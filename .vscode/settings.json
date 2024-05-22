@@ -1,0 +1,62 @@
+{
+  "editor.tabSize": 2,
+  "editor.trimAutoWhitespace": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [100],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.associations": {
+    "*.tsx": "typescriptreact",
+    "*.ts": "typescript"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "[scss,css,less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "eslint.run": "onSave",
+  "eslint.nodePath": "/Users/nickflorin/.nvm/versions/node/v20.0.0/bin/node",
+  "eslint.probe": ["typescript", "typescriptreact", "html", "markdown", "scss"],
+  "eslint.format.enable": true,
+  "eslint.execArgv": ["--max-old-space-size=16384"],
+  "eslint.debug": false,
+  "eslint.codeActionsOnSave.rules": [
+    "import/*",
+    "quotes",
+    "arrow-body-style",
+    "multiline-comment-style",
+    "prefer-const",
+    "react/jsx-curly-brace-presence",
+    "@typescript-eslint/consistent-type-imports"
+  ],
+
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescript.updateImportsOnFileMove.enabled": "prompt",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.format.enable": false,
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.preferences.renameMatchingJsxTags": true,
+  "typescript.preferences.autoImportFileExcludePatterns": ["@mantine/*"],
+  "typescript.format.semicolons": "insert",
+  "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+  "typescript.preferences.quoteStyle": "double",
+  "typescript.referencesCodeLens.enabled": true,
+
+  "javascript.format.enable": false,
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+
+  // When/if we incorporate Stylelint - these need to be set to false.
+  "css.validate": true,
+  "less.validate": true,
+  "scss.validate": true,
+
+  "stylelint.validate": ["css", "scss", "less", "postcss"],
+  "stylelint.configBasedir": "/",
+  "stylelint.packageManager": "pnpm"
+}
