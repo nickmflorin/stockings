@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
 
 import { logger } from "~/application/logger";
-import { WrappedElement } from "~/dom";
 
 import * as errors from "./errors";
 import * as paths from "./paths";
+import { Thumbnail, type IThumbnail } from "./thumbnail";
 
 /**
  *
@@ -23,49 +23,24 @@ import * as paths from "./paths";
  * ```
  */
 
-export type Thumbnail = {
-  readonly productPath: string;
-  readonly productPrice: string;
-  readonly imageSrc: string;
-  readonly productName: string;
-};
-
-const parseThumbnail = (element: cheerio.Element) => {
-  const anchor = WrappedElement(element).find({ tag: "a" });
-  const img = anchor.find({ tag: "img" });
-
-  const caption = WrappedElement(element).find({ className: "caption" });
-
-  const h5 = caption.find({ tag: "h5" });
-  const link = h5.find({ tag: "a" });
-
-  if (anchor.attribs.href === undefined) {
-    throw new Error("");
-  } else if (img.attribs.src === undefined) {
-    throw new Error("");
-  }
-  return {
-    productPath: anchor.attribs.href,
-    productPrice: caption.find({ tag: "h6" }).text,
-    imageSrc: img.attribs.src,
-    productName: link.text,
-  };
-};
-
 export class LieNielsenClient {
   private async request(url: string): Promise<string> {
+    logger.info(`Making request to ${url}.`);
     let response: Response;
     try {
       response = await fetch(url);
     } catch (e) {
       logger.error(`There was a network error making a request to ${url}:\n${e}`);
-      throw new errors.LieNielsenNetworkError(url);
+      if (!(e instanceof Error)) {
+        throw new TypeError("Fetch unexpectedly threw non-error object.");
+      }
+      throw new errors.LieNielsenNetworkError(url, e);
     }
     if (!response.ok) {
       logger.error(`There was a ${response.status} client error making a request to ${url}.`, {
         response,
       });
-      throw new errors.LieNielsenClientError(url);
+      throw new errors.LieNielsenClientError(url, response.status);
     }
     let text: string;
     try {
@@ -75,19 +50,76 @@ export class LieNielsenClient {
         `There was an error deserializing the response from the request to ${url}:\n${e}`,
         { response },
       );
-      throw new errors.LieNielsenSerializationError(url);
+      if (!(e instanceof Error)) {
+        throw new TypeError("Fetch unexpectedly threw non-error object.");
+      }
+      throw new errors.LieNielsenSerializationError(url, e);
     }
     return text;
   }
 
-  public async fetchProductPageThumbnails(id: paths.ProductPageId) {
-    const url = paths.getProductPageUrl(id);
-    const html = await this.request(url);
-    const selector = cheerio.load(html);
-    return [...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el)].map(
-      c => parseThumbnail(c),
-    );
+  private async collectPaginatedResults<T>(
+    url: string,
+    config: {
+      readonly processData: (selector: cheerio.CheerioAPI, curr?: T) => T;
+    },
+  ): Promise<T> {
+    const firstPageHtml = await this.request(url);
+    const selector = cheerio.load(firstPageHtml);
+    let data = config.processData(selector);
+
+    let page = 2;
+    while (true) {
+      const paginatedUrl = paths.paginatePathOrUrl(url, page);
+      let html: string;
+      try {
+        html = await this.request(paginatedUrl);
+      } catch (e) {
+        // TBD: Should we break on other errors as well?  Maybe rate limiting?
+        if (e instanceof errors.LieNielsenClientError && e.status === 404) {
+          break;
+        }
+        throw e;
+      }
+      const paginatedSelector = cheerio.load(html);
+      data = config.processData(paginatedSelector, data);
+      page += 1;
+    }
+    return data;
   }
+
+  public async fetchProductsPageThumbnails<
+    P extends paths.ProductsPageId,
+    S extends paths.ProductsSubPageId<P>,
+  >(page: P, subPage?: S) {
+    const url = subPage
+      ? paths.getProductsSubPageUrl(page, subPage)
+      : paths.getProductsPageUrl(page);
+
+    return this.collectPaginatedResults(url, {
+      processData: (selector, curr?: IThumbnail[]) => {
+        const existing = curr ?? [];
+        const elements = [
+          ...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el),
+        ];
+        return [...existing, ...elements.map(e => Thumbnail(e, { page, subPage }))];
+      },
+    });
+  }
+
+  /* public async fetchProductPage(id: paths.ProductPageId, path: string) {
+       const url = paths.getProductPageUrl(id); */
+
+  /*   return this.collectPaginatedResults(url, {
+         processData: (selector, curr?: Thumbnail[]) => {
+           const existing = curr ?? [];
+           const elements = [
+             ...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el),
+           ];
+           return [...existing, ...elements.map(e => parseThumbnail(e))];
+         },
+       });
+     } */
 }
 
 export const client = new LieNielsenClient();
