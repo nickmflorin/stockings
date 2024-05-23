@@ -4,7 +4,7 @@ import { logger } from "~/application/logger";
 
 import * as errors from "./errors";
 import * as paths from "./paths";
-import { Thumbnail, type IThumbnail } from "./thumbnail";
+import { Thumbnail, ThumbnailDifferences, type IThumbnail } from "./thumbnail";
 
 /**
  *
@@ -107,19 +107,76 @@ export class LieNielsenClient {
     });
   }
 
-  /* public async fetchProductPage(id: paths.ProductPageId, path: string) {
-       const url = paths.getProductPageUrl(id); */
+  public async fetchAllProductsPageThumbnails<P extends paths.ProductsPageId>(page: P) {
+    const pairs: { url: string; subPage?: paths.ProductsSubPageId<P> }[] = paths.ProductsSubPages[
+      page
+    ].values.reduce(
+      (acc, curr) => [
+        ...acc,
+        {
+          url: paths.getProductsSubPageUrl(page, curr as paths.ProductsSubPageId<P>),
+          subPage: curr as paths.ProductsSubPageId<P>,
+        },
+      ],
+      [{ url: paths.getProductsPageUrl(page) }] as {
+        url: string;
+        subPage?: paths.ProductsSubPageId<P>;
+      }[],
+    );
 
-  /*   return this.collectPaginatedResults(url, {
-         processData: (selector, curr?: Thumbnail[]) => {
-           const existing = curr ?? [];
-           const elements = [
-             ...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el),
-           ];
-           return [...existing, ...elements.map(e => parseThumbnail(e))];
-         },
-       });
-     } */
+    const promises = pairs.map(({ url, subPage }) =>
+      this.collectPaginatedResults(url, {
+        processData: (selector, curr?: IThumbnail[]) => {
+          const existing = curr ?? [];
+          const elements = [
+            ...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el),
+          ];
+          return [...existing, ...elements.map(e => Thumbnail(e, { page, subPage }))];
+        },
+      }),
+    );
+
+    const results = await Promise.all(promises);
+    return results.reduce(
+      (prev: IThumbnail[], curr) =>
+        curr.reduce((p, c): IThumbnail[] => {
+          const existing = p.find(pi => pi.slug === c.slug);
+          if (existing) {
+            const differences = ThumbnailDifferences(existing, c);
+            if (differences.hasDifferences) {
+              logger.warn(
+                `Encountered two thumbnails with the same slug, '${c.slug}', that have ` +
+                  `differing data: ${differences.toString()}. The first thumbnail was ` +
+                  `encountered on sub-page '${existing.subPage}', and the second thumbnail was ` +
+                  `encountered on sub-page '${c.subPage}'.`,
+                {
+                  differences: differences.data,
+                  slug: c.slug,
+                  thumbnails: [existing, c],
+                  page,
+                  subPages: [existing.subPage, c.subPage],
+                },
+              );
+            } else {
+              logger.warn(
+                `Encountered two identical thumbnails with the same slug, '${c.slug}'. ` +
+                  `The first thumbnail was encountered on sub-page '${existing.subPage}', ` +
+                  `and the second thumbnail was encountered on sub-page '${c.subPage}'.`,
+                {
+                  slug: c.slug,
+                  thumbnails: [existing, c],
+                  page,
+                  subPages: [existing.subPage, c.subPage],
+                },
+              );
+            }
+            return p;
+          }
+          return [...p, c];
+        }, prev),
+      [],
+    );
+  }
 }
 
 export const client = new LieNielsenClient();

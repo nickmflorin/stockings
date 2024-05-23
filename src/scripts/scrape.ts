@@ -1,7 +1,7 @@
 import { client } from "~/lie-nielsen";
 
 async function main() {
-  const thumbnails = await client.fetchProductsPageThumbnails("hand-tools", "handplanes");
+  const thumbnails = await client.fetchAllProductsPageThumbnails("hand-tools");
   console.log(thumbnails);
 }
 

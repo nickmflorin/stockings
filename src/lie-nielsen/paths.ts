@@ -88,6 +88,23 @@ export const getProductsSubPageUrl = <P extends ProductsPageId, S extends Produc
 ): LieNielsenUrl<ProductsSubPagePath<P, S>> =>
   toLieNielsenUrl(getProductsSubPagePath(page, subPage));
 
+export type ProductsPageSubPagePair<
+  P extends ProductsPageId = ProductsPageId,
+  S extends ProductsSubPageId<P> = ProductsSubPageId<P>,
+> = P extends ProductsPageId
+  ? S extends ProductsSubPageId<P>
+    ?
+        | {
+            readonly page: P;
+            readonly subPage: S;
+          }
+        | {
+            readonly page: P;
+            readonly subPage?: never;
+          }
+    : never
+  : never;
+
 // --------------------------------- URLS ---------------------------------
 type PaginatedPathParam<G extends number = number> = G extends number ? `page-${G}` : never;
 
