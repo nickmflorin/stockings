@@ -1,5 +1,3 @@
-import { P } from "pino";
-
 import {
   enumeratedLiterals,
   type EnumeratedLiteralsModel,
@@ -18,24 +16,27 @@ export const toLieNielsenUrl = <P extends `/${string}`>(path: P): LieNielsenUrl<
 
 // --------------------------------- Pages ---------------------------------
 export const ProductsPages = enumeratedLiterals(
-  [{ value: "hand-tools", accessor: "HandTools", node: "4066" }] as const,
+  [
+    {
+      value: "hand-tools",
+      accessor: "HandTools",
+      node: "4066",
+      subPages: enumeratedLiterals(
+        [
+          { value: "toms-toolbox", accessor: "TomsToolbox", node: "4225" },
+          { value: "handplanes", accessor: "Handplanes", node: "4063" },
+          { value: "saws", accessor: "Saws", node: "4067" },
+          { value: "chisels", accessor: "Chisels", node: "4080" },
+          { value: "spokeshaves", accessor: "Spokeshaves", node: "4091" },
+          { value: "green-woodworking", accessor: "GreenWoodworking", node: "4170" },
+          { value: "accessory-tools", accessor: "AccessoryTools", node: "4084" },
+        ] as const,
+        {},
+      ),
+    },
+  ] as const,
   {},
 );
-
-export const ProductsSubPages = {
-  [ProductsPages.HandTools]: enumeratedLiterals(
-    [
-      { value: "toms-toolbox", accessor: "TomsToolbox", node: "4225" },
-      { value: "handplanes", accessor: "Handplanes", node: "4063" },
-      { value: "saws", accessor: "Saws", node: "4067" },
-      { value: "chisels", accessor: "Chisels", node: "4080" },
-      { value: "spokeshaves", accessor: "Spokeshaves", node: "4091" },
-      { value: "green-woodworking", accessor: "GreenWoodworking", node: "4170" },
-      { value: "accessory-tools", accessor: "AccessoryTools", node: "4084" },
-    ] as const,
-    {},
-  ),
-} as const;
 
 export type ProductsPageId = EnumeratedLiteralsType<typeof ProductsPages>;
 export type ProductsPage = EnumeratedLiteralsModel<typeof ProductsPages>;
@@ -56,16 +57,21 @@ export const getProductsPageUrl = <P extends ProductsPageId>(
 ): LieNielsenUrl<ProductsPagePath<P>> => toLieNielsenUrl(getProductsPagePath(id));
 
 // --------------------------------- Sub Pages ---------------------------------
-export type ProductsSubPageId<P extends ProductsPageId> = EnumeratedLiteralsType<
-  (typeof ProductsSubPages)[P]
->;
-export type ProductsSubPage<P extends ProductsPageId> = EnumeratedLiteralsModel<
-  (typeof ProductsSubPages)[P]
->;
-export type ProductsSubPageNode<P extends ProductsPageId, S extends ProductsSubPageId<P>> = Extract<
-  ProductsSubPage<P>,
-  { value: S }
->["node"];
+export type ProductsSubPageId<P extends ProductsPageId = ProductsPageId> = P extends ProductsPageId
+  ? EnumeratedLiteralsType<Extract<ProductsPage, { value: P }>["subPages"]>
+  : never;
+
+export type ProductsSubPage<
+  P extends ProductsPageId,
+  S extends ProductsSubPageId<P> = ProductsSubPageId<P>,
+> = P extends ProductsPageId
+  ? Extract<EnumeratedLiteralsModel<Extract<ProductsPage, { value: P }>["subPages"]>, { value: S }>
+  : never;
+
+export type ProductsSubPageNode<
+  P extends ProductsPageId,
+  S extends ProductsSubPageId<P>,
+> = ProductsSubPage<P, S>["node"];
 
 export type ProductsSubPagePath<
   P extends ProductsPageId = ProductsPageId,
@@ -80,7 +86,10 @@ export const getProductsSubPagePath = <P extends ProductsPageId, S extends Produ
   page: P,
   subPage: S,
 ): ProductsSubPagePath<P, S> =>
-  `/nodes/${ProductsSubPages[page].getModel(subPage).node}/${subPage}` as ProductsSubPagePath<P, S>;
+  `/nodes/${ProductsPages.getModel(page).subPages.getModel(subPage).node}/${subPage}` as ProductsSubPagePath<
+    P,
+    S
+  >;
 
 export const getProductsSubPageUrl = <P extends ProductsPageId, S extends ProductsSubPageId<P>>(
   page: P,
@@ -105,6 +114,16 @@ export type ProductsPageSubPagePair<
     : never
   : never;
 
+// --------------------------------- Sub Pages ---------------------------------
+export type ProductDetailPagePath<S extends string> = `/products/${S}`;
+
+export const getProductDetailPagePath = <S extends string>(slug: S): ProductDetailPagePath<S> =>
+  `/products/${slug}`;
+
+export const getProductDetailPageUrl = <S extends string>(
+  slug: S,
+): LieNielsenUrl<ProductDetailPagePath<S>> => toLieNielsenUrl(`/products/${slug}`);
+
 // --------------------------------- URLS ---------------------------------
 type PaginatedPathParam<G extends number = number> = G extends number ? `page-${G}` : never;
 
@@ -112,10 +131,3 @@ export const paginatePathOrUrl = <P extends string, G extends number>(
   path: P,
   page: G,
 ): `${P}/${PaginatedPathParam<G>}` => `${path}/page-${page}` as `${P}/${PaginatedPathParam<G>}`;
-
-export const LieNielsenUrls = {
-  [ProductsPages.HandTools]: getProductsPageUrl(ProductsPages.HandTools),
-} as const satisfies { [key in ProductsPageId]: LieNielsenUrl<ProductsPagePath<key>> };
-
-/* export const getProductsPagePath = <S extends string>(param: S): `/products/${S}` =>
-     `/products/${param}`; */

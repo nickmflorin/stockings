@@ -1,19 +1,7 @@
-export * from "./generated";
-export * from "./company";
-export * from "./course";
-export * from "./details";
-export * from "./education";
-export * from "./experience";
-export * from "./project";
 export * from "./inclusion";
-export * from "./repository";
-export * from "./school";
-export * from "./skills";
 export * from "./brand";
 
 import { DateTime } from "luxon";
-
-export { Prisma } from "./generated";
 
 export type ModelTimePeriod = {
   readonly startDate: Date;

@@ -1,8 +1,16 @@
 import { client } from "~/lie-nielsen";
+import type { IScrapedProduct } from "~/lie-nielsen/scraped-product";
 
 async function main() {
   const thumbnails = await client.fetchAllProductsPageThumbnails("hand-tools");
-  console.log(thumbnails);
+
+  let promises: Promise<IScrapedProduct>[] = [];
+  for (const thumb of thumbnails) {
+    promises = [...promises, client.fetchProduct(thumb.slug)];
+  }
+  console.log("MAKING PRODUCT REQUESTS");
+  const products = await Promise.all(promises.slice(0, 15));
+  console.log(products);
 }
 
 main()
