@@ -1,9 +1,9 @@
 import { enumeratedLiterals, type EnumeratedLiteralsType } from "~/lib/literals";
 
-import { type IWrappedElement } from "./element";
-import { InvalidTextError, InvalidAttributeError } from "./errors";
 import { type ElementAttribute } from "./types";
 import { sanitizeString } from "./util";
+
+import { InvalidTextError, InvalidAttributeError, type ApiElement } from ".";
 
 export const PARSER_NAMES = enumeratedLiterals(["price", "priceRange", "productSlug"] as const, {});
 export type ParserName = EnumeratedLiteralsType<typeof PARSER_NAMES>;
@@ -23,10 +23,13 @@ const ProductSlugRegex = /^\/products\/([A-Za-z0-9-]+).*/;
 export type ParserOptions = {
   readonly attribute: ElementAttribute | "text";
   readonly strict?: boolean;
-  readonly parent: IWrappedElement;
+  readonly parent: ApiElement;
 };
 
-export type ParserReturn<N extends ParserName, O extends ParserOptions> = N extends ParserName
+export type ParserReturn<
+  N extends ParserName,
+  O extends { strict?: boolean },
+> = N extends ParserName
   ? O extends { strict: false }
     ? ParserResults[N] | null
     : ParserResults[N]

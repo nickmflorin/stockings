@@ -1,14 +1,14 @@
-import { type ElementAttribute } from "~/dom/types";
+import { type ElementAttribute } from "~/dom/api/types";
 
-import { type IWrappedElement } from "./element";
-import { type ISelector } from "./selector";
+import { type ApiElement } from "./element";
+import { type ApiSelector } from "./selector";
 
 interface ElementErrorConfig {
-  readonly parent?: IWrappedElement;
+  readonly parent?: ApiElement;
 }
 
 export abstract class ElementError extends Error {
-  protected readonly parent: IWrappedElement | undefined;
+  protected readonly parent: ApiElement | undefined;
   public abstract message: string;
 
   constructor(config?: ElementErrorConfig) {
@@ -17,14 +17,16 @@ export abstract class ElementError extends Error {
   }
 }
 
-export class MissingElementError extends ElementError {
-  private readonly selector: ISelector;
+export abstract class ApiSelectorError extends ElementError {
+  protected readonly selector: ApiSelector | string;
 
-  constructor(selector: ISelector, config?: ElementErrorConfig) {
+  constructor(selector: ApiSelector | string, config?: ElementErrorConfig) {
     super(config);
     this.selector = selector;
   }
+}
 
+export class MissingElementError extends ApiSelectorError {
   public get message() {
     if (this.parent) {
       return `The selector '${this.selector.toString()}' did not match any children in ${this.parent.toString()}.`;
@@ -33,14 +35,7 @@ export class MissingElementError extends ElementError {
   }
 }
 
-export class NonUniqueElementError extends ElementError {
-  private readonly selector: ISelector;
-
-  constructor(selector: ISelector, config?: ElementErrorConfig) {
-    super(config);
-    this.selector = selector;
-  }
-
+export class NonUniqueElementError extends ApiSelectorError {
   public get message() {
     if (this.parent) {
       return `The selector '${this.selector.toString()}' unexpectedly matched multiple children in ${this.parent.toString()}.`;

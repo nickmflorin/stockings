@@ -1,35 +1,17 @@
 import * as cheerio from "cheerio";
 
+import { api, models } from "~/dom";
 import { logger } from "~/application/logger";
 
 import * as errors from "./errors";
 import * as paths from "./paths";
-import { type IScrapedProduct, ScrapedProduct } from "./scraped-product";
-import {
-  ScrapedThumbnail,
-  type IScrapedThumbnail,
-  processScrapedThumbnails,
-} from "./scraped-thumbnail";
 
-/**
- *
- * @param element
- *
- * ```html
- * <div class="thumbnail">
- *   <a><img /></a>
- *   <div class="caption">
- *     <h5 class="center">
- *       <a></a>
- *     </h5>
- *     <h6>$285.00</h6>
- *   </div>
- * </div>
- * ```
- */
+type RequestOptions = {
+  readonly errorIsExpected?: (e: Error) => boolean;
+};
 
 export class LieNielsenClient {
-  private async request(url: string): Promise<cheerio.CheerioAPI> {
+  private async request(url: string, options?: RequestOptions): Promise<api.DomApiType> {
     logger.info(`Making request to ${url}.`);
     let response: Response;
     try {
@@ -42,10 +24,13 @@ export class LieNielsenClient {
       throw new errors.LieNielsenNetworkError(url, e);
     }
     if (!response.ok) {
-      logger.error(`There was a ${response.status} client error making a request to ${url}.`, {
-        response,
-      });
-      throw new errors.LieNielsenClientError(url, response.status);
+      const e = new errors.LieNielsenClientError(url, response.status);
+      if (options?.errorIsExpected?.(e) !== true) {
+        logger.error(`There was a ${response.status} client error making a request to ${url}.`, {
+          response,
+        });
+      }
+      throw e;
     }
     let html: string;
     try {
@@ -60,24 +45,28 @@ export class LieNielsenClient {
       }
       throw new errors.LieNielsenSerializationError(url, e);
     }
-    return cheerio.load(html);
+    return api.DomApi(cheerio.load(html));
   }
 
   private async collectPaginatedResults<T>(
     url: string,
     config: {
-      readonly processData: (selector: cheerio.CheerioAPI, curr?: T) => T;
+      readonly processData: (selector: api.DomApiType, curr?: T) => T;
     },
   ): Promise<T> {
-    const selector = await this.request(url);
+    const selector = await this.request(url, {
+      errorIsExpected: e => e instanceof errors.LieNielsenClientError && e.status === 404,
+    });
     let data = config.processData(selector);
 
     let page = 2;
     while (true) {
       const paginatedUrl = paths.paginatePathOrUrl(url, page);
-      let sel: cheerio.CheerioAPI;
+      let sel: api.DomApiType;
       try {
-        sel = await this.request(paginatedUrl);
+        sel = await this.request(paginatedUrl, {
+          errorIsExpected: e => e instanceof errors.LieNielsenClientError && e.status === 404,
+        });
       } catch (e) {
         // TBD: Should we break on other errors as well?  Maybe rate limiting?
         if (e instanceof errors.LieNielsenClientError && e.status === 404) {
@@ -91,10 +80,10 @@ export class LieNielsenClient {
     return data;
   }
 
-  public async fetchProduct(slug: string): Promise<IScrapedProduct> {
+  public async fetchProduct(slug: string): Promise<models.ScrapedProduct> {
     const url = paths.getProductDetailPageUrl(slug);
     const sel = await this.request(url);
-    return ScrapedProduct(sel);
+    return new models.ScrapedProduct(sel);
   }
 
   public async fetchProductsPageThumbnails<
@@ -106,18 +95,22 @@ export class LieNielsenClient {
       : paths.getProductsPageUrl(page);
 
     const results = await this.collectPaginatedResults(url, {
-      processData: (selector, curr?: IScrapedThumbnail[]) => {
+      processData: (api, curr?: models.ScrapedThumbnail<P, S>[]) => {
         const existing = curr ?? [];
-        const elements = [
-          ...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el),
+        const elements = api(".product-list > .product-list-item > .thumbnail", { multiple: true });
+        return [
+          ...existing,
+          ...elements.map(e => new models.ScrapedThumbnail<P, S>(e, { page, subPage })),
         ];
-        return [...existing, ...elements.map(e => ScrapedThumbnail(e, { page, subPage }))];
       },
     });
-    return processScrapedThumbnails(results);
+    return models.ScrapedThumbnail.processScrapedThumbnails(results);
   }
 
-  public async fetchAllProductsPageThumbnails<P extends paths.ProductsPageId>(page: P) {
+  public async fetchAllProductsPageThumbnails<P extends paths.ProductsPageId>(
+    page: P,
+    options?: { limit?: number },
+  ) {
     const pairs: { url: string; subPage?: paths.ProductsSubPageId<P> }[] =
       paths.ProductsPages.getModel(page).subPages.values.reduce(
         (acc, curr) => [
@@ -133,20 +126,25 @@ export class LieNielsenClient {
         }[],
       );
 
-    const promises = pairs.map(({ url, subPage }) =>
+    const promises = pairs.slice(0, options?.limit ?? pairs.length).map(({ url, subPage }) =>
       this.collectPaginatedResults(url, {
-        processData: (selector, curr?: IScrapedThumbnail[]) => {
+        processData: (api, curr?: models.ScrapedThumbnail<P, paths.ProductsSubPageId<P>>[]) => {
           const existing = curr ?? [];
-          const elements = [
-            ...selector(".product-list > .product-list-item > .thumbnail").map((i, el) => el),
+          const elements = api(".product-list > .product-list-item > .thumbnail", {
+            multiple: true,
+          });
+          return [
+            ...existing,
+            ...elements.map(
+              e => new models.ScrapedThumbnail<P, paths.ProductsSubPageId<P>>(e, { page, subPage }),
+            ),
           ];
-          return [...existing, ...elements.map(e => ScrapedThumbnail(e, { page, subPage }))];
         },
       }),
     );
 
     const results = await Promise.all(promises);
-    return processScrapedThumbnails(results);
+    return models.ScrapedThumbnail.processScrapedThumbnails(results);
   }
 }
 
