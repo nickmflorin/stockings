@@ -17,7 +17,8 @@ same.
 - [homebrew]: A MacOSX package manager.
 - [postgresql] (a [homebrew] package)
 - [pnpm]: A [node] package manager.
-- [Vercel CLI][vercel-cli]: [Vercel][vercel]'s command line utility.
+- [vercel-cli]: The [homebrew] package that exposes [Vercel][vercel]'s command line utility. This is
+  used locally for purposes of environment variable management and deployments.
 
 ## 1. Getting Started
 
