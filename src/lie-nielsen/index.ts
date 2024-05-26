@@ -1,2 +1,2 @@
-export { client } from "./client";
+export { scraper } from "./scrape-client";
 export * from "./errors";

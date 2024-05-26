@@ -1,6 +1,8 @@
 # nick.florin
 
-This repository contains a web application that supports my personal resume, portfolio and website.
+This repository contains a web application that is used for scraping publically available web data
+from specific e-commerce websites and allowing users to monitor, manage and configure notifications
+and alerts for events that occur in relation to products that the specific e-commerce sites offer.
 
 &copy; Nick Florin, 2024
 
@@ -32,7 +34,7 @@ Windows/Ubuntu machine as well, but the steps will not be exactly as they are de
 Clone this repository locally and `cd` into the directory.
 
 ```bash
-$ git clone git@github.com:nickmflorin/nick.florin.git
+$ git clone git@github.com:nickmflorin/stockings.git
 ```
 
 ### 1.2: Installing System Requirements
@@ -167,7 +169,8 @@ installation of [node], something went awry - consult a team member before proce
 
 ### 1.2.b: Homebrew
 
-If on MacOSX, you will need to install [homebrew], which is a MacOSX package manager.
+If on MacOSX, you will need to install [homebrew], which is a MacOSX package manager. Installation
+instructions can be found on [homebrew]'s website.
 
 ### 1.2.c: pnpm
 

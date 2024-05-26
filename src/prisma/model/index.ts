@@ -1,5 +1,6 @@
 export * from "./inclusion";
 export * from "./brand";
+export * from "./generated";
 
 import { DateTime } from "luxon";
 
