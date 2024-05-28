@@ -18,25 +18,32 @@ export type AllowedScrapedProductInconsistency<
   readonly thumbnailValue: ScrapedThumbnail[F];
 };
 
-export const AllowedScrapedProductInconsistencies: [AllowedScrapedProductInconsistency<"name">] = [
+export const AllowedScrapedProductInconsistencies: [
+  AllowedScrapedProductInconsistency<"name">,
+  AllowedScrapedProductInconsistency<"name">,
+] = [
   {
     field: "name",
     productValue: "No. 1 Bench Plane, Iron",
     thumbnailValue: "No.1 Bench Plane, Iron",
+  },
+  {
+    field: "name",
+    productValue: "Large Router Plane -  Open Throat",
+    thumbnailValue: "Large Router Plane - Open Throat",
   },
 ];
 
 const inconsistencyIsAllowed = <F extends keyof ScrapedProduct & keyof ScrapedThumbnail>(
   field: F,
   values: Pick<AllowedScrapedProductInconsistency<F>, "productValue" | "thumbnailValue">,
-): boolean => {
-  const allowed = AllowedScrapedProductInconsistencies.filter(a => a.field === field);
-  return (
-    allowed.filter(
-      a => a.productValue === values.productValue && a.thumbnailValue === values.thumbnailValue,
-    ).length > 0
-  );
-};
+): boolean =>
+  AllowedScrapedProductInconsistencies.filter(
+    a =>
+      a.field === field &&
+      a.productValue === values.productValue &&
+      a.thumbnailValue === values.thumbnailValue,
+  ).length > 0;
 
 export const checkScrapedProductInconsistencies = <
   P extends ProductsPageId = ProductsPageId,

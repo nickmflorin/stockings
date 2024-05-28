@@ -25,6 +25,27 @@ model User {
   updatedProductRecords ProductRecord[] @relation("updatedProductRecords")
 }
 
+enum ElementAttribute {
+  HREF
+  SRC
+  VALUE
+  DATA_GA_PRODUCT_NAME
+  TEXT
+}
+
+enum ProductRecordErrorCode {
+  ATTRIBUTE_ERROR
+  HTTP_NETWORK_ERROR
+  HTTP_CLIENT_ERROR
+  HTTP_SERIALIZATION_ERROR
+}
+
+model ProductErrorRecord {
+  id      String @id @default(uuid()) @db.Uuid
+  errorId String @unique @db.Uuid
+  // errorCode ProductErrorRecordType
+}
+
 enum ProductRecordStatus {
   OUT_OF_STOCK
   IN_STOCK
@@ -35,11 +56,6 @@ enum ProductRecordDataFields {
   PRICE
   RAW_PRICE
   STATUS
-}
-
-model ProductErrorRecord {
-  id           String @id @default(uuid()) @db.Uuid
-  errorMessage String
 }
 
 model ProductRecordedRecord {

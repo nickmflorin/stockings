@@ -131,7 +131,7 @@ export class ScrapedThumbnail<
   }
 
   public get path() {
-    return this.root.find({ tag: "a" }).href;
+    return decodeURI(this.root.find({ tag: "a" }).href);
   }
 
   public get slug() {

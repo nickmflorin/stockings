@@ -2,20 +2,16 @@ import { prisma } from "~/prisma/client";
 import { LogLevels } from "~/environment";
 import { integration } from "~/lie-nielsen";
 import { logger } from "~/application/logger";
+import { getScriptContext } from "~/scripts/context";
 
 logger.level = LogLevels.INFO;
 
 async function main() {
-  await prisma.productRecord.deleteMany();
-  await prisma.product.deleteMany();
-  await prisma.user.deleteMany();
-
-  const user = await prisma.user.create({
-    data: { clerkId: "foobar", emailAddress: "fobar@gmail.com", firstName: "foo", lastName: "bar" },
-  });
-  const records = await prisma.$transaction(
-    async tx =>
-      await integration.updateProductRecords("hand-tools", { batchSize: 2, limit: 10, tx, user }),
+  await prisma.$transaction(
+    async tx => {
+      const { user } = await getScriptContext(tx, { upsertUser: true });
+      await integration.updateProductRecords("hand-tools", { batchSize: 10, tx, user });
+    },
     { timeout: 500000 },
   );
 }

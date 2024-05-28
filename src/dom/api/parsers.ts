@@ -18,7 +18,10 @@ export type ParserResult<N extends ParserName> = N extends ParserName ? ParserRe
 
 const PriceRegex = /^\s*\$([0-9]+\.[0-9]{2})\s*$/;
 const PriceRangeRegex = /^\s*\$([0-9]+\.[0-9]{2})\s*-\s*\$([0-9]+\.[0-9]{2})\s*$/;
-const ProductSlugRegex = /^\/products\/([A-Za-z0-9-]+).*/;
+/* For whatever reason, Lie Nielsen has a couple of slugs that are in title case with spaces, which
+   match the product's name (e.g. Model Maker's Block Plane) is the slug...  We also have to account
+   for the degree (º) symbol. */
+const ProductSlugRegex = /^\/products\/([A-Za-z0-9-'\sº]+).*/;
 
 export type ParserOptions = {
   readonly attribute: ElementAttribute | "text";
@@ -74,7 +77,7 @@ export const Parsers: IParsers = {
     return null;
   },
   productSlug<O extends ParserOptions>(value: string, opts: O): ParserReturn<"productSlug", O> {
-    const match = sanitizeString(value).match(ProductSlugRegex);
+    const match = decodeURI(sanitizeString(value)).match(ProductSlugRegex);
     if (match === null || match.length !== 2) {
       return this.handleInvalid(value, opts) as ParserReturn<"productSlug", O>;
     }

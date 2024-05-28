@@ -23,6 +23,8 @@ export const environment = Environment.create(
       ANALYZE_BUNDLE: process.env.ANALYZE_BUNDLE,
       NODE_ENV: process.env.NODE_ENV,
       VERCEL_ENV: process.env.VERCEL_ENV,
+      CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+      PERSONAL_CLERK_USER_ID: process.env.PERSONAL_CLERK_USER_ID,
       /* ~~~~~~~~~~~~~~~~~~~~~~~~~ Log Configuration ~~~~~~~~~~~~~~~~~~~~~~~~~ */
       LOGFLARE_LOGGING_ENABLED: process.env.LOGFLARE_LOGGING_ENABLED,
       LOGFLARE_SOURCE_TOKEN: process.env.LOGFLARE_SOURCE_TOKEN,
@@ -40,12 +42,29 @@ export const environment = Environment.create(
       NEXT_PUBLIC_PRETTY_LOGGING: process.env.NEXT_PUBLIC_PRETTY_LOGGING,
       NEXT_PUBLIC_LOG_LEVEL: process.env.NEXT_PUBLIC_LOG_LEVEL,
       NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     },
     validators: {
       /* ---------------------------- Server Environment Variables ---------------------------- */
       NODE_ENV: z.enum(["development", "test", "production"]),
       VERCEL_ENV: z.enum(["development", "production", "preview"]),
       ANALYZE_BUNDLE: StringBooleanFlagSchema.optional(),
+      CLERK_SECRET_KEY: environmentLookup<z.ZodString | z.ZodOptional<z.ZodLiteral<"">>>({
+        test: STRICT_OMISSION,
+        development: z.string().startsWith("sk_test"),
+        local: z.string().startsWith("sk_test"),
+        preview: z.string().startsWith("sk_test"),
+        production: z.string().startsWith("sk_live"),
+      }),
+      PERSONAL_CLERK_USER_ID: environmentLookup<z.ZodString | z.ZodOptional<z.ZodLiteral<"">>>({
+        test: STRICT_OMISSION,
+        preview: z.string().startsWith("user_"),
+        local: z.string().startsWith("user_"),
+        development: z.string().startsWith("user_"),
+        production: z.string().startsWith("user_"),
+      }),
       /* ~~~~~~~~~~~~~~~~~~~~~~~~~ Log Configuration ~~~~~~~~~~~~~~~~~~~~~~~~~ */
       LOGFLARE_LOGGING_ENABLED: StringBooleanFlagSchema.optional(),
       LOGFLARE_SOURCE_TOKEN: environmentLookup<
@@ -81,6 +100,10 @@ export const environment = Environment.create(
       ),
       NEXT_PUBLIC_LOG_LEVEL: LogLevels.schema.default(environmentLookup(DEFAULT_LOG_LEVELS)),
       NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: z.string().optional(),
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+        process.env.NODE_ENV === "test" ? z.literal("") : z.string(),
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string(),
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string(),
     },
   },
   {
