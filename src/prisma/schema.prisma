@@ -5,12 +5,13 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL") // Uses Connection Pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // Uses Connection Pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a Direct Connection
 }
 
 model User {
-  id                    String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String          @id @default(uuid()) @db.Uuid
   clerkId               String          @unique
   firstName             String
   lastName              String
@@ -24,33 +25,64 @@ model User {
   updatedProductRecords ProductRecord[] @relation("updatedProductRecords")
 }
 
-enum ProductStatus {
+enum ProductRecordStatus {
   OUT_OF_STOCK
   IN_STOCK
   NOT_LISTED
 }
 
+enum ProductRecordDataFields {
+  PRICE
+  RAW_PRICE
+  STATUS
+}
+
+model ProductErrorRecord {
+  id           String @id @default(uuid()) @db.Uuid
+  errorMessage String
+}
+
+model ProductRecordedRecord {
+  id                    String                    @id @default(uuid()) @db.Uuid
+  updatedAt             DateTime                  @updatedAt
+  price                 Float
+  rawPrice              String
+  status                ProductRecordStatus
+  wasManuallyCreated    Boolean                   @default(false)
+  manuallyChangedFields ProductRecordDataFields[] @default([])
+}
+
+enum ProductRecordType {
+  RECORDED
+  ERROR
+}
+
 model ProductRecord {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  timestamp   DateTime      @default(now())
-  createdBy   User          @relation("createdProductRecords", fields: [createdById], references: [id])
-  createdById String        @db.ObjectId
-  updatedBy   User          @relation("updatedProductRecords", fields: [updatedById], references: [id])
-  updatedById String        @db.ObjectId
-  price       Float
-  rawPrice    String
-  status      ProductStatus
+  id          String            @id @default(uuid()) @db.Uuid
+  timestamp   DateTime          @default(now())
+  createdBy   User              @relation("createdProductRecords", fields: [createdById], references: [id])
+  createdById String            @db.Uuid
+  updatedBy   User              @relation("updatedProductRecords", fields: [updatedById], references: [id])
+  updatedById String            @db.Uuid
+  recordType  ProductRecordType
+  recordId    String            @unique @db.Uuid
+  product     Product           @relation("records", fields: [productId], references: [id])
+  productId   String            @db.Uuid
+
+  @@unique([productId, recordId])
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime @default(now())
-  createdBy   User     @relation("createdProducts", fields: [createdById], references: [id])
-  createdById String   @db.ObjectId
-  updatedAt   DateTime @updatedAt
-  updatedBy   User     @relation("updatedProducts", fields: [updatedById], references: [id])
-  updatedById String   @db.ObjectId
-  name        String   @unique
-  slug        String   @unique
+  id          String          @id @default(uuid()) @db.Uuid
+  createdAt   DateTime        @default(now())
+  createdBy   User            @relation("createdProducts", fields: [createdById], references: [id])
+  createdById String          @db.Uuid
+  updatedAt   DateTime        @updatedAt
+  updatedBy   User            @relation("updatedProducts", fields: [updatedById], references: [id])
+  updatedById String          @db.Uuid
+  name        String          @unique
+  slug        String          @unique
+  code        String          @unique
   imageSrc    String
+  records     ProductRecord[] @relation("records")
 }

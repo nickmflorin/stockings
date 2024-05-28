@@ -8,7 +8,7 @@ import pino, {
 import { logflarePinoVercel } from "pino-logflare";
 import { v4 as uuid } from "uuid";
 
-import { environment } from "~/environment";
+import { type LogLevel, environment } from "~/environment";
 
 import { browserWriter } from "./browser-writer";
 
@@ -17,6 +17,7 @@ type NotSet = typeof __NOT_SET__;
 
 export class Logger {
   private readonly instance: string;
+  private _level: LogLevel | undefined;
   private _pino: pino.Logger | null = null;
   private _prettyStream: DestinationStream | NotSet | null = __NOT_SET__;
   private _logflareStream:
@@ -27,8 +28,23 @@ export class Logger {
     | NotSet
     | null = __NOT_SET__;
 
-  constructor() {
+  constructor(level?: LogLevel) {
     this.instance = uuid();
+    this._level = level;
+  }
+
+  public get level() {
+    if (this._level === undefined) {
+      return environment.get("NEXT_PUBLIC_LOG_LEVEL");
+    }
+    return this._level;
+  }
+
+  public set level(level: LogLevel) {
+    this._level = level;
+    /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
+    console.info(`Resetting logger with level '${level}'...`);
+    this.reset();
   }
 
   private get env() {
@@ -58,7 +74,8 @@ export class Logger {
         ["preview", "production"].includes(this.vercelEnv) &&
         /* This check may not be necessary?  Not sure if running tests during builds will trigger
          this. */
-        this.env !== "test"
+        this.env !== "test" &&
+        environment.get("LOGFLARE_LOGGING_ENABLED") !== false
       ) {
         const [apiKey, sourceToken] = [
           environment.get("LOGFLARE_API_KEY"),
@@ -111,7 +128,7 @@ export class Logger {
             }
           : undefined,
       },
-      level: environment.get("NEXT_PUBLIC_LOG_LEVEL"),
+      level: this.level,
       base: {
         env: this.env,
         revision: environment.get("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA"),
@@ -120,11 +137,15 @@ export class Logger {
     };
   }
 
+  private reset() {
+    this._pino = pino(this.config, this.stream);
+  }
+
   private get pino() {
     if (!this._pino) {
-      this._pino = pino(this.config, this.stream);
+      this.reset();
     }
-    return this._pino;
+    return this._pino as pino.Logger;
   }
 
   public warn(message: string, context?: object, ...args: any[]): void {

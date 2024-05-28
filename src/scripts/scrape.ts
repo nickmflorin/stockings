@@ -1,16 +1,23 @@
 import { prisma } from "~/prisma/client";
-import type { ScrapedProduct } from "~/dom/scraped-models";
-import { scraper } from "~/lie-nielsen";
+import { LogLevels } from "~/environment";
+import { integration } from "~/lie-nielsen";
+import { logger } from "~/application/logger";
+
+logger.level = LogLevels.INFO;
 
 async function main() {
-  const thumbnails = await scraper.fetchProductAndSubProductsPageThumbnails("hand-tools");
-  console.log(thumbnails);
-  /* let promises: Promise<ScrapedProduct>[] = [];
-     for (const thumb of thumbnails.slice(0, 10)) {
-       promises = [...promises, client.fetchProduct(thumb.slug)];
-     }
-     const products = await (await Promise.all(promises)).map(p => p.data); */
-  // await prisma.test.create({ data: { name: "Test" } });
+  await prisma.productRecord.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.user.deleteMany();
+
+  const user = await prisma.user.create({
+    data: { clerkId: "foobar", emailAddress: "fobar@gmail.com", firstName: "foo", lastName: "bar" },
+  });
+  const records = await prisma.$transaction(
+    async tx =>
+      await integration.updateProductRecords("hand-tools", { batchSize: 2, limit: 10, tx, user }),
+    { timeout: 500000 },
+  );
 }
 
 main()

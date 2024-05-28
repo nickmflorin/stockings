@@ -118,6 +118,43 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductErrorRecordScalarFieldEnum = {
+  id: 'id',
+  errorMessage: 'errorMessage'
+};
+
+exports.Prisma.ProductRecordedRecordScalarFieldEnum = {
+  id: 'id',
+  updatedAt: 'updatedAt',
+  price: 'price',
+  rawPrice: 'rawPrice',
+  status: 'status',
+  wasManuallyCreated: 'wasManuallyCreated',
+  manuallyChangedFields: 'manuallyChangedFields'
+};
+
+exports.Prisma.ProductRecordScalarFieldEnum = {
+  id: 'id',
+  timestamp: 'timestamp',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  recordType: 'recordType',
+  recordId: 'recordId',
+  productId: 'productId'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  createdById: 'createdById',
+  updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  name: 'name',
+  slug: 'slug',
+  code: 'code',
+  imageSrc: 'imageSrc'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -132,10 +169,29 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.ProductRecordStatus = exports.$Enums.ProductRecordStatus = {
+  OUT_OF_STOCK: 'OUT_OF_STOCK',
+  IN_STOCK: 'IN_STOCK',
+  NOT_LISTED: 'NOT_LISTED'
+};
 
+exports.ProductRecordDataFields = exports.$Enums.ProductRecordDataFields = {
+  PRICE: 'PRICE',
+  RAW_PRICE: 'RAW_PRICE',
+  STATUS: 'STATUS'
+};
+
+exports.ProductRecordType = exports.$Enums.ProductRecordType = {
+  RECORDED: 'RECORDED',
+  ERROR: 'ERROR'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  ProductErrorRecord: 'ProductErrorRecord',
+  ProductRecordedRecord: 'ProductRecordedRecord',
+  ProductRecord: 'ProductRecord',
+  Product: 'Product'
 };
 
 /**

@@ -55,7 +55,7 @@ const logExisting = <
       },
     );
   } else {
-    logger.warn(
+    logger.debug(
       `Encountered two identical thumbnails with the same slug, '${thumbs[0].slug}'. ` +
         subPageMessage(thumbs[0], thumbs[1]),
       {
@@ -157,6 +157,47 @@ export class ScrapedThumbnail<
       .parseText(["price", "priceRange"], {});
   }
 
+  /**
+   * Returns whether or not the {@link ScrapedThumbnail} is composite, meaning that the thumbnail
+   * represents a collection of products that can be selected from a dropdown on the product page.
+   *
+   * In the case that the {@link ScrapedThumbnail} is composite, on some page (either the same or
+   * other), there should be individual {@link ScrapedThumbnail}(s) for each of the composite's
+   * products that are represented by the overall {@link ScrapedThumbnail}.  This means that the
+   * overall {@link ScrapedThumbnail} can be excluded from the scraped products, when mapping the
+   * {@link ScrapedThumbnail}(s) to {@link ScrapedProduct}(s).
+   *
+   * Ex).
+   * ---
+   * There is a thumbnail for a "Mortise Chisels" product, which is a composite product that has
+   * both "1/2 Mortise Chisel" and "1/4 Mortise Chisel" in its dropdown.  There will be (or at
+   * least should be) three thumbnails:
+   *
+   * 1) Mortise Chisels
+   * 2) 1/2 Mortise Chisel
+   * 3) 1/4 Mortise Chisel
+   *
+   * All three thumbnails point to a page that has a select dropdown, but clicking the
+   * "Mortise Chisels" thumbnail will take you to the page with that select defaulted, as either
+   * 1/2 Mortise Chisel or 1/4 Mortise Chisel.  When the select dropdown changes, the URL path
+   * changes to reflect the selected product.
+   */
+  public get isComposite() {
+    /* In the case that the thumbnail represents a composite set of products, the thumbnail's name
+       (or the text of the link to the product page) will represent the overall composite product
+       (e.g. Mortise Chisels) where the 'data-ga-product-name' will correspond to the product slug
+       that is contained inside of the href of the link. */
+    const dataProductName = this.root
+      .find({ className: "caption" })
+      .find({ tag: "h5" })
+      .find({ tag: "a" })
+      .findAttribute("data-ga-product-name");
+    return (
+      dataProductName.trim().toLowerCase().replaceAll(" ", "") !==
+      this.name.trim().toLowerCase().replaceAll(" ", "")
+    );
+  }
+
   protected parseData() {
     return {
       page: this.page,
@@ -174,26 +215,25 @@ export class ScrapedThumbnail<
     P extends paths.ProductsPageId = paths.ProductsPageId,
     S extends paths.ProductsSubPageId<P> = paths.ProductsSubPageId<P>,
   >(thumbnails: ScrapedThumbnail<P, S>[] | ScrapedThumbnail<P, S>[][]): ScrapedThumbnail<P, S>[] {
-    if (thumbnails.length === 0) {
-      return [];
-    }
     const ts = (Array.isArray(thumbnails[0]) ? thumbnails : [thumbnails]) as ScrapedThumbnail<
       P,
       S
     >[][];
     return ts.reduce(
       (prev: ScrapedThumbnail<P, S>[], curr: ScrapedThumbnail<P, S>[]) =>
-        curr.reduce(
-          (p: ScrapedThumbnail<P, S>[], c: ScrapedThumbnail<P, S>): ScrapedThumbnail<P, S>[] => {
-            const existing = p.find(pi => pi.slug === c.slug);
-            if (existing) {
-              logExisting([existing, c]);
-              return p;
-            }
-            return [...p, c];
-          },
-          prev,
-        ),
+        curr
+          .filter(th => !th.isComposite)
+          .reduce(
+            (p: ScrapedThumbnail<P, S>[], c: ScrapedThumbnail<P, S>): ScrapedThumbnail<P, S>[] => {
+              const existing = p.find(pi => pi.slug === c.slug);
+              if (existing) {
+                logExisting([existing, c]);
+                return p;
+              }
+              return [...p, c];
+            },
+            prev,
+          ),
       [] as ScrapedThumbnail<P, S>[],
     );
   }

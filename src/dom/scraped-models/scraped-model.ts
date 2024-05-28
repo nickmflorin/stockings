@@ -1,6 +1,5 @@
 import type { ApiElement, DomApiType } from "~/dom/api";
-
-import { DomDifferences } from "./differences";
+import { Differences } from "~/lib/differences";
 
 export abstract class ScrapedModel<
   T extends ApiElement | DomApiType,
@@ -31,7 +30,7 @@ export abstract class ScrapedModel<
   }
 
   public compare(other: ScrapedModel<T, D>) {
-    return DomDifferences([this.data, other.data], [...this.comparisonFields]);
+    return Differences([this.data, other.data], [...this.comparisonFields]);
   }
 }
 

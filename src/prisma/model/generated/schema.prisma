@@ -11,12 +11,78 @@ datasource db {
 }
 
 model User {
-  id                   String         @id @default(uuid()) @db.Uuid
-  clerkId              String         @unique
-  firstName            String
-  lastName             String
-  profileImageUrl      String?
-  emailAddress         String
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
+  id                    String          @id @default(uuid()) @db.Uuid
+  clerkId               String          @unique
+  firstName             String
+  lastName              String
+  profileImageUrl       String?
+  emailAddress          String
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  createdProducts       Product[]       @relation("createdProducts")
+  updatedProducts       Product[]       @relation("updatedProducts")
+  createdProductRecords ProductRecord[] @relation("createdProductRecords")
+  updatedProductRecords ProductRecord[] @relation("updatedProductRecords")
+}
+
+enum ProductRecordStatus {
+  OUT_OF_STOCK
+  IN_STOCK
+  NOT_LISTED
+}
+
+enum ProductRecordDataFields {
+  PRICE
+  RAW_PRICE
+  STATUS
+}
+
+model ProductErrorRecord {
+  id           String @id @default(uuid()) @db.Uuid
+  errorMessage String
+}
+
+model ProductRecordedRecord {
+  id                    String                    @id @default(uuid()) @db.Uuid
+  updatedAt             DateTime                  @updatedAt
+  price                 Float
+  rawPrice              String
+  status                ProductRecordStatus
+  wasManuallyCreated    Boolean                   @default(false)
+  manuallyChangedFields ProductRecordDataFields[] @default([])
+}
+
+enum ProductRecordType {
+  RECORDED
+  ERROR
+}
+
+model ProductRecord {
+  id          String            @id @default(uuid()) @db.Uuid
+  timestamp   DateTime          @default(now())
+  createdBy   User              @relation("createdProductRecords", fields: [createdById], references: [id])
+  createdById String            @db.Uuid
+  updatedBy   User              @relation("updatedProductRecords", fields: [updatedById], references: [id])
+  updatedById String            @db.Uuid
+  recordType  ProductRecordType
+  recordId    String            @unique @db.Uuid
+  product     Product           @relation("records", fields: [productId], references: [id])
+  productId   String            @db.Uuid
+
+  @@unique([productId, recordId])
+}
+
+model Product {
+  id          String          @id @default(uuid()) @db.Uuid
+  createdAt   DateTime        @default(now())
+  createdBy   User            @relation("createdProducts", fields: [createdById], references: [id])
+  createdById String          @db.Uuid
+  updatedAt   DateTime        @updatedAt
+  updatedBy   User            @relation("updatedProducts", fields: [updatedById], references: [id])
+  updatedById String          @db.Uuid
+  name        String          @unique
+  slug        String          @unique
+  code        String          @unique
+  imageSrc    String
+  records     ProductRecord[] @relation("records")
 }

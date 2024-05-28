@@ -1,7 +1,6 @@
 import prettier from "@prettier/sync";
-import { type Text } from "domhandler";
-import { ElementType, DomUtils } from "htmlparser2";
-import htmlParser from "prettier/parser-html";
+import { type ChildNode, type Text } from "domhandler";
+import { DomUtils } from "htmlparser2";
 
 import type * as cheerio from "cheerio";
 
@@ -17,13 +16,13 @@ import {
 } from "./errors";
 import { Parsers, type ParserName, type ParserOptions, type ParserReturn } from "./parsers";
 import { type IApiSelector, type ApiSelectorParams, ApiSelector } from "./selector";
-import { isElement, isText, type ElementAttribute } from "./types";
+import { isText, type ElementAttribute, isApiValidElement } from "./types";
 import { sanitizeString } from "./util";
 
 export type FindOptions = {
   readonly strict?: false;
   readonly first?: true;
-  readonly strictUniqueness?: false;
+  readonly duplication?: "log" | "silent" | "error";
   readonly multiple?: boolean;
 };
 
@@ -128,7 +127,7 @@ export class ApiElement implements IApiElement {
     { nonUniqueError, missingError }: { nonUniqueError: () => Error; missingError: () => Error },
     options?: O,
   ): FindRT<T, O> {
-    const strictUniqueness = options?.strictUniqueness ?? true;
+    const duplication = options?.duplication ?? "error";
     const strict = options?.strict ?? true;
     const multiple = options?.multiple ?? false;
     const first = options?.first ?? false;
@@ -140,10 +139,11 @@ export class ApiElement implements IApiElement {
         return results as FindRT<T, O>;
       }
       const err = nonUniqueError();
-      if (strictUniqueness) {
+      if (duplication === "error") {
         throw err;
+      } else if (duplication === "log") {
+        logger.warn(err.message);
       }
-      logger.warn(err.message);
       return results[0] as FindRT<T, O>;
     } else if (results.length === 0) {
       if (first || !multiple) {
@@ -226,16 +226,63 @@ export class ApiElement implements IApiElement {
     );
   }
 
+  /* TODO: Build this to support finding multiple nested children.
+     Note: This is currently not being used... */
+  private findNested(sel: ApiSelector): ApiElement | null {
+    const checkChildren = (children: ChildNode[]): ApiElement | null => {
+      const f = children.filter(isApiValidElement);
+      for (let i = 0; i < f.length; i++) {
+        const child = f[i];
+        if (sel.evaluate(child)) {
+          return ApiElement.create(child);
+        }
+        const nestedChild = checkChildren(child.children);
+        if (nestedChild) {
+          return ApiElement.create(nestedChild);
+        }
+      }
+      return null;
+    };
+
+    const filtered = this.children.filter(isApiValidElement);
+    for (let i = 0; i < filtered.length; i++) {
+      const child = filtered[i];
+      if (sel.evaluate(child)) {
+        return ApiElement.create(child);
+      }
+      const checked = checkChildren(child.children);
+      if (checked) {
+        return checked;
+      }
+    }
+    return null;
+  }
+
+  public findFirstNested<O extends FindOptions>(
+    selector: ApiSelector | ApiSelectorParams,
+    options?: O,
+  ): FindElementRT<O> {
+    const sel = ApiSelector.create(selector);
+
+    const nested = this.findNested(sel);
+
+    return ApiElement.findReturn(
+      nested ? [nested] : [],
+      {
+        nonUniqueError: () => new NonUniqueElementError(sel, { parent: this }),
+        missingError: () => new MissingElementError(sel, { parent: this }),
+      },
+      options,
+    );
+  }
+
   public find<O extends FindOptions>(
     selector: ApiSelector | ApiSelectorParams,
     options?: O,
   ): FindElementRT<O> {
     const sel = ApiSelector.create(selector);
     const elements = this.children
-      .filter(
-        // Ignore ElementType.Script and ElementType.Style
-        (c): c is cheerio.Element => isElement(c) && c.type === ElementType.Tag && sel.evaluate(c),
-      )
+      .filter((c): c is cheerio.Element => isApiValidElement(c) && sel.evaluate(c))
       .map(c => ApiElement.create(c));
     return ApiElement.findReturn(
       elements,
