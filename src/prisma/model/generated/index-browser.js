@@ -118,9 +118,51 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProductErrorRecordScalarFieldEnum = {
+exports.Prisma.MissingAttributeErrorDataScalarFieldEnum = {
   id: 'id',
-  errorMessage: 'errorMessage'
+  attribute: 'attribute',
+  parentHtml: 'parentHtml'
+};
+
+exports.Prisma.InvalidAttributeErrorDataScalarFieldEnum = {
+  id: 'id',
+  attribute: 'attribute',
+  parentHtml: 'parentHtml',
+  value: 'value'
+};
+
+exports.Prisma.InvalidTextErrorDataScalarFieldEnum = {
+  id: 'id',
+  parentHtml: 'parentHtml',
+  value: 'value'
+};
+
+exports.Prisma.MissingTextErrorDataScalarFieldEnum = {
+  id: 'id',
+  parentHtml: 'parentHtml'
+};
+
+exports.Prisma.NonUniqueTextErrorDataScalarFieldEnum = {
+  id: 'id',
+  parentHtml: 'parentHtml'
+};
+
+exports.Prisma.MissingElementErrorDataScalarFieldEnum = {
+  id: 'id',
+  parentHtml: 'parentHtml',
+  selector: 'selector'
+};
+
+exports.Prisma.NonUniqueElementErrorDataScalarFieldEnum = {
+  id: 'id',
+  parentHtml: 'parentHtml',
+  selector: 'selector'
+};
+
+exports.Prisma.ScrapingErrorRecordScalarFieldEnum = {
+  id: 'id',
+  errorId: 'errorId',
+  errorCode: 'errorCode'
 };
 
 exports.Prisma.ProductRecordedRecordScalarFieldEnum = {
@@ -169,6 +211,26 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.ElementAttribute = exports.$Enums.ElementAttribute = {
+  HREF: 'HREF',
+  SRC: 'SRC',
+  VALUE: 'VALUE',
+  DATA_GA_PRODUCT_NAME: 'DATA_GA_PRODUCT_NAME'
+};
+
+exports.ScrapingErrorCode = exports.$Enums.ScrapingErrorCode = {
+  MISSING_ATTRIBUTE: 'MISSING_ATTRIBUTE',
+  INVALID_ATTRIBUTE: 'INVALID_ATTRIBUTE',
+  MISSING_TEXT: 'MISSING_TEXT',
+  INVALID_TEXT: 'INVALID_TEXT',
+  NONUNIQUE_TEXT: 'NONUNIQUE_TEXT',
+  MISSING_ELEMENT: 'MISSING_ELEMENT',
+  NONUNIQUE_ELEMENT: 'NONUNIQUE_ELEMENT',
+  HTTP_NETWORK: 'HTTP_NETWORK',
+  HTTP_CLIENT: 'HTTP_CLIENT',
+  HTTP_SERIALIZATION: 'HTTP_SERIALIZATION'
+};
+
 exports.ProductRecordStatus = exports.$Enums.ProductRecordStatus = {
   OUT_OF_STOCK: 'OUT_OF_STOCK',
   IN_STOCK: 'IN_STOCK',
@@ -188,7 +250,14 @@ exports.ProductRecordType = exports.$Enums.ProductRecordType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  ProductErrorRecord: 'ProductErrorRecord',
+  MissingAttributeErrorData: 'MissingAttributeErrorData',
+  InvalidAttributeErrorData: 'InvalidAttributeErrorData',
+  InvalidTextErrorData: 'InvalidTextErrorData',
+  MissingTextErrorData: 'MissingTextErrorData',
+  NonUniqueTextErrorData: 'NonUniqueTextErrorData',
+  MissingElementErrorData: 'MissingElementErrorData',
+  NonUniqueElementErrorData: 'NonUniqueElementErrorData',
+  ScrapingErrorRecord: 'ScrapingErrorRecord',
   ProductRecordedRecord: 'ProductRecordedRecord',
   ProductRecord: 'ProductRecord',
   Product: 'Product'

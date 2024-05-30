@@ -1,9 +1,9 @@
-import { type ApiElement } from "~/dom/api";
-import { type ParserResult } from "~/dom/api/parsers";
-import type * as paths from "~/lie-nielsen/paths";
 import { logger } from "~/application/logger";
-
-import { ScrapedElementModel } from "./scraped-model";
+import { ElementAttribute } from "~/prisma/model";
+import { type ApiElement } from "~/scraping/dom/api";
+import { type ParserResult } from "~/scraping/dom/api/parsers";
+import type * as paths from "~/scraping/integrations/lie-nielsen/paths";
+import { ScrapedElementModel } from "~/scraping/scraped-model";
 
 const subPageMessage = (a: IScrapedThumbnail, b: IScrapedThumbnail): string => {
   if (a.subPage && b.subPage) {
@@ -135,7 +135,7 @@ export class ScrapedThumbnail<
   }
 
   public get slug() {
-    return this.root.find({ tag: "a" }).parseAttribute("href", ["productSlug"], {});
+    return this.root.find({ tag: "a" }).parseAttribute(ElementAttribute.HREF, ["productSlug"], {});
   }
 
   public get name() {
@@ -191,7 +191,7 @@ export class ScrapedThumbnail<
       .find({ className: "caption" })
       .find({ tag: "h5" })
       .find({ tag: "a" })
-      .findAttribute("data-ga-product-name");
+      .findAttribute(ElementAttribute.DATA_GA_PRODUCT_NAME);
     return (
       dataProductName.trim().toLowerCase().replaceAll(" ", "") !==
       this.name.trim().toLowerCase().replaceAll(" ", "")

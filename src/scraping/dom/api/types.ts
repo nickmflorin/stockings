@@ -8,8 +8,6 @@ export const isElement = (child: ChildNode): child is cheerio.Element =>
 
 export const isText = (child: ChildNode): child is Text => [ElementType.Text].includes(child.type);
 
-export type ElementAttribute = "href" | "src" | "value" | "data-ga-product-name";
-
 export const isApiValidElement = (element: ChildNode): element is cheerio.Element =>
   // Ignore ElementType.Script and ElementType.Style
   isElement(element) && element.type === ElementType.Tag;

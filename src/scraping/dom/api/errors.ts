@@ -1,4 +1,5 @@
-import { type ElementAttribute } from "~/dom/api/types";
+import { getAttributeKey, type ElementAttribute, ScrapingErrorCode } from "~/prisma/model";
+import { ScrapingError } from "~/scraping/errors";
 
 import { type ApiElement } from "./element";
 import { type ApiSelector } from "./selector";
@@ -7,13 +8,17 @@ interface ElementErrorConfig {
   readonly parent?: ApiElement;
 }
 
-export abstract class ElementError extends Error {
+export abstract class ElementError extends ScrapingError {
   protected readonly parent: ApiElement | undefined;
   public abstract message: string;
 
   constructor(config?: ElementErrorConfig) {
     super();
     this.parent = config?.parent;
+  }
+
+  public get html() {
+    return this.parent?.html;
   }
 }
 
@@ -27,6 +32,8 @@ export abstract class ApiSelectorError extends ElementError {
 }
 
 export class MissingElementError extends ApiSelectorError {
+  public errorCode = ScrapingErrorCode.MISSING_ELEMENT;
+
   public get message() {
     if (this.parent) {
       return `The selector '${this.selector.toString()}' did not match any children in ${this.parent.toString()}.`;
@@ -36,6 +43,8 @@ export class MissingElementError extends ApiSelectorError {
 }
 
 export class NonUniqueElementError extends ApiSelectorError {
+  public errorCode = ScrapingErrorCode.NONUNIQUE_ELEMENT;
+
   public get message() {
     if (this.parent) {
       return `The selector '${this.selector.toString()}' unexpectedly matched multiple children in ${this.parent.toString()}.`;
@@ -45,6 +54,8 @@ export class NonUniqueElementError extends ApiSelectorError {
 }
 
 export class MissingTextError extends ElementError {
+  public errorCode = ScrapingErrorCode.MISSING_TEXT;
+
   public get message() {
     if (this.parent) {
       return `The parent '${this.parent.toString()}' did not have a child text node.`;
@@ -54,6 +65,8 @@ export class MissingTextError extends ElementError {
 }
 
 export class NonUniqueTextError extends ElementError {
+  public errorCode = ScrapingErrorCode.NONUNIQUE_TEXT;
+
   public get message() {
     if (this.parent) {
       return `The parent '${this.parent.toString()}' had multiple child text nodes when only 1 was expected.`;
@@ -63,6 +76,7 @@ export class NonUniqueTextError extends ElementError {
 }
 
 export class InvalidTextError extends ElementError {
+  public errorCode = ScrapingErrorCode.INVALID_TEXT;
   private readonly value: string;
 
   constructor(value: string, config?: ElementErrorConfig) {
@@ -85,19 +99,26 @@ export abstract class AttributeError extends ElementError {
     super(config);
     this.attribute = attribute;
   }
+
+  public get key() {
+    return getAttributeKey(this.attribute);
+  }
 }
 
 export class MissingAttributeError extends AttributeError {
+  public errorCode = ScrapingErrorCode.MISSING_ATTRIBUTE;
+
   public get message() {
     if (this.parent) {
-      return `The element ${this.parent.toString()} did not have the attribute '${this.attribute}'.`;
+      return `The element ${this.parent.toString()} did not have the attribute '${this.key}'.`;
     }
-    return `The element did not have the attribute '${this.attribute}'.`;
+    return `The element did not have the attribute '${this.key}'.`;
   }
 }
 
 export class InvalidAttributeError extends AttributeError {
   private readonly value: string;
+  public errorCode = ScrapingErrorCode.INVALID_ATTRIBUTE;
 
   constructor(attribute: ElementAttribute, value: string, config?: ElementErrorConfig) {
     super(attribute, config);

@@ -1,5 +1,8 @@
-import { type ProductsPageId, type ProductsSubPageId } from "~/lie-nielsen/paths";
 import { logger } from "~/application/logger";
+import {
+  type ProductsPageId,
+  type ProductsSubPageId,
+} from "~/scraping/integrations/lie-nielsen/paths";
 
 import { type ScrapedProduct, type ScrapedThumbnailProduct } from "./scraped-product";
 import { type ScrapedThumbnail } from "./scraped-thumbnail";

@@ -1,5 +1,7 @@
 import type * as paths from "./paths";
+import type { ScrapedThumbnailProduct } from "./scraped-models";
 
+import { logger } from "~/application/logger";
 import { prisma, type Transaction } from "~/prisma/client";
 import {
   type ProductRecord,
@@ -8,8 +10,6 @@ import {
   type ProductRecordedRecord,
   type User,
 } from "~/prisma/model";
-import type { ScrapedThumbnailProduct } from "~/dom/scraped-models";
-import { logger } from "~/application/logger";
 
 import { scraper } from "./scrape-client";
 

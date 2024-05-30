@@ -25,6 +25,73 @@ model User {
   updatedProductRecords ProductRecord[] @relation("updatedProductRecords")
 }
 
+enum ElementAttribute {
+  HREF
+  SRC
+  VALUE
+  DATA_GA_PRODUCT_NAME
+}
+
+enum ScrapingErrorCode {
+  MISSING_ATTRIBUTE
+  INVALID_ATTRIBUTE
+  MISSING_TEXT
+  INVALID_TEXT
+  NONUNIQUE_TEXT
+  MISSING_ELEMENT
+  NONUNIQUE_ELEMENT
+  HTTP_NETWORK
+  HTTP_CLIENT
+  HTTP_SERIALIZATION
+}
+
+model MissingAttributeErrorData {
+  id         String           @id @default(uuid()) @db.Uuid
+  attribute  ElementAttribute
+  parentHtml String?
+}
+
+model InvalidAttributeErrorData {
+  id         String           @id @default(uuid()) @db.Uuid
+  attribute  ElementAttribute
+  parentHtml String?
+  value      String
+}
+
+model InvalidTextErrorData {
+  id         String @id @default(uuid()) @db.Uuid
+  parentHtml String
+  value      String
+}
+
+model MissingTextErrorData {
+  id         String @id @default(uuid()) @db.Uuid
+  parentHtml String
+}
+
+model NonUniqueTextErrorData {
+  id         String @id @default(uuid()) @db.Uuid
+  parentHtml String
+}
+
+model MissingElementErrorData {
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
+  selector   String
+}
+
+model NonUniqueElementErrorData {
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
+  selector   String
+}
+
+model ScrapingErrorRecord {
+  id        String            @id @default(uuid()) @db.Uuid
+  errorId   String            @unique @db.Uuid
+  errorCode ScrapingErrorCode
+}
+
 enum ProductRecordStatus {
   OUT_OF_STOCK
   IN_STOCK
@@ -35,11 +102,6 @@ enum ProductRecordDataFields {
   PRICE
   RAW_PRICE
   STATUS
-}
-
-model ProductErrorRecord {
-  id           String @id @default(uuid()) @db.Uuid
-  errorMessage String
 }
 
 model ProductRecordedRecord {

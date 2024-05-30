@@ -3,12 +3,12 @@ import chunk from "lodash.chunk";
 
 import type { ILieNielsenClient } from "./client";
 
-import { api, models } from "~/dom";
-import type { ScrapedThumbnail } from "~/dom/scraped-models";
 import { logger } from "~/application/logger";
+import { api } from "~/scraping/dom";
 
 import { LieNielsenClient } from "./client";
 import * as paths from "./paths";
+import { ScrapedThumbnail, ScrapedProduct, ScrapedThumbnailProduct } from "./scraped-models";
 
 const processor = (html: string) => api.DomApi(cheerio.load(html));
 
@@ -26,17 +26,17 @@ export class LieNielsenScrapeClient {
     this.client = client;
   }
 
-  public async scrapeProduct(slug: string): Promise<models.ScrapedProduct> {
+  public async scrapeProduct(slug: string): Promise<ScrapedProduct> {
     const sel = await this.client.fetchProduct(slug);
-    return new models.ScrapedProduct(sel);
+    return new ScrapedProduct(sel);
   }
 
   public async scrapeThumbnailProduct<
     P extends paths.ProductsPageId,
     S extends paths.ProductsSubPageId<P>,
-  >(thumbnail: ScrapedThumbnail<P, S>): Promise<models.ScrapedThumbnailProduct<P, S>> {
+  >(thumbnail: ScrapedThumbnail<P, S>): Promise<ScrapedThumbnailProduct<P, S>> {
     const sel = await this.client.fetchProduct(thumbnail.slug);
-    return new models.ScrapedThumbnailProduct<P, S>(sel, thumbnail);
+    return new ScrapedThumbnailProduct<P, S>(sel, thumbnail);
   }
 
   public async scrapeThumbnailProducts<P extends paths.ProductsPageId>(
@@ -51,18 +51,18 @@ export class LieNielsenScrapeClient {
 
     const chunks = chunk(limited, batchSize);
 
-    let scrapedProducts: models.ScrapedThumbnailProduct<P>[] = [];
+    let scrapedProducts: ScrapedThumbnailProduct<P>[] = [];
     for (let i = 0; i < chunks.length; i++) {
       logger.info(
         `Processing Product Thumbnail Chunk ${i + 1}/${chunks.length} of ` +
           `Size ${chunks[i].length} for Page ${page}.`,
       );
-      const promises: Promise<models.ScrapedThumbnailProduct<P>>[] = chunks[i].map(thumb =>
+      const promises: Promise<ScrapedThumbnailProduct<P>>[] = chunks[i].map(thumb =>
         this.scrapeThumbnailProduct(thumb),
       );
       scrapedProducts = [...scrapedProducts, ...(await Promise.all(promises))];
     }
-    return models.ScrapedThumbnailProduct.processScrapedProducts(scrapedProducts);
+    return ScrapedThumbnailProduct.processScrapedProducts(scrapedProducts);
   }
 
   public async scrapeProductsPageThumbnails<P extends paths.ProductsPageId>(
@@ -72,10 +72,10 @@ export class LieNielsenScrapeClient {
     const data = await this.client.fetchProductsPage(page, { paginated: true });
     const thumbnails = data.flatMap(d => {
       const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
-      return elements.map(e => new models.ScrapedThumbnail<P>(e, { page }));
+      return elements.map(e => new ScrapedThumbnail<P>(e, { page }));
     });
     if (options?.process !== false) {
-      return models.ScrapedThumbnail.processScrapedThumbnails(thumbnails);
+      return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
     }
     return thumbnails;
   }
@@ -87,10 +87,10 @@ export class LieNielsenScrapeClient {
     const data = await this.client.fetchProductsPage(page, { paginated: true });
     const thumbnails = data.flatMap(d => {
       const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
-      return elements.map(e => new models.ScrapedThumbnail<P, S>(e, { page, subPage }));
+      return elements.map(e => new ScrapedThumbnail<P, S>(e, { page, subPage }));
     });
     if (options?.process !== false) {
-      return models.ScrapedThumbnail.processScrapedThumbnails(thumbnails);
+      return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
     }
     return thumbnails;
   }
@@ -105,7 +105,7 @@ export class LieNielsenScrapeClient {
       ),
     ];
     const thumbnails = await Promise.all(promises);
-    return models.ScrapedThumbnail.processScrapedThumbnails(thumbnails);
+    return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
   }
 }
 

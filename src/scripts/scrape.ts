@@ -1,19 +1,14 @@
-import { prisma } from "~/prisma/client";
-import { LogLevels } from "~/environment";
-import { integration } from "~/lie-nielsen";
 import { logger } from "~/application/logger";
+import { LogLevels } from "~/environment";
+import { prisma } from "~/prisma/client";
+import { integration } from "~/scraping/integrations/lie-nielsen";
 import { getScriptContext } from "~/scripts/context";
 
 logger.level = LogLevels.INFO;
 
 async function main() {
-  await prisma.$transaction(
-    async tx => {
-      const { user } = await getScriptContext(tx, { upsertUser: true });
-      await integration.updateProductRecords("hand-tools", { batchSize: 10, tx, user });
-    },
-    { timeout: 500000 },
-  );
+  const { user } = await getScriptContext({ upsertUser: true });
+  await integration.updateProductRecords("hand-tools", { batchSize: 10, user });
 }
 
 main()

@@ -1,4 +1,7 @@
-export abstract class LieNielsenHttpError extends Error {
+import { ScrapingErrorCode } from "~/prisma/model";
+import { ScrapingError } from "~/scraping/errors";
+
+export abstract class ScrapingHttpError extends ScrapingError {
   protected readonly url: string;
 
   constructor(url: string) {
@@ -11,20 +14,23 @@ export abstract class LieNielsenHttpError extends Error {
   }
 }
 
-export class LieNielsenNetworkError extends LieNielsenHttpError {
+export class ScrapingNetworkError extends ScrapingHttpError {
   public readonly error: Error;
+  public errorCode = ScrapingErrorCode.HTTP_NETWORK;
 
   constructor(url: string, error: Error) {
     super(url);
     this.error = error;
   }
+
   public get message() {
     return `There was a network error making a request to ${this.url}:\n${this.error}`;
   }
 }
 
-export class LieNielsenClientError extends LieNielsenHttpError {
+export class ScrapingClientError extends ScrapingHttpError {
   public readonly status: number;
+  public errorCode = ScrapingErrorCode.HTTP_CLIENT;
 
   constructor(url: string, status: number) {
     super(url);
@@ -36,13 +42,15 @@ export class LieNielsenClientError extends LieNielsenHttpError {
   }
 }
 
-export class LieNielsenSerializationError extends LieNielsenHttpError {
+export class ScrapingSerializationError extends ScrapingHttpError {
   public readonly error: Error;
+  public errorCode = ScrapingErrorCode.HTTP_SERIALIZATION;
 
   constructor(url: string, error: Error) {
     super(url);
     this.error = error;
   }
+
   public get message() {
     return `There was an error deserializing the response from the request to ${this.url}:\n${this.error}`;
   }

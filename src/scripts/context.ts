@@ -1,10 +1,10 @@
 import { type User as ClerkUser } from "@clerk/clerk-sdk-node";
 import clerk from "@clerk/clerk-sdk-node";
 
-import { type Transaction } from "~/prisma/client";
+import { environment } from "~/environment";
+import { prisma, type PrismaClient, type Transaction } from "~/prisma/client";
 import { type User } from "~/prisma/model";
 import { upsertUserFromClerk } from "~/prisma/model/user";
-import { environment } from "~/environment";
 
 export type SeedContext = {
   readonly clerkUser: ClerkUser;
@@ -15,10 +15,26 @@ type ScriptContextOptions = {
   readonly upsertUser?: boolean;
 };
 
-export const getScriptContext = async (
+export async function getScriptContext(
   tx: Transaction,
-  { upsertUser = true }: ScriptContextOptions,
-): Promise<SeedContext> => {
+  opts: ScriptContextOptions,
+): Promise<SeedContext>;
+
+export async function getScriptContext(opts: ScriptContextOptions): Promise<SeedContext>;
+
+export async function getScriptContext(
+  arg0: Transaction | ScriptContextOptions,
+  arg1?: ScriptContextOptions,
+): Promise<SeedContext> {
+  let tx: Transaction | PrismaClient;
+  let upsertUser: boolean;
+  if (arg1) {
+    tx = arg0 as Transaction;
+    upsertUser = arg1.upsertUser ?? true;
+  } else {
+    tx = prisma;
+    upsertUser = (arg0 as ScriptContextOptions).upsertUser ?? true;
+  }
   const { NODE_ENV, VERCEL_ENV, CLERK_SECRET_KEY } = environment.pick([
     "NODE_ENV",
     "VERCEL_ENV",
@@ -85,7 +101,7 @@ export const getScriptContext = async (
     );
   }
   /* TODO: We have to validate that the clerk user is in fact an admin that is allowed to make these
-     changes. */
+     changes once we establish the notion of an admin. */
   const clerkUser = await clerk.users.getUser(personalClerkId);
 
   if (upsertUser) {
@@ -98,4 +114,4 @@ export const getScriptContext = async (
     clerkUser,
     user: await tx.user.findUniqueOrThrow({ where: { clerkId: clerkUser.id } }),
   };
-};
+}

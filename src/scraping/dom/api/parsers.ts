@@ -1,6 +1,6 @@
+import { type ElementAttribute } from "~/prisma/model";
 import { enumeratedLiterals, type EnumeratedLiteralsType } from "~/lib/literals";
 
-import { type ElementAttribute } from "./types";
 import { sanitizeString } from "./util";
 
 import { InvalidTextError, InvalidAttributeError, type ApiElement } from ".";

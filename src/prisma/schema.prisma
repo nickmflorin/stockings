@@ -30,20 +30,66 @@ enum ElementAttribute {
   SRC
   VALUE
   DATA_GA_PRODUCT_NAME
-  TEXT
 }
 
-enum ProductRecordErrorCode {
-  ATTRIBUTE_ERROR
-  HTTP_NETWORK_ERROR
-  HTTP_CLIENT_ERROR
-  HTTP_SERIALIZATION_ERROR
+enum ScrapingErrorCode {
+  MISSING_ATTRIBUTE
+  INVALID_ATTRIBUTE
+  MISSING_TEXT
+  INVALID_TEXT
+  NONUNIQUE_TEXT
+  MISSING_ELEMENT
+  NONUNIQUE_ELEMENT
+  HTTP_NETWORK
+  HTTP_CLIENT
+  HTTP_SERIALIZATION
 }
 
-model ProductErrorRecord {
-  id      String @id @default(uuid()) @db.Uuid
-  errorId String @unique @db.Uuid
-  // errorCode ProductErrorRecordType
+model MissingAttributeErrorData {
+  id         String           @id @default(uuid()) @db.Uuid
+  attribute  ElementAttribute
+  parentHtml String?
+}
+
+model InvalidAttributeErrorData {
+  id         String           @id @default(uuid()) @db.Uuid
+  attribute  ElementAttribute
+  parentHtml String?
+  value      String
+}
+
+model InvalidTextErrorData {
+  id         String @id @default(uuid()) @db.Uuid
+  parentHtml String
+  value      String
+}
+
+model MissingTextErrorData {
+  id         String @id @default(uuid()) @db.Uuid
+  parentHtml String
+}
+
+model NonUniqueTextErrorData {
+  id         String @id @default(uuid()) @db.Uuid
+  parentHtml String
+}
+
+model MissingElementErrorData {
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
+  selector   String
+}
+
+model NonUniqueElementErrorData {
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
+  selector   String
+}
+
+model ScrapingErrorRecord {
+  id        String            @id @default(uuid()) @db.Uuid
+  errorId   String            @unique @db.Uuid
+  errorCode ScrapingErrorCode
 }
 
 enum ProductRecordStatus {

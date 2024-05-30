@@ -5,6 +5,7 @@ import { DomUtils } from "htmlparser2";
 import type * as cheerio from "cheerio";
 
 import { logger } from "~/application/logger";
+import { ElementAttribute, getAttributeKey } from "~/prisma/model";
 
 import {
   MissingElementError,
@@ -16,7 +17,7 @@ import {
 } from "./errors";
 import { Parsers, type ParserName, type ParserOptions, type ParserReturn } from "./parsers";
 import { type IApiSelector, type ApiSelectorParams, ApiSelector } from "./selector";
-import { isText, type ElementAttribute, isApiValidElement } from "./types";
+import { isText, isApiValidElement } from "./types";
 import { sanitizeString } from "./util";
 
 export type FindOptions = {
@@ -98,11 +99,11 @@ export class ApiElement implements IApiElement {
   }
 
   public get href() {
-    return this.findAttribute("href");
+    return this.findAttribute(ElementAttribute.HREF);
   }
 
   public get src() {
-    return this.findAttribute("src");
+    return this.findAttribute(ElementAttribute.SRC);
   }
 
   public get html() {
@@ -163,7 +164,7 @@ export class ApiElement implements IApiElement {
     attribute: ElementAttribute,
     options?: O,
   ): FindAttributeRT<O> {
-    const v = this.attributes[attribute];
+    const v = this.attributes[getAttributeKey(attribute)];
     if (v === undefined) {
       if (options?.strict !== false) {
         throw new MissingAttributeError(attribute, { parent: this });

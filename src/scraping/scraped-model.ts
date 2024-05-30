@@ -1,4 +1,4 @@
-import type { ApiElement, DomApiType } from "~/dom/api";
+import type { ApiElement, DomApiType } from "~/scraping/dom/api";
 import { Differences } from "~/lib/differences";
 
 export abstract class ScrapedModel<

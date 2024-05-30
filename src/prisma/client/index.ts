@@ -18,8 +18,8 @@ as global variables are not reloaded:
 See: https://www.prisma.io/docs/guides/performance-and-optimization/connection-management
      #prevent-hot-reloading-from-creating-new-instances-of-prismaclient
 */
-import { PrismaClient as RootPrismaClient } from "~/prisma/model";
 import { environment } from "~/environment";
+import { PrismaClient as RootPrismaClient } from "~/prisma/model";
 
 import { brandExtension } from "./brand-extension";
 import { ModelMetaDataMiddleware } from "./middleware";

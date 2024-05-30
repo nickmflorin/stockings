@@ -1,14 +1,17 @@
-import { ProductRecordStatus, type ProductRecordedRecord } from "~/prisma/model";
-import { InvalidTextError, type DomApiType } from "~/dom/api";
-import type { ScrapedThumbnail } from "~/dom/scraped-models/scraped-thumbnail";
-import { type ProductsPageId, type ProductsSubPageId } from "~/lie-nielsen/paths";
+import type { ScrapedThumbnail } from "./scraped-thumbnail";
+
 import { logger } from "~/application/logger";
+import { ProductRecordStatus, type ProductRecordedRecord } from "~/prisma/model";
+import { type api } from "~/scraping/dom";
+import { InvalidTextError, type DomApiType } from "~/scraping/dom/api";
+import {
+  type ProductsPageId,
+  type ProductsSubPageId,
+} from "~/scraping/integrations/lie-nielsen/paths";
+import { ScrapedApiModel } from "~/scraping/scraped-model";
 import { Differences, type DifferenceField } from "~/lib/differences";
 
-import { type ParserResult } from "../api/parsers";
-
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
-import { ScrapedApiModel } from "./scraped-model";
 
 const logExisting = <
   P extends ProductsPageId = ProductsPageId,
@@ -53,7 +56,7 @@ export const parseProductScrapedState = (value: string): ProductScrapedStatus | 
 };
 
 export type IScrapedProduct = {
-  readonly price: ParserResult<"price">;
+  readonly price: api.ParserResult<"price">;
   readonly rawPrice: string;
   readonly imageSrc: string;
   readonly name: string;

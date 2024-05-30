@@ -1,13 +1,6 @@
-const FIRST_INTERNAL_MODULE_GROUP = ["prisma"];
+const FIRST_INTERNAL_MODULE_GROUP = ["prisma", "environment", "application"];
 
-const SECOND_INTERNAL_MODULE_GROUP = [
-  "app",
-  "actions",
-  "environment",
-  "lie-nielsen",
-  "prisma",
-  "dom",
-];
+const SECOND_INTERNAL_MODULE_GROUP = ["app", "actions", "scraping"];
 
 // Components and styles should always be the last absolute imports.
 const THIRD_INTERNAL_MODULE_GROUP = ["components", "hooks", "styles"];
@@ -105,7 +98,6 @@ const BASE_RULES = {
   ],
   "arrow-body-style": ["error", "as-needed"],
   "no-console": "error",
-  "no-redeclare": ["error"],
   "no-useless-escape": ["error"],
   "no-case-declarations": ["error"],
   "no-extra-boolean-cast": ["error"],
@@ -124,6 +116,10 @@ const BASE_RULES = {
         {
           group: ["@prisma/client/*", "@prisma/client"],
           message: "Please import from '~/prisma/model` instead.",
+        },
+        {
+          group: ["~/prisma/model/generated"],
+          message: "Please import directly from '~/prisma/model` instead.",
         },
       ],
     },
