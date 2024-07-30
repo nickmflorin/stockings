@@ -1,0 +1,34 @@
+@use "partials";
+
+@use "./constants" as constants;
+
+@mixin input-base() {
+  @include partials.transition(none);
+
+  align-items: center;
+  // We need to explicitly set the background color to white (instead of not specifying a background
+  // color) such that auto fill styling applied by Google Chrome (and likely others) does not change
+  // the background.
+  background-color: constants.$input-bg-color;
+  background-image: none !important;
+  border: none;
+  box-shadow: none !important;
+  box-sizing: border-box;
+  caret-color: constants.$input-caret-color;
+  color: constants.$input-color;
+  cursor: text;
+  font-family: constants.$input-font-family;
+  // This is the default font-size for input elements.
+  font-size: 14px;
+  font-weight: constants.$input-font-weight;
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  color: constants.$input-placeholder-color;
+}

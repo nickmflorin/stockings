@@ -234,6 +234,7 @@ exports.ScrapingErrorCode = exports.$Enums.ScrapingErrorCode = {
 exports.ProductRecordStatus = exports.$Enums.ProductRecordStatus = {
   OUT_OF_STOCK: 'OUT_OF_STOCK',
   IN_STOCK: 'IN_STOCK',
+  AVAILABLE_FOR_BACKORDER: 'AVAILABLE_FOR_BACKORDER',
   NOT_LISTED: 'NOT_LISTED'
 };
 

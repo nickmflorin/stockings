@@ -1,0 +1,5 @@
+@mixin fully-constrained-dimension($dimension, $value) {
+  #{$dimension}: $value;
+  min-#{$dimension}: $value;
+  max-#{$dimension}: $value;
+}

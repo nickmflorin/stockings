@@ -107,6 +107,7 @@ export type ScrapingErrorCode = (typeof ScrapingErrorCode)[keyof typeof Scraping
 export const ProductRecordStatus: {
   OUT_OF_STOCK: 'OUT_OF_STOCK',
   IN_STOCK: 'IN_STOCK',
+  AVAILABLE_FOR_BACKORDER: 'AVAILABLE_FOR_BACKORDER',
   NOT_LISTED: 'NOT_LISTED'
 };
 

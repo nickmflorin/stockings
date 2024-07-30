@@ -95,6 +95,7 @@ model ScrapingErrorRecord {
 enum ProductRecordStatus {
   OUT_OF_STOCK
   IN_STOCK
+  AVAILABLE_FOR_BACKORDER
   NOT_LISTED
 }
 

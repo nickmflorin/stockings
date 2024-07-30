@@ -221,19 +221,20 @@ export class ScrapedThumbnail<
     >[][];
     return ts.reduce(
       (prev: ScrapedThumbnail<P, S>[], curr: ScrapedThumbnail<P, S>[]) =>
-        curr
-          .filter(th => !th.isComposite)
-          .reduce(
-            (p: ScrapedThumbnail<P, S>[], c: ScrapedThumbnail<P, S>): ScrapedThumbnail<P, S>[] => {
+        curr.reduce(
+          (p: ScrapedThumbnail<P, S>[], c: ScrapedThumbnail<P, S>): ScrapedThumbnail<P, S>[] => {
+            if (!c.isComposite) {
               const existing = p.find(pi => pi.slug === c.slug);
               if (existing) {
                 logExisting([existing, c]);
                 return p;
               }
               return [...p, c];
-            },
-            prev,
-          ),
+            }
+            return p;
+          },
+          prev,
+        ),
       [] as ScrapedThumbnail<P, S>[],
     );
   }

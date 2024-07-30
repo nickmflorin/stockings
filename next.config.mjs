@@ -24,11 +24,6 @@ const config = {
     optimizePackageImports: ["@mantine/core", "zod", "@mantine/dropzone", "@mantine/dates"],
   },
   transpilePackages: ["@mantine/core"],
-  // webpack: config => {
-  //   /* The StylelintPlugin requires the addition to the package.json: "postcss": "^8.4.18". */
-  //   config.plugins.push(new StylelintPlugin());
-  //   return config;
-  // },
   sassOptions: {
     includePaths: [path.join(__dirname, "src/styles")],
   },
@@ -45,21 +40,6 @@ const config = {
     {
       source: "/",
       destination: "/dashboard",
-      permanent: false,
-    },
-    {
-      source: "/resume",
-      destination: "/resume/experience",
-      permanent: false,
-    },
-    {
-      source: "/admin",
-      destination: "/admin/skills",
-      permanent: false,
-    },
-    {
-      source: "/projects",
-      destination: "/projects/asset-visualizations",
       permanent: false,
     },
   ],

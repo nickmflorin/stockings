@@ -1,5 +1,6 @@
+import { isError } from "~/application/errors";
 import { getAttributeKey, type ElementAttribute, ScrapingErrorCode } from "~/prisma/model";
-import { ScrapingError } from "~/scraping/errors";
+import { BaseScrapingError } from "~/scraping/errors";
 
 import { type ApiElement } from "./element";
 import { type ApiSelector } from "./selector";
@@ -8,7 +9,7 @@ interface ElementErrorConfig {
   readonly parent?: ApiElement;
 }
 
-export abstract class ElementError extends ScrapingError {
+export abstract class ElementError extends BaseScrapingError {
   protected readonly parent: ApiElement | undefined;
   public abstract message: string;
 
@@ -132,3 +133,24 @@ export class InvalidAttributeError extends AttributeError {
     return `The element had an invalid value, '${this.value}', for the attribute '${this.attribute}'.`;
   }
 }
+
+export type ScrapingDomError =
+  | InvalidAttributeError
+  | MissingAttributeError
+  | MissingTextError
+  | MissingElementError
+  | NonUniqueElementError
+  | NonUniqueTextError
+  | InvalidTextError;
+
+export const isScrapingDomError = (e: unknown) =>
+  isError(e) &&
+  [
+    InvalidAttributeError,
+    MissingAttributeError,
+    MissingTextError,
+    MissingElementError,
+    NonUniqueElementError,
+    NonUniqueTextError,
+    InvalidTextError,
+  ].some(cls => e instanceof cls);

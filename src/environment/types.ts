@@ -6,19 +6,24 @@ type BaseRuntimeEnv = {
   [key in string]: string | undefined;
 };
 
-export type ClientKey<R extends RuntimeEnv<V>, V extends Validators<R>> = Extract<
-  Extract<keyof R, string> & Extract<keyof V, string>,
+export type EnvironmentValidationMethod = "first-access" | "instantiation";
+
+export type EnvKey<R extends RuntimeEnv<V>, V extends Validators<R>> = Extract<keyof R, string> &
+  Extract<keyof V, string>;
+
+export type NextClientKey<R extends RuntimeEnv<V>, V extends Validators<R>> = Extract<
+  EnvKey<R, V>,
   `NEXT_PUBLIC_${string}`
 >;
 
-export type ServerOnlyKey<R extends RuntimeEnv<V>, V extends Validators<R>> = Exclude<
-  Extract<keyof R, string> & Extract<keyof V, string>,
+export type NextServerOnlyKey<R extends RuntimeEnv<V>, V extends Validators<R>> = Exclude<
+  EnvKey<R, V>,
   `NEXT_PUBLIC_${string}`
 >;
 
-export type EnvKey<R extends RuntimeEnv<V>, V extends Validators<R>> =
-  | ClientKey<R, V>
-  | ServerOnlyKey<R, V>;
+export type NextEnvKey<R extends RuntimeEnv<V>, V extends Validators<R>> =
+  | NextClientKey<R, V>
+  | NextServerOnlyKey<R, V>;
 
 export type EnvValue<
   K extends EnvKey<R, V>,
@@ -26,34 +31,42 @@ export type EnvValue<
   V extends Validators<R>,
 > = z.infer<V[K]>;
 
+export type Env<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in EnvKey<R, V>]: EnvValue<key, R, V>;
+};
+
 export type Validators<R extends BaseRuntimeEnv = BaseRuntimeEnv> = {
   [key in Extract<keyof R, string>]: z.ZodType<ValidEnvValue>;
 };
 
-export type ClientValidators<R extends RuntimeEnv<V>, V extends Validators<R>> = {
-  [key in ClientKey<R, V>]: V[key];
+export type NextClientValidators<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextClientKey<R, V>]: V[key];
 };
 
-export type ClientRuntime<R extends RuntimeEnv<V>, V extends Validators<R>> = {
-  [key in ClientKey<R, V>]: R[key];
+export type NextClientRuntime<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextClientKey<R, V>]: R[key];
 };
 
-export type ClientEnv<R extends RuntimeEnv<V>, V extends Validators<R>> = {
-  [key in ClientKey<R, V>]: EnvValue<key, R, V>;
+export type NextClientEnv<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextClientKey<R, V>]: EnvValue<key, R, V>;
 };
 
-export type ServerOnlyValidators<R extends RuntimeEnv<V>, V extends Validators<R>> = {
-  [key in ServerOnlyKey<R, V>]: V[key];
+export type NextServerOnlyValidators<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextServerOnlyKey<R, V>]: V[key];
 };
 
-export type ServerOnlyRuntime<R extends RuntimeEnv<V>, V extends Validators<R>> = {
-  [key in ServerOnlyKey<R, V>]: R[key];
+export type NextServerOnlyRuntime<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextServerOnlyKey<R, V>]: R[key];
 };
 
-export type ServerOnlyEnv<R extends RuntimeEnv<V>, V extends Validators<R>> = {
-  [key in ServerOnlyKey<R, V>]: EnvValue<key, R, V>;
+export type NextServerOnlyEnv<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextServerOnlyKey<R, V>]: EnvValue<key, R, V>;
 };
 
 export type RuntimeEnv<V extends Validators> = {
   [key in Extract<keyof V, string>]: string | undefined;
+};
+
+export type NextMergedEnv<R extends RuntimeEnv<V>, V extends Validators<R>> = {
+  [key in NextServerOnlyKey<R, V> | NextClientKey<R, V>]: R[key];
 };

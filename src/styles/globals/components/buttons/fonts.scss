@@ -1,0 +1,88 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+@use "partials";
+@use "../typography" as typography;
+
+@use "./constants" as constants;
+@use "./sizing" as sizing;
+
+@mixin button-font-base($type) {
+  font-family: constants.$button-default-font-family;
+
+  // Allow the font families to be defined with a class name.
+  @include typography.with-font-families();
+
+  // Allow the text transformations to be defined with a class name.
+  @include typography.with-text-transforms();
+
+  font-weight: partials.mapget(constants.$button-font-weights, $type);
+
+  // Allow the font-weight to be overridden if the class name is present.
+  @include typography.with-font-weights();
+}
+
+@mixin btn-size-fonts($size) {
+  $padding: partials.mapget(constants.$button-padding, $size);
+  $height: partials.mapget(constants.$button-sizes, $size);
+  font-size: partials.mapget(constants.$button-font-sizes, $size);
+  line-height: $height - 2 * list.nth($padding, 1);
+
+  // Allow the font size to be overridden for a Button independently of the Button's size.
+  @include typography.use-fonts("body") using ($font-size, $data) {
+    &.font-sz-#{$font-size} {
+      font-size: partials.mapget($data, font-size);
+    }
+  }
+}
+
+@mixin btn-fonts() {
+  @include button-font-base("button");
+
+  @include btn-size-fonts(constants.$button-default-size);
+  @each $size in map.keys(constants.$button-sizes) {
+    &.button--size-#{$size} {
+      @include btn-size-fonts($size);
+    }
+  }
+}
+
+@mixin link-fonts() {
+  @include button-font-base("link");
+
+  $properties: typography.get-font("body", constants.$link-default-font-size);
+  font-size: partials.mapget($properties, font-size);
+  line-height: partials.mapget($properties, line-height);
+
+  @include typography.use-fonts("body") using ($size, $data) {
+    &.font-sz-#{$size} {
+      font-size: partials.mapget($data, font-size);
+      line-height: partials.mapget($data, line-height);
+    }
+  }
+}
+
+@mixin inline-link-fonts() {
+  @include button-font-base("inline-link");
+
+  font-size: inherit;
+  line-height: inherit;
+
+  @include typography.use-fonts("body") using ($size, $data) {
+    &.font-sz-#{$size} {
+      font-size: partials.mapget($data, font-size);
+      line-height: partials.mapget($data, line-height);
+    }
+  }
+}
+
+@mixin button-fonts($type) {
+  @if $type == "button" {
+    @include btn-fonts();
+  } @else if $type == "link" {
+    @include link-fonts();
+  } @else if $type == "inline-link" {
+    @include inline-link-fonts();
+  }
+}

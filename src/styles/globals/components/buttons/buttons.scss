@@ -1,0 +1,123 @@
+@use "sass:list";
+@use "sass:map";
+
+@use "partials";
+
+@use "../typography" as typography;
+
+@use "./base" as *;
+@use "./constants" as constants;
+@use "./fonts" as fonts;
+@use "./mixins" as mixins;
+@use "./sizing" as sizing;
+@use "./colors" as colors;
+
+@mixin button-properties($type) {
+  @include button-base;
+  @include colors.button-colors($type);
+  @include sizing.button-sizes($type);
+
+  @if $type != "icon-button" {
+    @include fonts.button-fonts($type);
+  }
+}
+
+@mixin inherit-properties() {
+  color: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: inherit;
+}
+
+@mixin button-structure() {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > .button__content {
+    text-align: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+    max-width: 100%;
+    flex-grow: 100;
+    gap: 8px;
+    @include inherit-properties();
+
+    > .button__sub-content {
+      text-decoration: none;
+      max-width: 100%;
+      flex-grow: 100;
+      // This padding prevents the right side of italic text from being cut off.
+      padding-right: 1px;
+      @include typography.truncate();
+      @include inherit-properties();
+    }
+  }
+}
+
+.button {
+  @include button-base();
+  @include mixins.button-locked-or-loading();
+
+  .icon {
+    aspect-ratio: 1;
+    width: auto;
+    color: inherit;
+    filter: inherit;
+  }
+
+  @include partials.border-radius(constants.$button-default-border-radius);
+
+  @include partials.with-radius() using ($radii, $value) {
+    &.button--radius-#{$radii} {
+      @include partials.border-radius($value);
+    }
+  }
+
+  &--type-button {
+    @include button-properties("button");
+    @include button-structure();
+
+    min-width: fit-content;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &--type-link {
+    @include button-properties("link");
+    @include button-structure();
+
+    text-decoration: none;
+    max-width: fit-content;
+    vertical-align: middle;
+  }
+
+  &--type-inline-link {
+    @include button-properties("inline-link");
+    @include inherit-properties();
+
+    text-decoration: none;
+    max-width: fit-content;
+    vertical-align: baseline;
+  }
+
+  &--type-icon-button {
+    @include button-properties("icon-button");
+    @include button-structure();
+
+    min-width: fit-content;
+    justify-content: center;
+    text-align: center;
+    aspect-ratio: 1;
+    padding: 0;
+  }
+}

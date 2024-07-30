@@ -1,9 +1,9 @@
-const FIRST_INTERNAL_MODULE_GROUP = ["prisma", "environment", "application"];
-
-const SECOND_INTERNAL_MODULE_GROUP = ["app", "actions", "scraping"];
-
-// Components and styles should always be the last absolute imports.
-const THIRD_INTERNAL_MODULE_GROUP = ["components", "hooks", "styles"];
+const ModuleGroups = [
+  ["prisma", "environment", "application", "support", "internal"],
+  ["integrations", "lib", "scraping"],
+  ["app", "actions"],
+  ["components", "hooks", "styles"],
+];
 
 const toAbsoluteImports = v => [`~/${v}`, `~/${v}/**`];
 
@@ -18,7 +18,7 @@ const BASE_RULES = {
       groups: ["builtin", "external", "type", "internal", "parent", "sibling", "index", "object"],
       "newlines-between": "always",
       warnOnUnassignedImports: true,
-      distinctGroup: false,
+      distinctGroup: true,
       pathGroupsExcludedImportTypes: ["react", "next"],
       pathGroups: [
         {
@@ -48,30 +48,13 @@ const BASE_RULES = {
           group: "sibling",
           position: "after",
         },
-        {
-          pattern: `{${FIRST_INTERNAL_MODULE_GROUP.reduce(
-            (prev, v) => [...prev, ...toAbsoluteImports(v)],
-            [],
-          ).join(",")}}`,
+        ...ModuleGroups.map(group => ({
+          pattern: `{${group
+            .reduce((prev, v) => [...prev, ...toAbsoluteImports(v)], [])
+            .join(",")}}`,
           group: "internal",
           position: "before",
-        },
-        {
-          pattern: `{${SECOND_INTERNAL_MODULE_GROUP.reduce(
-            (prev, v) => [...prev, ...toAbsoluteImports(v)],
-            [],
-          ).join(",")}}`,
-          group: "internal",
-          position: "before",
-        },
-        {
-          pattern: `{${THIRD_INTERNAL_MODULE_GROUP.reduce(
-            (prev, v) => [...prev, ...toAbsoluteImports(v)],
-            [],
-          ).join(",")}}`,
-          group: "internal",
-          position: "before",
-        },
+        })),
       ],
       alphabetize: {
         order: "asc",

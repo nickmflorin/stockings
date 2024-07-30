@@ -1,0 +1,12 @@
+@use "./layout";
+@use "./side-nav";
+@use "./mixins" as mixins;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  @include mixins.fully-constrained-dimension(height, 100vh);
+  @include mixins.fully-constrained-dimension(width, 100vw);
+}

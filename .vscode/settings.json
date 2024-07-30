@@ -36,7 +36,7 @@
     "@typescript-eslint/consistent-type-imports"
   ],
 
-  "typescript.tsdk": "./node_modules/typescript/lib",
+  // "typescript.tsdk": "./node_modules/typescript/lib",
   "typescript.updateImportsOnFileMove.enabled": "prompt",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.format.enable": false,
@@ -58,5 +58,6 @@
 
   "stylelint.validate": ["css", "scss", "less", "postcss"],
   "stylelint.configBasedir": "/",
-  "stylelint.packageManager": "pnpm"
+  "stylelint.packageManager": "pnpm",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,0 +1,67 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:selector";
+
+@use "./selectors" as selectors;
+
+@forward "./element-properties";
+@forward "./selectors";
+
+$states: ("disabled", "hovered", "focused", "focused-within", "visited");
+
+$disabled-selectors: (":disabled", ".disabled");
+$hovered-selectors: (":hover");
+$focused-selectors: (":focus");
+$focused-within-selectors: (":focus-within");
+$visited-selectors: (":visited");
+
+@mixin focused($args...) {
+  @include selectors.with-selectors($focused-selectors, $args...) {
+    @include selectors.without-selectors($disabled-selectors, $args...) {
+      @content;
+    }
+  }
+}
+
+@mixin focused-within($args...) {
+  @include selectors.with-selectors($focused-within-selectors, $args...) {
+    @include selectors.without-selectors($disabled-selectors, $args...) {
+      @content;
+    }
+  }
+}
+
+@mixin disabled($args...) {
+  @include selectors.with-selectors($disabled-selectors, $args...) {
+    cursor: not-allowed !important;
+    // Turning off pointer-events with `pointer-events: none` prevents the disabled cursor from
+    // appearing.
+    pointer-events: auto !important;
+    @content;
+  }
+}
+
+@mixin hovered($args...) {
+  @include selectors.with-selectors($hovered-selectors, $args...) {
+    @include selectors.without-selectors($disabled-selectors, $args...) {
+      @content;
+    }
+  }
+}
+
+@mixin focused-hovered($args...) {
+  @include selectors.with-selectors($focused-selectors, $args...) {
+    @include selectors.with-selectors($hovered-selectors, $args...) {
+      @include selectors.without-selectors($disabled-selectors, $args...) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin visited($args...) {
+  @include selectors.with-selectors($visited-selectors, $args...) {
+    @content;
+  }
+}

@@ -1,7 +1,8 @@
+import { isError } from "~/application/errors";
 import { ScrapingErrorCode } from "~/prisma/model";
-import { ScrapingError } from "~/scraping/errors";
+import { BaseScrapingError } from "~/scraping/errors";
 
-export abstract class ScrapingHttpError extends ScrapingError {
+export abstract class ScrapingBaseHttpError extends BaseScrapingError {
   protected readonly url: string;
 
   constructor(url: string) {
@@ -14,7 +15,7 @@ export abstract class ScrapingHttpError extends ScrapingError {
   }
 }
 
-export class ScrapingNetworkError extends ScrapingHttpError {
+export class ScrapingNetworkError extends ScrapingBaseHttpError {
   public readonly error: Error;
   public errorCode = ScrapingErrorCode.HTTP_NETWORK;
 
@@ -28,7 +29,7 @@ export class ScrapingNetworkError extends ScrapingHttpError {
   }
 }
 
-export class ScrapingClientError extends ScrapingHttpError {
+export class ScrapingClientError extends ScrapingBaseHttpError {
   public readonly status: number;
   public errorCode = ScrapingErrorCode.HTTP_CLIENT;
 
@@ -42,7 +43,7 @@ export class ScrapingClientError extends ScrapingHttpError {
   }
 }
 
-export class ScrapingSerializationError extends ScrapingHttpError {
+export class ScrapingSerializationError extends ScrapingBaseHttpError {
   public readonly error: Error;
   public errorCode = ScrapingErrorCode.HTTP_SERIALIZATION;
 
@@ -55,3 +56,14 @@ export class ScrapingSerializationError extends ScrapingHttpError {
     return `There was an error deserializing the response from the request to ${this.url}:\n${this.error}`;
   }
 }
+
+export type ScrapingHttpError =
+  | ScrapingClientError
+  | ScrapingNetworkError
+  | ScrapingSerializationError;
+
+export const isScrapingHttpError = (e: unknown) =>
+  isError(e) &&
+  [ScrapingClientError, ScrapingNetworkError, ScrapingSerializationError].some(
+    cls => e instanceof cls,
+  );

@@ -1,0 +1,33 @@
+@use "sass:map";
+
+@use "./functions" as fn;
+@use "./mixins" as mixins;
+
+$radii: (
+  "none": theme("borderRadius.none"),
+  "xs": theme("borderRadius.xs"),
+  "sm": theme("borderRadius.sm"),
+  "md": theme("borderRadius.md"),
+  "lg": theme("borderRadius.lg"),
+  "xl": theme("borderRadius.xl"),
+  "2xl": theme("borderRadius.2xl"),
+  "3xl": theme("borderRadius.3xl"),
+  "full": theme("borderRadius.full"),
+);
+
+@function get-radius($size) {
+  @if not map.has-key($radii, $size) {
+    @error "The provided size #{$size} is invalid.";
+  }
+  @return fn.mapget($radii, $size);
+}
+
+@mixin radius($size) {
+  @include mixins.border-radius(fn.mapget($radii, $size));
+}
+
+@mixin with-radius() {
+  @each $size in map.keys($radii) {
+    @content ($size, fn.mapget($radii, $size));
+  }
+}

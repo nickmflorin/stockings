@@ -1,0 +1,90 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+@use "partials";
+@use "./constants" as constants;
+
+// The sizes of the Icon that will appear inside of the element.
+$button-icon-sizes: (
+  "button": (
+    "xsmall": partials.mapget(constants.$button-sizes, "xsmall") - 2 *
+      list.nth(partials.mapget(constants.$button-padding, "xsmall"), 1),
+    "small": partials.mapget(constants.$button-sizes, "small") - 2 *
+      list.nth(partials.mapget(constants.$button-padding, "small"), 1),
+    "medium": partials.mapget(constants.$button-sizes, "medium") - 2 *
+      list.nth(partials.mapget(constants.$button-padding, "medium"), 1),
+    "large": partials.mapget(constants.$button-sizes, "large") - 2 *
+      list.nth(partials.mapget(constants.$button-padding, "large"), 1),
+    "xlarge": partials.mapget(constants.$button-sizes, "xlarge") - 2 *
+      list.nth(partials.mapget(constants.$button-padding, "xlarge"), 1),
+    "full": 100%,
+  ),
+  "link": (
+    "xsmall": 13px,
+    "small": 14px,
+    "medium": 16px,
+    "large": 18px,
+    "xlarge": 20px,
+    "full": 100%,
+  ),
+  "icon-button": (
+    "xsmall": 14px,
+    "small": 16px,
+    "medium": 18px,
+    "large": 18px,
+    "xlarge": 20px,
+    "full": 100%,
+  ),
+);
+
+@mixin button-icon-size($type, $size) {
+  .icon {
+    height: partials.mapget($button-icon-sizes, $type, $size);
+  }
+}
+
+@mixin button-size($type, $size) {
+  @if $type == "icon-button" or $type == "button" {
+    $height: partials.mapget(constants.$button-sizes, $size);
+
+    height: $height;
+    min-height: $height;
+
+    @if $type == "icon-button" {
+      width: $height;
+    } @else {
+      padding: partials.mapget(constants.$button-padding, $size);
+    }
+  }
+  @if $type != "inline-link" {
+    @include button-icon-size($type, $size);
+  }
+}
+
+@mixin button-icon-sizes($type) {
+  @each $size in map.keys(constants.$button-sizes) {
+    &.button--icon-size-#{$size} {
+      @include button-icon-size($type, $size);
+    }
+  }
+}
+
+@mixin button-sizes($type) {
+  @if $type != "link" and $type != "inline-link" {
+    @each $size in map.keys(constants.$button-sizes) {
+      &.button--size-#{$size} {
+        @include button-size($type, $size);
+        /* Allow the icon size in the button to be controlled independently of the button's primary
+           size if the class name is present. */
+        @include button-icon-sizes($type);
+      }
+    }
+  } @else if $type == "link" {
+    // Consider 'small' to be the default.
+    @include button-icon-size($type, "small");
+    /* The Link is sized based on the line height of its text, but it still can have icons - which
+       need to be sized explicitly. */
+    @include button-icon-sizes($type);
+  }
+}

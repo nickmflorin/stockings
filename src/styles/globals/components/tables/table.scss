@@ -1,0 +1,195 @@
+@use "partials";
+
+$table-header-bg-color: theme("colors.gray.100");
+$table-row-highlighted-color: theme("colors.gray.50");
+$table-border-color: theme("colors.border");
+$table-border: 1px solid $table-border-color;
+$table-color: theme("colors.body");
+$table-body-bg-color: theme("colors.white");
+
+$table-sizes: ("small", "medium", "large");
+$table-default-size: "medium";
+
+$table-size-properties: (
+  "small": (
+    "td": (
+      padding: 10px 12px,
+    ),
+    "th": (
+      padding: 10px 12px,
+    ),
+  ),
+  "medium": (
+    "td": (
+      padding: 10px 12px,
+    ),
+    "th": (
+      padding: 10px 12px,
+    ),
+  ),
+  "large": (
+    "td": (
+      padding: 10px 12px,
+    ),
+    "th": (
+      padding: 10px 12px,
+    ),
+  ),
+);
+
+@mixin table-head() {
+  > thead.table__head {
+    @content;
+  }
+}
+
+@mixin table-header-row($direct: false) {
+  @if $direct {
+    > tr.table__header-row {
+      @content;
+    }
+  } @else {
+    @include table-head() {
+      > tr.table__header-row {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin table-body() {
+  > tbody.table__body {
+    @content;
+  }
+}
+
+@mixin table-body-row($direct: false) {
+  @if $direct {
+    > tr.table__body-row {
+      @content;
+    }
+  } @else {
+    @include table-body() {
+      > tr.table__body-row {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin table-header-cell($direct: false) {
+  @if $direct {
+    > th.table__header-cell {
+      @content;
+    }
+  } @else {
+    @include table-header-row($direct: false) {
+      > th.table__header-cell {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin table-body-cell($direct: false) {
+  @if $direct {
+    > td.table__body-cell {
+      @content;
+    }
+  } @else {
+    @include table-body-row($direct: false) {
+      > td.table__body-cell {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin table-size($size) {
+  $td: partials.mapget($table-size-properties, $size, "td");
+  @include table-body-cell() {
+    @include partials.mapped-properties($td);
+  }
+  $th: partials.mapget($table-size-properties, $size, "th");
+  @include table-header-cell() {
+    @include partials.mapped-properties($th);
+  }
+}
+
+.table {
+  @include table-size($table-default-size);
+  @each $size in $table-sizes {
+    &.table--#{$size} {
+      @include table-size($size);
+    }
+  }
+
+  @include table-head {
+    background-color: $table-header-bg-color;
+    color: $table-color;
+
+    @include table-header-row($direct: true) {
+      color: inherit;
+
+      @include table-header-cell($direct: true) {
+        border-bottom: $table-border;
+        color: inherit;
+        font-size: 13px;
+      }
+    }
+  }
+
+  @include table-body {
+    color: $table-color;
+    background-color: $table-body-bg-color;
+    position: relative;
+
+    @include table-body-row($direct: true) {
+      color: inherit;
+
+      @include table-body-cell($direct: true) {
+        color: inherit;
+        font-size: 14px;
+        border-bottom: none;
+      }
+
+      &--highlighted {
+        background-color: $table-row-highlighted-color;
+      }
+
+      &--loading {
+        opacity: 0.4;
+      }
+
+      &--bordered {
+        @include table-body-cell($direct: true) {
+          // These important flags are only to work around MUI's default application of bottom
+          // borders.
+          border-bottom: $table-border !important;
+        }
+      }
+    }
+
+    &.table__body--loading {
+      @include table-body-row($direct: true) {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  &--higlighted-rows-on-hover {
+    @include table-body-row($direct: false) {
+      &:hover {
+        background-color: $table-row-highlighted-color;
+      }
+    }
+  }
+
+  &--bordered {
+    @include table-body-cell($direct: false) {
+      // These important flags are only to work around MUI's default application of bottom
+      // borders.
+      border-bottom: $table-border !important;
+    }
+  }
+}

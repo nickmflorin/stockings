@@ -1,0 +1,216 @@
+@use "sass:list";
+
+@use "partials";
+@use "./typography" as typography;
+
+$menu-item-padding: 6px 10px;
+
+@mixin content-locked() {
+  pointer-events: none;
+  > .menu__item {
+    pointer-events: none;
+  }
+}
+
+@mixin content-loading() {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@mixin content-disabled() {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.menu__content {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
+
+  .menu__item-group {
+    display: flex;
+    flex-direction: column;
+
+    > .menu__item-group__label-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 12px list.nth($menu-item-padding, 2);
+
+      > .menu__item-group__label {
+        @include typography.font(
+          $type: "label",
+          $size: "xs",
+          $weight: "medium",
+          $color: theme("colors.gray.600")
+        );
+      }
+    }
+  }
+
+  // Note: Sometimes a menu__item element is wrapped in an anchor tag if it represents a link.
+  .menu__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: $menu-item-padding;
+    gap: theme("spacing.2");
+    color: theme("colors.body");
+    transition-property: background-color, background, border-color, color, fill, stroke, opacity,
+      box-shadow, transform;
+    transition-duration: 100ms;
+
+    // The line height may be overridden in the component if the height is specified as a prop.
+    @include typography.font($type: "body", $line-height: 28px, $size: "xs");
+
+    @include partials.disabled {
+      color: theme("colors.disabled");
+    }
+
+    &.menu__item--locked,
+    &.menu__item--loading {
+      pointer-events: none;
+    }
+
+    @include partials.hovered {
+      &:not(.menu__item--selected, .disabled, .menu__item--locked) {
+        background-color: theme("colors.gray.50");
+      }
+    }
+
+    @include partials.focused {
+      &:not(.menu__item--selected, .disabled, .menu__item--locked) {
+        background-color: theme("colors.gray.50");
+      }
+    }
+
+    &.menu__item--navigated:not(.disabled) {
+      &:not(.menu__item--selected, .disabled, .menu__item--locked) {
+        background-color: theme("colors.gray.50");
+      }
+      &.menu__item--selected {
+        background-color: theme("colors.gray.200");
+      }
+    }
+
+    &.menu__item--selected:not(.disabled) {
+      background-color: theme("colors.gray.100");
+      @include partials.hovered {
+        &:not(.disabled, .menu__item--locked) {
+          background-color: theme("colors.gray.200");
+        }
+      }
+      @include partials.focused {
+        &:not(.disabled, .menu__item--locked) {
+          background-color: theme("colors.gray.200");
+        }
+      }
+    }
+
+    // TODO: Improve the style of the checkbox.
+    > .checkbox {
+      padding: 0;
+    }
+
+    > .menu__item__content {
+      height: 100%;
+      text-align: left;
+      line-height: inherit;
+      flex-grow: 100;
+      color: inherit;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: theme("spacing.2");
+      @include typography.truncate();
+    }
+  }
+
+  &--bordered {
+    .menu__item {
+      &:not(:last-of-type) {
+        border-bottom: 1px solid theme("colors.border");
+      }
+    }
+    .menu__item-group:not(:last-of-type) {
+      > .menu__item-group__content {
+        > .menu__item {
+          &:last-of-type {
+            border-bottom: 1px solid theme("colors.border");
+          }
+        }
+      }
+    }
+  }
+
+  &--bordered-groups:not(.menu__item--bordered) {
+    .menu__item-group {
+      &:not(:first-of-type) {
+        border-top: 1px solid theme("colors.border");
+      }
+    }
+  }
+
+  &--locked {
+    @include content-locked();
+  }
+
+  &--loading {
+    @include content-loading();
+  }
+
+  &--disabled {
+    @include content-disabled();
+  }
+
+  .menu__item-group {
+    > .menu__item-group__content {
+      @include content-locked();
+
+      &--loading {
+        @include content-loading();
+      }
+
+      &--disabled {
+        @include content-disabled();
+      }
+
+      &--bordered {
+        .menu__item {
+          &:not(:last-of-type) {
+            border-bottom: 1px solid theme("colors.border");
+          }
+        }
+      }
+
+      > .menu__item {
+        padding: list.nth($menu-item-padding, 1) list.nth($menu-item-padding, 2) + 2px;
+      }
+    }
+  }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: theme("spacing.1");
+  overflow: hidden;
+  max-height: 100%;
+
+  &:focus {
+    outline: none !important;
+  }
+
+  > .menu__header {
+    display: flex;
+    flex-direction: column;
+    gap: theme("spacing.1");
+    padding: theme("spacing.2");
+  }
+
+  > .menu__content {
+    overflow-y: auto;
+    flex-grow: 100;
+  }
+}

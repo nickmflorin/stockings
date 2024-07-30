@@ -136,6 +136,7 @@ export class LieNielsenIntegration {
     { limit, user, batchSize = 10 }: UpdateProductRecordsContext,
   ) {
     const scrapedProducts = await scraper.scrapeThumbnailProducts(page, { limit, batchSize });
+
     const products = await prisma.product.findMany({
       include: { records: { orderBy: { timestamp: "desc" } } },
     });

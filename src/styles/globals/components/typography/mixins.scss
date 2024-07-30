@@ -1,0 +1,171 @@
+@use "sass:map";
+
+@use "partials";
+@use "./constants" as constants;
+
+@mixin truncate {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin clamp($line-clamp: 2) {
+  @include truncate;
+  -webkit-line-clamp: $line-clamp;
+  -webkit-box-orient: vertical;
+  display: block;
+}
+
+@mixin inherit-font-properties() {
+  color: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-transform: inherit;
+  text-decoration: inherit;
+}
+
+@mixin font-family($type) {
+  font-family: partials.mapget(constants.$font-families, $type);
+}
+
+@mixin text-font-family() {
+  @include font-family("body");
+}
+
+@mixin title_font-family() {
+  @include font-family("title");
+}
+
+@mixin label-font-family() {
+  @include font-family("label");
+}
+
+/* --------------------------------------- Font Weights ----------------------------------------- */
+@mixin font-weight($type, $size) {
+  font-weight: constants.get-font-weight($type, $size);
+}
+
+@mixin text-font-weight($size) {
+  @include font-weight("body", $size);
+}
+
+@mixin title_font-weight($size) {
+  @include font-weight("title", $size);
+}
+
+@mixin label-font-weight($size) {
+  @include font-weight("label", $size);
+}
+
+/* --------------------------------------- Font Sizes ----------------------------------------- */
+@mixin font-size($type, $size) {
+  font-size: get-font-size($type, $size);
+}
+
+@mixin title_font-size($size) {
+  @include font-size("title", $size);
+}
+
+@mixin text-font-size($size) {
+  @include font-size("body", $size);
+}
+
+@mixin label-font-size($size) {
+  @include font-size("label", $size);
+}
+
+@mixin line-height($type, $size) {
+  line-height: get-line-height($type, $size);
+}
+
+@mixin title_line-height($size) {
+  @include line-height("title", $size);
+}
+
+@mixin text-line-height($size) {
+  @include line-height("body", $size);
+}
+
+@mixin label-line-height($size) {
+  @include line-height("label", $size);
+}
+
+/* --------------------------------------- Font Colors ------------------------------------------ */
+@mixin default-font-color($type) {
+  color: constants.get-default-font-color($type);
+}
+
+@mixin text-default-font-color() {
+  @include default-font-color("body");
+}
+
+@mixin title-default-font-color() {
+  @include default-font-color("title");
+}
+
+@mixin label-default-font-color() {
+  @include default-font-color("label");
+}
+
+/* --------------------------------------- Font Specs ------------------------------------------ */
+@mixin font($type, $size, $args...) {
+  @include font-family("body");
+  $properties: constants.get-font($type, $size, $args...);
+  font-size: partials.mapget($properties, font-size);
+  line-height: partials.mapget($properties, line-height);
+  font-weight: partials.mapget($properties, font-weight);
+  color: partials.mapget($properties, color);
+}
+
+@mixin use-fonts($type) {
+  @each $size in map.keys(partials.mapget(constants.$typography-size-properties, $type)) {
+    $properties: constants.get-font($type, $size);
+    @content ($size, $properties);
+  }
+}
+
+@mixin with-font-weights() {
+  @each $weight in map.keys(constants.$font-weights) {
+    &.font-weight-#{$weight} {
+      font-weight: partials.mapget(constants.$font-weights, $weight);
+    }
+  }
+}
+
+@mixin with-font-sizes($type) {
+  @include use-fonts($type) using ($size, $properties) {
+    &.font-sz-#{$size} {
+      font-size: partials.mapget($properties, font-size);
+    }
+  }
+}
+
+@mixin with-fonts($type) {
+  @include use-fonts($type) using ($size, $properties) {
+    &.font-sz-#{$size} {
+      font-size: partials.mapget($properties, font-size);
+      line-height: partials.mapget($properties, line-height);
+      font-weight: partials.mapget($properties, font-weight);
+      color: partials.mapget($properties, color);
+
+      // Allow the font-weight to be overridden with the appropriate class name.
+      @include with-font-weights();
+    }
+  }
+}
+
+@mixin with-font-families() {
+  &.font-family-poppins {
+    font-family: theme("fontFamily.poppins");
+  }
+}
+
+@mixin with-text-transforms() {
+  @each $transform in constants.$text-transforms {
+    &.transform-#{$transform} {
+      text-transform: $transform;
+    }
+  }
+}

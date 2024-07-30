@@ -1,0 +1,18 @@
+.table-view {
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  gap: theme("spacing.4");
+
+  > .table-view__header {
+    width: 100%;
+  }
+
+  > .table-view__content {
+    flex-grow: 100;
+  }
+
+  > .table-view__footer {
+    width: 100%;
+  }
+}

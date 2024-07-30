@@ -5,6 +5,9 @@ import type { ILieNielsenClient } from "./client";
 
 import { logger } from "~/application/logger";
 import { api } from "~/scraping/dom";
+import type { DomApiType } from "~/scraping/dom/api";
+import { type ScrapingError } from "~/scraping/errors";
+import { ScrapingHttpError, isScrapingHttpError } from "~/scraping/http";
 
 import { LieNielsenClient } from "./client";
 import * as paths from "./paths";
@@ -19,6 +22,18 @@ interface ScrapeThumbnailProductsContext {
   readonly batchSize?: number;
 }
 
+type ScrapeProductOptions = {
+  readonly strict?: boolean;
+};
+
+type ScrapedProductRT<
+  O extends ScrapeProductOptions,
+  P extends paths.ProductsPageId,
+  S extends paths.ProductsSubPageId<P>,
+> = O extends { strict: true }
+  ? ScrapedThumbnailProduct<P, S>
+  : ScrapingError | ScrapedThumbnailProduct<P, S>;
+
 export class LieNielsenScrapeClient {
   private readonly client: ILieNielsenClient<typeof processor>;
 
@@ -32,11 +47,20 @@ export class LieNielsenScrapeClient {
   }
 
   public async scrapeThumbnailProduct<
+    O extends ScrapeProductOptions,
     P extends paths.ProductsPageId,
     S extends paths.ProductsSubPageId<P>,
-  >(thumbnail: ScrapedThumbnail<P, S>): Promise<ScrapedThumbnailProduct<P, S>> {
-    const sel = await this.client.fetchProduct(thumbnail.slug);
-    return new ScrapedThumbnailProduct<P, S>(sel, thumbnail);
+  >(thumbnail: ScrapedThumbnail<P, S>, options: O): Promise<ScrapedProductRT<O, P, S>> {
+    let domApi: DomApiType;
+    try {
+      domApi = await this.client.fetchProduct(thumbnail.slug);
+    } catch (e) {
+      if (isScrapingHttpError(e) && options.strict !== true) {
+        return e as ScrapedProductRT<O, P, S>;
+      }
+      throw e;
+    }
+    return new ScrapedThumbnailProduct<P, S>(domApi, thumbnail);
   }
 
   public async scrapeThumbnailProducts<P extends paths.ProductsPageId>(

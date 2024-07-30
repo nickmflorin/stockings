@@ -8,7 +8,7 @@ import {
   type ProductsPageId,
   type ProductsSubPageId,
 } from "~/scraping/integrations/lie-nielsen/paths";
-import { ScrapedApiModel } from "~/scraping/scraped-model";
+import { ScrapedApiModel, ScrapedApiModelDataCls } from "~/scraping/scraped-model";
 import { Differences, type DifferenceField } from "~/lib/differences";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
@@ -36,9 +36,9 @@ const logExisting = <
   }
 };
 
-export type ProductScrapedStatus = Extract<
+export type ProductScrapedStatus = Exclude<
   ProductRecordStatus,
-  typeof ProductRecordStatus.IN_STOCK | typeof ProductRecordStatus.OUT_OF_STOCK
+  typeof ProductRecordStatus.NOT_LISTED
 >;
 
 export const parseProductScrapedState = (value: string): ProductScrapedStatus | null => {
@@ -47,7 +47,7 @@ export const parseProductScrapedState = (value: string): ProductScrapedStatus | 
     case "outofstock":
       return ProductRecordStatus.OUT_OF_STOCK;
     case "placebackorder":
-      return ProductRecordStatus.OUT_OF_STOCK;
+      return ProductRecordStatus.AVAILABLE_FOR_BACKORDER;
     case "addtocart":
       return ProductRecordStatus.IN_STOCK;
     default:
@@ -55,7 +55,7 @@ export const parseProductScrapedState = (value: string): ProductScrapedStatus | 
   }
 };
 
-export type IScrapedProduct = {
+export type IScrapedProductData = {
   readonly price: api.ParserResult<"price">;
   readonly rawPrice: string;
   readonly imageSrc: string;
@@ -64,13 +64,7 @@ export type IScrapedProduct = {
   readonly code: string;
 };
 
-export class ScrapedProduct extends ScrapedApiModel<IScrapedProduct> implements IScrapedProduct {
-  protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
-  protected recordComparisonFields: DifferenceField<ProductRecordedRecord, IScrapedProduct>[] = [
-    "price",
-    "status",
-  ] as const;
-
+class ScrapedProductData extends ScrapedApiModelDataCls implements IScrapedProductData {
   private get priceElement() {
     /* eslint-disable-next-line quotes */
     return this.root('div[itemprop="offerDetails"]', {})
@@ -107,26 +101,25 @@ export class ScrapedProduct extends ScrapedApiModel<IScrapedProduct> implements 
        the contents of that select dropdown are.
 
        In these cases, we are relying on those composite products having their own individual
-       thumbnails (which they almost always do).  Then, the scraped products will include both
-       those individual composite products, along with a scraped product for the composite product
-       as a whole.  However, the scraped product for the composite product as a whole will be the
-       same as one of the individual scraped products.
+          thumbnails (which they almost always do).  Then, the scraped products will include both
+          those individual composite products, along with a scraped product for the composite product
+          as a whole.  However, the scraped product for the composite product as a whole will be the
+          same as one of the individual scraped products.
 
-       Ex).
-       ---
-       There is a thumbnail for a "Mortise Chisels" product, which is a composite product that has
-       both "1/2 Mortise Chisel" and "1/4 Mortise Chisel" in its dropdown.  There will be (or at
-       least should be) three thumbnails:
+          Ex).
+          ---
+          There is a thumbnail for a "Mortise Chisels" product, which is a composite product that has
+          both "1/2 Mortise Chisel" and "1/4 Mortise Chisel" in its dropdown.  There will be (or at
+          least should be) three thumbnails:
 
-       1) Mortise Chisels
-       2) 1/2 Mortise Chisel
-       3) 1/4 Mortise Chisel
+          1) Mortise Chisels
+          2) 1/2 Mortise Chisel
+          3) 1/4 Mortise Chisel
 
        All three thumbnails point to a page that has a select dropdown, but clicking the
        "Mortise Chisels" thumbnail will take you to the page with that select defaulted, as either
        1/2 Mortise Chisel or 1/4 Mortise Chisel.  When the select dropdown changes, the URL path
-       changes to reflect the selected product.
-       */
+       changes to reflect the selected product. */
     if (div) {
       return true;
     }
@@ -155,20 +148,20 @@ export class ScrapedProduct extends ScrapedApiModel<IScrapedProduct> implements 
       attributes: { itemprop: "identifier" },
     }).text;
   }
+}
 
-  public compareRecord(record: ProductRecordedRecord) {
-    return Differences([this.data, record], this.recordComparisonFields);
+export class ScrapedProduct extends ScrapedApiModel<IScrapedProductData> {
+  protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
+  protected fields = ["price", "rawPrice", "imageSrc", "name", "status", "code"] as const;
+  protected recordComparisonFields: DifferenceField<ProductRecordedRecord, IScrapedProductData>[] =
+    ["price", "status"] as const;
+
+  constructor(root: DomApiType) {
+    super(root, new ScrapedProductData(root));
   }
 
-  protected parseData() {
-    return {
-      price: this.price,
-      rawPrice: this.rawPrice,
-      imageSrc: this.imageSrc,
-      name: this.name,
-      code: this.code,
-      status: this.status,
-    };
+  public compareRecord(record: ProductRecordedRecord) {
+    return Differences([this.validatedData, record], this.recordComparisonFields);
   }
 }
 
@@ -179,21 +172,40 @@ export class ScrapedThumbnailProduct<
   public thumbnail: ScrapedThumbnail<P, S>;
 
   constructor(root: DomApiType, thumbnail: ScrapedThumbnail<P, S>) {
-    super(root, { lazy: true });
+    super(root);
     this.thumbnail = thumbnail;
-    this.instantiate();
+    if (this.thumbnail.isComposite) {
+      throw new Error(
+        "A ScrapedThumbnailProduct cannot be instantiated from a composite thumbnail!",
+      );
+    }
   }
 
   public get slug() {
+    /* The thumbnail will already be valid before it is used to instantiate the
+       ScrapedThumbnailProduct, so the slug property can be safely exposed without having to ensure
+       that parsing it does not throw an error (as with the other fields of this class).
+       Additionally, the slug needs to be accessible for the ScrapedModelProduct at all times,
+       regardless of whether or not the data can be properly parsed, because it is used as a unique
+       identifier to relate to other models. */
     return this.thumbnail.slug;
-  }
-
-  public get isComposite() {
-    return this.thumbnail.isComposite;
   }
 
   public checkInconsistencies() {
     checkScrapedProductInconsistencies(this);
+  }
+
+  public process(others: ScrapedThumbnailProduct<P, S>[]) {
+    /* Accessing the slug property will not result in an ElementError being thrown because it is
+       accessed from the underlying Thumbnail, which must be valid in order to instantiate the
+       ScrapedThumbnailProduct. */
+    const existing = others.find(pi => pi.slug === this.slug);
+    if (existing) {
+      logExisting([existing, this]);
+      return false;
+    }
+    this.checkInconsistencies();
+    return true;
   }
 
   public static processScrapedProducts<

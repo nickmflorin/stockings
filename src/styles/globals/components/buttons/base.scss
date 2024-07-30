@@ -1,0 +1,29 @@
+@use "sass:list";
+@use "sass:map";
+
+@use "partials";
+
+@use "./constants" as constants;
+
+@mixin button-base() {
+  @include partials.transition(none);
+  @include partials.disabled;
+  appearance: none;
+  @include partials.border-radius(constants.$button-default-border-radius);
+  box-shadow: none !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-stretch: normal;
+  // The default font family.
+  font-family: constants.$button-default-font-family;
+  // The default font weight.
+  font-weight: constants.$button-default-font-weight;
+  margin: 0;
+  min-height: 0px;
+  outline-width: constants.$button-outline-width;
+  outline-offset: constants.$button-outline-offset;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  user-select: none;
+  vertical-align: middle;
+}

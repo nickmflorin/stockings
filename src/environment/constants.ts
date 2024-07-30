@@ -1,39 +1,76 @@
-import { type EnumeratedLiteralsType, enumeratedLiterals } from "~/lib/literals";
+import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
 
-import { createCommaSeparatedArraySchema } from "./util";
+export const NodeEnvironmentNames = enumeratedLiterals(
+  ["development", "test", "production"] as const,
+  {},
+);
 
-export const PrismaLogLevels = enumeratedLiterals(["info", "query", "warn", "error"] as const, {});
-export type PrismaLogLevel = EnumeratedLiteralsType<typeof PrismaLogLevels>;
+export type NodeEnvironmentName = EnumeratedLiteralsType<typeof NodeEnvironmentNames>;
 
-export const PrismaLogLevelSchema = createCommaSeparatedArraySchema({
-  options: PrismaLogLevels.values,
-  partTransformer: v => v.toLowerCase(),
-});
+export const VercelEnvironmentNames = enumeratedLiterals(
+  ["development", "preview", "production"] as const,
+  {},
+);
+
+export type VercelEnvironmentName = EnumeratedLiteralsType<typeof VercelEnvironmentNames>;
 
 export const EnvironmentNames = enumeratedLiterals(
-  ["test", "local", "development", "production", "preview"] as const,
+  ["test", "local", "production", "preview"] as const,
   {},
 );
+
 export type EnvironmentName = EnumeratedLiteralsType<typeof EnvironmentNames>;
 
-export const LogLevels = enumeratedLiterals(
-  ["fatal", "error", "info", "warn", "debug", "trace", "silent"] as const,
-  {},
-);
-export type LogLevel = EnumeratedLiteralsType<typeof LogLevels>;
+export enum LogLevel {
+  ERROR = "error",
+  INFO = "info",
+  WARN = "warn",
+  DEBUG = "debug",
+  SILENT = "silent",
+}
+
+export const isLogLevel = (v: unknown): v is LogLevel =>
+  typeof v === "string" && Object.values(LogLevel).includes(v as LogLevel);
 
 export const DEFAULT_LOG_LEVELS: { [key in EnvironmentName]: LogLevel } = {
-  development: "info",
-  production: "info",
-  test: "debug",
-  local: "debug",
-  preview: "info",
+  [EnvironmentNames.PRODUCTION]: LogLevel.INFO,
+  [EnvironmentNames.TEST]: LogLevel.DEBUG,
+  [EnvironmentNames.LOCAL]: LogLevel.DEBUG,
+  [EnvironmentNames.PREVIEW]: LogLevel.INFO,
 };
 
-export const DEFAULT_PRETTY_LOGGING: Record<EnvironmentName, boolean> = {
-  development: false,
-  production: false,
-  preview: false,
-  test: true,
-  local: true,
+export const getEnvironmentName = ({
+  nodeEnvironment,
+  vercelEnvironment,
+}: {
+  nodeEnvironment: "test" | "development" | "production";
+  vercelEnvironment?: VercelEnvironmentName;
+}): EnvironmentName => {
+  if (nodeEnvironment === NodeEnvironmentNames.TEST) {
+    return EnvironmentNames.TEST;
+  } else if (nodeEnvironment === NodeEnvironmentNames.DEVELOPMENT) {
+    return EnvironmentNames.LOCAL;
+  } else if (!vercelEnvironment) {
+    return EnvironmentNames.PRODUCTION;
+  }
+  return (
+    {
+      development: EnvironmentNames.LOCAL,
+      preview: EnvironmentNames.PREVIEW,
+      production: EnvironmentNames.PRODUCTION,
+    } as const
+  )[vercelEnvironment];
+};
+
+export const getEnvironmentNameUnsafe = ({
+  nodeEnvironment,
+  vercelEnvironment,
+}: {
+  nodeEnvironment: "test" | "development" | "production";
+  vercelEnvironment?: string;
+}): EnvironmentName => {
+  if (vercelEnvironment !== undefined && !VercelEnvironmentNames.contains(vercelEnvironment)) {
+    throw new Error(`Detected an invalid Vercel environment key: '${vercelEnvironment}'!`);
+  }
+  return getEnvironmentName({ nodeEnvironment, vercelEnvironment });
 };

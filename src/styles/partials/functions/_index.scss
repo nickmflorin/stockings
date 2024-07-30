@@ -1,0 +1,11 @@
+@use "sass:map";
+
+@forward "./selectors";
+
+@function mapget($map, $keys...) {
+  $value: map.get($map, $keys...);
+  @if not $value {
+    @error "No value found for #{$keys} in map.";
+  }
+  @return $value;
+}
