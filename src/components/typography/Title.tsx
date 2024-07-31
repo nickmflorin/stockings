@@ -2,14 +2,16 @@ import { forwardRef, type ForwardedRef } from "react";
 
 import { isFragment } from "react-is";
 
-import { type ComponentProps, type HTMLElementProps, classNames } from "~/components/types";
 import {
+  type ComponentProps,
+  type HTMLElementProps,
+  classNames,
   type TypographyCharacteristics,
   getTypographyClassName,
   type TitleComponent,
   TitleFontSizeOrderMap,
   type FontSize,
-} from "~/components/types/typography";
+} from "~/components/types";
 
 type PolymorphicTitleProps<C extends TitleComponent> = Omit<
   HTMLElementProps<C>,

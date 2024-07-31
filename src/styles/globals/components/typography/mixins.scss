@@ -157,8 +157,8 @@
 }
 
 @mixin with-font-families() {
-  &.font-family-poppins {
-    font-family: theme("fontFamily.poppins");
+  &.font-family-inter {
+    font-family: theme("fontFamily.inter");
   }
 }
 

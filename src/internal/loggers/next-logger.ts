@@ -1,6 +1,6 @@
 import { type DestinationStream, multistream } from "pino";
 
-import { EnvironmentNames } from "~/environment";
+import { EnvironmentNames } from "~/environment/constants";
 
 import { BaseNextLogger } from "./base-next-logger";
 import { type NextLoggerConfig } from "./types";

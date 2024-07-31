@@ -1,10 +1,12 @@
 import { forwardRef, type ReactNode } from "react";
 
-import { type ComponentProps, type HTMLElementProps, classNames } from "~/components/types";
 import {
+  type ComponentProps,
+  type HTMLElementProps,
+  classNames,
   type TypographyCharacteristics,
   getTypographyClassName,
-} from "~/components/types/typography";
+} from "~/components/types";
 
 export interface LabelProps
   extends TypographyCharacteristics,

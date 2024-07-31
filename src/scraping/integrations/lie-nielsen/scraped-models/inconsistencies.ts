@@ -1,4 +1,5 @@
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
+
 import {
   type ProductsPageId,
   type ProductsSubPageId,

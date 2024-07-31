@@ -1,5 +1,6 @@
 import { isError } from "~/application/errors";
 import { ScrapingErrorCode } from "~/prisma/model";
+
 import { BaseScrapingError } from "~/scraping/errors";
 
 export abstract class ScrapingBaseHttpError extends BaseScrapingError {

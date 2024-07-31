@@ -1,12 +1,14 @@
 import * as Sentry from "@sentry/nextjs";
 
-import { type EnvironmentName } from "~/environment";
 import { environment } from "~/environment";
+import { type EnvironmentName } from "~/environment/constants";
 import {
   VercelEnvironmentNames,
   EnvironmentNames,
   getEnvironmentName,
 } from "~/environment/constants";
+
+import { isHttpError } from "~/integrations/http";
 
 import { AbstractLogger } from "./abstract-logger";
 import { createBrowserWriter } from "./browser-writer";
@@ -17,8 +19,6 @@ import {
   LogLevel,
 } from "./constants";
 import * as types from "./types";
-
-import { isHttpError } from "~/integrations/http";
 
 const getNonErrorObjectSanitizedErrorMessage = (error: unknown): string => {
   if (

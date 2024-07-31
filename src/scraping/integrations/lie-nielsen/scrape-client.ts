@@ -1,9 +1,10 @@
 import * as cheerio from "cheerio";
-import chunk from "lodash.chunk";
+import { chunk } from "lodash-es";
 
 import type { ILieNielsenClient } from "./client";
 
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
+
 import { api } from "~/scraping/dom";
 import type { DomApiType } from "~/scraping/dom/api";
 import { type ScrapingError } from "~/scraping/errors";
@@ -82,7 +83,7 @@ export class LieNielsenScrapeClient {
           `Size ${chunks[i].length} for Page ${page}.`,
       );
       const promises: Promise<ScrapedThumbnailProduct<P>>[] = chunks[i].map(thumb =>
-        this.scrapeThumbnailProduct(thumb),
+        this.scrapeThumbnailProduct(thumb, { strict: true }),
       );
       scrapedProducts = [...scrapedProducts, ...(await Promise.all(promises))];
     }

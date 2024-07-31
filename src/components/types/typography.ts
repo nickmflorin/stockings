@@ -50,7 +50,7 @@ export const TextTransforms = enumeratedLiterals(
 );
 export type TextTransform = EnumeratedLiteralsType<typeof TextTransforms>;
 
-export const FontFamilies = enumeratedLiterals(["poppins"] as const, {});
+export const FontFamilies = enumeratedLiterals(["inter"] as const, {});
 export type FontFamily = EnumeratedLiteralsType<typeof FontFamilies>;
 
 export type LineClamp = 0 | 1 | 2 | 3 | 4 | 5 | 6;

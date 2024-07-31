@@ -38,7 +38,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className={InterFont.className}>
-        <AppConfig>{children}</AppConfig>
+        <AppConfig>
+          <div className="root">{children}</div>
+        </AppConfig>
       </body>
     </html>
   );

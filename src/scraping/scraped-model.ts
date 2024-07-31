@@ -1,3 +1,4 @@
+import { Differences } from "~/lib/differences";
 import {
   isScrapingDomError,
   type ApiElement,
@@ -5,9 +6,12 @@ import {
   type ScrapingDomError,
 } from "~/scraping/dom/api";
 import { ParsedDataError } from "~/scraping/errors";
-import { Differences } from "~/lib/differences";
 
-export type BaseScrapedModelDataValue = string | number | boolean;
+export type BaseScrapedModelDataValue =
+  | string
+  | number
+  | boolean
+  | Record<string, string | number | boolean>;
 
 export type BaseScrapedModelData = Record<string, BaseScrapedModelDataValue>;
 

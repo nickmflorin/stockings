@@ -1,4 +1,4 @@
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
 
 import * as errors from "./errors";
 

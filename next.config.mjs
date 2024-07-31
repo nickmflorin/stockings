@@ -21,9 +21,13 @@ const config = {
   },
   reactStrictMode: false,
   experimental: {
-    optimizePackageImports: ["@mantine/core", "zod", "@mantine/dropzone", "@mantine/dates"],
+    optimizePackageImports: [
+      "@mantine/core",
+      "@mantine/hooks",
+      "@mantine/dropzone",
+      "@mantine/dates",
+    ],
   },
-  transpilePackages: ["@mantine/core"],
   sassOptions: {
     includePaths: [path.join(__dirname, "src/styles")],
   },

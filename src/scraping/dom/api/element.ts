@@ -4,7 +4,7 @@ import { DomUtils } from "htmlparser2";
 
 import type * as cheerio from "cheerio";
 
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
 import { ElementAttribute, getAttributeKey } from "~/prisma/model";
 
 import {

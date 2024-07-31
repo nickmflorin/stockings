@@ -9,7 +9,6 @@ import {
   type PopoverContentWrapperProps,
   type PopoverContent,
 } from "./PopoverContentWrapper";
-import { Tooltip, type TooltipProps } from "./Tooltip";
 
 export interface PopoverProps
   extends UsePopoverConfig,
@@ -38,8 +37,6 @@ export interface PopoverProps
    */
   readonly children: JSX.Element | ((params: types.PopoverRenderProps) => JSX.Element);
   readonly content: PopoverContent;
-  readonly tooltip?: TooltipProps["content"];
-  readonly tooltipProps?: Omit<TooltipProps, "title" | "children">;
 }
 
 export const Popover = ({
@@ -49,8 +46,6 @@ export const Popover = ({
   isDisabled,
   withArrow = true,
   arrowClassName,
-  tooltip,
-  tooltipProps,
   outerContent,
   ...config
 }: PopoverProps) => {
@@ -68,9 +63,7 @@ export const Popover = ({
 
   return (
     <>
-      <Tooltip {...tooltipProps} content={tooltip}>
-        {children}
-      </Tooltip>
+      {children}
       <PopoverContentWrapper
         context={{ refs, referenceProps, isOpen, ...rest }}
         outerContent={outerContent}

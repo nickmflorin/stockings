@@ -1,10 +1,12 @@
-import { logger } from "~/application/logger";
-import { LogLevels } from "~/environment";
+import { logger } from "~/internal/logger";
+import { LogLevel } from "~/internal/loggers/constants";
 import { prisma } from "~/prisma/client";
+
 import { integration } from "~/scraping/integrations/lie-nielsen";
+
 import { getScriptContext } from "~/scripts/context";
 
-logger.level = LogLevels.INFO;
+logger.level = LogLevel.INFO;
 
 async function main() {
   const { user } = await getScriptContext({ upsertUser: true });

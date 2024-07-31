@@ -1,7 +1,7 @@
 import type * as paths from "./paths";
 import type { ScrapedThumbnailProduct } from "./scraped-models";
 
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
 import { prisma, type Transaction } from "~/prisma/client";
 import {
   type ProductRecord,
@@ -170,8 +170,8 @@ export class LieNielsenIntegration {
 
     const results = await prisma.$transaction(async tx => {
       const promises = scrapedProducts.map(scrapedProduct => {
-        if (scrapedProduct.isComposite) {
-          throw new Error("Unexpectedly encountered composite product!");
+        if (scrapedProduct.thumbnail.isComposite) {
+          throw new Error("Unexpectedly encountered product with composite thumbnail!");
         }
         const existing = products.find(p => p.slug === scrapedProduct.slug);
         if (existing) {

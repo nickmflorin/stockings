@@ -1,7 +1,9 @@
 import type { ScrapedThumbnail } from "./scraped-thumbnail";
 
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
 import { ProductRecordStatus, type ProductRecordedRecord } from "~/prisma/model";
+
+import { Differences, type DifferenceField } from "~/lib/differences";
 import { type api } from "~/scraping/dom";
 import { InvalidTextError, type DomApiType } from "~/scraping/dom/api";
 import {
@@ -9,7 +11,6 @@ import {
   type ProductsSubPageId,
 } from "~/scraping/integrations/lie-nielsen/paths";
 import { ScrapedApiModel, ScrapedApiModelDataCls } from "~/scraping/scraped-model";
-import { Differences, type DifferenceField } from "~/lib/differences";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
 
@@ -102,15 +103,15 @@ class ScrapedProductData extends ScrapedApiModelDataCls implements IScrapedProdu
 
        In these cases, we are relying on those composite products having their own individual
           thumbnails (which they almost always do).  Then, the scraped products will include both
-          those individual composite products, along with a scraped product for the composite product
-          as a whole.  However, the scraped product for the composite product as a whole will be the
-          same as one of the individual scraped products.
+          those individual composite products, along with a scraped product for the composite
+          product as a whole.  However, the scraped product for the composite product as a whole
+          will be the same as one of the individual scraped products.
 
           Ex).
           ---
-          There is a thumbnail for a "Mortise Chisels" product, which is a composite product that has
-          both "1/2 Mortise Chisel" and "1/4 Mortise Chisel" in its dropdown.  There will be (or at
-          least should be) three thumbnails:
+          There is a thumbnail for a "Mortise Chisels" product, which is a composite product that
+          has both "1/2 Mortise Chisel" and "1/4 Mortise Chisel" in its dropdown.  There will be
+          (or at least should be) three thumbnails:
 
           1) Mortise Chisels
           2) 1/2 Mortise Chisel
@@ -161,7 +162,7 @@ export class ScrapedProduct extends ScrapedApiModel<IScrapedProductData> {
   }
 
   public compareRecord(record: ProductRecordedRecord) {
-    return Differences([this.validatedData, record], this.recordComparisonFields);
+    return Differences([this.processedData, record], this.recordComparisonFields);
   }
 }
 
@@ -220,23 +221,21 @@ export class ScrapedThumbnailProduct<
     >[][];
     return ts.reduce(
       (prev: ScrapedThumbnailProduct<P, S>[], curr: ScrapedThumbnailProduct<P, S>[]) =>
-        curr
-          .filter(th => !th.isComposite)
-          .reduce(
-            (
-              p: ScrapedThumbnailProduct<P, S>[],
-              c: ScrapedThumbnailProduct<P, S>,
-            ): ScrapedThumbnailProduct<P, S>[] => {
-              const existing = p.find(pi => pi.slug === c.slug);
-              if (existing) {
-                logExisting([existing, c]);
-                return p;
-              }
-              c.checkInconsistencies();
-              return [...p, c];
-            },
-            prev,
-          ),
+        curr.reduce(
+          (
+            p: ScrapedThumbnailProduct<P, S>[],
+            c: ScrapedThumbnailProduct<P, S>,
+          ): ScrapedThumbnailProduct<P, S>[] => {
+            const existing = p.find(pi => pi.slug === c.slug);
+            if (existing) {
+              logExisting([existing, c]);
+              return p;
+            }
+            c.checkInconsistencies();
+            return [...p, c];
+          },
+          prev,
+        ),
       [] as ScrapedThumbnailProduct<P, S>[],
     );
   }

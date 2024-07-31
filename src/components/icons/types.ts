@@ -25,7 +25,7 @@ export const IconDiscreteSizes = enumeratedLiterals(
 export type IconDiscreteSize = EnumeratedLiteralsType<typeof IconDiscreteSizes>;
 export type IconSize = IconDiscreteSize | Size;
 
-export type IconFamily = Exclude<RootIconFamily, "duotone">;
+export type IconFamily = Exclude<RootIconFamily, "duotone" | "sharp-duotone">;
 
 export enum IconFamilies {
   CLASSIC = "classic",

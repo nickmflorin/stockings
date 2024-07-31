@@ -1,12 +1,15 @@
+@use "partials";
+
+@use "./header";
 @use "./layout";
-@use "./side-nav";
-@use "./mixins" as mixins;
+@use "./layout-nav";
+@use "./toast";
 
 .root {
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  @include mixins.fully-constrained-dimension(height, 100vh);
-  @include mixins.fully-constrained-dimension(width, 100vw);
+  @include partials.fully-constrained-dimension(height, 100vh);
+  @include partials.fully-constrained-dimension(width, 100vw);
 }

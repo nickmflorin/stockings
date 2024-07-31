@@ -9,8 +9,12 @@ import {
   type InputVariant,
 } from "~/components/input/types";
 import { classNames } from "~/components/types";
-import { type ComponentProps, type HTMLElementProps } from "~/components/types";
-import { BorderRadii, type BorderRadius } from "~/components/types/borders";
+import {
+  type ComponentProps,
+  type HTMLElementProps,
+  BorderRadii,
+  type BorderRadius,
+} from "~/components/types";
 
 type WrapperComponentName = "div" | "textarea";
 

@@ -1,5 +1,5 @@
 import { isError } from "~/application/errors";
-import { type VercelEnvironmentName, type EnvironmentName } from "~/environment";
+import { type VercelEnvironmentName, type EnvironmentName } from "~/environment/constants";
 
 import { type HttpError, isHttpError } from "~/integrations/http";
 

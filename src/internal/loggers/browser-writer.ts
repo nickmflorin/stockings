@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { levels } from "pino";
 import { z } from "zod";
 
-import { EnvironmentNames, type EnvironmentName } from "~/environment";
+import { EnvironmentNames, type EnvironmentName } from "~/environment/constants";
 import { terminal } from "~/support";
 
 import { isLogLevel, type LogLevel } from "./constants";

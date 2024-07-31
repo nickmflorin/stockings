@@ -2,7 +2,7 @@ import {
   enumeratedLiterals,
   type EnumeratedLiteralsModel,
   type EnumeratedLiteralsType,
-} from "~/lib/literals";
+} from "enumerated-literals";
 
 // --------------------------------- URLS ---------------------------------
 const LIE_NIELSEN_BASE_URL = "https://www.lie-nielsen.com" as const;

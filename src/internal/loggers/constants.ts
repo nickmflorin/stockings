@@ -1,7 +1,7 @@
 import type * as types from "./types";
 import type * as Sentry from "@sentry/nextjs";
 
-import { type EnvironmentName, EnvironmentNames } from "~/environment";
+import { type EnvironmentName, EnvironmentNames } from "~/environment/constants";
 
 export enum LogLevel {
   ERROR = "error",

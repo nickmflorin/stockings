@@ -1,5 +1,6 @@
 import { isError } from "~/application/errors";
 import { getAttributeKey, type ElementAttribute, ScrapingErrorCode } from "~/prisma/model";
+
 import { BaseScrapingError } from "~/scraping/errors";
 
 import { type ApiElement } from "./element";

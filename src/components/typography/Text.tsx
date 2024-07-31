@@ -3,11 +3,12 @@ import React, { forwardRef, type ForwardedRef } from "react";
 import clsx from "clsx";
 import { isFragment } from "react-is";
 
-import { type ComponentProps, type HTMLElementProps } from "~/components/types";
 import {
+  type ComponentProps,
+  type HTMLElementProps,
   type TypographyCharacteristics,
   getTypographyClassName,
-} from "~/components/types/typography";
+} from "~/components/types";
 
 export type TextComponent = "span" | "div" | "p";
 

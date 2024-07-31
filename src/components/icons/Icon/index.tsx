@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
 
-import clsx from "clsx";
 import { pick } from "lodash-es";
 
 import { type IconProps, isSvgIconProp } from "~/components/icons";
@@ -50,7 +49,7 @@ export const Icon = ({
     if (isSvgIconProp(icon)) {
       return (
         <Image
-          className={clsx("icon", props.className)}
+          className={classNames("icon", props.className)}
           style={{ ...style, ...getNativeIconStyle(props) }}
           src={icon}
           height={typeof props.size === "number" ? props.size : 16}

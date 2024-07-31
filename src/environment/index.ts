@@ -5,8 +5,6 @@ import { getEnvironmentNameUnsafe, LogLevel, EnvironmentNames } from "./constant
 import { NextEnvironment } from "./next-environment";
 import { StringBooleanFlagSchema, createCommaSeparatedArraySchema } from "./util";
 
-export * from "./constants";
-
 const environmentName = getEnvironmentNameUnsafe({
   nodeEnvironment: process.env.NODE_ENV,
   vercelEnvironment: process.env.VERCEL_ENV,
@@ -46,6 +44,7 @@ export const environment = NextEnvironment.create(
       VERCEL_ENV: process.env.VERCEL_ENV,
       APP_NAME_FORMAL: process.env.APP_NAME_FORMAL,
       FONT_AWESOME_KIT_TOKEN: process.env.FONT_AWESOME_KIT_TOKEN,
+      CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
       /* ~~~~~~~~~~~~~~~~~~~~~~~~~ Database Configuration ~~~~~~~~~~~~~~~~~~~~~~~~~ */
       DATABASE_LOG_LEVEL: process.env.DATABASE_LOG_LEVEL,
       POSTGRES_URL: process.env.POSTGRES_URL,
@@ -60,6 +59,7 @@ export const environment = NextEnvironment.create(
       NEXT_PUBLIC_LOG_LEVEL: process.env.NEXT_PUBLIC_LOG_LEVEL,
       NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
       NEXT_PUBLIC_SENTRY_ENABLED: process.env.NEXT_PUBLIC_SENTRY_ENABLED,
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     },
     validators: {
       /* ---------------------------- Server Environment Variables ---------------------------- */
@@ -68,6 +68,13 @@ export const environment = NextEnvironment.create(
       ANALYZE_BUNDLE: StringBooleanFlagSchema.optional(),
       APP_NAME_FORMAL: z.string(),
       FONT_AWESOME_KIT_TOKEN: z.string(),
+      CLERK_SECRET_KEY: {
+        test: z.literal("").optional(),
+        development: z.string().startsWith("sk_test"),
+        local: z.string().startsWith("sk_test"),
+        preview: z.string().startsWith("sk_test"),
+        production: z.string().startsWith("sk_live"),
+      }[environmentName],
       /* ~~~~~~~~~~~~~~~~~~~~~~~~~ Database Configuration ~~~~~~~~~~~~~~~~~~~~~~~~~ */
       POSTGRES_URL: TestRestricted(z.string().url().optional()),
       POSTGRES_PRISMA_URL: TestRestricted(z.string().url().optional()),
@@ -78,6 +85,8 @@ export const environment = NextEnvironment.create(
       POSTGRES_HOST: TestRestricted(z.string().optional()),
       DATABASE_LOG_LEVEL: PrismaLogLevelSchema.optional(),
       /* ---------------------------- Client Environment Variables ---------------------------- */
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+        process.env.NODE_ENV === "test" ? z.literal("") : z.string(),
       NEXT_PUBLIC_SENTRY_ENABLED: StringBooleanFlagSchema.optional(),
       NEXT_PUBLIC_PRETTY_LOGGING: StringBooleanFlagSchema.optional(),
       NEXT_PUBLIC_LOG_LEVEL: z

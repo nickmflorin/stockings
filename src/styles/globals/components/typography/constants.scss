@@ -4,7 +4,7 @@
 
 @use "partials";
 
-$font-family-poppins: var(--font-poppins);
+$font-family-inter: var(--font-inter);
 
 $text-transforms: ("uppercase", "lowercase", "capitalize", "underline");
 
@@ -85,31 +85,31 @@ $typography-size-properties: (
       font-size: theme("fontSize.title-xxxs.0"),
       line-height: theme("fontSize.title-xxxs.1.lineHeight"),
       font-weight: theme("fontWeight.medium"),
-      color: theme("colors.title-secondary"),
+      color: theme("colors.title"),
     ),
     "xxs": (
       font-size: theme("fontSize.title-xxs.0"),
       line-height: theme("fontSize.title-xxs.1.lineHeight"),
       font-weight: theme("fontWeight.medium"),
-      color: theme("colors.title-secondary"),
+      color: theme("colors.title"),
     ),
     "xs": (
       font-size: theme("fontSize.title-xs.0"),
       line-height: theme("fontSize.title-xs.1.lineHeight"),
       font-weight: theme("fontWeight.medium"),
-      color: theme("colors.title-secondary"),
+      color: theme("colors.title"),
     ),
     "sm": (
       font-size: theme("fontSize.title-sm.0"),
       line-height: theme("fontSize.title-sm.1.lineHeight"),
       font-weight: theme("fontWeight.medium"),
-      color: theme("colors.title-secondary"),
+      color: theme("colors.title"),
     ),
     "smplus": (
       font-size: theme("fontSize.title-smplus.0"),
       line-height: theme("fontSize.title-smplus.1.lineHeight"),
       font-weight: theme("fontWeight.medium"),
-      color: theme("colors.title-secondary"),
+      color: theme("colors.title"),
     ),
     "md": (
       font-size: theme("fontSize.title-md.0"),

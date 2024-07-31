@@ -10,12 +10,6 @@ export interface ClientConfigProps {
   readonly children: ReactNode;
 }
 
-function ClientConfig(props: ClientConfigProps) {
-  return (
-    <SWRConfig>
-      <MantineProvider>{props.children}</MantineProvider>
-    </SWRConfig>
-  );
-}
+export const ClientConfig = (props: ClientConfigProps) => <SWRConfig>{props.children}</SWRConfig>;
 
 export default ClientConfig;
