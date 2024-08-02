@@ -1,9 +1,5 @@
 import type * as paths from "./paths";
-import type {
-  ProcessedScrapedProduct,
-  ScrapedProduct,
-  IScrapedProductData,
-} from "./scraped-models";
+import type { ProcessedScrapedProduct, IScrapedProductData } from "./scraped-models";
 
 import { logger } from "~/internal/logger";
 import { prisma, type Transaction } from "~/prisma/client";
@@ -15,6 +11,7 @@ import {
   ProductRecordDataField,
 } from "~/prisma/model";
 
+import { Differences } from "~/lib/differences";
 import { humanizeList } from "~/lib/formatters";
 import { type ScrapingDomError } from "~/scraping/errors";
 import type { ScrapedModelField } from "~/scraping/models";
@@ -30,9 +27,9 @@ type UpdateProductRecordsContext = {
 type ProductRecords = { [key in string]: ProductRecord[] };
 
 /* Note: In both cases, both when the Product exists and when the Product does not exist, we are
-   always creating a new ProductRecordedRecord.  The 'updated' and 'created' here refer to whether
-   or not the Product itself was updated with a new ProductRecordedRecord or created and then
-   updated with a new ProductRecordedRecord.
+   always creating a new ProductRecord.  The 'updated' and 'created' here refer to whether or not
+   the Product itself was updated with a new ProductRecord or created and then updated with a new
+   ProductRecord.
 
    These are just used to determine what to log after the promises are concurrently resolved. */
 type UpdatedProduct = { updated: ProductRecord; created?: never };
@@ -62,24 +59,6 @@ const createProductRecord = async (
   scrapedProduct: ProcessedScrapedProduct,
   { user }: Pick<UpdateProductRecordsContext, "user">,
 ): Promise<ProductRecord> => {
-  if (scrapedProduct.isValid) {
-    return await tx.productRecord.create({
-      data: {
-        product: { connect: { id: product.id } },
-        createdBy: { connect: { id: user.id } },
-        updatedBy: { connect: { id: user.id } },
-        successfulRecord: {
-          create: {
-            wasManuallyCreated: false,
-            price: scrapedProduct.data.price,
-            rawPrice: scrapedProduct.data.rawPrice,
-            status: scrapedProduct.data.status,
-          },
-        },
-      },
-    });
-  }
-
   const createErrorData = async <F extends ProductRecordDataField>(
     field: F,
     error: ScrapingDomError,
@@ -135,16 +114,12 @@ const createProductRecord = async (
       product: { connect: { id: product.id } },
       createdBy: { connect: { id: user.id } },
       updatedBy: { connect: { id: user.id } },
-      failedRecord: {
-        create: {
-          wasManuallyCreated: false,
-          price: scrapedProduct.data.price.value,
-          rawPrice: scrapedProduct.data.rawPrice.value,
-          status: scrapedProduct.data.status.value,
-          errors: {
-            createMany: { data: errors },
-          },
-        },
+      wasManuallyCreated: false,
+      price: scrapedProduct.data.price.value,
+      rawPrice: scrapedProduct.data.rawPrice.value,
+      status: scrapedProduct.data.status.value,
+      errors: {
+        createMany: { data: errors },
       },
     },
   });
@@ -160,10 +135,7 @@ const syncExistingProduct = async (
   let updateData: Partial<Pick<Product, "code" | "name" | "imageSrc">> = {};
   /* The 'name' associated with the scraped product might not be present if there was an error
      parsing the name from the HTML. */
-  const name =
-    typeof scrapedProduct.data.name === "string"
-      ? scrapedProduct.data.name
-      : (scrapedProduct.data.name.value ?? null);
+  const name = scrapedProduct.data.name.value ?? null;
   if (name !== null && product.name !== name) {
     logger.warn(
       `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
@@ -174,10 +146,7 @@ const syncExistingProduct = async (
   }
   /* The 'code' associated with the scraped product might not be present if there was an error
      parsing the code from the HTML. */
-  const code =
-    typeof scrapedProduct.data.code === "string"
-      ? scrapedProduct.data.code
-      : (scrapedProduct.data.code.value ?? null);
+  const code = scrapedProduct.data.code.value ?? null;
   if (code !== null && product.code !== code) {
     logger.warn(
       `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
@@ -188,10 +157,7 @@ const syncExistingProduct = async (
   }
   /* The 'code' associated with the scraped product might not be present if there was an error
      parsing the code from the HTML. */
-  const imageSrc =
-    typeof scrapedProduct.data.imageSrc === "string"
-      ? scrapedProduct.data.imageSrc
-      : (scrapedProduct.data.imageSrc.value ?? null);
+  const imageSrc = scrapedProduct.data.imageSrc.value ?? null;
   if (imageSrc !== null && product.imageSrc !== imageSrc) {
     logger.warn(
       `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
@@ -225,14 +191,25 @@ const syncExistingProduct = async (
     return { updated: await createProductRecord(tx, product, scrapedProduct, { user }) };
   }
   const latestRecord = records[0];
-  const differences = scrapedProduct.compareRecord(latestRecord);
+
+  /* Note: If the latest record had errors, there will be undefined values for at least one of
+     the fields.  This is okay though - because if a previous value was undefined due to an error,
+     and the error was resolved, we want to add a new record with the resolved value.  Similarly,
+     if the previous value is not undefined, and the new value is undefined - there was an error,
+     and we want to add a new record to indicate that the field is now undefined due to the
+     error. */
+  const differences = Differences(
+    [scrapedProduct.data, latestRecord],
+    ["price", "rawPrice", "status"],
+  );
+  // const differences = scrapedProduct.compareRecord(latestRecord);
   if (differences.hasDifferences) {
     logger.info(
       `Detected differences ${differences.toString()} for product '${product.id}' ` +
         `(slug = '${product.slug}') compared to the last recorded record. ` +
         "Adding a recorded record to history.",
     );
-    return { updated: await createProductRecordedRecord(tx, product, scrapedProduct, { user }) };
+    return { updated: await createProductRecord(tx, product, scrapedProduct, { user }) };
   }
   return null;
 };
@@ -242,19 +219,17 @@ const syncNewProduct = async (
   scrapedProduct: ProcessedScrapedProduct,
   { user }: Pick<UpdateProductRecordsContext, "user">,
 ): Promise<CreatedProduct> => {
-  if (scrapedProduct.isValid) {
-    const product = await tx.product.create({
-      data: {
-        name: scrapedProduct.data.name,
-        code: scrapedProduct.data.code,
-        slug: scrapedProduct.slug,
-        imageSrc: scrapedProduct.data.imageSrc,
-        createdBy: { connect: { id: user.id } },
-        updatedBy: { connect: { id: user.id } },
-      },
-    });
-    return { created: await createProductRecordedRecord(tx, product, scrapedProduct, { user }) };
-  }
+  const product = await tx.product.create({
+    data: {
+      name: scrapedProduct.data.name.value ?? null,
+      code: scrapedProduct.data.code.value ?? null,
+      slug: scrapedProduct.slug,
+      imageSrc: scrapedProduct.data.imageSrc.value ?? null,
+      createdBy: { connect: { id: user.id } },
+      updatedBy: { connect: { id: user.id } },
+    },
+  });
+  return { created: await createProductRecord(tx, product, scrapedProduct, { user }) };
 };
 
 export class LieNielsenIntegration {
@@ -267,32 +242,16 @@ export class LieNielsenIntegration {
     const products = await prisma.product.findMany({
       include: { records: { orderBy: { timestamp: "desc" } } },
     });
-    const productRecords = await prisma.productRecord.findMany({
-      where: { recordType: ProductRecordType.RECORDED },
+    const allProductRecords = await prisma.productRecord.findMany({
+      where: { productId: { in: products.map(p => p.id) } },
       orderBy: { timestamp: "desc" },
     });
-    const recordedRecords = await prisma.productRecordedRecord.findMany({
-      where: { id: { in: productRecords.map(r => r.recordId) } },
-    });
-    const productRecordedRecords: ProductRecordedRecords = products.reduce(
-      (prev: ProductRecordedRecords, curr: Product) => {
-        const recs = productRecords.filter(rec => rec.productId === curr.id);
-        return {
-          ...prev,
-          /* It is important to map over the 'recs' variable because the 'recs' are ordered by
-             timestamp. */
-          [curr.id]: recs.map(rec => {
-            const recorded = recordedRecords.find(r => r.id === rec.recordId);
-            if (!recorded) {
-              throw new Error(
-                `Unexpected Condition: No recorded record found for product record '${rec.id}'!`,
-              );
-            }
-            return recorded;
-          }),
-        };
-      },
-      {} as ProductRecordedRecords,
+    const productRecords: ProductRecords = products.reduce(
+      (prev: ProductRecords, curr: Product) => ({
+        ...prev,
+        [curr.id]: allProductRecords.filter(rec => rec.productId === curr.id),
+      }),
+      {} as ProductRecords,
     );
 
     const results = await prisma.$transaction(async tx => {
@@ -302,13 +261,9 @@ export class LieNielsenIntegration {
         }
         const existing = products.find(p => p.slug === scrapedProduct.slug);
         if (existing) {
-          return syncExistingProduct(
-            tx,
-            existing,
-            scrapedProduct,
-            productRecordedRecords[existing.id],
-            { user },
-          );
+          return syncExistingProduct(tx, existing, scrapedProduct, productRecords[existing.id], {
+            user,
+          });
         }
         return syncNewProduct(tx, scrapedProduct, { user });
       });

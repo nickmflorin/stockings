@@ -1,28 +1,7 @@
 import type * as types from "./types";
 
-import { Differences } from "~/lib/differences";
 import { type ApiElement, type DomApiType } from "~/scraping/dom";
 import { isScrapingDomError } from "~/scraping/errors";
-
-export interface ValidScrapedModelCls<
-  D extends types.BaseScrapedModelData,
-  V extends ValidScrapedModel<D>,
-  O extends Record<string, unknown> = Record<string, unknown>,
-> {
-  new (data: D, fields: readonly types.ScrapedModelField<D>[], options: O): V;
-}
-
-interface InvalidScrapedModelCls<
-  D extends types.BaseScrapedModelData,
-  I extends InvalidScrapedModel<D>,
-  O extends Record<string, unknown> = Record<string, unknown>,
-> {
-  new (
-    data: types.InvalidScrapedModelData<D>,
-    fields: readonly types.ScrapedModelField<D>[],
-    options: O,
-  ): I;
-}
 
 export class BaseScrapedModel<T extends ApiElement | DomApiType> {
   protected readonly root: T;
@@ -35,16 +14,14 @@ export class BaseScrapedModel<T extends ApiElement | DomApiType> {
 export abstract class ScrapedModel<
   T extends ApiElement | DomApiType,
   D extends types.BaseScrapedModelData,
-  V extends ValidScrapedModel<D> = ValidScrapedModel<D>,
-  I extends InvalidScrapedModel<D> = InvalidScrapedModel<D>,
   O extends Record<string, unknown> = Record<string, unknown>,
+  P extends ProcessedScrapedModel<D, O> = ProcessedScrapedModel<D, O>,
 > extends BaseScrapedModel<T> {
   private __data__: D;
   protected options: O;
 
   protected abstract fields: readonly types.ScrapedModelField<D>[];
-  protected abstract ValidCls: ValidScrapedModelCls<D, V, O>;
-  protected abstract InvalidCls: InvalidScrapedModelCls<D, I, O>;
+  protected abstract ProcessedCls: ProcessedScrapedModelCls<D, O, P>;
 
   constructor(root: T, data: D, options: O) {
     super(root);
@@ -52,8 +29,8 @@ export abstract class ScrapedModel<
     this.options = options;
   }
 
-  public validate(): V | I {
-    let data: types.InvalidScrapedModelData<D> = {} as types.InvalidScrapedModelData<D>;
+  public process(): P {
+    let data: types.ScrapedModelData<D> = {} as types.ScrapedModelData<D>;
     for (const f of this.fields) {
       try {
         data = { ...data, [f]: { value: this.__data__[f] } };
@@ -65,97 +42,39 @@ export abstract class ScrapedModel<
         }
       }
     }
-    if (Object.entries(data).every(([_, v]) => v.error === undefined)) {
-      const d: D = Object.entries(data).reduce((curr, [k, v]) => {
-        if (v.error) {
-          throw new Error(
-            "Unexpectedly encountered scraped data value with 'error' key in object that was " +
-              "previously checked for the omission of errors!",
-          );
-        }
-        return { ...curr, [k]: v.value };
-      }, {} as D);
-      return new this.ValidCls(d, this.fields, this.options);
-    }
-    return new this.InvalidCls(data, this.fields, this.options);
+    return new this.ProcessedCls({ data, fields: this.fields, options: this.options });
   }
 }
 
-interface ProcessedScrapedModelConfig {
-  readonly data: types.ScrapedModelData<D, V>;
-  readonly isValid: V;
+interface ProcessedScrapedModelConfig<
+  D extends types.BaseScrapedModelData,
+  O extends Record<string, unknown>,
+> {
+  readonly data: types.ScrapedModelData<D>;
   readonly fields: readonly types.ScrapedModelField<D>[];
   readonly options: O;
 }
 
-interface BaseProcessedScrapedModelCls<
+interface ProcessedScrapedModelCls<
   D extends types.BaseScrapedModelData,
-  I extends InvalidScrapedModel<D>,
-  O extends Record<string, unknown> = Record<string, unknown>,
+  O extends Record<string, unknown>,
+  I extends ProcessedScrapedModel<D, O>,
 > {
-  new (
-    data: types.InvalidScrapedModelData<D>,
-    fields: readonly types.ScrapedModelField<D>[],
-    options: O,
-  ): I;
+  new (config: ProcessedScrapedModelConfig<D, O>): I;
 }
 
-export abstract class BaseProcessedScrapedModel<
+export abstract class ProcessedScrapedModel<
   D extends types.BaseScrapedModelData,
-  V extends boolean = boolean,
-  O extends Record<string, unknown> = Record<string, unknown>,
+  O extends Record<string, unknown>,
 > {
-  protected fields: readonly (keyof D & string)[];
-  public readonly isValid: V;
-  private readonly _data: types.ScrapedModelData<D, V>;
-  protected readonly options: O;
+  private readonly _config: ProcessedScrapedModelConfig<D, O>;
 
-  constructor(
-    data: types.ScrapedModelData<D, V>,
-    isValid: V,
-    fields: readonly types.ScrapedModelField<D>[],
-    options: O,
-  ) {
-    this._data = data;
-    this.isValid = isValid;
-    this.fields = fields;
-    this.options = options;
+  constructor(config: ProcessedScrapedModelConfig<D, O>) {
+    this._config = config;
   }
 
   public get data() {
-    return this._data;
-  }
-}
-
-export const createValidScrapedModel;
-
-export class ValidScrapedModel<
-  D extends types.BaseScrapedModelData,
-  O extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseProcessedScrapedModel<D, true, O> {
-  constructor(
-    data: types.ScrapedModelData<D, true>,
-    fields: readonly types.ScrapedModelField<D>[],
-    options: O,
-  ) {
-    super(data, true, fields, options);
-  }
-
-  public compare(other: ValidScrapedModel<D>) {
-    return Differences([this.data, other.data], [...this.fields]);
-  }
-}
-
-export class InvalidScrapedModel<
-  D extends types.BaseScrapedModelData,
-  O extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseProcessedScrapedModel<D, false, O> {
-  constructor(
-    data: types.ScrapedModelData<D, false>,
-    fields: readonly types.ScrapedModelField<D>[],
-    options: O,
-  ) {
-    super(data, false, fields, options);
+    return this._config.data;
   }
 
   public get errors(): types.ScrapedModelFieldErrors<D> {
@@ -165,5 +84,25 @@ export class InvalidScrapedModel<
       }
       return curr;
     }, {} as types.ScrapedModelFieldErrors<D>);
+  }
+
+  public get validatedData(): D {
+    if (!this.isValid) {
+      throw new Error("Cannot access validated data when the model is invalid.");
+    }
+    return Object.entries(this.data).reduce((curr, [k, v]) => {
+      if (v.value) {
+        return { ...curr, [k]: v.value };
+      }
+      throw new Error(`Encountered error for field '${k}' after validity of model was checked!`);
+    }, {} as D);
+  }
+
+  public get options() {
+    return this._config.options;
+  }
+
+  public get isValid() {
+    return Object.keys(this.errors).length === 0;
   }
 }

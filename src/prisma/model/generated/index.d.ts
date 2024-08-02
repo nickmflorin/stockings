@@ -13796,10 +13796,10 @@ export namespace Prisma {
     createdById: string
     updatedAt: Date
     updatedById: string
-    name: string
+    name: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code: string | null
+    imageSrc: string | null
     _count: ProductCountAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
@@ -13868,10 +13868,10 @@ export namespace Prisma {
       createdById: string
       updatedAt: Date
       updatedById: string
-      name: string
+      name: string | null
       slug: string
-      code: string
-      imageSrc: string
+      code: string | null
+      imageSrc: string | null
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -15589,10 +15589,10 @@ export namespace Prisma {
     createdById?: UuidFilter<"Product"> | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     updatedById?: UuidFilter<"Product"> | string
-    name?: StringFilter<"Product"> | string
+    name?: StringNullableFilter<"Product"> | string | null
     slug?: StringFilter<"Product"> | string
-    code?: StringFilter<"Product"> | string
-    imageSrc?: StringFilter<"Product"> | string
+    code?: StringNullableFilter<"Product"> | string | null
+    imageSrc?: StringNullableFilter<"Product"> | string | null
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     updatedBy?: XOR<UserRelationFilter, UserWhereInput>
     records?: ProductRecordListRelationFilter
@@ -15604,10 +15604,10 @@ export namespace Prisma {
     createdById?: SortOrder
     updatedAt?: SortOrder
     updatedById?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     slug?: SortOrder
-    code?: SortOrder
-    imageSrc?: SortOrder
+    code?: SortOrderInput | SortOrder
+    imageSrc?: SortOrderInput | SortOrder
     createdBy?: UserOrderByWithRelationInput
     updatedBy?: UserOrderByWithRelationInput
     records?: ProductRecordOrderByRelationAggregateInput
@@ -15615,9 +15615,7 @@ export namespace Prisma {
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    name?: string
     slug?: string
-    code?: string
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
@@ -15625,11 +15623,13 @@ export namespace Prisma {
     createdById?: UuidFilter<"Product"> | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     updatedById?: UuidFilter<"Product"> | string
-    imageSrc?: StringFilter<"Product"> | string
+    name?: StringNullableFilter<"Product"> | string | null
+    code?: StringNullableFilter<"Product"> | string | null
+    imageSrc?: StringNullableFilter<"Product"> | string | null
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     updatedBy?: XOR<UserRelationFilter, UserWhereInput>
     records?: ProductRecordListRelationFilter
-  }, "id" | "name" | "slug" | "code">
+  }, "id" | "slug">
 
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15637,10 +15637,10 @@ export namespace Prisma {
     createdById?: SortOrder
     updatedAt?: SortOrder
     updatedById?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     slug?: SortOrder
-    code?: SortOrder
-    imageSrc?: SortOrder
+    code?: SortOrderInput | SortOrder
+    imageSrc?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
     _min?: ProductMinOrderByAggregateInput
@@ -15655,10 +15655,10 @@ export namespace Prisma {
     createdById?: UuidWithAggregatesFilter<"Product"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedById?: UuidWithAggregatesFilter<"Product"> | string
-    name?: StringWithAggregatesFilter<"Product"> | string
+    name?: StringNullableWithAggregatesFilter<"Product"> | string | null
     slug?: StringWithAggregatesFilter<"Product"> | string
-    code?: StringWithAggregatesFilter<"Product"> | string
-    imageSrc?: StringWithAggregatesFilter<"Product"> | string
+    code?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    imageSrc?: StringNullableWithAggregatesFilter<"Product"> | string | null
   }
 
   export type UserCreateInput = {
@@ -16318,10 +16318,10 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     updatedBy: UserCreateNestedOneWithoutUpdatedProductsInput
     records?: ProductRecordCreateNestedManyWithoutProductInput
@@ -16333,10 +16333,10 @@ export namespace Prisma {
     createdById: string
     updatedAt?: Date | string
     updatedById: string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     records?: ProductRecordUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -16344,10 +16344,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductsNestedInput
     records?: ProductRecordUpdateManyWithoutProductNestedInput
@@ -16359,10 +16359,10 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     records?: ProductRecordUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -16372,20 +16372,20 @@ export namespace Prisma {
     createdById: string
     updatedAt?: Date | string
     updatedById: string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
   }
 
   export type ProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -16394,10 +16394,10 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -17700,10 +17700,10 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     updatedBy: UserCreateNestedOneWithoutUpdatedProductsInput
     records?: ProductRecordCreateNestedManyWithoutProductInput
   }
@@ -17713,10 +17713,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     updatedById: string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     records?: ProductRecordUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -17734,10 +17734,10 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     records?: ProductRecordCreateNestedManyWithoutProductInput
   }
@@ -17747,10 +17747,10 @@ export namespace Prisma {
     createdAt?: Date | string
     createdById: string
     updatedAt?: Date | string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     records?: ProductRecordUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -17865,10 +17865,10 @@ export namespace Prisma {
     createdById?: UuidFilter<"Product"> | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     updatedById?: UuidFilter<"Product"> | string
-    name?: StringFilter<"Product"> | string
+    name?: StringNullableFilter<"Product"> | string | null
     slug?: StringFilter<"Product"> | string
-    code?: StringFilter<"Product"> | string
-    imageSrc?: StringFilter<"Product"> | string
+    code?: StringNullableFilter<"Product"> | string | null
+    imageSrc?: StringNullableFilter<"Product"> | string | null
   }
 
   export type ProductUpsertWithWhereUniqueWithoutUpdatedByInput = {
@@ -18078,10 +18078,10 @@ export namespace Prisma {
     id?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
     updatedBy: UserCreateNestedOneWithoutUpdatedProductsInput
   }
@@ -18092,10 +18092,10 @@ export namespace Prisma {
     createdById: string
     updatedAt?: Date | string
     updatedById: string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
   }
 
   export type ProductCreateOrConnectWithoutRecordsInput = {
@@ -18222,10 +18222,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductsNestedInput
   }
@@ -18236,10 +18236,10 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductRecordErrorUpsertWithWhereUniqueWithoutRecordInput = {
@@ -18473,10 +18473,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     updatedById: string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
   }
 
   export type ProductCreateManyUpdatedByInput = {
@@ -18484,10 +18484,10 @@ export namespace Prisma {
     createdAt?: Date | string
     createdById: string
     updatedAt?: Date | string
-    name: string
+    name?: string | null
     slug: string
-    code: string
-    imageSrc: string
+    code?: string | null
+    imageSrc?: string | null
   }
 
   export type ProductRecordCreateManyCreatedByInput = {
@@ -18520,10 +18520,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductsNestedInput
     records?: ProductRecordUpdateManyWithoutProductNestedInput
   }
@@ -18533,10 +18533,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     records?: ProductRecordUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -18545,20 +18545,20 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
     records?: ProductRecordUpdateManyWithoutProductNestedInput
   }
@@ -18568,10 +18568,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     records?: ProductRecordUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -18580,10 +18580,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    imageSrc?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductRecordUpdateWithoutCreatedByInput = {

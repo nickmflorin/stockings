@@ -7,36 +7,31 @@ import { InvalidTextError } from "~/scraping/errors";
 import {
   ScrapedModel,
   BaseScrapedModel,
-  ValidScrapedModel,
-  InvalidScrapedModel,
+  ProcessedScrapedModel,
   dataValueIsFieldValue,
 } from "~/scraping/models";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
-import { type ValidScrapedThumbnail } from "./scraped-thumbnail";
+import { type ProcessedScrapedThumbnail } from "./scraped-thumbnail";
 
-const logExisting = (
-  products: [
-    ValidScrapedProduct | InvalidScrapedProduct,
-    ValidScrapedProduct | InvalidScrapedProduct,
-  ],
-) => {
-  const differences = products[0].compare(products[1]);
-  if (differences.hasDifferences) {
-    logger.warn(
-      `Encountered two products with the same slug, '${products[0].slug}', that have ` +
-        `differing data: ${differences.toString()}.`,
+/* const logExisting = (products: [ProcessedScrapedProduct, ProcessedScrapedProduct]) => {
+     const differences = products[0].compare(products[1]);
+     if (differences.hasDifferences) {
+       logger.warn(
+         `Encountered two products with the same slug, '${products[0].slug}', that have ` +
+           `differing data: ${differences.toString()}.`,
+         {
+           differences: differences.differences,
+           slug: products[0].slug,
+         },
+       );
+     } else {
+       logger.warn(`Encountered two identical products with the same slug, '${products[0].slug}'.`,
       {
-        differences: differences.differences,
-        slug: products[0].slug,
-      },
-    );
-  } else {
-    logger.warn(`Encountered two identical products with the same slug, '${products[0].slug}'.`, {
-      slug: products[0].slug,
-    });
-  }
-};
+         slug: products[0].slug,
+       });
+     }
+   }; */
 
 export type ProductScrapedStatus = Exclude<
   ProductRecordStatus,
@@ -67,7 +62,7 @@ export type IScrapedProductData = {
 };
 
 export type ScrapedProductConfig = {
-  readonly thumbnail: ValidScrapedThumbnail;
+  readonly thumbnail: ProcessedScrapedThumbnail;
 };
 
 class ScrapedProductData extends BaseScrapedModel<DomApiType> implements IScrapedProductData {
@@ -159,12 +154,10 @@ class ScrapedProductData extends BaseScrapedModel<DomApiType> implements IScrape
 export class ScrapedProduct extends ScrapedModel<
   DomApiType,
   IScrapedProductData,
-  ValidScrapedProduct,
-  InvalidScrapedProduct,
-  ScrapedProductConfig
+  ScrapedProductConfig,
+  ProcessedScrapedProduct
 > {
-  protected ValidCls = ValidScrapedProduct;
-  protected InvalidCls = InvalidScrapedProduct;
+  protected ProcessedCls = ProcessedScrapedProduct;
   // protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
   protected fields = ["price", "rawPrice", "imageSrc", "name", "status", "code"] as const;
 
@@ -174,35 +167,29 @@ export class ScrapedProduct extends ScrapedModel<
 
   public static processScrapedProducts(
     products: ScrapedProduct[] | ScrapedProduct[][],
-  ): (ValidScrapedProduct | InvalidScrapedProduct)[] {
+  ): ProcessedScrapedProduct[] {
     const ts = (Array.isArray(products[0]) ? products : [products]) as ScrapedProduct[][];
     return ts.reduce(
-      (
-        prev: (ValidScrapedProduct | InvalidScrapedProduct)[],
-        curr: ScrapedProduct[],
-      ): (ValidScrapedProduct | InvalidScrapedProduct)[] =>
+      (prev: ProcessedScrapedProduct[], curr: ScrapedProduct[]): ProcessedScrapedProduct[] =>
         curr.reduce(
-          (
-            p: (ValidScrapedProduct | InvalidScrapedProduct)[],
-            c: ScrapedProduct,
-          ): (ValidScrapedProduct | InvalidScrapedProduct)[] => {
-            const validated = c.validate();
-            const existing = p.find(pi => pi.thumbnail.data.slug === validated.slug);
+          (p: ProcessedScrapedProduct[], c: ScrapedProduct): ProcessedScrapedProduct[] => {
+            const processed = c.process();
+            const existing = p.find(pi => pi.slug === processed.slug);
             if (existing) {
-              logExisting([existing, validated]);
+              // logExisting([existing, processed]);
               return p;
             }
-            validated.checkInconsistencies();
-            return [...p, validated];
+            processed.checkInconsistencies();
+            return [...p, processed];
           },
           prev,
         ),
-      [] as (ValidScrapedProduct | InvalidScrapedProduct)[],
+      [] as ProcessedScrapedProduct[],
     );
   }
 }
 
-export class ValidScrapedProduct extends ValidScrapedModel<
+export class ProcessedScrapedProduct extends ProcessedScrapedModel<
   IScrapedProductData,
   ScrapedProductConfig
 > {
@@ -216,33 +203,7 @@ export class ValidScrapedProduct extends ValidScrapedModel<
   }
 
   public get slug() {
-    return this.thumbnail.data.slug;
-  }
-
-  public checkInconsistencies() {
-    checkScrapedProductInconsistencies(this);
-  }
-
-  public compareToRecord(record: ProductRecord) {
-    return Differences([this.data, record], this.recordComparisonFields);
-  }
-}
-
-export class InvalidScrapedProduct extends InvalidScrapedModel<
-  IScrapedProductData,
-  ScrapedProductConfig
-> {
-  protected recordComparisonFields = ["price", "status"] as const satisfies DifferenceField<
-    ProductRecord,
-    IScrapedProductData
-  >[];
-
-  public get thumbnail() {
-    return this.options.thumbnail;
-  }
-
-  public get slug() {
-    return this.thumbnail.data.slug;
+    return this.thumbnail.validatedData.slug;
   }
 
   public checkInconsistencies() {
@@ -266,5 +227,3 @@ export class InvalidScrapedProduct extends InvalidScrapedModel<
     return Differences([data, record], this.recordComparisonFields);
   }
 }
-
-export type ProcessedScrapedProduct = InvalidScrapedProduct | ValidScrapedProduct;

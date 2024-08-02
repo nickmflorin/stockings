@@ -151,9 +151,9 @@ model Product {
   updatedAt   DateTime        @updatedAt
   updatedBy   User            @relation("updatedProducts", fields: [updatedById], references: [id])
   updatedById String          @db.Uuid
-  name        String          @unique
+  name        String?
   slug        String          @unique
-  code        String          @unique
-  imageSrc    String
+  code        String?
+  imageSrc    String?
   records     ProductRecord[] @relation("records")
 }

@@ -1,6 +1,6 @@
 import { logger } from "~/internal/logger";
 
-import { dataValueIsFieldValue, dataValueIsValue } from "~/scraping/models";
+import { dataValueIsFieldValue } from "~/scraping/models";
 
 import { type IScrapedProductData, type ProcessedScrapedProduct } from "./scraped-product";
 import { type IScrapedThumbnailData } from "./scraped-thumbnail";
@@ -51,14 +51,11 @@ export const checkScrapedProductInconsistencies = (product: ProcessedScrapedProd
     const rawProductValue = product.data[check.field];
     /* The value on the scraped product may be an error object { error: ... } if there was an
        error scraping the field.  In this case, inconsistencies should not be checked. */
-    const productValue = dataValueIsValue(rawProductValue)
-      ? rawProductValue
-      : dataValueIsFieldValue(rawProductValue)
-        ? rawProductValue.value
-        : null;
-    /* The value on the scraped thumbnail is guaranteed to be a direct value because the scraped
-       product cannot be instantiated with an invalid or partially invalid thumbnail. */
-    const thumbnailValue = product.thumbnail.data[check.field];
+    const productValue = dataValueIsFieldValue(rawProductValue) ? rawProductValue.value : null;
+    /* Accessing the validated data on the thumbnail should be safe because the thumbnail's
+       validity should have been checked before being used to instantiate a ScrapedProduct.  If
+       the thumbnail is invalid, an error will be thrown here. */
+    const thumbnailValue = product.thumbnail.validatedData[check.field];
 
     if (productValue !== null && productValue !== thumbnailValue) {
       if (inconsistencyIsAllowed(check.field, { productValue, thumbnailValue })) {

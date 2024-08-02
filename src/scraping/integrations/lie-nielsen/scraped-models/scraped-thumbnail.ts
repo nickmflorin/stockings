@@ -4,12 +4,7 @@ import { ElementAttribute } from "~/prisma/model";
 import { type ApiElement } from "~/scraping/dom";
 import { type ParserResult } from "~/scraping/dom/parsers";
 import type * as paths from "~/scraping/integrations/lie-nielsen/paths";
-import {
-  ScrapedModel,
-  ValidScrapedModel,
-  BaseScrapedModel,
-  InvalidScrapedModel,
-} from "~/scraping/models";
+import { ScrapedModel, BaseScrapedModel, ProcessedScrapedModel } from "~/scraping/models";
 
 const subPageMessage = (a: ValidScrapedThumbnail, b: ValidScrapedThumbnail): string => {
   if (a.subPage && b.subPage) {
@@ -235,20 +230,7 @@ export class ScrapedThumbnail extends ScrapedModel<
   }
 }
 
-export class ValidScrapedThumbnail extends ValidScrapedModel<
-  IScrapedThumbnailData,
-  ScrapedThumbnailConfig
-> {
-  public get page() {
-    return this.options.page;
-  }
-
-  public get subPage() {
-    return this.options.subPage;
-  }
-}
-
-export class InvalidScrapedThumbnail extends InvalidScrapedModel<
+export class ProcessedScrapedThumbnail extends ProcessedScrapedModel<
   IScrapedThumbnailData,
   ScrapedThumbnailConfig
 > {

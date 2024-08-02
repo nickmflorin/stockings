@@ -13,7 +13,7 @@ import { isScrapingHttpError } from "~/scraping/errors";
 import { LieNielsenClient } from "../../http/lie-nielsen-client";
 
 import * as paths from "./paths";
-import { ScrapedThumbnail, ScrapedProduct, type ValidScrapedThumbnail } from "./scraped-models";
+import { ScrapedThumbnail, ScrapedProduct, type ProcessedScrapedThumbnail } from "./scraped-models";
 
 const processor = (html: string) => DomApi(cheerio.load(html));
 
@@ -45,12 +45,15 @@ export class LieNielsenScrapeClient {
      } */
 
   public async scrapeProduct<O extends ScrapeProductOptions>(
-    thumbnail: ValidScrapedThumbnail,
+    thumbnail: ProcessedScrapedThumbnail,
     options: O,
   ): Promise<ScrapedProductRT<O>> {
+    if (!thumbnail.isValid) {
+      throw new Error("Cannot scrape a product with an invalid thumbnail!");
+    }
     let domApi: DomApiType;
     try {
-      domApi = await this.client.fetchProduct(thumbnail.data.slug);
+      domApi = await this.client.fetchProduct(thumbnail.validatedData.slug);
     } catch (e) {
       if (isScrapingHttpError(e) && options.strict !== true) {
         return e as ScrapedProductRT<O>;
