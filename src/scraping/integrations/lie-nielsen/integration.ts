@@ -1,15 +1,23 @@
 import type * as paths from "./paths";
-import type { ScrapedThumbnailProduct } from "./scraped-models";
+import type {
+  ProcessedScrapedProduct,
+  ScrapedProduct,
+  IScrapedProductData,
+} from "./scraped-models";
 
 import { logger } from "~/internal/logger";
 import { prisma, type Transaction } from "~/prisma/client";
 import {
   type ProductRecord,
   type Product,
-  ProductRecordType,
-  type ProductRecordedRecord,
+  ScrapingErrorCode,
   type User,
+  ProductRecordDataField,
 } from "~/prisma/model";
+
+import { humanizeList } from "~/lib/formatters";
+import { type ScrapingDomError } from "~/scraping/errors";
+import type { ScrapedModelField } from "~/scraping/models";
 
 import { scraper } from "./scrape-client";
 
@@ -19,7 +27,7 @@ type UpdateProductRecordsContext = {
   readonly user: User;
 };
 
-type ProductRecordedRecords = { [key in string]: ProductRecordedRecord[] };
+type ProductRecords = { [key in string]: ProductRecord[] };
 
 /* Note: In both cases, both when the Product exists and when the Product does not exist, we are
    always creating a new ProductRecordedRecord.  The 'updated' and 'created' here refer to whether
@@ -28,66 +36,183 @@ type ProductRecordedRecords = { [key in string]: ProductRecordedRecord[] };
 
    These are just used to determine what to log after the promises are concurrently resolved. */
 type UpdatedProduct = { updated: ProductRecord; created?: never };
-type CreatedProduct = { created: ProductRecord; updated?: never };
+type CreatedProduct = { created: ProductRecord | null; updated?: never };
 
-const createProductRecordedRecord = async <P extends paths.ProductsPageId = paths.ProductsPageId>(
+const ProductRecordDataFieldMap: {
+  [key in Extract<
+    ScrapedModelField<IScrapedProductData>,
+    "price" | "rawPrice" | "status"
+  >]: ProductRecordDataField;
+} = {
+  price: ProductRecordDataField.PRICE,
+  status: ProductRecordDataField.STATUS,
+  rawPrice: ProductRecordDataField.RAW_PRICE,
+};
+
+type ErrorDataToCreate<F extends ProductRecordDataField = ProductRecordDataField> = {
+  field: F;
+  errorId: string;
+  message: string;
+  errorCode: ScrapingErrorCode;
+};
+
+const createProductRecord = async (
   tx: Transaction,
   product: Product,
-  scrapedProduct: ScrapedThumbnailProduct<P>,
+  scrapedProduct: ProcessedScrapedProduct,
   { user }: Pick<UpdateProductRecordsContext, "user">,
 ): Promise<ProductRecord> => {
-  const recorded = await tx.productRecordedRecord.create({
-    data: {
-      price: scrapedProduct.price,
-      rawPrice: scrapedProduct.rawPrice,
-      status: scrapedProduct.status,
-      wasManuallyCreated: false,
-    },
-  });
-  return tx.productRecord.create({
+  if (scrapedProduct.isValid) {
+    return await tx.productRecord.create({
+      data: {
+        product: { connect: { id: product.id } },
+        createdBy: { connect: { id: user.id } },
+        updatedBy: { connect: { id: user.id } },
+        successfulRecord: {
+          create: {
+            wasManuallyCreated: false,
+            price: scrapedProduct.data.price,
+            rawPrice: scrapedProduct.data.rawPrice,
+            status: scrapedProduct.data.status,
+          },
+        },
+      },
+    });
+  }
+
+  const createErrorData = async <F extends ProductRecordDataField>(
+    field: F,
+    error: ScrapingDomError,
+  ): Promise<ErrorDataToCreate<F>> => {
+    switch (error.errorCode) {
+      case ScrapingErrorCode.MISSING_ELEMENT: {
+        const created = await tx.missingElementErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+      case ScrapingErrorCode.MISSING_TEXT: {
+        const created = await tx.missingTextErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+      case ScrapingErrorCode.NONUNIQUE_ELEMENT: {
+        const created = await tx.nonUniqueElementErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+      case ScrapingErrorCode.INVALID_ATTRIBUTE: {
+        const created = await tx.invalidAttributeErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+      case ScrapingErrorCode.INVALID_TEXT: {
+        const created = await tx.invalidTextErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+      case ScrapingErrorCode.MISSING_ATTRIBUTE: {
+        const created = await tx.missingAttributeErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+      case ScrapingErrorCode.NONUNIQUE_TEXT: {
+        const created = await tx.nonUniqueTextErrorData.create({ data: error.errorData });
+        return { field, errorId: created.id, errorCode: error.errorCode, message: error.message };
+      }
+    }
+  };
+
+  const errors = await Promise.all(
+    Object.entries(scrapedProduct.errors).reduce(
+      (curr: Promise<ErrorDataToCreate>[], [field, error]) => {
+        const fieldName =
+          ProductRecordDataFieldMap[field as keyof typeof ProductRecordDataFieldMap];
+        if (fieldName) {
+          return [...curr, createErrorData(fieldName, error)];
+        }
+        return curr;
+      },
+      [] as Promise<ErrorDataToCreate>[],
+    ),
+  );
+
+  return await tx.productRecord.create({
     data: {
       product: { connect: { id: product.id } },
       createdBy: { connect: { id: user.id } },
       updatedBy: { connect: { id: user.id } },
-      recordType: ProductRecordType.RECORDED,
-      recordId: recorded.id,
+      failedRecord: {
+        create: {
+          wasManuallyCreated: false,
+          price: scrapedProduct.data.price.value,
+          rawPrice: scrapedProduct.data.rawPrice.value,
+          status: scrapedProduct.data.status.value,
+          errors: {
+            createMany: { data: errors },
+          },
+        },
+      },
     },
   });
 };
 
-const syncExistingProduct = async <P extends paths.ProductsPageId = paths.ProductsPageId>(
+const syncExistingProduct = async (
   tx: Transaction,
   product: Product,
-  scrapedProduct: ScrapedThumbnailProduct<P>,
-  records: ProductRecordedRecord[],
+  scrapedProduct: ProcessedScrapedProduct,
+  records: ProductRecord[],
   { user }: Pick<UpdateProductRecordsContext, "user">,
 ): Promise<UpdatedProduct | null> => {
-  if (product.name !== scrapedProduct.name) {
-    // Eventually, we may not want to throw this as a hard error.
-    throw new Error(
-      `Product '${product.id}' matches the slug for a scraped product, '${product.slug}', but ` +
-        `the product name '${product.name}' differs from the scraped name, '${scrapedProduct.name}'!`,
+  let updateData: Partial<Pick<Product, "code" | "name" | "imageSrc">> = {};
+  /* The 'name' associated with the scraped product might not be present if there was an error
+     parsing the name from the HTML. */
+  const name =
+    typeof scrapedProduct.data.name === "string"
+      ? scrapedProduct.data.name
+      : (scrapedProduct.data.name.value ?? null);
+  if (name !== null && product.name !== name) {
+    logger.warn(
+      `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
+        `the product name '${product.name}' differs from the scraped name, '${name}'!`,
+      { scrapedName: name, product },
     );
-  } else if (product.code !== scrapedProduct.code) {
-    // Eventually, we may not want to throw this as a hard error.
-    throw new Error(
-      `Product '${product.id}' matches the slug for scraped product, '${product.slug}', but ` +
-        `the product code '${product.code}' differs from the scraped code, '${scrapedProduct.code}'!`,
+    updateData = { ...updateData, name };
+  }
+  /* The 'code' associated with the scraped product might not be present if there was an error
+     parsing the code from the HTML. */
+  const code =
+    typeof scrapedProduct.data.code === "string"
+      ? scrapedProduct.data.code
+      : (scrapedProduct.data.code.value ?? null);
+  if (code !== null && product.code !== code) {
+    logger.warn(
+      `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
+        `the product code '${product.code}' differs from the scraped code, '${code}'!`,
+      { scrapedCode: code, product },
     );
-  } else if (product.imageSrc !== scrapedProduct.imageSrc) {
+    updateData = { ...updateData, code };
+  }
+  /* The 'code' associated with the scraped product might not be present if there was an error
+     parsing the code from the HTML. */
+  const imageSrc =
+    typeof scrapedProduct.data.imageSrc === "string"
+      ? scrapedProduct.data.imageSrc
+      : (scrapedProduct.data.imageSrc.value ?? null);
+  if (imageSrc !== null && product.imageSrc !== imageSrc) {
+    logger.warn(
+      `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
+        `the product image '${product.imageSrc}' differs from the scraped image, '${imageSrc}'!`,
+      { scrapedImageSrc: imageSrc, product },
+    );
+    updateData = { ...updateData, imageSrc };
+  }
+  if (Object.keys(updateData).length !== 0) {
+    const humanized = humanizeList(Object.keys(updateData), { formatter: v => `'${v}'` });
     logger.info(
-      `Updating image source for product '${product.id}' (slug = '${product.slug}' from ` +
-        `'${product.imageSrc}' to '${scrapedProduct.imageSrc}'.`,
+      `Updating field(s) ${humanized} for product '${product.id}' (slug = '${product.slug}').`,
       {
         id: product.id,
         slug: product.slug,
-        imageSrc: product.imageSrc,
-        newImageSrc: scrapedProduct.imageSrc,
+        updateData,
       },
     );
     await tx.product.update({
       where: { id: product.id },
-      data: { imageSrc: scrapedProduct.imageSrc, updatedById: user.id },
+      data: { ...updateData, updatedById: user.id },
     });
   }
   /* A product should always have at least 1 record, but it may have been an error record,
@@ -97,7 +222,7 @@ const syncExistingProduct = async <P extends paths.ProductsPageId = paths.Produc
       `Creating a new recorded record for product '${product.slug}' because there are recorded ` +
         "records for the product.",
     );
-    return { updated: await createProductRecordedRecord(tx, product, scrapedProduct, { user }) };
+    return { updated: await createProductRecord(tx, product, scrapedProduct, { user }) };
   }
   const latestRecord = records[0];
   const differences = scrapedProduct.compareRecord(latestRecord);
@@ -112,22 +237,24 @@ const syncExistingProduct = async <P extends paths.ProductsPageId = paths.Produc
   return null;
 };
 
-const syncNewProduct = async <P extends paths.ProductsPageId = paths.ProductsPageId>(
+const syncNewProduct = async (
   tx: Transaction,
-  scrapedProduct: ScrapedThumbnailProduct<P>,
+  scrapedProduct: ProcessedScrapedProduct,
   { user }: Pick<UpdateProductRecordsContext, "user">,
 ): Promise<CreatedProduct> => {
-  const product = await tx.product.create({
-    data: {
-      name: scrapedProduct.name,
-      code: scrapedProduct.code,
-      slug: scrapedProduct.slug,
-      imageSrc: scrapedProduct.imageSrc,
-      createdBy: { connect: { id: user.id } },
-      updatedBy: { connect: { id: user.id } },
-    },
-  });
-  return { created: await createProductRecordedRecord(tx, product, scrapedProduct, { user }) };
+  if (scrapedProduct.isValid) {
+    const product = await tx.product.create({
+      data: {
+        name: scrapedProduct.data.name,
+        code: scrapedProduct.data.code,
+        slug: scrapedProduct.slug,
+        imageSrc: scrapedProduct.data.imageSrc,
+        createdBy: { connect: { id: user.id } },
+        updatedBy: { connect: { id: user.id } },
+      },
+    });
+    return { created: await createProductRecordedRecord(tx, product, scrapedProduct, { user }) };
+  }
 };
 
 export class LieNielsenIntegration {
@@ -135,7 +262,7 @@ export class LieNielsenIntegration {
     page: P,
     { limit, user, batchSize = 10 }: UpdateProductRecordsContext,
   ) {
-    const scrapedProducts = await scraper.scrapeThumbnailProducts(page, { limit, batchSize });
+    const scrapedProducts = await scraper.scrapeProducts(page, { limit, batchSize });
 
     const products = await prisma.product.findMany({
       include: { records: { orderBy: { timestamp: "desc" } } },
@@ -170,7 +297,7 @@ export class LieNielsenIntegration {
 
     const results = await prisma.$transaction(async tx => {
       const promises = scrapedProducts.map(scrapedProduct => {
-        if (scrapedProduct.thumbnail.isComposite) {
+        if (scrapedProduct.thumbnail.data.isComposite) {
           throw new Error("Unexpectedly encountered product with composite thumbnail!");
         }
         const existing = products.find(p => p.slug === scrapedProduct.slug);
@@ -180,9 +307,7 @@ export class LieNielsenIntegration {
             existing,
             scrapedProduct,
             productRecordedRecords[existing.id],
-            {
-              user,
-            },
+            { user },
           );
         }
         return syncNewProduct(tx, scrapedProduct, { user });

@@ -1,5 +1,6 @@
-import { type ScrapingDomError, isScrapingDomError } from "~/scraping/dom/api";
-import { isScrapingHttpError, type ScrapingHttpError } from "~/scraping/http";
+import { type ScrapingDomError, isScrapingDomError } from "~/scraping/errors";
+
+import { isScrapingHttpError, type ScrapingHttpError } from "./http-errors";
 
 export type ScrapingError = ScrapingDomError | ScrapingHttpError;
 

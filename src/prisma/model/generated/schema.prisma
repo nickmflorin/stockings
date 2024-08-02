@@ -45,6 +45,28 @@ enum ScrapingErrorCode {
   HTTP_SERIALIZATION
 }
 
+enum ProductRecordDataField {
+  PRICE
+  RAW_PRICE
+  STATUS
+}
+
+model HttpNetworkErrorData {
+  id  String @id @default(uuid()) @db.Uuid
+  url String
+}
+
+model HttpSerializationErrorData {
+  id  String @id @default(uuid()) @db.Uuid
+  url String
+}
+
+model HttpClientErrorData {
+  id     String @id @default(uuid()) @db.Uuid
+  url    String
+  status Int
+}
+
 model MissingAttributeErrorData {
   id         String           @id @default(uuid()) @db.Uuid
   attribute  ElementAttribute
@@ -59,19 +81,19 @@ model InvalidAttributeErrorData {
 }
 
 model InvalidTextErrorData {
-  id         String @id @default(uuid()) @db.Uuid
-  parentHtml String
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
   value      String
 }
 
 model MissingTextErrorData {
-  id         String @id @default(uuid()) @db.Uuid
-  parentHtml String
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
 }
 
 model NonUniqueTextErrorData {
-  id         String @id @default(uuid()) @db.Uuid
-  parentHtml String
+  id         String  @id @default(uuid()) @db.Uuid
+  parentHtml String?
 }
 
 model MissingElementErrorData {
@@ -86,10 +108,14 @@ model NonUniqueElementErrorData {
   selector   String
 }
 
-model ScrapingErrorRecord {
-  id        String            @id @default(uuid()) @db.Uuid
-  errorId   String            @unique @db.Uuid
+model ProductRecordError {
+  id        String                 @id @default(uuid()) @db.Uuid
+  errorId   String                 @unique @db.Uuid
   errorCode ScrapingErrorCode
+  record    ProductRecord          @relation("errors", fields: [recordId], references: [id])
+  recordId  String                 @unique @db.Uuid
+  field     ProductRecordDataField
+  message   String
 }
 
 enum ProductRecordStatus {
@@ -99,40 +125,22 @@ enum ProductRecordStatus {
   NOT_LISTED
 }
 
-enum ProductRecordDataFields {
-  PRICE
-  RAW_PRICE
-  STATUS
-}
-
-model ProductRecordedRecord {
-  id                    String                    @id @default(uuid()) @db.Uuid
-  updatedAt             DateTime                  @updatedAt
-  price                 Float
-  rawPrice              String
-  status                ProductRecordStatus
-  wasManuallyCreated    Boolean                   @default(false)
-  manuallyChangedFields ProductRecordDataFields[] @default([])
-}
-
-enum ProductRecordType {
-  RECORDED
-  ERROR
-}
-
 model ProductRecord {
-  id          String            @id @default(uuid()) @db.Uuid
-  timestamp   DateTime          @default(now())
-  createdBy   User              @relation("createdProductRecords", fields: [createdById], references: [id])
-  createdById String            @db.Uuid
-  updatedBy   User              @relation("updatedProductRecords", fields: [updatedById], references: [id])
-  updatedById String            @db.Uuid
-  recordType  ProductRecordType
-  recordId    String            @unique @db.Uuid
-  product     Product           @relation("records", fields: [productId], references: [id])
-  productId   String            @db.Uuid
-
-  @@unique([productId, recordId])
+  id                    String                   @id @default(uuid()) @db.Uuid
+  timestamp             DateTime                 @default(now())
+  createdBy             User                     @relation("createdProductRecords", fields: [createdById], references: [id])
+  createdById           String                   @db.Uuid
+  updatedBy             User                     @relation("updatedProductRecords", fields: [updatedById], references: [id])
+  updatedById           String                   @db.Uuid
+  updatedAt             DateTime                 @updatedAt
+  product               Product                  @relation("records", fields: [productId], references: [id])
+  productId             String                   @db.Uuid
+  price                 Float?
+  rawPrice              String?
+  status                ProductRecordStatus?
+  wasManuallyCreated    Boolean                  @default(false)
+  manuallyChangedFields ProductRecordDataField[] @default([])
+  errors                ProductRecordError[]     @relation("errors")
 }
 
 model Product {

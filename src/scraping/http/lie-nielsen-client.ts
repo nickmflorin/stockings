@@ -5,9 +5,9 @@ import {
   type ProcessedRequestData,
 } from "~/scraping/http";
 
-import * as paths from "./paths";
+import * as paths from "../integrations/lie-nielsen/paths";
 
-export type RequestOptions = {
+export type LieNielsenRequestOptions = {
   readonly paginated?: boolean;
   readonly errorIsExpected?: (e: Error) => boolean;
 };
@@ -15,14 +15,14 @@ export type RequestOptions = {
 export interface ILieNielsenClient<D extends RequestDataProcessor> {
   fetchProduct(slug: string): Promise<ProcessedRequestData<D>>;
   fetchProductsPage<
-    O extends Omit<RequestOptions, "errorIsExpected">,
+    O extends Omit<LieNielsenRequestOptions, "errorIsExpected">,
     P extends paths.ProductsPageId,
   >(
     page: P,
     options?: O,
   ): Promise<RequestRT<D, O>>;
   fetchSubProductsPage<
-    O extends Omit<RequestOptions, "errorIsExpected">,
+    O extends Omit<LieNielsenRequestOptions, "errorIsExpected">,
     P extends paths.ProductsPageId,
     S extends paths.ProductsSubPageId<P>,
   >(
@@ -42,23 +42,23 @@ export class LieNielsenClient<D extends RequestDataProcessor>
 
   public async fetchProduct(slug: string): Promise<ProcessedRequestData<D>> {
     const url = paths.getProductDetailPageUrl(slug);
-    return await this.request(url);
+    return await this.fetchContent(url);
   }
 
   public async fetchProductsPage<
-    O extends Omit<RequestOptions, "errorIsExpected">,
+    O extends Omit<LieNielsenRequestOptions, "errorIsExpected">,
     P extends paths.ProductsPageId,
   >(page: P, options?: O): Promise<RequestRT<D, O>> {
     const url = paths.getProductsPageUrl(page);
-    return await this.request(url, options);
+    return await this.fetchContent(url, options);
   }
 
   public async fetchSubProductsPage<
-    O extends Omit<RequestOptions, "errorIsExpected">,
+    O extends Omit<LieNielsenRequestOptions, "errorIsExpected">,
     P extends paths.ProductsPageId,
     S extends paths.ProductsSubPageId<P>,
   >(page: P, subPage: S, options?: O): Promise<RequestRT<D, O>> {
     const url = paths.getProductsSubPageUrl(page, subPage);
-    return await this.request(url, options);
+    return await this.fetchContent(url, options);
   }
 }

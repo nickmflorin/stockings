@@ -1,7 +1,8 @@
 import type * as cheerio from "cheerio";
 
+import { MissingElementError, NonUniqueElementError } from "~/scraping/errors";
+
 import { ApiElement, type FindRT, type FindOptions } from "./element";
-import { MissingElementError, NonUniqueElementError } from "./errors";
 import { ApiSelector, type ApiSelectorParams } from "./selector";
 
 type DomApiRT<O extends FindOptions> = FindRT<ApiElement, O>;

@@ -79,6 +79,22 @@ export class HttpClientError extends BaseHttpError {
   }
 }
 
+export type SerializationErrorClass<C extends HttpSerializationError> = {
+  new (config: HttpErrorConfig & { readonly status: number }): C;
+};
+
+export class HttpSerializationError extends HttpClientError {
+  constructor(config: HttpErrorConfig & { readonly status: number }) {
+    super({
+      ...config,
+      message: config.message
+        ? `[${config.status}] ${config.message}`
+        : `[${config.status}] There was an error serializing/processing the response for the request to ${config.url}.`,
+    });
+    this.name = "HttpSerializationError";
+  }
+}
+
 export type HttpError = HttpNetworkError | HttpClientError;
 
 export const isHttpError = (e: unknown): e is HttpError =>

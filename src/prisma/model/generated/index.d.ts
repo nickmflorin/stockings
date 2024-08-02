@@ -19,6 +19,21 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model HttpNetworkErrorData
+ * 
+ */
+export type HttpNetworkErrorData = $Result.DefaultSelection<Prisma.$HttpNetworkErrorDataPayload>
+/**
+ * Model HttpSerializationErrorData
+ * 
+ */
+export type HttpSerializationErrorData = $Result.DefaultSelection<Prisma.$HttpSerializationErrorDataPayload>
+/**
+ * Model HttpClientErrorData
+ * 
+ */
+export type HttpClientErrorData = $Result.DefaultSelection<Prisma.$HttpClientErrorDataPayload>
+/**
  * Model MissingAttributeErrorData
  * 
  */
@@ -54,15 +69,10 @@ export type MissingElementErrorData = $Result.DefaultSelection<Prisma.$MissingEl
  */
 export type NonUniqueElementErrorData = $Result.DefaultSelection<Prisma.$NonUniqueElementErrorDataPayload>
 /**
- * Model ScrapingErrorRecord
+ * Model ProductRecordError
  * 
  */
-export type ScrapingErrorRecord = $Result.DefaultSelection<Prisma.$ScrapingErrorRecordPayload>
-/**
- * Model ProductRecordedRecord
- * 
- */
-export type ProductRecordedRecord = $Result.DefaultSelection<Prisma.$ProductRecordedRecordPayload>
+export type ProductRecordError = $Result.DefaultSelection<Prisma.$ProductRecordErrorPayload>
 /**
  * Model ProductRecord
  * 
@@ -104,6 +114,15 @@ export const ScrapingErrorCode: {
 export type ScrapingErrorCode = (typeof ScrapingErrorCode)[keyof typeof ScrapingErrorCode]
 
 
+export const ProductRecordDataField: {
+  PRICE: 'PRICE',
+  RAW_PRICE: 'RAW_PRICE',
+  STATUS: 'STATUS'
+};
+
+export type ProductRecordDataField = (typeof ProductRecordDataField)[keyof typeof ProductRecordDataField]
+
+
 export const ProductRecordStatus: {
   OUT_OF_STOCK: 'OUT_OF_STOCK',
   IN_STOCK: 'IN_STOCK',
@@ -112,23 +131,6 @@ export const ProductRecordStatus: {
 };
 
 export type ProductRecordStatus = (typeof ProductRecordStatus)[keyof typeof ProductRecordStatus]
-
-
-export const ProductRecordDataFields: {
-  PRICE: 'PRICE',
-  RAW_PRICE: 'RAW_PRICE',
-  STATUS: 'STATUS'
-};
-
-export type ProductRecordDataFields = (typeof ProductRecordDataFields)[keyof typeof ProductRecordDataFields]
-
-
-export const ProductRecordType: {
-  RECORDED: 'RECORDED',
-  ERROR: 'ERROR'
-};
-
-export type ProductRecordType = (typeof ProductRecordType)[keyof typeof ProductRecordType]
 
 }
 
@@ -140,17 +142,13 @@ export type ScrapingErrorCode = $Enums.ScrapingErrorCode
 
 export const ScrapingErrorCode: typeof $Enums.ScrapingErrorCode
 
+export type ProductRecordDataField = $Enums.ProductRecordDataField
+
+export const ProductRecordDataField: typeof $Enums.ProductRecordDataField
+
 export type ProductRecordStatus = $Enums.ProductRecordStatus
 
 export const ProductRecordStatus: typeof $Enums.ProductRecordStatus
-
-export type ProductRecordDataFields = $Enums.ProductRecordDataFields
-
-export const ProductRecordDataFields: typeof $Enums.ProductRecordDataFields
-
-export type ProductRecordType = $Enums.ProductRecordType
-
-export const ProductRecordType: typeof $Enums.ProductRecordType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -285,6 +283,36 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs>;
 
   /**
+   * `prisma.httpNetworkErrorData`: Exposes CRUD operations for the **HttpNetworkErrorData** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HttpNetworkErrorData
+    * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findMany()
+    * ```
+    */
+  get httpNetworkErrorData(): Prisma.HttpNetworkErrorDataDelegate<ExtArgs>;
+
+  /**
+   * `prisma.httpSerializationErrorData`: Exposes CRUD operations for the **HttpSerializationErrorData** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HttpSerializationErrorData
+    * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findMany()
+    * ```
+    */
+  get httpSerializationErrorData(): Prisma.HttpSerializationErrorDataDelegate<ExtArgs>;
+
+  /**
+   * `prisma.httpClientErrorData`: Exposes CRUD operations for the **HttpClientErrorData** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HttpClientErrorData
+    * const httpClientErrorData = await prisma.httpClientErrorData.findMany()
+    * ```
+    */
+  get httpClientErrorData(): Prisma.HttpClientErrorDataDelegate<ExtArgs>;
+
+  /**
    * `prisma.missingAttributeErrorData`: Exposes CRUD operations for the **MissingAttributeErrorData** model.
     * Example usage:
     * ```ts
@@ -355,24 +383,14 @@ export class PrismaClient<
   get nonUniqueElementErrorData(): Prisma.NonUniqueElementErrorDataDelegate<ExtArgs>;
 
   /**
-   * `prisma.scrapingErrorRecord`: Exposes CRUD operations for the **ScrapingErrorRecord** model.
+   * `prisma.productRecordError`: Exposes CRUD operations for the **ProductRecordError** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ScrapingErrorRecords
-    * const scrapingErrorRecords = await prisma.scrapingErrorRecord.findMany()
+    * // Fetch zero or more ProductRecordErrors
+    * const productRecordErrors = await prisma.productRecordError.findMany()
     * ```
     */
-  get scrapingErrorRecord(): Prisma.ScrapingErrorRecordDelegate<ExtArgs>;
-
-  /**
-   * `prisma.productRecordedRecord`: Exposes CRUD operations for the **ProductRecordedRecord** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ProductRecordedRecords
-    * const productRecordedRecords = await prisma.productRecordedRecord.findMany()
-    * ```
-    */
-  get productRecordedRecord(): Prisma.ProductRecordedRecordDelegate<ExtArgs>;
+  get productRecordError(): Prisma.ProductRecordErrorDelegate<ExtArgs>;
 
   /**
    * `prisma.productRecord`: Exposes CRUD operations for the **ProductRecord** model.
@@ -864,6 +882,9 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    HttpNetworkErrorData: 'HttpNetworkErrorData',
+    HttpSerializationErrorData: 'HttpSerializationErrorData',
+    HttpClientErrorData: 'HttpClientErrorData',
     MissingAttributeErrorData: 'MissingAttributeErrorData',
     InvalidAttributeErrorData: 'InvalidAttributeErrorData',
     InvalidTextErrorData: 'InvalidTextErrorData',
@@ -871,8 +892,7 @@ export namespace Prisma {
     NonUniqueTextErrorData: 'NonUniqueTextErrorData',
     MissingElementErrorData: 'MissingElementErrorData',
     NonUniqueElementErrorData: 'NonUniqueElementErrorData',
-    ScrapingErrorRecord: 'ScrapingErrorRecord',
-    ProductRecordedRecord: 'ProductRecordedRecord',
+    ProductRecordError: 'ProductRecordError',
     ProductRecord: 'ProductRecord',
     Product: 'Product'
   };
@@ -891,7 +911,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'user' | 'missingAttributeErrorData' | 'invalidAttributeErrorData' | 'invalidTextErrorData' | 'missingTextErrorData' | 'nonUniqueTextErrorData' | 'missingElementErrorData' | 'nonUniqueElementErrorData' | 'scrapingErrorRecord' | 'productRecordedRecord' | 'productRecord' | 'product'
+      modelProps: 'user' | 'httpNetworkErrorData' | 'httpSerializationErrorData' | 'httpClientErrorData' | 'missingAttributeErrorData' | 'invalidAttributeErrorData' | 'invalidTextErrorData' | 'missingTextErrorData' | 'nonUniqueTextErrorData' | 'missingElementErrorData' | 'nonUniqueElementErrorData' | 'productRecordError' | 'productRecord' | 'product'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -958,6 +978,204 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>,
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      HttpNetworkErrorData: {
+        payload: Prisma.$HttpNetworkErrorDataPayload<ExtArgs>
+        fields: Prisma.HttpNetworkErrorDataFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HttpNetworkErrorDataFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HttpNetworkErrorDataFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>
+          }
+          findFirst: {
+            args: Prisma.HttpNetworkErrorDataFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HttpNetworkErrorDataFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>
+          }
+          findMany: {
+            args: Prisma.HttpNetworkErrorDataFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>[]
+          }
+          create: {
+            args: Prisma.HttpNetworkErrorDataCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>
+          }
+          createMany: {
+            args: Prisma.HttpNetworkErrorDataCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.HttpNetworkErrorDataDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>
+          }
+          update: {
+            args: Prisma.HttpNetworkErrorDataUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>
+          }
+          deleteMany: {
+            args: Prisma.HttpNetworkErrorDataDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HttpNetworkErrorDataUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.HttpNetworkErrorDataUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpNetworkErrorDataPayload>
+          }
+          aggregate: {
+            args: Prisma.HttpNetworkErrorDataAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateHttpNetworkErrorData>
+          }
+          groupBy: {
+            args: Prisma.HttpNetworkErrorDataGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<HttpNetworkErrorDataGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HttpNetworkErrorDataCountArgs<ExtArgs>,
+            result: $Utils.Optional<HttpNetworkErrorDataCountAggregateOutputType> | number
+          }
+        }
+      }
+      HttpSerializationErrorData: {
+        payload: Prisma.$HttpSerializationErrorDataPayload<ExtArgs>
+        fields: Prisma.HttpSerializationErrorDataFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HttpSerializationErrorDataFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HttpSerializationErrorDataFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>
+          }
+          findFirst: {
+            args: Prisma.HttpSerializationErrorDataFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HttpSerializationErrorDataFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>
+          }
+          findMany: {
+            args: Prisma.HttpSerializationErrorDataFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>[]
+          }
+          create: {
+            args: Prisma.HttpSerializationErrorDataCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>
+          }
+          createMany: {
+            args: Prisma.HttpSerializationErrorDataCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.HttpSerializationErrorDataDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>
+          }
+          update: {
+            args: Prisma.HttpSerializationErrorDataUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>
+          }
+          deleteMany: {
+            args: Prisma.HttpSerializationErrorDataDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HttpSerializationErrorDataUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.HttpSerializationErrorDataUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpSerializationErrorDataPayload>
+          }
+          aggregate: {
+            args: Prisma.HttpSerializationErrorDataAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateHttpSerializationErrorData>
+          }
+          groupBy: {
+            args: Prisma.HttpSerializationErrorDataGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<HttpSerializationErrorDataGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HttpSerializationErrorDataCountArgs<ExtArgs>,
+            result: $Utils.Optional<HttpSerializationErrorDataCountAggregateOutputType> | number
+          }
+        }
+      }
+      HttpClientErrorData: {
+        payload: Prisma.$HttpClientErrorDataPayload<ExtArgs>
+        fields: Prisma.HttpClientErrorDataFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HttpClientErrorDataFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HttpClientErrorDataFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>
+          }
+          findFirst: {
+            args: Prisma.HttpClientErrorDataFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HttpClientErrorDataFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>
+          }
+          findMany: {
+            args: Prisma.HttpClientErrorDataFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>[]
+          }
+          create: {
+            args: Prisma.HttpClientErrorDataCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>
+          }
+          createMany: {
+            args: Prisma.HttpClientErrorDataCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.HttpClientErrorDataDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>
+          }
+          update: {
+            args: Prisma.HttpClientErrorDataUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>
+          }
+          deleteMany: {
+            args: Prisma.HttpClientErrorDataDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HttpClientErrorDataUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.HttpClientErrorDataUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$HttpClientErrorDataPayload>
+          }
+          aggregate: {
+            args: Prisma.HttpClientErrorDataAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateHttpClientErrorData>
+          }
+          groupBy: {
+            args: Prisma.HttpClientErrorDataGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<HttpClientErrorDataGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HttpClientErrorDataCountArgs<ExtArgs>,
+            result: $Utils.Optional<HttpClientErrorDataCountAggregateOutputType> | number
           }
         }
       }
@@ -1423,135 +1641,69 @@ export namespace Prisma {
           }
         }
       }
-      ScrapingErrorRecord: {
-        payload: Prisma.$ScrapingErrorRecordPayload<ExtArgs>
-        fields: Prisma.ScrapingErrorRecordFieldRefs
+      ProductRecordError: {
+        payload: Prisma.$ProductRecordErrorPayload<ExtArgs>
+        fields: Prisma.ProductRecordErrorFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ScrapingErrorRecordFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload> | null
+            args: Prisma.ProductRecordErrorFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ScrapingErrorRecordFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>
+            args: Prisma.ProductRecordErrorFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>
           }
           findFirst: {
-            args: Prisma.ScrapingErrorRecordFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload> | null
+            args: Prisma.ProductRecordErrorFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ScrapingErrorRecordFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>
+            args: Prisma.ProductRecordErrorFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>
           }
           findMany: {
-            args: Prisma.ScrapingErrorRecordFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>[]
+            args: Prisma.ProductRecordErrorFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>[]
           }
           create: {
-            args: Prisma.ScrapingErrorRecordCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>
+            args: Prisma.ProductRecordErrorCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>
           }
           createMany: {
-            args: Prisma.ScrapingErrorRecordCreateManyArgs<ExtArgs>,
+            args: Prisma.ProductRecordErrorCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.ScrapingErrorRecordDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>
+            args: Prisma.ProductRecordErrorDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>
           }
           update: {
-            args: Prisma.ScrapingErrorRecordUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>
+            args: Prisma.ProductRecordErrorUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>
           }
           deleteMany: {
-            args: Prisma.ScrapingErrorRecordDeleteManyArgs<ExtArgs>,
+            args: Prisma.ProductRecordErrorDeleteManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.ScrapingErrorRecordUpdateManyArgs<ExtArgs>,
+            args: Prisma.ProductRecordErrorUpdateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.ScrapingErrorRecordUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ScrapingErrorRecordPayload>
+            args: Prisma.ProductRecordErrorUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ProductRecordErrorPayload>
           }
           aggregate: {
-            args: Prisma.ScrapingErrorRecordAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateScrapingErrorRecord>
+            args: Prisma.ProductRecordErrorAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateProductRecordError>
           }
           groupBy: {
-            args: Prisma.ScrapingErrorRecordGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<ScrapingErrorRecordGroupByOutputType>[]
+            args: Prisma.ProductRecordErrorGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<ProductRecordErrorGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ScrapingErrorRecordCountArgs<ExtArgs>,
-            result: $Utils.Optional<ScrapingErrorRecordCountAggregateOutputType> | number
-          }
-        }
-      }
-      ProductRecordedRecord: {
-        payload: Prisma.$ProductRecordedRecordPayload<ExtArgs>
-        fields: Prisma.ProductRecordedRecordFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ProductRecordedRecordFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ProductRecordedRecordFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>
-          }
-          findFirst: {
-            args: Prisma.ProductRecordedRecordFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ProductRecordedRecordFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>
-          }
-          findMany: {
-            args: Prisma.ProductRecordedRecordFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>[]
-          }
-          create: {
-            args: Prisma.ProductRecordedRecordCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>
-          }
-          createMany: {
-            args: Prisma.ProductRecordedRecordCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.ProductRecordedRecordDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>
-          }
-          update: {
-            args: Prisma.ProductRecordedRecordUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>
-          }
-          deleteMany: {
-            args: Prisma.ProductRecordedRecordDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ProductRecordedRecordUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.ProductRecordedRecordUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProductRecordedRecordPayload>
-          }
-          aggregate: {
-            args: Prisma.ProductRecordedRecordAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateProductRecordedRecord>
-          }
-          groupBy: {
-            args: Prisma.ProductRecordedRecordGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<ProductRecordedRecordGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ProductRecordedRecordCountArgs<ExtArgs>,
-            result: $Utils.Optional<ProductRecordedRecordCountAggregateOutputType> | number
+            args: Prisma.ProductRecordErrorCountArgs<ExtArgs>,
+            result: $Utils.Optional<ProductRecordErrorCountAggregateOutputType> | number
           }
         }
       }
@@ -1891,6 +2043,40 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountUpdatedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductRecordWhereInput
+  }
+
+
+
+  /**
+   * Count Type ProductRecordCountOutputType
+   */
+
+  export type ProductRecordCountOutputType = {
+    errors: number
+  }
+
+  export type ProductRecordCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    errors?: boolean | ProductRecordCountOutputTypeCountErrorsArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * ProductRecordCountOutputType without action
+   */
+  export type ProductRecordCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductRecordCountOutputType
+     */
+    select?: ProductRecordCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * ProductRecordCountOutputType without action
+   */
+  export type ProductRecordCountOutputTypeCountErrorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductRecordErrorWhereInput
   }
 
 
@@ -2981,6 +3167,2562 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model HttpNetworkErrorData
+   */
+
+  export type AggregateHttpNetworkErrorData = {
+    _count: HttpNetworkErrorDataCountAggregateOutputType | null
+    _min: HttpNetworkErrorDataMinAggregateOutputType | null
+    _max: HttpNetworkErrorDataMaxAggregateOutputType | null
+  }
+
+  export type HttpNetworkErrorDataMinAggregateOutputType = {
+    id: string | null
+    url: string | null
+  }
+
+  export type HttpNetworkErrorDataMaxAggregateOutputType = {
+    id: string | null
+    url: string | null
+  }
+
+  export type HttpNetworkErrorDataCountAggregateOutputType = {
+    id: number
+    url: number
+    _all: number
+  }
+
+
+  export type HttpNetworkErrorDataMinAggregateInputType = {
+    id?: true
+    url?: true
+  }
+
+  export type HttpNetworkErrorDataMaxAggregateInputType = {
+    id?: true
+    url?: true
+  }
+
+  export type HttpNetworkErrorDataCountAggregateInputType = {
+    id?: true
+    url?: true
+    _all?: true
+  }
+
+  export type HttpNetworkErrorDataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HttpNetworkErrorData to aggregate.
+     */
+    where?: HttpNetworkErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpNetworkErrorData to fetch.
+     */
+    orderBy?: HttpNetworkErrorDataOrderByWithRelationInput | HttpNetworkErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HttpNetworkErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpNetworkErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpNetworkErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HttpNetworkErrorData
+    **/
+    _count?: true | HttpNetworkErrorDataCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HttpNetworkErrorDataMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HttpNetworkErrorDataMaxAggregateInputType
+  }
+
+  export type GetHttpNetworkErrorDataAggregateType<T extends HttpNetworkErrorDataAggregateArgs> = {
+        [P in keyof T & keyof AggregateHttpNetworkErrorData]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHttpNetworkErrorData[P]>
+      : GetScalarType<T[P], AggregateHttpNetworkErrorData[P]>
+  }
+
+
+
+
+  export type HttpNetworkErrorDataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HttpNetworkErrorDataWhereInput
+    orderBy?: HttpNetworkErrorDataOrderByWithAggregationInput | HttpNetworkErrorDataOrderByWithAggregationInput[]
+    by: HttpNetworkErrorDataScalarFieldEnum[] | HttpNetworkErrorDataScalarFieldEnum
+    having?: HttpNetworkErrorDataScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HttpNetworkErrorDataCountAggregateInputType | true
+    _min?: HttpNetworkErrorDataMinAggregateInputType
+    _max?: HttpNetworkErrorDataMaxAggregateInputType
+  }
+
+  export type HttpNetworkErrorDataGroupByOutputType = {
+    id: string
+    url: string
+    _count: HttpNetworkErrorDataCountAggregateOutputType | null
+    _min: HttpNetworkErrorDataMinAggregateOutputType | null
+    _max: HttpNetworkErrorDataMaxAggregateOutputType | null
+  }
+
+  type GetHttpNetworkErrorDataGroupByPayload<T extends HttpNetworkErrorDataGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HttpNetworkErrorDataGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HttpNetworkErrorDataGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HttpNetworkErrorDataGroupByOutputType[P]>
+            : GetScalarType<T[P], HttpNetworkErrorDataGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HttpNetworkErrorDataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+  }, ExtArgs["result"]["httpNetworkErrorData"]>
+
+  export type HttpNetworkErrorDataSelectScalar = {
+    id?: boolean
+    url?: boolean
+  }
+
+
+  export type $HttpNetworkErrorDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HttpNetworkErrorData"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      url: string
+    }, ExtArgs["result"]["httpNetworkErrorData"]>
+    composites: {}
+  }
+
+
+  type HttpNetworkErrorDataGetPayload<S extends boolean | null | undefined | HttpNetworkErrorDataDefaultArgs> = $Result.GetResult<Prisma.$HttpNetworkErrorDataPayload, S>
+
+  type HttpNetworkErrorDataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<HttpNetworkErrorDataFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: HttpNetworkErrorDataCountAggregateInputType | true
+    }
+
+  export interface HttpNetworkErrorDataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HttpNetworkErrorData'], meta: { name: 'HttpNetworkErrorData' } }
+    /**
+     * Find zero or one HttpNetworkErrorData that matches the filter.
+     * @param {HttpNetworkErrorDataFindUniqueArgs} args - Arguments to find a HttpNetworkErrorData
+     * @example
+     * // Get one HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends HttpNetworkErrorDataFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpNetworkErrorDataFindUniqueArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one HttpNetworkErrorData that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {HttpNetworkErrorDataFindUniqueOrThrowArgs} args - Arguments to find a HttpNetworkErrorData
+     * @example
+     * // Get one HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends HttpNetworkErrorDataFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpNetworkErrorDataFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first HttpNetworkErrorData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataFindFirstArgs} args - Arguments to find a HttpNetworkErrorData
+     * @example
+     * // Get one HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends HttpNetworkErrorDataFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpNetworkErrorDataFindFirstArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first HttpNetworkErrorData that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataFindFirstOrThrowArgs} args - Arguments to find a HttpNetworkErrorData
+     * @example
+     * // Get one HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends HttpNetworkErrorDataFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpNetworkErrorDataFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more HttpNetworkErrorData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findMany()
+     * 
+     * // Get first 10 HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const httpNetworkErrorDataWithIdOnly = await prisma.httpNetworkErrorData.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends HttpNetworkErrorDataFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpNetworkErrorDataFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a HttpNetworkErrorData.
+     * @param {HttpNetworkErrorDataCreateArgs} args - Arguments to create a HttpNetworkErrorData.
+     * @example
+     * // Create one HttpNetworkErrorData
+     * const HttpNetworkErrorData = await prisma.httpNetworkErrorData.create({
+     *   data: {
+     *     // ... data to create a HttpNetworkErrorData
+     *   }
+     * })
+     * 
+    **/
+    create<T extends HttpNetworkErrorDataCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpNetworkErrorDataCreateArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many HttpNetworkErrorData.
+     *     @param {HttpNetworkErrorDataCreateManyArgs} args - Arguments to create many HttpNetworkErrorData.
+     *     @example
+     *     // Create many HttpNetworkErrorData
+     *     const httpNetworkErrorData = await prisma.httpNetworkErrorData.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends HttpNetworkErrorDataCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpNetworkErrorDataCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a HttpNetworkErrorData.
+     * @param {HttpNetworkErrorDataDeleteArgs} args - Arguments to delete one HttpNetworkErrorData.
+     * @example
+     * // Delete one HttpNetworkErrorData
+     * const HttpNetworkErrorData = await prisma.httpNetworkErrorData.delete({
+     *   where: {
+     *     // ... filter to delete one HttpNetworkErrorData
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends HttpNetworkErrorDataDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpNetworkErrorDataDeleteArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one HttpNetworkErrorData.
+     * @param {HttpNetworkErrorDataUpdateArgs} args - Arguments to update one HttpNetworkErrorData.
+     * @example
+     * // Update one HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends HttpNetworkErrorDataUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpNetworkErrorDataUpdateArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more HttpNetworkErrorData.
+     * @param {HttpNetworkErrorDataDeleteManyArgs} args - Arguments to filter HttpNetworkErrorData to delete.
+     * @example
+     * // Delete a few HttpNetworkErrorData
+     * const { count } = await prisma.httpNetworkErrorData.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends HttpNetworkErrorDataDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpNetworkErrorDataDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HttpNetworkErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends HttpNetworkErrorDataUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpNetworkErrorDataUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one HttpNetworkErrorData.
+     * @param {HttpNetworkErrorDataUpsertArgs} args - Arguments to update or create a HttpNetworkErrorData.
+     * @example
+     * // Update or create a HttpNetworkErrorData
+     * const httpNetworkErrorData = await prisma.httpNetworkErrorData.upsert({
+     *   create: {
+     *     // ... data to create a HttpNetworkErrorData
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HttpNetworkErrorData we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends HttpNetworkErrorDataUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpNetworkErrorDataUpsertArgs<ExtArgs>>
+    ): Prisma__HttpNetworkErrorDataClient<$Result.GetResult<Prisma.$HttpNetworkErrorDataPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of HttpNetworkErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataCountArgs} args - Arguments to filter HttpNetworkErrorData to count.
+     * @example
+     * // Count the number of HttpNetworkErrorData
+     * const count = await prisma.httpNetworkErrorData.count({
+     *   where: {
+     *     // ... the filter for the HttpNetworkErrorData we want to count
+     *   }
+     * })
+    **/
+    count<T extends HttpNetworkErrorDataCountArgs>(
+      args?: Subset<T, HttpNetworkErrorDataCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HttpNetworkErrorDataCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HttpNetworkErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HttpNetworkErrorDataAggregateArgs>(args: Subset<T, HttpNetworkErrorDataAggregateArgs>): Prisma.PrismaPromise<GetHttpNetworkErrorDataAggregateType<T>>
+
+    /**
+     * Group by HttpNetworkErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpNetworkErrorDataGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HttpNetworkErrorDataGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HttpNetworkErrorDataGroupByArgs['orderBy'] }
+        : { orderBy?: HttpNetworkErrorDataGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HttpNetworkErrorDataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHttpNetworkErrorDataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HttpNetworkErrorData model
+   */
+  readonly fields: HttpNetworkErrorDataFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HttpNetworkErrorData.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HttpNetworkErrorDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the HttpNetworkErrorData model
+   */ 
+  interface HttpNetworkErrorDataFieldRefs {
+    readonly id: FieldRef<"HttpNetworkErrorData", 'String'>
+    readonly url: FieldRef<"HttpNetworkErrorData", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * HttpNetworkErrorData findUnique
+   */
+  export type HttpNetworkErrorDataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpNetworkErrorData to fetch.
+     */
+    where: HttpNetworkErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpNetworkErrorData findUniqueOrThrow
+   */
+  export type HttpNetworkErrorDataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpNetworkErrorData to fetch.
+     */
+    where: HttpNetworkErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpNetworkErrorData findFirst
+   */
+  export type HttpNetworkErrorDataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpNetworkErrorData to fetch.
+     */
+    where?: HttpNetworkErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpNetworkErrorData to fetch.
+     */
+    orderBy?: HttpNetworkErrorDataOrderByWithRelationInput | HttpNetworkErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HttpNetworkErrorData.
+     */
+    cursor?: HttpNetworkErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpNetworkErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpNetworkErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HttpNetworkErrorData.
+     */
+    distinct?: HttpNetworkErrorDataScalarFieldEnum | HttpNetworkErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpNetworkErrorData findFirstOrThrow
+   */
+  export type HttpNetworkErrorDataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpNetworkErrorData to fetch.
+     */
+    where?: HttpNetworkErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpNetworkErrorData to fetch.
+     */
+    orderBy?: HttpNetworkErrorDataOrderByWithRelationInput | HttpNetworkErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HttpNetworkErrorData.
+     */
+    cursor?: HttpNetworkErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpNetworkErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpNetworkErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HttpNetworkErrorData.
+     */
+    distinct?: HttpNetworkErrorDataScalarFieldEnum | HttpNetworkErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpNetworkErrorData findMany
+   */
+  export type HttpNetworkErrorDataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpNetworkErrorData to fetch.
+     */
+    where?: HttpNetworkErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpNetworkErrorData to fetch.
+     */
+    orderBy?: HttpNetworkErrorDataOrderByWithRelationInput | HttpNetworkErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HttpNetworkErrorData.
+     */
+    cursor?: HttpNetworkErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpNetworkErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpNetworkErrorData.
+     */
+    skip?: number
+    distinct?: HttpNetworkErrorDataScalarFieldEnum | HttpNetworkErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpNetworkErrorData create
+   */
+  export type HttpNetworkErrorDataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * The data needed to create a HttpNetworkErrorData.
+     */
+    data: XOR<HttpNetworkErrorDataCreateInput, HttpNetworkErrorDataUncheckedCreateInput>
+  }
+
+
+  /**
+   * HttpNetworkErrorData createMany
+   */
+  export type HttpNetworkErrorDataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HttpNetworkErrorData.
+     */
+    data: HttpNetworkErrorDataCreateManyInput | HttpNetworkErrorDataCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * HttpNetworkErrorData update
+   */
+  export type HttpNetworkErrorDataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * The data needed to update a HttpNetworkErrorData.
+     */
+    data: XOR<HttpNetworkErrorDataUpdateInput, HttpNetworkErrorDataUncheckedUpdateInput>
+    /**
+     * Choose, which HttpNetworkErrorData to update.
+     */
+    where: HttpNetworkErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpNetworkErrorData updateMany
+   */
+  export type HttpNetworkErrorDataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HttpNetworkErrorData.
+     */
+    data: XOR<HttpNetworkErrorDataUpdateManyMutationInput, HttpNetworkErrorDataUncheckedUpdateManyInput>
+    /**
+     * Filter which HttpNetworkErrorData to update
+     */
+    where?: HttpNetworkErrorDataWhereInput
+  }
+
+
+  /**
+   * HttpNetworkErrorData upsert
+   */
+  export type HttpNetworkErrorDataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * The filter to search for the HttpNetworkErrorData to update in case it exists.
+     */
+    where: HttpNetworkErrorDataWhereUniqueInput
+    /**
+     * In case the HttpNetworkErrorData found by the `where` argument doesn't exist, create a new HttpNetworkErrorData with this data.
+     */
+    create: XOR<HttpNetworkErrorDataCreateInput, HttpNetworkErrorDataUncheckedCreateInput>
+    /**
+     * In case the HttpNetworkErrorData was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HttpNetworkErrorDataUpdateInput, HttpNetworkErrorDataUncheckedUpdateInput>
+  }
+
+
+  /**
+   * HttpNetworkErrorData delete
+   */
+  export type HttpNetworkErrorDataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter which HttpNetworkErrorData to delete.
+     */
+    where: HttpNetworkErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpNetworkErrorData deleteMany
+   */
+  export type HttpNetworkErrorDataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HttpNetworkErrorData to delete
+     */
+    where?: HttpNetworkErrorDataWhereInput
+  }
+
+
+  /**
+   * HttpNetworkErrorData without action
+   */
+  export type HttpNetworkErrorDataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpNetworkErrorData
+     */
+    select?: HttpNetworkErrorDataSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model HttpSerializationErrorData
+   */
+
+  export type AggregateHttpSerializationErrorData = {
+    _count: HttpSerializationErrorDataCountAggregateOutputType | null
+    _min: HttpSerializationErrorDataMinAggregateOutputType | null
+    _max: HttpSerializationErrorDataMaxAggregateOutputType | null
+  }
+
+  export type HttpSerializationErrorDataMinAggregateOutputType = {
+    id: string | null
+    url: string | null
+  }
+
+  export type HttpSerializationErrorDataMaxAggregateOutputType = {
+    id: string | null
+    url: string | null
+  }
+
+  export type HttpSerializationErrorDataCountAggregateOutputType = {
+    id: number
+    url: number
+    _all: number
+  }
+
+
+  export type HttpSerializationErrorDataMinAggregateInputType = {
+    id?: true
+    url?: true
+  }
+
+  export type HttpSerializationErrorDataMaxAggregateInputType = {
+    id?: true
+    url?: true
+  }
+
+  export type HttpSerializationErrorDataCountAggregateInputType = {
+    id?: true
+    url?: true
+    _all?: true
+  }
+
+  export type HttpSerializationErrorDataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HttpSerializationErrorData to aggregate.
+     */
+    where?: HttpSerializationErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpSerializationErrorData to fetch.
+     */
+    orderBy?: HttpSerializationErrorDataOrderByWithRelationInput | HttpSerializationErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HttpSerializationErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpSerializationErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpSerializationErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HttpSerializationErrorData
+    **/
+    _count?: true | HttpSerializationErrorDataCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HttpSerializationErrorDataMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HttpSerializationErrorDataMaxAggregateInputType
+  }
+
+  export type GetHttpSerializationErrorDataAggregateType<T extends HttpSerializationErrorDataAggregateArgs> = {
+        [P in keyof T & keyof AggregateHttpSerializationErrorData]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHttpSerializationErrorData[P]>
+      : GetScalarType<T[P], AggregateHttpSerializationErrorData[P]>
+  }
+
+
+
+
+  export type HttpSerializationErrorDataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HttpSerializationErrorDataWhereInput
+    orderBy?: HttpSerializationErrorDataOrderByWithAggregationInput | HttpSerializationErrorDataOrderByWithAggregationInput[]
+    by: HttpSerializationErrorDataScalarFieldEnum[] | HttpSerializationErrorDataScalarFieldEnum
+    having?: HttpSerializationErrorDataScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HttpSerializationErrorDataCountAggregateInputType | true
+    _min?: HttpSerializationErrorDataMinAggregateInputType
+    _max?: HttpSerializationErrorDataMaxAggregateInputType
+  }
+
+  export type HttpSerializationErrorDataGroupByOutputType = {
+    id: string
+    url: string
+    _count: HttpSerializationErrorDataCountAggregateOutputType | null
+    _min: HttpSerializationErrorDataMinAggregateOutputType | null
+    _max: HttpSerializationErrorDataMaxAggregateOutputType | null
+  }
+
+  type GetHttpSerializationErrorDataGroupByPayload<T extends HttpSerializationErrorDataGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HttpSerializationErrorDataGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HttpSerializationErrorDataGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HttpSerializationErrorDataGroupByOutputType[P]>
+            : GetScalarType<T[P], HttpSerializationErrorDataGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HttpSerializationErrorDataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+  }, ExtArgs["result"]["httpSerializationErrorData"]>
+
+  export type HttpSerializationErrorDataSelectScalar = {
+    id?: boolean
+    url?: boolean
+  }
+
+
+  export type $HttpSerializationErrorDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HttpSerializationErrorData"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      url: string
+    }, ExtArgs["result"]["httpSerializationErrorData"]>
+    composites: {}
+  }
+
+
+  type HttpSerializationErrorDataGetPayload<S extends boolean | null | undefined | HttpSerializationErrorDataDefaultArgs> = $Result.GetResult<Prisma.$HttpSerializationErrorDataPayload, S>
+
+  type HttpSerializationErrorDataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<HttpSerializationErrorDataFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: HttpSerializationErrorDataCountAggregateInputType | true
+    }
+
+  export interface HttpSerializationErrorDataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HttpSerializationErrorData'], meta: { name: 'HttpSerializationErrorData' } }
+    /**
+     * Find zero or one HttpSerializationErrorData that matches the filter.
+     * @param {HttpSerializationErrorDataFindUniqueArgs} args - Arguments to find a HttpSerializationErrorData
+     * @example
+     * // Get one HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends HttpSerializationErrorDataFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpSerializationErrorDataFindUniqueArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one HttpSerializationErrorData that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {HttpSerializationErrorDataFindUniqueOrThrowArgs} args - Arguments to find a HttpSerializationErrorData
+     * @example
+     * // Get one HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends HttpSerializationErrorDataFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpSerializationErrorDataFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first HttpSerializationErrorData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataFindFirstArgs} args - Arguments to find a HttpSerializationErrorData
+     * @example
+     * // Get one HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends HttpSerializationErrorDataFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpSerializationErrorDataFindFirstArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first HttpSerializationErrorData that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataFindFirstOrThrowArgs} args - Arguments to find a HttpSerializationErrorData
+     * @example
+     * // Get one HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends HttpSerializationErrorDataFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpSerializationErrorDataFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more HttpSerializationErrorData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findMany()
+     * 
+     * // Get first 10 HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const httpSerializationErrorDataWithIdOnly = await prisma.httpSerializationErrorData.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends HttpSerializationErrorDataFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpSerializationErrorDataFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a HttpSerializationErrorData.
+     * @param {HttpSerializationErrorDataCreateArgs} args - Arguments to create a HttpSerializationErrorData.
+     * @example
+     * // Create one HttpSerializationErrorData
+     * const HttpSerializationErrorData = await prisma.httpSerializationErrorData.create({
+     *   data: {
+     *     // ... data to create a HttpSerializationErrorData
+     *   }
+     * })
+     * 
+    **/
+    create<T extends HttpSerializationErrorDataCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpSerializationErrorDataCreateArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many HttpSerializationErrorData.
+     *     @param {HttpSerializationErrorDataCreateManyArgs} args - Arguments to create many HttpSerializationErrorData.
+     *     @example
+     *     // Create many HttpSerializationErrorData
+     *     const httpSerializationErrorData = await prisma.httpSerializationErrorData.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends HttpSerializationErrorDataCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpSerializationErrorDataCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a HttpSerializationErrorData.
+     * @param {HttpSerializationErrorDataDeleteArgs} args - Arguments to delete one HttpSerializationErrorData.
+     * @example
+     * // Delete one HttpSerializationErrorData
+     * const HttpSerializationErrorData = await prisma.httpSerializationErrorData.delete({
+     *   where: {
+     *     // ... filter to delete one HttpSerializationErrorData
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends HttpSerializationErrorDataDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpSerializationErrorDataDeleteArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one HttpSerializationErrorData.
+     * @param {HttpSerializationErrorDataUpdateArgs} args - Arguments to update one HttpSerializationErrorData.
+     * @example
+     * // Update one HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends HttpSerializationErrorDataUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpSerializationErrorDataUpdateArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more HttpSerializationErrorData.
+     * @param {HttpSerializationErrorDataDeleteManyArgs} args - Arguments to filter HttpSerializationErrorData to delete.
+     * @example
+     * // Delete a few HttpSerializationErrorData
+     * const { count } = await prisma.httpSerializationErrorData.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends HttpSerializationErrorDataDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpSerializationErrorDataDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HttpSerializationErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends HttpSerializationErrorDataUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpSerializationErrorDataUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one HttpSerializationErrorData.
+     * @param {HttpSerializationErrorDataUpsertArgs} args - Arguments to update or create a HttpSerializationErrorData.
+     * @example
+     * // Update or create a HttpSerializationErrorData
+     * const httpSerializationErrorData = await prisma.httpSerializationErrorData.upsert({
+     *   create: {
+     *     // ... data to create a HttpSerializationErrorData
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HttpSerializationErrorData we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends HttpSerializationErrorDataUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpSerializationErrorDataUpsertArgs<ExtArgs>>
+    ): Prisma__HttpSerializationErrorDataClient<$Result.GetResult<Prisma.$HttpSerializationErrorDataPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of HttpSerializationErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataCountArgs} args - Arguments to filter HttpSerializationErrorData to count.
+     * @example
+     * // Count the number of HttpSerializationErrorData
+     * const count = await prisma.httpSerializationErrorData.count({
+     *   where: {
+     *     // ... the filter for the HttpSerializationErrorData we want to count
+     *   }
+     * })
+    **/
+    count<T extends HttpSerializationErrorDataCountArgs>(
+      args?: Subset<T, HttpSerializationErrorDataCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HttpSerializationErrorDataCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HttpSerializationErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HttpSerializationErrorDataAggregateArgs>(args: Subset<T, HttpSerializationErrorDataAggregateArgs>): Prisma.PrismaPromise<GetHttpSerializationErrorDataAggregateType<T>>
+
+    /**
+     * Group by HttpSerializationErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpSerializationErrorDataGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HttpSerializationErrorDataGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HttpSerializationErrorDataGroupByArgs['orderBy'] }
+        : { orderBy?: HttpSerializationErrorDataGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HttpSerializationErrorDataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHttpSerializationErrorDataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HttpSerializationErrorData model
+   */
+  readonly fields: HttpSerializationErrorDataFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HttpSerializationErrorData.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HttpSerializationErrorDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the HttpSerializationErrorData model
+   */ 
+  interface HttpSerializationErrorDataFieldRefs {
+    readonly id: FieldRef<"HttpSerializationErrorData", 'String'>
+    readonly url: FieldRef<"HttpSerializationErrorData", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * HttpSerializationErrorData findUnique
+   */
+  export type HttpSerializationErrorDataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpSerializationErrorData to fetch.
+     */
+    where: HttpSerializationErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpSerializationErrorData findUniqueOrThrow
+   */
+  export type HttpSerializationErrorDataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpSerializationErrorData to fetch.
+     */
+    where: HttpSerializationErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpSerializationErrorData findFirst
+   */
+  export type HttpSerializationErrorDataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpSerializationErrorData to fetch.
+     */
+    where?: HttpSerializationErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpSerializationErrorData to fetch.
+     */
+    orderBy?: HttpSerializationErrorDataOrderByWithRelationInput | HttpSerializationErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HttpSerializationErrorData.
+     */
+    cursor?: HttpSerializationErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpSerializationErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpSerializationErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HttpSerializationErrorData.
+     */
+    distinct?: HttpSerializationErrorDataScalarFieldEnum | HttpSerializationErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpSerializationErrorData findFirstOrThrow
+   */
+  export type HttpSerializationErrorDataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpSerializationErrorData to fetch.
+     */
+    where?: HttpSerializationErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpSerializationErrorData to fetch.
+     */
+    orderBy?: HttpSerializationErrorDataOrderByWithRelationInput | HttpSerializationErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HttpSerializationErrorData.
+     */
+    cursor?: HttpSerializationErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpSerializationErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpSerializationErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HttpSerializationErrorData.
+     */
+    distinct?: HttpSerializationErrorDataScalarFieldEnum | HttpSerializationErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpSerializationErrorData findMany
+   */
+  export type HttpSerializationErrorDataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpSerializationErrorData to fetch.
+     */
+    where?: HttpSerializationErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpSerializationErrorData to fetch.
+     */
+    orderBy?: HttpSerializationErrorDataOrderByWithRelationInput | HttpSerializationErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HttpSerializationErrorData.
+     */
+    cursor?: HttpSerializationErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpSerializationErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpSerializationErrorData.
+     */
+    skip?: number
+    distinct?: HttpSerializationErrorDataScalarFieldEnum | HttpSerializationErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpSerializationErrorData create
+   */
+  export type HttpSerializationErrorDataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * The data needed to create a HttpSerializationErrorData.
+     */
+    data: XOR<HttpSerializationErrorDataCreateInput, HttpSerializationErrorDataUncheckedCreateInput>
+  }
+
+
+  /**
+   * HttpSerializationErrorData createMany
+   */
+  export type HttpSerializationErrorDataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HttpSerializationErrorData.
+     */
+    data: HttpSerializationErrorDataCreateManyInput | HttpSerializationErrorDataCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * HttpSerializationErrorData update
+   */
+  export type HttpSerializationErrorDataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * The data needed to update a HttpSerializationErrorData.
+     */
+    data: XOR<HttpSerializationErrorDataUpdateInput, HttpSerializationErrorDataUncheckedUpdateInput>
+    /**
+     * Choose, which HttpSerializationErrorData to update.
+     */
+    where: HttpSerializationErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpSerializationErrorData updateMany
+   */
+  export type HttpSerializationErrorDataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HttpSerializationErrorData.
+     */
+    data: XOR<HttpSerializationErrorDataUpdateManyMutationInput, HttpSerializationErrorDataUncheckedUpdateManyInput>
+    /**
+     * Filter which HttpSerializationErrorData to update
+     */
+    where?: HttpSerializationErrorDataWhereInput
+  }
+
+
+  /**
+   * HttpSerializationErrorData upsert
+   */
+  export type HttpSerializationErrorDataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * The filter to search for the HttpSerializationErrorData to update in case it exists.
+     */
+    where: HttpSerializationErrorDataWhereUniqueInput
+    /**
+     * In case the HttpSerializationErrorData found by the `where` argument doesn't exist, create a new HttpSerializationErrorData with this data.
+     */
+    create: XOR<HttpSerializationErrorDataCreateInput, HttpSerializationErrorDataUncheckedCreateInput>
+    /**
+     * In case the HttpSerializationErrorData was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HttpSerializationErrorDataUpdateInput, HttpSerializationErrorDataUncheckedUpdateInput>
+  }
+
+
+  /**
+   * HttpSerializationErrorData delete
+   */
+  export type HttpSerializationErrorDataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter which HttpSerializationErrorData to delete.
+     */
+    where: HttpSerializationErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpSerializationErrorData deleteMany
+   */
+  export type HttpSerializationErrorDataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HttpSerializationErrorData to delete
+     */
+    where?: HttpSerializationErrorDataWhereInput
+  }
+
+
+  /**
+   * HttpSerializationErrorData without action
+   */
+  export type HttpSerializationErrorDataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpSerializationErrorData
+     */
+    select?: HttpSerializationErrorDataSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model HttpClientErrorData
+   */
+
+  export type AggregateHttpClientErrorData = {
+    _count: HttpClientErrorDataCountAggregateOutputType | null
+    _avg: HttpClientErrorDataAvgAggregateOutputType | null
+    _sum: HttpClientErrorDataSumAggregateOutputType | null
+    _min: HttpClientErrorDataMinAggregateOutputType | null
+    _max: HttpClientErrorDataMaxAggregateOutputType | null
+  }
+
+  export type HttpClientErrorDataAvgAggregateOutputType = {
+    status: number | null
+  }
+
+  export type HttpClientErrorDataSumAggregateOutputType = {
+    status: number | null
+  }
+
+  export type HttpClientErrorDataMinAggregateOutputType = {
+    id: string | null
+    url: string | null
+    status: number | null
+  }
+
+  export type HttpClientErrorDataMaxAggregateOutputType = {
+    id: string | null
+    url: string | null
+    status: number | null
+  }
+
+  export type HttpClientErrorDataCountAggregateOutputType = {
+    id: number
+    url: number
+    status: number
+    _all: number
+  }
+
+
+  export type HttpClientErrorDataAvgAggregateInputType = {
+    status?: true
+  }
+
+  export type HttpClientErrorDataSumAggregateInputType = {
+    status?: true
+  }
+
+  export type HttpClientErrorDataMinAggregateInputType = {
+    id?: true
+    url?: true
+    status?: true
+  }
+
+  export type HttpClientErrorDataMaxAggregateInputType = {
+    id?: true
+    url?: true
+    status?: true
+  }
+
+  export type HttpClientErrorDataCountAggregateInputType = {
+    id?: true
+    url?: true
+    status?: true
+    _all?: true
+  }
+
+  export type HttpClientErrorDataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HttpClientErrorData to aggregate.
+     */
+    where?: HttpClientErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpClientErrorData to fetch.
+     */
+    orderBy?: HttpClientErrorDataOrderByWithRelationInput | HttpClientErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HttpClientErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpClientErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpClientErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HttpClientErrorData
+    **/
+    _count?: true | HttpClientErrorDataCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HttpClientErrorDataAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HttpClientErrorDataSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HttpClientErrorDataMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HttpClientErrorDataMaxAggregateInputType
+  }
+
+  export type GetHttpClientErrorDataAggregateType<T extends HttpClientErrorDataAggregateArgs> = {
+        [P in keyof T & keyof AggregateHttpClientErrorData]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHttpClientErrorData[P]>
+      : GetScalarType<T[P], AggregateHttpClientErrorData[P]>
+  }
+
+
+
+
+  export type HttpClientErrorDataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HttpClientErrorDataWhereInput
+    orderBy?: HttpClientErrorDataOrderByWithAggregationInput | HttpClientErrorDataOrderByWithAggregationInput[]
+    by: HttpClientErrorDataScalarFieldEnum[] | HttpClientErrorDataScalarFieldEnum
+    having?: HttpClientErrorDataScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HttpClientErrorDataCountAggregateInputType | true
+    _avg?: HttpClientErrorDataAvgAggregateInputType
+    _sum?: HttpClientErrorDataSumAggregateInputType
+    _min?: HttpClientErrorDataMinAggregateInputType
+    _max?: HttpClientErrorDataMaxAggregateInputType
+  }
+
+  export type HttpClientErrorDataGroupByOutputType = {
+    id: string
+    url: string
+    status: number
+    _count: HttpClientErrorDataCountAggregateOutputType | null
+    _avg: HttpClientErrorDataAvgAggregateOutputType | null
+    _sum: HttpClientErrorDataSumAggregateOutputType | null
+    _min: HttpClientErrorDataMinAggregateOutputType | null
+    _max: HttpClientErrorDataMaxAggregateOutputType | null
+  }
+
+  type GetHttpClientErrorDataGroupByPayload<T extends HttpClientErrorDataGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HttpClientErrorDataGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HttpClientErrorDataGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HttpClientErrorDataGroupByOutputType[P]>
+            : GetScalarType<T[P], HttpClientErrorDataGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HttpClientErrorDataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    status?: boolean
+  }, ExtArgs["result"]["httpClientErrorData"]>
+
+  export type HttpClientErrorDataSelectScalar = {
+    id?: boolean
+    url?: boolean
+    status?: boolean
+  }
+
+
+  export type $HttpClientErrorDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HttpClientErrorData"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      url: string
+      status: number
+    }, ExtArgs["result"]["httpClientErrorData"]>
+    composites: {}
+  }
+
+
+  type HttpClientErrorDataGetPayload<S extends boolean | null | undefined | HttpClientErrorDataDefaultArgs> = $Result.GetResult<Prisma.$HttpClientErrorDataPayload, S>
+
+  type HttpClientErrorDataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<HttpClientErrorDataFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: HttpClientErrorDataCountAggregateInputType | true
+    }
+
+  export interface HttpClientErrorDataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HttpClientErrorData'], meta: { name: 'HttpClientErrorData' } }
+    /**
+     * Find zero or one HttpClientErrorData that matches the filter.
+     * @param {HttpClientErrorDataFindUniqueArgs} args - Arguments to find a HttpClientErrorData
+     * @example
+     * // Get one HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends HttpClientErrorDataFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpClientErrorDataFindUniqueArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one HttpClientErrorData that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {HttpClientErrorDataFindUniqueOrThrowArgs} args - Arguments to find a HttpClientErrorData
+     * @example
+     * // Get one HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends HttpClientErrorDataFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpClientErrorDataFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first HttpClientErrorData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataFindFirstArgs} args - Arguments to find a HttpClientErrorData
+     * @example
+     * // Get one HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends HttpClientErrorDataFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpClientErrorDataFindFirstArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first HttpClientErrorData that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataFindFirstOrThrowArgs} args - Arguments to find a HttpClientErrorData
+     * @example
+     * // Get one HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends HttpClientErrorDataFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpClientErrorDataFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more HttpClientErrorData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.findMany()
+     * 
+     * // Get first 10 HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const httpClientErrorDataWithIdOnly = await prisma.httpClientErrorData.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends HttpClientErrorDataFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpClientErrorDataFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a HttpClientErrorData.
+     * @param {HttpClientErrorDataCreateArgs} args - Arguments to create a HttpClientErrorData.
+     * @example
+     * // Create one HttpClientErrorData
+     * const HttpClientErrorData = await prisma.httpClientErrorData.create({
+     *   data: {
+     *     // ... data to create a HttpClientErrorData
+     *   }
+     * })
+     * 
+    **/
+    create<T extends HttpClientErrorDataCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpClientErrorDataCreateArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many HttpClientErrorData.
+     *     @param {HttpClientErrorDataCreateManyArgs} args - Arguments to create many HttpClientErrorData.
+     *     @example
+     *     // Create many HttpClientErrorData
+     *     const httpClientErrorData = await prisma.httpClientErrorData.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends HttpClientErrorDataCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpClientErrorDataCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a HttpClientErrorData.
+     * @param {HttpClientErrorDataDeleteArgs} args - Arguments to delete one HttpClientErrorData.
+     * @example
+     * // Delete one HttpClientErrorData
+     * const HttpClientErrorData = await prisma.httpClientErrorData.delete({
+     *   where: {
+     *     // ... filter to delete one HttpClientErrorData
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends HttpClientErrorDataDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpClientErrorDataDeleteArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one HttpClientErrorData.
+     * @param {HttpClientErrorDataUpdateArgs} args - Arguments to update one HttpClientErrorData.
+     * @example
+     * // Update one HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends HttpClientErrorDataUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpClientErrorDataUpdateArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more HttpClientErrorData.
+     * @param {HttpClientErrorDataDeleteManyArgs} args - Arguments to filter HttpClientErrorData to delete.
+     * @example
+     * // Delete a few HttpClientErrorData
+     * const { count } = await prisma.httpClientErrorData.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends HttpClientErrorDataDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, HttpClientErrorDataDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HttpClientErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends HttpClientErrorDataUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpClientErrorDataUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one HttpClientErrorData.
+     * @param {HttpClientErrorDataUpsertArgs} args - Arguments to update or create a HttpClientErrorData.
+     * @example
+     * // Update or create a HttpClientErrorData
+     * const httpClientErrorData = await prisma.httpClientErrorData.upsert({
+     *   create: {
+     *     // ... data to create a HttpClientErrorData
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HttpClientErrorData we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends HttpClientErrorDataUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, HttpClientErrorDataUpsertArgs<ExtArgs>>
+    ): Prisma__HttpClientErrorDataClient<$Result.GetResult<Prisma.$HttpClientErrorDataPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of HttpClientErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataCountArgs} args - Arguments to filter HttpClientErrorData to count.
+     * @example
+     * // Count the number of HttpClientErrorData
+     * const count = await prisma.httpClientErrorData.count({
+     *   where: {
+     *     // ... the filter for the HttpClientErrorData we want to count
+     *   }
+     * })
+    **/
+    count<T extends HttpClientErrorDataCountArgs>(
+      args?: Subset<T, HttpClientErrorDataCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HttpClientErrorDataCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HttpClientErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HttpClientErrorDataAggregateArgs>(args: Subset<T, HttpClientErrorDataAggregateArgs>): Prisma.PrismaPromise<GetHttpClientErrorDataAggregateType<T>>
+
+    /**
+     * Group by HttpClientErrorData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HttpClientErrorDataGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HttpClientErrorDataGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HttpClientErrorDataGroupByArgs['orderBy'] }
+        : { orderBy?: HttpClientErrorDataGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HttpClientErrorDataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHttpClientErrorDataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HttpClientErrorData model
+   */
+  readonly fields: HttpClientErrorDataFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HttpClientErrorData.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HttpClientErrorDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the HttpClientErrorData model
+   */ 
+  interface HttpClientErrorDataFieldRefs {
+    readonly id: FieldRef<"HttpClientErrorData", 'String'>
+    readonly url: FieldRef<"HttpClientErrorData", 'String'>
+    readonly status: FieldRef<"HttpClientErrorData", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * HttpClientErrorData findUnique
+   */
+  export type HttpClientErrorDataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpClientErrorData to fetch.
+     */
+    where: HttpClientErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpClientErrorData findUniqueOrThrow
+   */
+  export type HttpClientErrorDataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpClientErrorData to fetch.
+     */
+    where: HttpClientErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpClientErrorData findFirst
+   */
+  export type HttpClientErrorDataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpClientErrorData to fetch.
+     */
+    where?: HttpClientErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpClientErrorData to fetch.
+     */
+    orderBy?: HttpClientErrorDataOrderByWithRelationInput | HttpClientErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HttpClientErrorData.
+     */
+    cursor?: HttpClientErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpClientErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpClientErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HttpClientErrorData.
+     */
+    distinct?: HttpClientErrorDataScalarFieldEnum | HttpClientErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpClientErrorData findFirstOrThrow
+   */
+  export type HttpClientErrorDataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpClientErrorData to fetch.
+     */
+    where?: HttpClientErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpClientErrorData to fetch.
+     */
+    orderBy?: HttpClientErrorDataOrderByWithRelationInput | HttpClientErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HttpClientErrorData.
+     */
+    cursor?: HttpClientErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpClientErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpClientErrorData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HttpClientErrorData.
+     */
+    distinct?: HttpClientErrorDataScalarFieldEnum | HttpClientErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpClientErrorData findMany
+   */
+  export type HttpClientErrorDataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter, which HttpClientErrorData to fetch.
+     */
+    where?: HttpClientErrorDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HttpClientErrorData to fetch.
+     */
+    orderBy?: HttpClientErrorDataOrderByWithRelationInput | HttpClientErrorDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HttpClientErrorData.
+     */
+    cursor?: HttpClientErrorDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HttpClientErrorData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HttpClientErrorData.
+     */
+    skip?: number
+    distinct?: HttpClientErrorDataScalarFieldEnum | HttpClientErrorDataScalarFieldEnum[]
+  }
+
+
+  /**
+   * HttpClientErrorData create
+   */
+  export type HttpClientErrorDataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * The data needed to create a HttpClientErrorData.
+     */
+    data: XOR<HttpClientErrorDataCreateInput, HttpClientErrorDataUncheckedCreateInput>
+  }
+
+
+  /**
+   * HttpClientErrorData createMany
+   */
+  export type HttpClientErrorDataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HttpClientErrorData.
+     */
+    data: HttpClientErrorDataCreateManyInput | HttpClientErrorDataCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * HttpClientErrorData update
+   */
+  export type HttpClientErrorDataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * The data needed to update a HttpClientErrorData.
+     */
+    data: XOR<HttpClientErrorDataUpdateInput, HttpClientErrorDataUncheckedUpdateInput>
+    /**
+     * Choose, which HttpClientErrorData to update.
+     */
+    where: HttpClientErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpClientErrorData updateMany
+   */
+  export type HttpClientErrorDataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HttpClientErrorData.
+     */
+    data: XOR<HttpClientErrorDataUpdateManyMutationInput, HttpClientErrorDataUncheckedUpdateManyInput>
+    /**
+     * Filter which HttpClientErrorData to update
+     */
+    where?: HttpClientErrorDataWhereInput
+  }
+
+
+  /**
+   * HttpClientErrorData upsert
+   */
+  export type HttpClientErrorDataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * The filter to search for the HttpClientErrorData to update in case it exists.
+     */
+    where: HttpClientErrorDataWhereUniqueInput
+    /**
+     * In case the HttpClientErrorData found by the `where` argument doesn't exist, create a new HttpClientErrorData with this data.
+     */
+    create: XOR<HttpClientErrorDataCreateInput, HttpClientErrorDataUncheckedCreateInput>
+    /**
+     * In case the HttpClientErrorData was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HttpClientErrorDataUpdateInput, HttpClientErrorDataUncheckedUpdateInput>
+  }
+
+
+  /**
+   * HttpClientErrorData delete
+   */
+  export type HttpClientErrorDataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
+    /**
+     * Filter which HttpClientErrorData to delete.
+     */
+    where: HttpClientErrorDataWhereUniqueInput
+  }
+
+
+  /**
+   * HttpClientErrorData deleteMany
+   */
+  export type HttpClientErrorDataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HttpClientErrorData to delete
+     */
+    where?: HttpClientErrorDataWhereInput
+  }
+
+
+  /**
+   * HttpClientErrorData without action
+   */
+  export type HttpClientErrorDataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HttpClientErrorData
+     */
+    select?: HttpClientErrorDataSelect<ExtArgs> | null
   }
 
 
@@ -4815,7 +7557,7 @@ export namespace Prisma {
 
   export type InvalidTextErrorDataGroupByOutputType = {
     id: string
-    parentHtml: string
+    parentHtml: string | null
     value: string
     _count: InvalidTextErrorDataCountAggregateOutputType | null
     _min: InvalidTextErrorDataMinAggregateOutputType | null
@@ -4854,7 +7596,7 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      parentHtml: string
+      parentHtml: string | null
       value: string
     }, ExtArgs["result"]["invalidTextErrorData"]>
     composites: {}
@@ -5657,7 +8399,7 @@ export namespace Prisma {
 
   export type MissingTextErrorDataGroupByOutputType = {
     id: string
-    parentHtml: string
+    parentHtml: string | null
     _count: MissingTextErrorDataCountAggregateOutputType | null
     _min: MissingTextErrorDataMinAggregateOutputType | null
     _max: MissingTextErrorDataMaxAggregateOutputType | null
@@ -5693,7 +8435,7 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      parentHtml: string
+      parentHtml: string | null
     }, ExtArgs["result"]["missingTextErrorData"]>
     composites: {}
   }
@@ -6266,7 +9008,7 @@ export namespace Prisma {
     /**
      * The data needed to create a MissingTextErrorData.
      */
-    data: XOR<MissingTextErrorDataCreateInput, MissingTextErrorDataUncheckedCreateInput>
+    data?: XOR<MissingTextErrorDataCreateInput, MissingTextErrorDataUncheckedCreateInput>
   }
 
 
@@ -6494,7 +9236,7 @@ export namespace Prisma {
 
   export type NonUniqueTextErrorDataGroupByOutputType = {
     id: string
-    parentHtml: string
+    parentHtml: string | null
     _count: NonUniqueTextErrorDataCountAggregateOutputType | null
     _min: NonUniqueTextErrorDataMinAggregateOutputType | null
     _max: NonUniqueTextErrorDataMaxAggregateOutputType | null
@@ -6530,7 +9272,7 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      parentHtml: string
+      parentHtml: string | null
     }, ExtArgs["result"]["nonUniqueTextErrorData"]>
     composites: {}
   }
@@ -7103,7 +9845,7 @@ export namespace Prisma {
     /**
      * The data needed to create a NonUniqueTextErrorData.
      */
-    data: XOR<NonUniqueTextErrorDataCreateInput, NonUniqueTextErrorDataUncheckedCreateInput>
+    data?: XOR<NonUniqueTextErrorDataCreateInput, NonUniqueTextErrorDataUncheckedCreateInput>
   }
 
 
@@ -8911,323 +11653,360 @@ export namespace Prisma {
 
 
   /**
-   * Model ScrapingErrorRecord
+   * Model ProductRecordError
    */
 
-  export type AggregateScrapingErrorRecord = {
-    _count: ScrapingErrorRecordCountAggregateOutputType | null
-    _min: ScrapingErrorRecordMinAggregateOutputType | null
-    _max: ScrapingErrorRecordMaxAggregateOutputType | null
+  export type AggregateProductRecordError = {
+    _count: ProductRecordErrorCountAggregateOutputType | null
+    _min: ProductRecordErrorMinAggregateOutputType | null
+    _max: ProductRecordErrorMaxAggregateOutputType | null
   }
 
-  export type ScrapingErrorRecordMinAggregateOutputType = {
+  export type ProductRecordErrorMinAggregateOutputType = {
     id: string | null
     errorId: string | null
     errorCode: $Enums.ScrapingErrorCode | null
+    recordId: string | null
+    field: $Enums.ProductRecordDataField | null
+    message: string | null
   }
 
-  export type ScrapingErrorRecordMaxAggregateOutputType = {
+  export type ProductRecordErrorMaxAggregateOutputType = {
     id: string | null
     errorId: string | null
     errorCode: $Enums.ScrapingErrorCode | null
+    recordId: string | null
+    field: $Enums.ProductRecordDataField | null
+    message: string | null
   }
 
-  export type ScrapingErrorRecordCountAggregateOutputType = {
+  export type ProductRecordErrorCountAggregateOutputType = {
     id: number
     errorId: number
     errorCode: number
+    recordId: number
+    field: number
+    message: number
     _all: number
   }
 
 
-  export type ScrapingErrorRecordMinAggregateInputType = {
+  export type ProductRecordErrorMinAggregateInputType = {
     id?: true
     errorId?: true
     errorCode?: true
+    recordId?: true
+    field?: true
+    message?: true
   }
 
-  export type ScrapingErrorRecordMaxAggregateInputType = {
+  export type ProductRecordErrorMaxAggregateInputType = {
     id?: true
     errorId?: true
     errorCode?: true
+    recordId?: true
+    field?: true
+    message?: true
   }
 
-  export type ScrapingErrorRecordCountAggregateInputType = {
+  export type ProductRecordErrorCountAggregateInputType = {
     id?: true
     errorId?: true
     errorCode?: true
+    recordId?: true
+    field?: true
+    message?: true
     _all?: true
   }
 
-  export type ScrapingErrorRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ScrapingErrorRecord to aggregate.
+     * Filter which ProductRecordError to aggregate.
      */
-    where?: ScrapingErrorRecordWhereInput
+    where?: ProductRecordErrorWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ScrapingErrorRecords to fetch.
+     * Determine the order of ProductRecordErrors to fetch.
      */
-    orderBy?: ScrapingErrorRecordOrderByWithRelationInput | ScrapingErrorRecordOrderByWithRelationInput[]
+    orderBy?: ProductRecordErrorOrderByWithRelationInput | ProductRecordErrorOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ScrapingErrorRecordWhereUniqueInput
+    cursor?: ProductRecordErrorWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ScrapingErrorRecords from the position of the cursor.
+     * Take `±n` ProductRecordErrors from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ScrapingErrorRecords.
+     * Skip the first `n` ProductRecordErrors.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ScrapingErrorRecords
+     * Count returned ProductRecordErrors
     **/
-    _count?: true | ScrapingErrorRecordCountAggregateInputType
+    _count?: true | ProductRecordErrorCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ScrapingErrorRecordMinAggregateInputType
+    _min?: ProductRecordErrorMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ScrapingErrorRecordMaxAggregateInputType
+    _max?: ProductRecordErrorMaxAggregateInputType
   }
 
-  export type GetScrapingErrorRecordAggregateType<T extends ScrapingErrorRecordAggregateArgs> = {
-        [P in keyof T & keyof AggregateScrapingErrorRecord]: P extends '_count' | 'count'
+  export type GetProductRecordErrorAggregateType<T extends ProductRecordErrorAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductRecordError]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateScrapingErrorRecord[P]>
-      : GetScalarType<T[P], AggregateScrapingErrorRecord[P]>
+        : GetScalarType<T[P], AggregateProductRecordError[P]>
+      : GetScalarType<T[P], AggregateProductRecordError[P]>
   }
 
 
 
 
-  export type ScrapingErrorRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ScrapingErrorRecordWhereInput
-    orderBy?: ScrapingErrorRecordOrderByWithAggregationInput | ScrapingErrorRecordOrderByWithAggregationInput[]
-    by: ScrapingErrorRecordScalarFieldEnum[] | ScrapingErrorRecordScalarFieldEnum
-    having?: ScrapingErrorRecordScalarWhereWithAggregatesInput
+  export type ProductRecordErrorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductRecordErrorWhereInput
+    orderBy?: ProductRecordErrorOrderByWithAggregationInput | ProductRecordErrorOrderByWithAggregationInput[]
+    by: ProductRecordErrorScalarFieldEnum[] | ProductRecordErrorScalarFieldEnum
+    having?: ProductRecordErrorScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ScrapingErrorRecordCountAggregateInputType | true
-    _min?: ScrapingErrorRecordMinAggregateInputType
-    _max?: ScrapingErrorRecordMaxAggregateInputType
+    _count?: ProductRecordErrorCountAggregateInputType | true
+    _min?: ProductRecordErrorMinAggregateInputType
+    _max?: ProductRecordErrorMaxAggregateInputType
   }
 
-  export type ScrapingErrorRecordGroupByOutputType = {
+  export type ProductRecordErrorGroupByOutputType = {
     id: string
     errorId: string
     errorCode: $Enums.ScrapingErrorCode
-    _count: ScrapingErrorRecordCountAggregateOutputType | null
-    _min: ScrapingErrorRecordMinAggregateOutputType | null
-    _max: ScrapingErrorRecordMaxAggregateOutputType | null
+    recordId: string
+    field: $Enums.ProductRecordDataField
+    message: string
+    _count: ProductRecordErrorCountAggregateOutputType | null
+    _min: ProductRecordErrorMinAggregateOutputType | null
+    _max: ProductRecordErrorMaxAggregateOutputType | null
   }
 
-  type GetScrapingErrorRecordGroupByPayload<T extends ScrapingErrorRecordGroupByArgs> = Prisma.PrismaPromise<
+  type GetProductRecordErrorGroupByPayload<T extends ProductRecordErrorGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ScrapingErrorRecordGroupByOutputType, T['by']> &
+      PickEnumerable<ProductRecordErrorGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ScrapingErrorRecordGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ProductRecordErrorGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ScrapingErrorRecordGroupByOutputType[P]>
-            : GetScalarType<T[P], ScrapingErrorRecordGroupByOutputType[P]>
+              : GetScalarType<T[P], ProductRecordErrorGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductRecordErrorGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ScrapingErrorRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ProductRecordErrorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     errorId?: boolean
     errorCode?: boolean
-  }, ExtArgs["result"]["scrapingErrorRecord"]>
+    recordId?: boolean
+    field?: boolean
+    message?: boolean
+    record?: boolean | ProductRecordDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productRecordError"]>
 
-  export type ScrapingErrorRecordSelectScalar = {
+  export type ProductRecordErrorSelectScalar = {
     id?: boolean
     errorId?: boolean
     errorCode?: boolean
+    recordId?: boolean
+    field?: boolean
+    message?: boolean
+  }
+
+  export type ProductRecordErrorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    record?: boolean | ProductRecordDefaultArgs<ExtArgs>
   }
 
 
-  export type $ScrapingErrorRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ScrapingErrorRecord"
-    objects: {}
+  export type $ProductRecordErrorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductRecordError"
+    objects: {
+      record: Prisma.$ProductRecordPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       errorId: string
       errorCode: $Enums.ScrapingErrorCode
-    }, ExtArgs["result"]["scrapingErrorRecord"]>
+      recordId: string
+      field: $Enums.ProductRecordDataField
+      message: string
+    }, ExtArgs["result"]["productRecordError"]>
     composites: {}
   }
 
 
-  type ScrapingErrorRecordGetPayload<S extends boolean | null | undefined | ScrapingErrorRecordDefaultArgs> = $Result.GetResult<Prisma.$ScrapingErrorRecordPayload, S>
+  type ProductRecordErrorGetPayload<S extends boolean | null | undefined | ProductRecordErrorDefaultArgs> = $Result.GetResult<Prisma.$ProductRecordErrorPayload, S>
 
-  type ScrapingErrorRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ScrapingErrorRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ScrapingErrorRecordCountAggregateInputType | true
+  type ProductRecordErrorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProductRecordErrorFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProductRecordErrorCountAggregateInputType | true
     }
 
-  export interface ScrapingErrorRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScrapingErrorRecord'], meta: { name: 'ScrapingErrorRecord' } }
+  export interface ProductRecordErrorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductRecordError'], meta: { name: 'ProductRecordError' } }
     /**
-     * Find zero or one ScrapingErrorRecord that matches the filter.
-     * @param {ScrapingErrorRecordFindUniqueArgs} args - Arguments to find a ScrapingErrorRecord
+     * Find zero or one ProductRecordError that matches the filter.
+     * @param {ProductRecordErrorFindUniqueArgs} args - Arguments to find a ProductRecordError
      * @example
-     * // Get one ScrapingErrorRecord
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.findUnique({
+     * // Get one ProductRecordError
+     * const productRecordError = await prisma.productRecordError.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends ScrapingErrorRecordFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, ScrapingErrorRecordFindUniqueArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+    findUnique<T extends ProductRecordErrorFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, ProductRecordErrorFindUniqueArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
-     * Find one ScrapingErrorRecord that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one ProductRecordError that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {ScrapingErrorRecordFindUniqueOrThrowArgs} args - Arguments to find a ScrapingErrorRecord
+     * @param {ProductRecordErrorFindUniqueOrThrowArgs} args - Arguments to find a ProductRecordError
      * @example
-     * // Get one ScrapingErrorRecord
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.findUniqueOrThrow({
+     * // Get one ProductRecordError
+     * const productRecordError = await prisma.productRecordError.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends ScrapingErrorRecordFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, ScrapingErrorRecordFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+    findUniqueOrThrow<T extends ProductRecordErrorFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ProductRecordErrorFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
-     * Find the first ScrapingErrorRecord that matches the filter.
+     * Find the first ProductRecordError that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordFindFirstArgs} args - Arguments to find a ScrapingErrorRecord
+     * @param {ProductRecordErrorFindFirstArgs} args - Arguments to find a ProductRecordError
      * @example
-     * // Get one ScrapingErrorRecord
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.findFirst({
+     * // Get one ProductRecordError
+     * const productRecordError = await prisma.productRecordError.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends ScrapingErrorRecordFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, ScrapingErrorRecordFindFirstArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+    findFirst<T extends ProductRecordErrorFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, ProductRecordErrorFindFirstArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
-     * Find the first ScrapingErrorRecord that matches the filter or
+     * Find the first ProductRecordError that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordFindFirstOrThrowArgs} args - Arguments to find a ScrapingErrorRecord
+     * @param {ProductRecordErrorFindFirstOrThrowArgs} args - Arguments to find a ProductRecordError
      * @example
-     * // Get one ScrapingErrorRecord
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.findFirstOrThrow({
+     * // Get one ProductRecordError
+     * const productRecordError = await prisma.productRecordError.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends ScrapingErrorRecordFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, ScrapingErrorRecordFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+    findFirstOrThrow<T extends ProductRecordErrorFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ProductRecordErrorFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
-     * Find zero or more ScrapingErrorRecords that matches the filter.
+     * Find zero or more ProductRecordErrors that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {ProductRecordErrorFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ScrapingErrorRecords
-     * const scrapingErrorRecords = await prisma.scrapingErrorRecord.findMany()
+     * // Get all ProductRecordErrors
+     * const productRecordErrors = await prisma.productRecordError.findMany()
      * 
-     * // Get first 10 ScrapingErrorRecords
-     * const scrapingErrorRecords = await prisma.scrapingErrorRecord.findMany({ take: 10 })
+     * // Get first 10 ProductRecordErrors
+     * const productRecordErrors = await prisma.productRecordError.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const scrapingErrorRecordWithIdOnly = await prisma.scrapingErrorRecord.findMany({ select: { id: true } })
+     * const productRecordErrorWithIdOnly = await prisma.productRecordError.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends ScrapingErrorRecordFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ScrapingErrorRecordFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'findMany'>>
+    findMany<T extends ProductRecordErrorFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ProductRecordErrorFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findMany'>>
 
     /**
-     * Create a ScrapingErrorRecord.
-     * @param {ScrapingErrorRecordCreateArgs} args - Arguments to create a ScrapingErrorRecord.
+     * Create a ProductRecordError.
+     * @param {ProductRecordErrorCreateArgs} args - Arguments to create a ProductRecordError.
      * @example
-     * // Create one ScrapingErrorRecord
-     * const ScrapingErrorRecord = await prisma.scrapingErrorRecord.create({
+     * // Create one ProductRecordError
+     * const ProductRecordError = await prisma.productRecordError.create({
      *   data: {
-     *     // ... data to create a ScrapingErrorRecord
+     *     // ... data to create a ProductRecordError
      *   }
      * })
      * 
     **/
-    create<T extends ScrapingErrorRecordCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, ScrapingErrorRecordCreateArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+    create<T extends ProductRecordErrorCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, ProductRecordErrorCreateArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
-     * Create many ScrapingErrorRecords.
-     *     @param {ScrapingErrorRecordCreateManyArgs} args - Arguments to create many ScrapingErrorRecords.
+     * Create many ProductRecordErrors.
+     *     @param {ProductRecordErrorCreateManyArgs} args - Arguments to create many ProductRecordErrors.
      *     @example
-     *     // Create many ScrapingErrorRecords
-     *     const scrapingErrorRecord = await prisma.scrapingErrorRecord.createMany({
+     *     // Create many ProductRecordErrors
+     *     const productRecordError = await prisma.productRecordError.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends ScrapingErrorRecordCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ScrapingErrorRecordCreateManyArgs<ExtArgs>>
+    createMany<T extends ProductRecordErrorCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ProductRecordErrorCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a ScrapingErrorRecord.
-     * @param {ScrapingErrorRecordDeleteArgs} args - Arguments to delete one ScrapingErrorRecord.
+     * Delete a ProductRecordError.
+     * @param {ProductRecordErrorDeleteArgs} args - Arguments to delete one ProductRecordError.
      * @example
-     * // Delete one ScrapingErrorRecord
-     * const ScrapingErrorRecord = await prisma.scrapingErrorRecord.delete({
+     * // Delete one ProductRecordError
+     * const ProductRecordError = await prisma.productRecordError.delete({
      *   where: {
-     *     // ... filter to delete one ScrapingErrorRecord
+     *     // ... filter to delete one ProductRecordError
      *   }
      * })
      * 
     **/
-    delete<T extends ScrapingErrorRecordDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, ScrapingErrorRecordDeleteArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+    delete<T extends ProductRecordErrorDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, ProductRecordErrorDeleteArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
-     * Update one ScrapingErrorRecord.
-     * @param {ScrapingErrorRecordUpdateArgs} args - Arguments to update one ScrapingErrorRecord.
+     * Update one ProductRecordError.
+     * @param {ProductRecordErrorUpdateArgs} args - Arguments to update one ProductRecordError.
      * @example
-     * // Update one ScrapingErrorRecord
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.update({
+     * // Update one ProductRecordError
+     * const productRecordError = await prisma.productRecordError.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9237,34 +12016,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends ScrapingErrorRecordUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, ScrapingErrorRecordUpdateArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+    update<T extends ProductRecordErrorUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, ProductRecordErrorUpdateArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
-     * Delete zero or more ScrapingErrorRecords.
-     * @param {ScrapingErrorRecordDeleteManyArgs} args - Arguments to filter ScrapingErrorRecords to delete.
+     * Delete zero or more ProductRecordErrors.
+     * @param {ProductRecordErrorDeleteManyArgs} args - Arguments to filter ProductRecordErrors to delete.
      * @example
-     * // Delete a few ScrapingErrorRecords
-     * const { count } = await prisma.scrapingErrorRecord.deleteMany({
+     * // Delete a few ProductRecordErrors
+     * const { count } = await prisma.productRecordError.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends ScrapingErrorRecordDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ScrapingErrorRecordDeleteManyArgs<ExtArgs>>
+    deleteMany<T extends ProductRecordErrorDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ProductRecordErrorDeleteManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ScrapingErrorRecords.
+     * Update zero or more ProductRecordErrors.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ProductRecordErrorUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ScrapingErrorRecords
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.updateMany({
+     * // Update many ProductRecordErrors
+     * const productRecordError = await prisma.productRecordError.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9274,59 +12053,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends ScrapingErrorRecordUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, ScrapingErrorRecordUpdateManyArgs<ExtArgs>>
+    updateMany<T extends ProductRecordErrorUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, ProductRecordErrorUpdateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one ScrapingErrorRecord.
-     * @param {ScrapingErrorRecordUpsertArgs} args - Arguments to update or create a ScrapingErrorRecord.
+     * Create or update one ProductRecordError.
+     * @param {ProductRecordErrorUpsertArgs} args - Arguments to update or create a ProductRecordError.
      * @example
-     * // Update or create a ScrapingErrorRecord
-     * const scrapingErrorRecord = await prisma.scrapingErrorRecord.upsert({
+     * // Update or create a ProductRecordError
+     * const productRecordError = await prisma.productRecordError.upsert({
      *   create: {
-     *     // ... data to create a ScrapingErrorRecord
+     *     // ... data to create a ProductRecordError
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ScrapingErrorRecord we want to update
+     *     // ... the filter for the ProductRecordError we want to update
      *   }
      * })
     **/
-    upsert<T extends ScrapingErrorRecordUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, ScrapingErrorRecordUpsertArgs<ExtArgs>>
-    ): Prisma__ScrapingErrorRecordClient<$Result.GetResult<Prisma.$ScrapingErrorRecordPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+    upsert<T extends ProductRecordErrorUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, ProductRecordErrorUpsertArgs<ExtArgs>>
+    ): Prisma__ProductRecordErrorClient<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
-     * Count the number of ScrapingErrorRecords.
+     * Count the number of ProductRecordErrors.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordCountArgs} args - Arguments to filter ScrapingErrorRecords to count.
+     * @param {ProductRecordErrorCountArgs} args - Arguments to filter ProductRecordErrors to count.
      * @example
-     * // Count the number of ScrapingErrorRecords
-     * const count = await prisma.scrapingErrorRecord.count({
+     * // Count the number of ProductRecordErrors
+     * const count = await prisma.productRecordError.count({
      *   where: {
-     *     // ... the filter for the ScrapingErrorRecords we want to count
+     *     // ... the filter for the ProductRecordErrors we want to count
      *   }
      * })
     **/
-    count<T extends ScrapingErrorRecordCountArgs>(
-      args?: Subset<T, ScrapingErrorRecordCountArgs>,
+    count<T extends ProductRecordErrorCountArgs>(
+      args?: Subset<T, ProductRecordErrorCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ScrapingErrorRecordCountAggregateOutputType>
+          : GetScalarType<T['select'], ProductRecordErrorCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ScrapingErrorRecord.
+     * Allows you to perform aggregations operations on a ProductRecordError.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ProductRecordErrorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -9346,13 +12125,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ScrapingErrorRecordAggregateArgs>(args: Subset<T, ScrapingErrorRecordAggregateArgs>): Prisma.PrismaPromise<GetScrapingErrorRecordAggregateType<T>>
+    aggregate<T extends ProductRecordErrorAggregateArgs>(args: Subset<T, ProductRecordErrorAggregateArgs>): Prisma.PrismaPromise<GetProductRecordErrorAggregateType<T>>
 
     /**
-     * Group by ScrapingErrorRecord.
+     * Group by ProductRecordError.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScrapingErrorRecordGroupByArgs} args - Group by arguments.
+     * @param {ProductRecordErrorGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -9367,14 +12146,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ScrapingErrorRecordGroupByArgs,
+      T extends ProductRecordErrorGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ScrapingErrorRecordGroupByArgs['orderBy'] }
-        : { orderBy?: ScrapingErrorRecordGroupByArgs['orderBy'] },
+        ? { orderBy: ProductRecordErrorGroupByArgs['orderBy'] }
+        : { orderBy?: ProductRecordErrorGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -9423,22 +12202,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ScrapingErrorRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScrapingErrorRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ProductRecordErrorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductRecordErrorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ScrapingErrorRecord model
+   * Fields of the ProductRecordError model
    */
-  readonly fields: ScrapingErrorRecordFieldRefs;
+  readonly fields: ProductRecordErrorFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ScrapingErrorRecord.
+   * The delegate class that acts as a "Promise-like" for ProductRecordError.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ScrapingErrorRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ProductRecordErrorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
+    record<T extends ProductRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecordDefaultArgs<ExtArgs>>): Prisma__ProductRecordClient<$Result.GetResult<Prisma.$ProductRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9465,1217 +12245,338 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ScrapingErrorRecord model
+   * Fields of the ProductRecordError model
    */ 
-  interface ScrapingErrorRecordFieldRefs {
-    readonly id: FieldRef<"ScrapingErrorRecord", 'String'>
-    readonly errorId: FieldRef<"ScrapingErrorRecord", 'String'>
-    readonly errorCode: FieldRef<"ScrapingErrorRecord", 'ScrapingErrorCode'>
+  interface ProductRecordErrorFieldRefs {
+    readonly id: FieldRef<"ProductRecordError", 'String'>
+    readonly errorId: FieldRef<"ProductRecordError", 'String'>
+    readonly errorCode: FieldRef<"ProductRecordError", 'ScrapingErrorCode'>
+    readonly recordId: FieldRef<"ProductRecordError", 'String'>
+    readonly field: FieldRef<"ProductRecordError", 'ProductRecordDataField'>
+    readonly message: FieldRef<"ProductRecordError", 'String'>
   }
     
 
   // Custom InputTypes
 
   /**
-   * ScrapingErrorRecord findUnique
+   * ProductRecordError findUnique
    */
-  export type ScrapingErrorRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter, which ScrapingErrorRecord to fetch.
+     * Choose, which related nodes to fetch as well.
      */
-    where: ScrapingErrorRecordWhereUniqueInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductRecordError to fetch.
+     */
+    where: ProductRecordErrorWhereUniqueInput
   }
 
 
   /**
-   * ScrapingErrorRecord findUniqueOrThrow
+   * ProductRecordError findUniqueOrThrow
    */
-  export type ScrapingErrorRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter, which ScrapingErrorRecord to fetch.
+     * Choose, which related nodes to fetch as well.
      */
-    where: ScrapingErrorRecordWhereUniqueInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductRecordError to fetch.
+     */
+    where: ProductRecordErrorWhereUniqueInput
   }
 
 
   /**
-   * ScrapingErrorRecord findFirst
+   * ProductRecordError findFirst
    */
-  export type ScrapingErrorRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter, which ScrapingErrorRecord to fetch.
+     * Choose, which related nodes to fetch as well.
      */
-    where?: ScrapingErrorRecordWhereInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductRecordError to fetch.
+     */
+    where?: ProductRecordErrorWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ScrapingErrorRecords to fetch.
+     * Determine the order of ProductRecordErrors to fetch.
      */
-    orderBy?: ScrapingErrorRecordOrderByWithRelationInput | ScrapingErrorRecordOrderByWithRelationInput[]
+    orderBy?: ProductRecordErrorOrderByWithRelationInput | ProductRecordErrorOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ScrapingErrorRecords.
+     * Sets the position for searching for ProductRecordErrors.
      */
-    cursor?: ScrapingErrorRecordWhereUniqueInput
+    cursor?: ProductRecordErrorWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ScrapingErrorRecords from the position of the cursor.
+     * Take `±n` ProductRecordErrors from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ScrapingErrorRecords.
+     * Skip the first `n` ProductRecordErrors.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ScrapingErrorRecords.
+     * Filter by unique combinations of ProductRecordErrors.
      */
-    distinct?: ScrapingErrorRecordScalarFieldEnum | ScrapingErrorRecordScalarFieldEnum[]
+    distinct?: ProductRecordErrorScalarFieldEnum | ProductRecordErrorScalarFieldEnum[]
   }
 
 
   /**
-   * ScrapingErrorRecord findFirstOrThrow
+   * ProductRecordError findFirstOrThrow
    */
-  export type ScrapingErrorRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter, which ScrapingErrorRecord to fetch.
+     * Choose, which related nodes to fetch as well.
      */
-    where?: ScrapingErrorRecordWhereInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductRecordError to fetch.
+     */
+    where?: ProductRecordErrorWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ScrapingErrorRecords to fetch.
+     * Determine the order of ProductRecordErrors to fetch.
      */
-    orderBy?: ScrapingErrorRecordOrderByWithRelationInput | ScrapingErrorRecordOrderByWithRelationInput[]
+    orderBy?: ProductRecordErrorOrderByWithRelationInput | ProductRecordErrorOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ScrapingErrorRecords.
+     * Sets the position for searching for ProductRecordErrors.
      */
-    cursor?: ScrapingErrorRecordWhereUniqueInput
+    cursor?: ProductRecordErrorWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ScrapingErrorRecords from the position of the cursor.
+     * Take `±n` ProductRecordErrors from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ScrapingErrorRecords.
+     * Skip the first `n` ProductRecordErrors.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ScrapingErrorRecords.
+     * Filter by unique combinations of ProductRecordErrors.
      */
-    distinct?: ScrapingErrorRecordScalarFieldEnum | ScrapingErrorRecordScalarFieldEnum[]
+    distinct?: ProductRecordErrorScalarFieldEnum | ProductRecordErrorScalarFieldEnum[]
   }
 
 
   /**
-   * ScrapingErrorRecord findMany
+   * ProductRecordError findMany
    */
-  export type ScrapingErrorRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter, which ScrapingErrorRecords to fetch.
+     * Choose, which related nodes to fetch as well.
      */
-    where?: ScrapingErrorRecordWhereInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductRecordErrors to fetch.
+     */
+    where?: ProductRecordErrorWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ScrapingErrorRecords to fetch.
+     * Determine the order of ProductRecordErrors to fetch.
      */
-    orderBy?: ScrapingErrorRecordOrderByWithRelationInput | ScrapingErrorRecordOrderByWithRelationInput[]
+    orderBy?: ProductRecordErrorOrderByWithRelationInput | ProductRecordErrorOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ScrapingErrorRecords.
+     * Sets the position for listing ProductRecordErrors.
      */
-    cursor?: ScrapingErrorRecordWhereUniqueInput
+    cursor?: ProductRecordErrorWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ScrapingErrorRecords from the position of the cursor.
+     * Take `±n` ProductRecordErrors from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ScrapingErrorRecords.
+     * Skip the first `n` ProductRecordErrors.
      */
     skip?: number
-    distinct?: ScrapingErrorRecordScalarFieldEnum | ScrapingErrorRecordScalarFieldEnum[]
+    distinct?: ProductRecordErrorScalarFieldEnum | ProductRecordErrorScalarFieldEnum[]
   }
 
 
   /**
-   * ScrapingErrorRecord create
+   * ProductRecordError create
    */
-  export type ScrapingErrorRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * The data needed to create a ScrapingErrorRecord.
+     * Choose, which related nodes to fetch as well.
      */
-    data: XOR<ScrapingErrorRecordCreateInput, ScrapingErrorRecordUncheckedCreateInput>
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductRecordError.
+     */
+    data: XOR<ProductRecordErrorCreateInput, ProductRecordErrorUncheckedCreateInput>
   }
 
 
   /**
-   * ScrapingErrorRecord createMany
+   * ProductRecordError createMany
    */
-  export type ScrapingErrorRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ScrapingErrorRecords.
+     * The data used to create many ProductRecordErrors.
      */
-    data: ScrapingErrorRecordCreateManyInput | ScrapingErrorRecordCreateManyInput[]
+    data: ProductRecordErrorCreateManyInput | ProductRecordErrorCreateManyInput[]
     skipDuplicates?: boolean
   }
 
 
   /**
-   * ScrapingErrorRecord update
+   * ProductRecordError update
    */
-  export type ScrapingErrorRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * The data needed to update a ScrapingErrorRecord.
+     * Choose, which related nodes to fetch as well.
      */
-    data: XOR<ScrapingErrorRecordUpdateInput, ScrapingErrorRecordUncheckedUpdateInput>
+    include?: ProductRecordErrorInclude<ExtArgs> | null
     /**
-     * Choose, which ScrapingErrorRecord to update.
+     * The data needed to update a ProductRecordError.
      */
-    where: ScrapingErrorRecordWhereUniqueInput
+    data: XOR<ProductRecordErrorUpdateInput, ProductRecordErrorUncheckedUpdateInput>
+    /**
+     * Choose, which ProductRecordError to update.
+     */
+    where: ProductRecordErrorWhereUniqueInput
   }
 
 
   /**
-   * ScrapingErrorRecord updateMany
+   * ProductRecordError updateMany
    */
-  export type ScrapingErrorRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ScrapingErrorRecords.
+     * The data used to update ProductRecordErrors.
      */
-    data: XOR<ScrapingErrorRecordUpdateManyMutationInput, ScrapingErrorRecordUncheckedUpdateManyInput>
+    data: XOR<ProductRecordErrorUpdateManyMutationInput, ProductRecordErrorUncheckedUpdateManyInput>
     /**
-     * Filter which ScrapingErrorRecords to update
+     * Filter which ProductRecordErrors to update
      */
-    where?: ScrapingErrorRecordWhereInput
+    where?: ProductRecordErrorWhereInput
   }
 
 
   /**
-   * ScrapingErrorRecord upsert
+   * ProductRecordError upsert
    */
-  export type ScrapingErrorRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * The filter to search for the ScrapingErrorRecord to update in case it exists.
+     * Choose, which related nodes to fetch as well.
      */
-    where: ScrapingErrorRecordWhereUniqueInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
     /**
-     * In case the ScrapingErrorRecord found by the `where` argument doesn't exist, create a new ScrapingErrorRecord with this data.
+     * The filter to search for the ProductRecordError to update in case it exists.
      */
-    create: XOR<ScrapingErrorRecordCreateInput, ScrapingErrorRecordUncheckedCreateInput>
+    where: ProductRecordErrorWhereUniqueInput
     /**
-     * In case the ScrapingErrorRecord was found with the provided `where` argument, update it with this data.
+     * In case the ProductRecordError found by the `where` argument doesn't exist, create a new ProductRecordError with this data.
      */
-    update: XOR<ScrapingErrorRecordUpdateInput, ScrapingErrorRecordUncheckedUpdateInput>
+    create: XOR<ProductRecordErrorCreateInput, ProductRecordErrorUncheckedCreateInput>
+    /**
+     * In case the ProductRecordError was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductRecordErrorUpdateInput, ProductRecordErrorUncheckedUpdateInput>
   }
 
 
   /**
-   * ScrapingErrorRecord delete
+   * ProductRecordError delete
    */
-  export type ScrapingErrorRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter which ScrapingErrorRecord to delete.
+     * Choose, which related nodes to fetch as well.
      */
-    where: ScrapingErrorRecordWhereUniqueInput
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    /**
+     * Filter which ProductRecordError to delete.
+     */
+    where: ProductRecordErrorWhereUniqueInput
   }
 
 
   /**
-   * ScrapingErrorRecord deleteMany
+   * ProductRecordError deleteMany
    */
-  export type ScrapingErrorRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ScrapingErrorRecords to delete
+     * Filter which ProductRecordErrors to delete
      */
-    where?: ScrapingErrorRecordWhereInput
+    where?: ProductRecordErrorWhereInput
   }
 
 
   /**
-   * ScrapingErrorRecord without action
+   * ProductRecordError without action
    */
-  export type ScrapingErrorRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductRecordErrorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ScrapingErrorRecord
+     * Select specific fields to fetch from the ProductRecordError
      */
-    select?: ScrapingErrorRecordSelect<ExtArgs> | null
-  }
-
-
-
-  /**
-   * Model ProductRecordedRecord
-   */
-
-  export type AggregateProductRecordedRecord = {
-    _count: ProductRecordedRecordCountAggregateOutputType | null
-    _avg: ProductRecordedRecordAvgAggregateOutputType | null
-    _sum: ProductRecordedRecordSumAggregateOutputType | null
-    _min: ProductRecordedRecordMinAggregateOutputType | null
-    _max: ProductRecordedRecordMaxAggregateOutputType | null
-  }
-
-  export type ProductRecordedRecordAvgAggregateOutputType = {
-    price: number | null
-  }
-
-  export type ProductRecordedRecordSumAggregateOutputType = {
-    price: number | null
-  }
-
-  export type ProductRecordedRecordMinAggregateOutputType = {
-    id: string | null
-    updatedAt: Date | null
-    price: number | null
-    rawPrice: string | null
-    status: $Enums.ProductRecordStatus | null
-    wasManuallyCreated: boolean | null
-  }
-
-  export type ProductRecordedRecordMaxAggregateOutputType = {
-    id: string | null
-    updatedAt: Date | null
-    price: number | null
-    rawPrice: string | null
-    status: $Enums.ProductRecordStatus | null
-    wasManuallyCreated: boolean | null
-  }
-
-  export type ProductRecordedRecordCountAggregateOutputType = {
-    id: number
-    updatedAt: number
-    price: number
-    rawPrice: number
-    status: number
-    wasManuallyCreated: number
-    manuallyChangedFields: number
-    _all: number
-  }
-
-
-  export type ProductRecordedRecordAvgAggregateInputType = {
-    price?: true
-  }
-
-  export type ProductRecordedRecordSumAggregateInputType = {
-    price?: true
-  }
-
-  export type ProductRecordedRecordMinAggregateInputType = {
-    id?: true
-    updatedAt?: true
-    price?: true
-    rawPrice?: true
-    status?: true
-    wasManuallyCreated?: true
-  }
-
-  export type ProductRecordedRecordMaxAggregateInputType = {
-    id?: true
-    updatedAt?: true
-    price?: true
-    rawPrice?: true
-    status?: true
-    wasManuallyCreated?: true
-  }
-
-  export type ProductRecordedRecordCountAggregateInputType = {
-    id?: true
-    updatedAt?: true
-    price?: true
-    rawPrice?: true
-    status?: true
-    wasManuallyCreated?: true
-    manuallyChangedFields?: true
-    _all?: true
-  }
-
-  export type ProductRecordedRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    select?: ProductRecordErrorSelect<ExtArgs> | null
     /**
-     * Filter which ProductRecordedRecord to aggregate.
+     * Choose, which related nodes to fetch as well.
      */
-    where?: ProductRecordedRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductRecordedRecords to fetch.
-     */
-    orderBy?: ProductRecordedRecordOrderByWithRelationInput | ProductRecordedRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ProductRecordedRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductRecordedRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductRecordedRecords.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ProductRecordedRecords
-    **/
-    _count?: true | ProductRecordedRecordCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ProductRecordedRecordAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ProductRecordedRecordSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ProductRecordedRecordMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ProductRecordedRecordMaxAggregateInputType
-  }
-
-  export type GetProductRecordedRecordAggregateType<T extends ProductRecordedRecordAggregateArgs> = {
-        [P in keyof T & keyof AggregateProductRecordedRecord]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateProductRecordedRecord[P]>
-      : GetScalarType<T[P], AggregateProductRecordedRecord[P]>
-  }
-
-
-
-
-  export type ProductRecordedRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductRecordedRecordWhereInput
-    orderBy?: ProductRecordedRecordOrderByWithAggregationInput | ProductRecordedRecordOrderByWithAggregationInput[]
-    by: ProductRecordedRecordScalarFieldEnum[] | ProductRecordedRecordScalarFieldEnum
-    having?: ProductRecordedRecordScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ProductRecordedRecordCountAggregateInputType | true
-    _avg?: ProductRecordedRecordAvgAggregateInputType
-    _sum?: ProductRecordedRecordSumAggregateInputType
-    _min?: ProductRecordedRecordMinAggregateInputType
-    _max?: ProductRecordedRecordMaxAggregateInputType
-  }
-
-  export type ProductRecordedRecordGroupByOutputType = {
-    id: string
-    updatedAt: Date
-    price: number
-    rawPrice: string
-    status: $Enums.ProductRecordStatus
-    wasManuallyCreated: boolean
-    manuallyChangedFields: $Enums.ProductRecordDataFields[]
-    _count: ProductRecordedRecordCountAggregateOutputType | null
-    _avg: ProductRecordedRecordAvgAggregateOutputType | null
-    _sum: ProductRecordedRecordSumAggregateOutputType | null
-    _min: ProductRecordedRecordMinAggregateOutputType | null
-    _max: ProductRecordedRecordMaxAggregateOutputType | null
-  }
-
-  type GetProductRecordedRecordGroupByPayload<T extends ProductRecordedRecordGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ProductRecordedRecordGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ProductRecordedRecordGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ProductRecordedRecordGroupByOutputType[P]>
-            : GetScalarType<T[P], ProductRecordedRecordGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ProductRecordedRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    updatedAt?: boolean
-    price?: boolean
-    rawPrice?: boolean
-    status?: boolean
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: boolean
-  }, ExtArgs["result"]["productRecordedRecord"]>
-
-  export type ProductRecordedRecordSelectScalar = {
-    id?: boolean
-    updatedAt?: boolean
-    price?: boolean
-    rawPrice?: boolean
-    status?: boolean
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: boolean
-  }
-
-
-  export type $ProductRecordedRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ProductRecordedRecord"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      updatedAt: Date
-      price: number
-      rawPrice: string
-      status: $Enums.ProductRecordStatus
-      wasManuallyCreated: boolean
-      manuallyChangedFields: $Enums.ProductRecordDataFields[]
-    }, ExtArgs["result"]["productRecordedRecord"]>
-    composites: {}
-  }
-
-
-  type ProductRecordedRecordGetPayload<S extends boolean | null | undefined | ProductRecordedRecordDefaultArgs> = $Result.GetResult<Prisma.$ProductRecordedRecordPayload, S>
-
-  type ProductRecordedRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ProductRecordedRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ProductRecordedRecordCountAggregateInputType | true
-    }
-
-  export interface ProductRecordedRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductRecordedRecord'], meta: { name: 'ProductRecordedRecord' } }
-    /**
-     * Find zero or one ProductRecordedRecord that matches the filter.
-     * @param {ProductRecordedRecordFindUniqueArgs} args - Arguments to find a ProductRecordedRecord
-     * @example
-     * // Get one ProductRecordedRecord
-     * const productRecordedRecord = await prisma.productRecordedRecord.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends ProductRecordedRecordFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, ProductRecordedRecordFindUniqueArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one ProductRecordedRecord that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {ProductRecordedRecordFindUniqueOrThrowArgs} args - Arguments to find a ProductRecordedRecord
-     * @example
-     * // Get one ProductRecordedRecord
-     * const productRecordedRecord = await prisma.productRecordedRecord.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends ProductRecordedRecordFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProductRecordedRecordFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first ProductRecordedRecord that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordFindFirstArgs} args - Arguments to find a ProductRecordedRecord
-     * @example
-     * // Get one ProductRecordedRecord
-     * const productRecordedRecord = await prisma.productRecordedRecord.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends ProductRecordedRecordFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProductRecordedRecordFindFirstArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first ProductRecordedRecord that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordFindFirstOrThrowArgs} args - Arguments to find a ProductRecordedRecord
-     * @example
-     * // Get one ProductRecordedRecord
-     * const productRecordedRecord = await prisma.productRecordedRecord.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends ProductRecordedRecordFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProductRecordedRecordFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more ProductRecordedRecords that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ProductRecordedRecords
-     * const productRecordedRecords = await prisma.productRecordedRecord.findMany()
-     * 
-     * // Get first 10 ProductRecordedRecords
-     * const productRecordedRecords = await prisma.productRecordedRecord.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const productRecordedRecordWithIdOnly = await prisma.productRecordedRecord.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends ProductRecordedRecordFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProductRecordedRecordFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a ProductRecordedRecord.
-     * @param {ProductRecordedRecordCreateArgs} args - Arguments to create a ProductRecordedRecord.
-     * @example
-     * // Create one ProductRecordedRecord
-     * const ProductRecordedRecord = await prisma.productRecordedRecord.create({
-     *   data: {
-     *     // ... data to create a ProductRecordedRecord
-     *   }
-     * })
-     * 
-    **/
-    create<T extends ProductRecordedRecordCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, ProductRecordedRecordCreateArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many ProductRecordedRecords.
-     *     @param {ProductRecordedRecordCreateManyArgs} args - Arguments to create many ProductRecordedRecords.
-     *     @example
-     *     // Create many ProductRecordedRecords
-     *     const productRecordedRecord = await prisma.productRecordedRecord.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends ProductRecordedRecordCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProductRecordedRecordCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a ProductRecordedRecord.
-     * @param {ProductRecordedRecordDeleteArgs} args - Arguments to delete one ProductRecordedRecord.
-     * @example
-     * // Delete one ProductRecordedRecord
-     * const ProductRecordedRecord = await prisma.productRecordedRecord.delete({
-     *   where: {
-     *     // ... filter to delete one ProductRecordedRecord
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends ProductRecordedRecordDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, ProductRecordedRecordDeleteArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one ProductRecordedRecord.
-     * @param {ProductRecordedRecordUpdateArgs} args - Arguments to update one ProductRecordedRecord.
-     * @example
-     * // Update one ProductRecordedRecord
-     * const productRecordedRecord = await prisma.productRecordedRecord.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends ProductRecordedRecordUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, ProductRecordedRecordUpdateArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more ProductRecordedRecords.
-     * @param {ProductRecordedRecordDeleteManyArgs} args - Arguments to filter ProductRecordedRecords to delete.
-     * @example
-     * // Delete a few ProductRecordedRecords
-     * const { count } = await prisma.productRecordedRecord.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends ProductRecordedRecordDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProductRecordedRecordDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ProductRecordedRecords.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ProductRecordedRecords
-     * const productRecordedRecord = await prisma.productRecordedRecord.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends ProductRecordedRecordUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, ProductRecordedRecordUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one ProductRecordedRecord.
-     * @param {ProductRecordedRecordUpsertArgs} args - Arguments to update or create a ProductRecordedRecord.
-     * @example
-     * // Update or create a ProductRecordedRecord
-     * const productRecordedRecord = await prisma.productRecordedRecord.upsert({
-     *   create: {
-     *     // ... data to create a ProductRecordedRecord
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ProductRecordedRecord we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends ProductRecordedRecordUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, ProductRecordedRecordUpsertArgs<ExtArgs>>
-    ): Prisma__ProductRecordedRecordClient<$Result.GetResult<Prisma.$ProductRecordedRecordPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of ProductRecordedRecords.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordCountArgs} args - Arguments to filter ProductRecordedRecords to count.
-     * @example
-     * // Count the number of ProductRecordedRecords
-     * const count = await prisma.productRecordedRecord.count({
-     *   where: {
-     *     // ... the filter for the ProductRecordedRecords we want to count
-     *   }
-     * })
-    **/
-    count<T extends ProductRecordedRecordCountArgs>(
-      args?: Subset<T, ProductRecordedRecordCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ProductRecordedRecordCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ProductRecordedRecord.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ProductRecordedRecordAggregateArgs>(args: Subset<T, ProductRecordedRecordAggregateArgs>): Prisma.PrismaPromise<GetProductRecordedRecordAggregateType<T>>
-
-    /**
-     * Group by ProductRecordedRecord.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductRecordedRecordGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ProductRecordedRecordGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProductRecordedRecordGroupByArgs['orderBy'] }
-        : { orderBy?: ProductRecordedRecordGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ProductRecordedRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductRecordedRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ProductRecordedRecord model
-   */
-  readonly fields: ProductRecordedRecordFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ProductRecordedRecord.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ProductRecordedRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the ProductRecordedRecord model
-   */ 
-  interface ProductRecordedRecordFieldRefs {
-    readonly id: FieldRef<"ProductRecordedRecord", 'String'>
-    readonly updatedAt: FieldRef<"ProductRecordedRecord", 'DateTime'>
-    readonly price: FieldRef<"ProductRecordedRecord", 'Float'>
-    readonly rawPrice: FieldRef<"ProductRecordedRecord", 'String'>
-    readonly status: FieldRef<"ProductRecordedRecord", 'ProductRecordStatus'>
-    readonly wasManuallyCreated: FieldRef<"ProductRecordedRecord", 'Boolean'>
-    readonly manuallyChangedFields: FieldRef<"ProductRecordedRecord", 'ProductRecordDataFields[]'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * ProductRecordedRecord findUnique
-   */
-  export type ProductRecordedRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * Filter, which ProductRecordedRecord to fetch.
-     */
-    where: ProductRecordedRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProductRecordedRecord findUniqueOrThrow
-   */
-  export type ProductRecordedRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * Filter, which ProductRecordedRecord to fetch.
-     */
-    where: ProductRecordedRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProductRecordedRecord findFirst
-   */
-  export type ProductRecordedRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * Filter, which ProductRecordedRecord to fetch.
-     */
-    where?: ProductRecordedRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductRecordedRecords to fetch.
-     */
-    orderBy?: ProductRecordedRecordOrderByWithRelationInput | ProductRecordedRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ProductRecordedRecords.
-     */
-    cursor?: ProductRecordedRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductRecordedRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductRecordedRecords.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductRecordedRecords.
-     */
-    distinct?: ProductRecordedRecordScalarFieldEnum | ProductRecordedRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * ProductRecordedRecord findFirstOrThrow
-   */
-  export type ProductRecordedRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * Filter, which ProductRecordedRecord to fetch.
-     */
-    where?: ProductRecordedRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductRecordedRecords to fetch.
-     */
-    orderBy?: ProductRecordedRecordOrderByWithRelationInput | ProductRecordedRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ProductRecordedRecords.
-     */
-    cursor?: ProductRecordedRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductRecordedRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductRecordedRecords.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductRecordedRecords.
-     */
-    distinct?: ProductRecordedRecordScalarFieldEnum | ProductRecordedRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * ProductRecordedRecord findMany
-   */
-  export type ProductRecordedRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * Filter, which ProductRecordedRecords to fetch.
-     */
-    where?: ProductRecordedRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductRecordedRecords to fetch.
-     */
-    orderBy?: ProductRecordedRecordOrderByWithRelationInput | ProductRecordedRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ProductRecordedRecords.
-     */
-    cursor?: ProductRecordedRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductRecordedRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductRecordedRecords.
-     */
-    skip?: number
-    distinct?: ProductRecordedRecordScalarFieldEnum | ProductRecordedRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * ProductRecordedRecord create
-   */
-  export type ProductRecordedRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * The data needed to create a ProductRecordedRecord.
-     */
-    data: XOR<ProductRecordedRecordCreateInput, ProductRecordedRecordUncheckedCreateInput>
-  }
-
-
-  /**
-   * ProductRecordedRecord createMany
-   */
-  export type ProductRecordedRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ProductRecordedRecords.
-     */
-    data: ProductRecordedRecordCreateManyInput | ProductRecordedRecordCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * ProductRecordedRecord update
-   */
-  export type ProductRecordedRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * The data needed to update a ProductRecordedRecord.
-     */
-    data: XOR<ProductRecordedRecordUpdateInput, ProductRecordedRecordUncheckedUpdateInput>
-    /**
-     * Choose, which ProductRecordedRecord to update.
-     */
-    where: ProductRecordedRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProductRecordedRecord updateMany
-   */
-  export type ProductRecordedRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ProductRecordedRecords.
-     */
-    data: XOR<ProductRecordedRecordUpdateManyMutationInput, ProductRecordedRecordUncheckedUpdateManyInput>
-    /**
-     * Filter which ProductRecordedRecords to update
-     */
-    where?: ProductRecordedRecordWhereInput
-  }
-
-
-  /**
-   * ProductRecordedRecord upsert
-   */
-  export type ProductRecordedRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * The filter to search for the ProductRecordedRecord to update in case it exists.
-     */
-    where: ProductRecordedRecordWhereUniqueInput
-    /**
-     * In case the ProductRecordedRecord found by the `where` argument doesn't exist, create a new ProductRecordedRecord with this data.
-     */
-    create: XOR<ProductRecordedRecordCreateInput, ProductRecordedRecordUncheckedCreateInput>
-    /**
-     * In case the ProductRecordedRecord was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ProductRecordedRecordUpdateInput, ProductRecordedRecordUncheckedUpdateInput>
-  }
-
-
-  /**
-   * ProductRecordedRecord delete
-   */
-  export type ProductRecordedRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
-    /**
-     * Filter which ProductRecordedRecord to delete.
-     */
-    where: ProductRecordedRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProductRecordedRecord deleteMany
-   */
-  export type ProductRecordedRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ProductRecordedRecords to delete
-     */
-    where?: ProductRecordedRecordWhereInput
-  }
-
-
-  /**
-   * ProductRecordedRecord without action
-   */
-  export type ProductRecordedRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductRecordedRecord
-     */
-    select?: ProductRecordedRecordSelect<ExtArgs> | null
+    include?: ProductRecordErrorInclude<ExtArgs> | null
   }
 
 
@@ -10686,8 +12587,18 @@ export namespace Prisma {
 
   export type AggregateProductRecord = {
     _count: ProductRecordCountAggregateOutputType | null
+    _avg: ProductRecordAvgAggregateOutputType | null
+    _sum: ProductRecordSumAggregateOutputType | null
     _min: ProductRecordMinAggregateOutputType | null
     _max: ProductRecordMaxAggregateOutputType | null
+  }
+
+  export type ProductRecordAvgAggregateOutputType = {
+    price: number | null
+  }
+
+  export type ProductRecordSumAggregateOutputType = {
+    price: number | null
   }
 
   export type ProductRecordMinAggregateOutputType = {
@@ -10695,9 +12606,12 @@ export namespace Prisma {
     timestamp: Date | null
     createdById: string | null
     updatedById: string | null
-    recordType: $Enums.ProductRecordType | null
-    recordId: string | null
+    updatedAt: Date | null
     productId: string | null
+    price: number | null
+    rawPrice: string | null
+    status: $Enums.ProductRecordStatus | null
+    wasManuallyCreated: boolean | null
   }
 
   export type ProductRecordMaxAggregateOutputType = {
@@ -10705,9 +12619,12 @@ export namespace Prisma {
     timestamp: Date | null
     createdById: string | null
     updatedById: string | null
-    recordType: $Enums.ProductRecordType | null
-    recordId: string | null
+    updatedAt: Date | null
     productId: string | null
+    price: number | null
+    rawPrice: string | null
+    status: $Enums.ProductRecordStatus | null
+    wasManuallyCreated: boolean | null
   }
 
   export type ProductRecordCountAggregateOutputType = {
@@ -10715,21 +12632,36 @@ export namespace Prisma {
     timestamp: number
     createdById: number
     updatedById: number
-    recordType: number
-    recordId: number
+    updatedAt: number
     productId: number
+    price: number
+    rawPrice: number
+    status: number
+    wasManuallyCreated: number
+    manuallyChangedFields: number
     _all: number
   }
 
+
+  export type ProductRecordAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type ProductRecordSumAggregateInputType = {
+    price?: true
+  }
 
   export type ProductRecordMinAggregateInputType = {
     id?: true
     timestamp?: true
     createdById?: true
     updatedById?: true
-    recordType?: true
-    recordId?: true
+    updatedAt?: true
     productId?: true
+    price?: true
+    rawPrice?: true
+    status?: true
+    wasManuallyCreated?: true
   }
 
   export type ProductRecordMaxAggregateInputType = {
@@ -10737,9 +12669,12 @@ export namespace Prisma {
     timestamp?: true
     createdById?: true
     updatedById?: true
-    recordType?: true
-    recordId?: true
+    updatedAt?: true
     productId?: true
+    price?: true
+    rawPrice?: true
+    status?: true
+    wasManuallyCreated?: true
   }
 
   export type ProductRecordCountAggregateInputType = {
@@ -10747,9 +12682,13 @@ export namespace Prisma {
     timestamp?: true
     createdById?: true
     updatedById?: true
-    recordType?: true
-    recordId?: true
+    updatedAt?: true
     productId?: true
+    price?: true
+    rawPrice?: true
+    status?: true
+    wasManuallyCreated?: true
+    manuallyChangedFields?: true
     _all?: true
   }
 
@@ -10791,6 +12730,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProductRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProductRecordMinAggregateInputType
@@ -10821,6 +12772,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProductRecordCountAggregateInputType | true
+    _avg?: ProductRecordAvgAggregateInputType
+    _sum?: ProductRecordSumAggregateInputType
     _min?: ProductRecordMinAggregateInputType
     _max?: ProductRecordMaxAggregateInputType
   }
@@ -10830,10 +12783,16 @@ export namespace Prisma {
     timestamp: Date
     createdById: string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt: Date
     productId: string
+    price: number | null
+    rawPrice: string | null
+    status: $Enums.ProductRecordStatus | null
+    wasManuallyCreated: boolean
+    manuallyChangedFields: $Enums.ProductRecordDataField[]
     _count: ProductRecordCountAggregateOutputType | null
+    _avg: ProductRecordAvgAggregateOutputType | null
+    _sum: ProductRecordSumAggregateOutputType | null
     _min: ProductRecordMinAggregateOutputType | null
     _max: ProductRecordMaxAggregateOutputType | null
   }
@@ -10857,12 +12816,18 @@ export namespace Prisma {
     timestamp?: boolean
     createdById?: boolean
     updatedById?: boolean
-    recordType?: boolean
-    recordId?: boolean
+    updatedAt?: boolean
     productId?: boolean
+    price?: boolean
+    rawPrice?: boolean
+    status?: boolean
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     updatedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    errors?: boolean | ProductRecord$errorsArgs<ExtArgs>
+    _count?: boolean | ProductRecordCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productRecord"]>
 
   export type ProductRecordSelectScalar = {
@@ -10870,15 +12835,21 @@ export namespace Prisma {
     timestamp?: boolean
     createdById?: boolean
     updatedById?: boolean
-    recordType?: boolean
-    recordId?: boolean
+    updatedAt?: boolean
     productId?: boolean
+    price?: boolean
+    rawPrice?: boolean
+    status?: boolean
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: boolean
   }
 
   export type ProductRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     updatedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    errors?: boolean | ProductRecord$errorsArgs<ExtArgs>
+    _count?: boolean | ProductRecordCountOutputTypeDefaultArgs<ExtArgs>
   }
 
 
@@ -10888,15 +12859,20 @@ export namespace Prisma {
       createdBy: Prisma.$UserPayload<ExtArgs>
       updatedBy: Prisma.$UserPayload<ExtArgs>
       product: Prisma.$ProductPayload<ExtArgs>
+      errors: Prisma.$ProductRecordErrorPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       timestamp: Date
       createdById: string
       updatedById: string
-      recordType: $Enums.ProductRecordType
-      recordId: string
+      updatedAt: Date
       productId: string
+      price: number | null
+      rawPrice: string | null
+      status: $Enums.ProductRecordStatus | null
+      wasManuallyCreated: boolean
+      manuallyChangedFields: $Enums.ProductRecordDataField[]
     }, ExtArgs["result"]["productRecord"]>
     composites: {}
   }
@@ -11268,6 +13244,8 @@ export namespace Prisma {
 
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
+    errors<T extends ProductRecord$errorsArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecord$errorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findMany'> | Null>;
+
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11300,9 +13278,13 @@ export namespace Prisma {
     readonly timestamp: FieldRef<"ProductRecord", 'DateTime'>
     readonly createdById: FieldRef<"ProductRecord", 'String'>
     readonly updatedById: FieldRef<"ProductRecord", 'String'>
-    readonly recordType: FieldRef<"ProductRecord", 'ProductRecordType'>
-    readonly recordId: FieldRef<"ProductRecord", 'String'>
+    readonly updatedAt: FieldRef<"ProductRecord", 'DateTime'>
     readonly productId: FieldRef<"ProductRecord", 'String'>
+    readonly price: FieldRef<"ProductRecord", 'Float'>
+    readonly rawPrice: FieldRef<"ProductRecord", 'String'>
+    readonly status: FieldRef<"ProductRecord", 'ProductRecordStatus'>
+    readonly wasManuallyCreated: FieldRef<"ProductRecord", 'Boolean'>
+    readonly manuallyChangedFields: FieldRef<"ProductRecord", 'ProductRecordDataField[]'>
   }
     
 
@@ -11611,6 +13593,27 @@ export namespace Prisma {
      * Filter which ProductRecords to delete
      */
     where?: ProductRecordWhereInput
+  }
+
+
+  /**
+   * ProductRecord.errors
+   */
+  export type ProductRecord$errorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductRecordError
+     */
+    select?: ProductRecordErrorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ProductRecordErrorInclude<ExtArgs> | null
+    where?: ProductRecordErrorWhereInput
+    orderBy?: ProductRecordErrorOrderByWithRelationInput | ProductRecordErrorOrderByWithRelationInput[]
+    cursor?: ProductRecordErrorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductRecordErrorScalarFieldEnum | ProductRecordErrorScalarFieldEnum[]
   }
 
 
@@ -12653,6 +14656,31 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const HttpNetworkErrorDataScalarFieldEnum: {
+    id: 'id',
+    url: 'url'
+  };
+
+  export type HttpNetworkErrorDataScalarFieldEnum = (typeof HttpNetworkErrorDataScalarFieldEnum)[keyof typeof HttpNetworkErrorDataScalarFieldEnum]
+
+
+  export const HttpSerializationErrorDataScalarFieldEnum: {
+    id: 'id',
+    url: 'url'
+  };
+
+  export type HttpSerializationErrorDataScalarFieldEnum = (typeof HttpSerializationErrorDataScalarFieldEnum)[keyof typeof HttpSerializationErrorDataScalarFieldEnum]
+
+
+  export const HttpClientErrorDataScalarFieldEnum: {
+    id: 'id',
+    url: 'url',
+    status: 'status'
+  };
+
+  export type HttpClientErrorDataScalarFieldEnum = (typeof HttpClientErrorDataScalarFieldEnum)[keyof typeof HttpClientErrorDataScalarFieldEnum]
+
+
   export const MissingAttributeErrorDataScalarFieldEnum: {
     id: 'id',
     attribute: 'attribute',
@@ -12715,26 +14743,16 @@ export namespace Prisma {
   export type NonUniqueElementErrorDataScalarFieldEnum = (typeof NonUniqueElementErrorDataScalarFieldEnum)[keyof typeof NonUniqueElementErrorDataScalarFieldEnum]
 
 
-  export const ScrapingErrorRecordScalarFieldEnum: {
+  export const ProductRecordErrorScalarFieldEnum: {
     id: 'id',
     errorId: 'errorId',
-    errorCode: 'errorCode'
+    errorCode: 'errorCode',
+    recordId: 'recordId',
+    field: 'field',
+    message: 'message'
   };
 
-  export type ScrapingErrorRecordScalarFieldEnum = (typeof ScrapingErrorRecordScalarFieldEnum)[keyof typeof ScrapingErrorRecordScalarFieldEnum]
-
-
-  export const ProductRecordedRecordScalarFieldEnum: {
-    id: 'id',
-    updatedAt: 'updatedAt',
-    price: 'price',
-    rawPrice: 'rawPrice',
-    status: 'status',
-    wasManuallyCreated: 'wasManuallyCreated',
-    manuallyChangedFields: 'manuallyChangedFields'
-  };
-
-  export type ProductRecordedRecordScalarFieldEnum = (typeof ProductRecordedRecordScalarFieldEnum)[keyof typeof ProductRecordedRecordScalarFieldEnum]
+  export type ProductRecordErrorScalarFieldEnum = (typeof ProductRecordErrorScalarFieldEnum)[keyof typeof ProductRecordErrorScalarFieldEnum]
 
 
   export const ProductRecordScalarFieldEnum: {
@@ -12742,9 +14760,13 @@ export namespace Prisma {
     timestamp: 'timestamp',
     createdById: 'createdById',
     updatedById: 'updatedById',
-    recordType: 'recordType',
-    recordId: 'recordId',
-    productId: 'productId'
+    updatedAt: 'updatedAt',
+    productId: 'productId',
+    price: 'price',
+    rawPrice: 'rawPrice',
+    status: 'status',
+    wasManuallyCreated: 'wasManuallyCreated',
+    manuallyChangedFields: 'manuallyChangedFields'
   };
 
   export type ProductRecordScalarFieldEnum = (typeof ProductRecordScalarFieldEnum)[keyof typeof ProductRecordScalarFieldEnum]
@@ -12823,6 +14845,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ElementAttribute'
    */
   export type EnumElementAttributeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElementAttribute'>
@@ -12847,6 +14883,20 @@ export namespace Prisma {
    * Reference to a field of type 'ScrapingErrorCode[]'
    */
   export type ListEnumScrapingErrorCodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScrapingErrorCode[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProductRecordDataField'
+   */
+  export type EnumProductRecordDataFieldFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductRecordDataField'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProductRecordDataField[]'
+   */
+  export type ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductRecordDataField[]'>
     
 
 
@@ -12882,48 +14932,6 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'ProductRecordDataFields[]'
-   */
-  export type ListEnumProductRecordDataFieldsFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductRecordDataFields[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'ProductRecordDataFields'
-   */
-  export type EnumProductRecordDataFieldsFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductRecordDataFields'>
-    
-
-
-  /**
-   * Reference to a field of type 'ProductRecordType'
-   */
-  export type EnumProductRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductRecordType'>
-    
-
-
-  /**
-   * Reference to a field of type 'ProductRecordType[]'
-   */
-  export type ListEnumProductRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductRecordType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
   /**
    * Deep Input Types
@@ -13007,6 +15015,124 @@ export namespace Prisma {
     emailAddress?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type HttpNetworkErrorDataWhereInput = {
+    AND?: HttpNetworkErrorDataWhereInput | HttpNetworkErrorDataWhereInput[]
+    OR?: HttpNetworkErrorDataWhereInput[]
+    NOT?: HttpNetworkErrorDataWhereInput | HttpNetworkErrorDataWhereInput[]
+    id?: UuidFilter<"HttpNetworkErrorData"> | string
+    url?: StringFilter<"HttpNetworkErrorData"> | string
+  }
+
+  export type HttpNetworkErrorDataOrderByWithRelationInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpNetworkErrorDataWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: HttpNetworkErrorDataWhereInput | HttpNetworkErrorDataWhereInput[]
+    OR?: HttpNetworkErrorDataWhereInput[]
+    NOT?: HttpNetworkErrorDataWhereInput | HttpNetworkErrorDataWhereInput[]
+    url?: StringFilter<"HttpNetworkErrorData"> | string
+  }, "id">
+
+  export type HttpNetworkErrorDataOrderByWithAggregationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    _count?: HttpNetworkErrorDataCountOrderByAggregateInput
+    _max?: HttpNetworkErrorDataMaxOrderByAggregateInput
+    _min?: HttpNetworkErrorDataMinOrderByAggregateInput
+  }
+
+  export type HttpNetworkErrorDataScalarWhereWithAggregatesInput = {
+    AND?: HttpNetworkErrorDataScalarWhereWithAggregatesInput | HttpNetworkErrorDataScalarWhereWithAggregatesInput[]
+    OR?: HttpNetworkErrorDataScalarWhereWithAggregatesInput[]
+    NOT?: HttpNetworkErrorDataScalarWhereWithAggregatesInput | HttpNetworkErrorDataScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"HttpNetworkErrorData"> | string
+    url?: StringWithAggregatesFilter<"HttpNetworkErrorData"> | string
+  }
+
+  export type HttpSerializationErrorDataWhereInput = {
+    AND?: HttpSerializationErrorDataWhereInput | HttpSerializationErrorDataWhereInput[]
+    OR?: HttpSerializationErrorDataWhereInput[]
+    NOT?: HttpSerializationErrorDataWhereInput | HttpSerializationErrorDataWhereInput[]
+    id?: UuidFilter<"HttpSerializationErrorData"> | string
+    url?: StringFilter<"HttpSerializationErrorData"> | string
+  }
+
+  export type HttpSerializationErrorDataOrderByWithRelationInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpSerializationErrorDataWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: HttpSerializationErrorDataWhereInput | HttpSerializationErrorDataWhereInput[]
+    OR?: HttpSerializationErrorDataWhereInput[]
+    NOT?: HttpSerializationErrorDataWhereInput | HttpSerializationErrorDataWhereInput[]
+    url?: StringFilter<"HttpSerializationErrorData"> | string
+  }, "id">
+
+  export type HttpSerializationErrorDataOrderByWithAggregationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    _count?: HttpSerializationErrorDataCountOrderByAggregateInput
+    _max?: HttpSerializationErrorDataMaxOrderByAggregateInput
+    _min?: HttpSerializationErrorDataMinOrderByAggregateInput
+  }
+
+  export type HttpSerializationErrorDataScalarWhereWithAggregatesInput = {
+    AND?: HttpSerializationErrorDataScalarWhereWithAggregatesInput | HttpSerializationErrorDataScalarWhereWithAggregatesInput[]
+    OR?: HttpSerializationErrorDataScalarWhereWithAggregatesInput[]
+    NOT?: HttpSerializationErrorDataScalarWhereWithAggregatesInput | HttpSerializationErrorDataScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"HttpSerializationErrorData"> | string
+    url?: StringWithAggregatesFilter<"HttpSerializationErrorData"> | string
+  }
+
+  export type HttpClientErrorDataWhereInput = {
+    AND?: HttpClientErrorDataWhereInput | HttpClientErrorDataWhereInput[]
+    OR?: HttpClientErrorDataWhereInput[]
+    NOT?: HttpClientErrorDataWhereInput | HttpClientErrorDataWhereInput[]
+    id?: UuidFilter<"HttpClientErrorData"> | string
+    url?: StringFilter<"HttpClientErrorData"> | string
+    status?: IntFilter<"HttpClientErrorData"> | number
+  }
+
+  export type HttpClientErrorDataOrderByWithRelationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+  }
+
+  export type HttpClientErrorDataWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: HttpClientErrorDataWhereInput | HttpClientErrorDataWhereInput[]
+    OR?: HttpClientErrorDataWhereInput[]
+    NOT?: HttpClientErrorDataWhereInput | HttpClientErrorDataWhereInput[]
+    url?: StringFilter<"HttpClientErrorData"> | string
+    status?: IntFilter<"HttpClientErrorData"> | number
+  }, "id">
+
+  export type HttpClientErrorDataOrderByWithAggregationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+    _count?: HttpClientErrorDataCountOrderByAggregateInput
+    _avg?: HttpClientErrorDataAvgOrderByAggregateInput
+    _max?: HttpClientErrorDataMaxOrderByAggregateInput
+    _min?: HttpClientErrorDataMinOrderByAggregateInput
+    _sum?: HttpClientErrorDataSumOrderByAggregateInput
+  }
+
+  export type HttpClientErrorDataScalarWhereWithAggregatesInput = {
+    AND?: HttpClientErrorDataScalarWhereWithAggregatesInput | HttpClientErrorDataScalarWhereWithAggregatesInput[]
+    OR?: HttpClientErrorDataScalarWhereWithAggregatesInput[]
+    NOT?: HttpClientErrorDataScalarWhereWithAggregatesInput | HttpClientErrorDataScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"HttpClientErrorData"> | string
+    url?: StringWithAggregatesFilter<"HttpClientErrorData"> | string
+    status?: IntWithAggregatesFilter<"HttpClientErrorData"> | number
   }
 
   export type MissingAttributeErrorDataWhereInput = {
@@ -13103,13 +15229,13 @@ export namespace Prisma {
     OR?: InvalidTextErrorDataWhereInput[]
     NOT?: InvalidTextErrorDataWhereInput | InvalidTextErrorDataWhereInput[]
     id?: UuidFilter<"InvalidTextErrorData"> | string
-    parentHtml?: StringFilter<"InvalidTextErrorData"> | string
+    parentHtml?: StringNullableFilter<"InvalidTextErrorData"> | string | null
     value?: StringFilter<"InvalidTextErrorData"> | string
   }
 
   export type InvalidTextErrorDataOrderByWithRelationInput = {
     id?: SortOrder
-    parentHtml?: SortOrder
+    parentHtml?: SortOrderInput | SortOrder
     value?: SortOrder
   }
 
@@ -13118,13 +15244,13 @@ export namespace Prisma {
     AND?: InvalidTextErrorDataWhereInput | InvalidTextErrorDataWhereInput[]
     OR?: InvalidTextErrorDataWhereInput[]
     NOT?: InvalidTextErrorDataWhereInput | InvalidTextErrorDataWhereInput[]
-    parentHtml?: StringFilter<"InvalidTextErrorData"> | string
+    parentHtml?: StringNullableFilter<"InvalidTextErrorData"> | string | null
     value?: StringFilter<"InvalidTextErrorData"> | string
   }, "id">
 
   export type InvalidTextErrorDataOrderByWithAggregationInput = {
     id?: SortOrder
-    parentHtml?: SortOrder
+    parentHtml?: SortOrderInput | SortOrder
     value?: SortOrder
     _count?: InvalidTextErrorDataCountOrderByAggregateInput
     _max?: InvalidTextErrorDataMaxOrderByAggregateInput
@@ -13136,7 +15262,7 @@ export namespace Prisma {
     OR?: InvalidTextErrorDataScalarWhereWithAggregatesInput[]
     NOT?: InvalidTextErrorDataScalarWhereWithAggregatesInput | InvalidTextErrorDataScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"InvalidTextErrorData"> | string
-    parentHtml?: StringWithAggregatesFilter<"InvalidTextErrorData"> | string
+    parentHtml?: StringNullableWithAggregatesFilter<"InvalidTextErrorData"> | string | null
     value?: StringWithAggregatesFilter<"InvalidTextErrorData"> | string
   }
 
@@ -13145,12 +15271,12 @@ export namespace Prisma {
     OR?: MissingTextErrorDataWhereInput[]
     NOT?: MissingTextErrorDataWhereInput | MissingTextErrorDataWhereInput[]
     id?: UuidFilter<"MissingTextErrorData"> | string
-    parentHtml?: StringFilter<"MissingTextErrorData"> | string
+    parentHtml?: StringNullableFilter<"MissingTextErrorData"> | string | null
   }
 
   export type MissingTextErrorDataOrderByWithRelationInput = {
     id?: SortOrder
-    parentHtml?: SortOrder
+    parentHtml?: SortOrderInput | SortOrder
   }
 
   export type MissingTextErrorDataWhereUniqueInput = Prisma.AtLeast<{
@@ -13158,12 +15284,12 @@ export namespace Prisma {
     AND?: MissingTextErrorDataWhereInput | MissingTextErrorDataWhereInput[]
     OR?: MissingTextErrorDataWhereInput[]
     NOT?: MissingTextErrorDataWhereInput | MissingTextErrorDataWhereInput[]
-    parentHtml?: StringFilter<"MissingTextErrorData"> | string
+    parentHtml?: StringNullableFilter<"MissingTextErrorData"> | string | null
   }, "id">
 
   export type MissingTextErrorDataOrderByWithAggregationInput = {
     id?: SortOrder
-    parentHtml?: SortOrder
+    parentHtml?: SortOrderInput | SortOrder
     _count?: MissingTextErrorDataCountOrderByAggregateInput
     _max?: MissingTextErrorDataMaxOrderByAggregateInput
     _min?: MissingTextErrorDataMinOrderByAggregateInput
@@ -13174,7 +15300,7 @@ export namespace Prisma {
     OR?: MissingTextErrorDataScalarWhereWithAggregatesInput[]
     NOT?: MissingTextErrorDataScalarWhereWithAggregatesInput | MissingTextErrorDataScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"MissingTextErrorData"> | string
-    parentHtml?: StringWithAggregatesFilter<"MissingTextErrorData"> | string
+    parentHtml?: StringNullableWithAggregatesFilter<"MissingTextErrorData"> | string | null
   }
 
   export type NonUniqueTextErrorDataWhereInput = {
@@ -13182,12 +15308,12 @@ export namespace Prisma {
     OR?: NonUniqueTextErrorDataWhereInput[]
     NOT?: NonUniqueTextErrorDataWhereInput | NonUniqueTextErrorDataWhereInput[]
     id?: UuidFilter<"NonUniqueTextErrorData"> | string
-    parentHtml?: StringFilter<"NonUniqueTextErrorData"> | string
+    parentHtml?: StringNullableFilter<"NonUniqueTextErrorData"> | string | null
   }
 
   export type NonUniqueTextErrorDataOrderByWithRelationInput = {
     id?: SortOrder
-    parentHtml?: SortOrder
+    parentHtml?: SortOrderInput | SortOrder
   }
 
   export type NonUniqueTextErrorDataWhereUniqueInput = Prisma.AtLeast<{
@@ -13195,12 +15321,12 @@ export namespace Prisma {
     AND?: NonUniqueTextErrorDataWhereInput | NonUniqueTextErrorDataWhereInput[]
     OR?: NonUniqueTextErrorDataWhereInput[]
     NOT?: NonUniqueTextErrorDataWhereInput | NonUniqueTextErrorDataWhereInput[]
-    parentHtml?: StringFilter<"NonUniqueTextErrorData"> | string
+    parentHtml?: StringNullableFilter<"NonUniqueTextErrorData"> | string | null
   }, "id">
 
   export type NonUniqueTextErrorDataOrderByWithAggregationInput = {
     id?: SortOrder
-    parentHtml?: SortOrder
+    parentHtml?: SortOrderInput | SortOrder
     _count?: NonUniqueTextErrorDataCountOrderByAggregateInput
     _max?: NonUniqueTextErrorDataMaxOrderByAggregateInput
     _min?: NonUniqueTextErrorDataMinOrderByAggregateInput
@@ -13211,7 +15337,7 @@ export namespace Prisma {
     OR?: NonUniqueTextErrorDataScalarWhereWithAggregatesInput[]
     NOT?: NonUniqueTextErrorDataScalarWhereWithAggregatesInput | NonUniqueTextErrorDataScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"NonUniqueTextErrorData"> | string
-    parentHtml?: StringWithAggregatesFilter<"NonUniqueTextErrorData"> | string
+    parentHtml?: StringNullableWithAggregatesFilter<"NonUniqueTextErrorData"> | string | null
   }
 
   export type MissingElementErrorDataWhereInput = {
@@ -13298,110 +15424,64 @@ export namespace Prisma {
     selector?: StringWithAggregatesFilter<"NonUniqueElementErrorData"> | string
   }
 
-  export type ScrapingErrorRecordWhereInput = {
-    AND?: ScrapingErrorRecordWhereInput | ScrapingErrorRecordWhereInput[]
-    OR?: ScrapingErrorRecordWhereInput[]
-    NOT?: ScrapingErrorRecordWhereInput | ScrapingErrorRecordWhereInput[]
-    id?: UuidFilter<"ScrapingErrorRecord"> | string
-    errorId?: UuidFilter<"ScrapingErrorRecord"> | string
-    errorCode?: EnumScrapingErrorCodeFilter<"ScrapingErrorRecord"> | $Enums.ScrapingErrorCode
+  export type ProductRecordErrorWhereInput = {
+    AND?: ProductRecordErrorWhereInput | ProductRecordErrorWhereInput[]
+    OR?: ProductRecordErrorWhereInput[]
+    NOT?: ProductRecordErrorWhereInput | ProductRecordErrorWhereInput[]
+    id?: UuidFilter<"ProductRecordError"> | string
+    errorId?: UuidFilter<"ProductRecordError"> | string
+    errorCode?: EnumScrapingErrorCodeFilter<"ProductRecordError"> | $Enums.ScrapingErrorCode
+    recordId?: UuidFilter<"ProductRecordError"> | string
+    field?: EnumProductRecordDataFieldFilter<"ProductRecordError"> | $Enums.ProductRecordDataField
+    message?: StringFilter<"ProductRecordError"> | string
+    record?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
   }
 
-  export type ScrapingErrorRecordOrderByWithRelationInput = {
+  export type ProductRecordErrorOrderByWithRelationInput = {
     id?: SortOrder
     errorId?: SortOrder
     errorCode?: SortOrder
+    recordId?: SortOrder
+    field?: SortOrder
+    message?: SortOrder
+    record?: ProductRecordOrderByWithRelationInput
   }
 
-  export type ScrapingErrorRecordWhereUniqueInput = Prisma.AtLeast<{
+  export type ProductRecordErrorWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     errorId?: string
-    AND?: ScrapingErrorRecordWhereInput | ScrapingErrorRecordWhereInput[]
-    OR?: ScrapingErrorRecordWhereInput[]
-    NOT?: ScrapingErrorRecordWhereInput | ScrapingErrorRecordWhereInput[]
-    errorCode?: EnumScrapingErrorCodeFilter<"ScrapingErrorRecord"> | $Enums.ScrapingErrorCode
-  }, "id" | "errorId">
+    recordId?: string
+    AND?: ProductRecordErrorWhereInput | ProductRecordErrorWhereInput[]
+    OR?: ProductRecordErrorWhereInput[]
+    NOT?: ProductRecordErrorWhereInput | ProductRecordErrorWhereInput[]
+    errorCode?: EnumScrapingErrorCodeFilter<"ProductRecordError"> | $Enums.ScrapingErrorCode
+    field?: EnumProductRecordDataFieldFilter<"ProductRecordError"> | $Enums.ProductRecordDataField
+    message?: StringFilter<"ProductRecordError"> | string
+    record?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
+  }, "id" | "errorId" | "recordId">
 
-  export type ScrapingErrorRecordOrderByWithAggregationInput = {
+  export type ProductRecordErrorOrderByWithAggregationInput = {
     id?: SortOrder
     errorId?: SortOrder
     errorCode?: SortOrder
-    _count?: ScrapingErrorRecordCountOrderByAggregateInput
-    _max?: ScrapingErrorRecordMaxOrderByAggregateInput
-    _min?: ScrapingErrorRecordMinOrderByAggregateInput
+    recordId?: SortOrder
+    field?: SortOrder
+    message?: SortOrder
+    _count?: ProductRecordErrorCountOrderByAggregateInput
+    _max?: ProductRecordErrorMaxOrderByAggregateInput
+    _min?: ProductRecordErrorMinOrderByAggregateInput
   }
 
-  export type ScrapingErrorRecordScalarWhereWithAggregatesInput = {
-    AND?: ScrapingErrorRecordScalarWhereWithAggregatesInput | ScrapingErrorRecordScalarWhereWithAggregatesInput[]
-    OR?: ScrapingErrorRecordScalarWhereWithAggregatesInput[]
-    NOT?: ScrapingErrorRecordScalarWhereWithAggregatesInput | ScrapingErrorRecordScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ScrapingErrorRecord"> | string
-    errorId?: UuidWithAggregatesFilter<"ScrapingErrorRecord"> | string
-    errorCode?: EnumScrapingErrorCodeWithAggregatesFilter<"ScrapingErrorRecord"> | $Enums.ScrapingErrorCode
-  }
-
-  export type ProductRecordedRecordWhereInput = {
-    AND?: ProductRecordedRecordWhereInput | ProductRecordedRecordWhereInput[]
-    OR?: ProductRecordedRecordWhereInput[]
-    NOT?: ProductRecordedRecordWhereInput | ProductRecordedRecordWhereInput[]
-    id?: UuidFilter<"ProductRecordedRecord"> | string
-    updatedAt?: DateTimeFilter<"ProductRecordedRecord"> | Date | string
-    price?: FloatFilter<"ProductRecordedRecord"> | number
-    rawPrice?: StringFilter<"ProductRecordedRecord"> | string
-    status?: EnumProductRecordStatusFilter<"ProductRecordedRecord"> | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolFilter<"ProductRecordedRecord"> | boolean
-    manuallyChangedFields?: EnumProductRecordDataFieldsNullableListFilter<"ProductRecordedRecord">
-  }
-
-  export type ProductRecordedRecordOrderByWithRelationInput = {
-    id?: SortOrder
-    updatedAt?: SortOrder
-    price?: SortOrder
-    rawPrice?: SortOrder
-    status?: SortOrder
-    wasManuallyCreated?: SortOrder
-    manuallyChangedFields?: SortOrder
-  }
-
-  export type ProductRecordedRecordWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ProductRecordedRecordWhereInput | ProductRecordedRecordWhereInput[]
-    OR?: ProductRecordedRecordWhereInput[]
-    NOT?: ProductRecordedRecordWhereInput | ProductRecordedRecordWhereInput[]
-    updatedAt?: DateTimeFilter<"ProductRecordedRecord"> | Date | string
-    price?: FloatFilter<"ProductRecordedRecord"> | number
-    rawPrice?: StringFilter<"ProductRecordedRecord"> | string
-    status?: EnumProductRecordStatusFilter<"ProductRecordedRecord"> | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolFilter<"ProductRecordedRecord"> | boolean
-    manuallyChangedFields?: EnumProductRecordDataFieldsNullableListFilter<"ProductRecordedRecord">
-  }, "id">
-
-  export type ProductRecordedRecordOrderByWithAggregationInput = {
-    id?: SortOrder
-    updatedAt?: SortOrder
-    price?: SortOrder
-    rawPrice?: SortOrder
-    status?: SortOrder
-    wasManuallyCreated?: SortOrder
-    manuallyChangedFields?: SortOrder
-    _count?: ProductRecordedRecordCountOrderByAggregateInput
-    _avg?: ProductRecordedRecordAvgOrderByAggregateInput
-    _max?: ProductRecordedRecordMaxOrderByAggregateInput
-    _min?: ProductRecordedRecordMinOrderByAggregateInput
-    _sum?: ProductRecordedRecordSumOrderByAggregateInput
-  }
-
-  export type ProductRecordedRecordScalarWhereWithAggregatesInput = {
-    AND?: ProductRecordedRecordScalarWhereWithAggregatesInput | ProductRecordedRecordScalarWhereWithAggregatesInput[]
-    OR?: ProductRecordedRecordScalarWhereWithAggregatesInput[]
-    NOT?: ProductRecordedRecordScalarWhereWithAggregatesInput | ProductRecordedRecordScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ProductRecordedRecord"> | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ProductRecordedRecord"> | Date | string
-    price?: FloatWithAggregatesFilter<"ProductRecordedRecord"> | number
-    rawPrice?: StringWithAggregatesFilter<"ProductRecordedRecord"> | string
-    status?: EnumProductRecordStatusWithAggregatesFilter<"ProductRecordedRecord"> | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolWithAggregatesFilter<"ProductRecordedRecord"> | boolean
-    manuallyChangedFields?: EnumProductRecordDataFieldsNullableListFilter<"ProductRecordedRecord">
+  export type ProductRecordErrorScalarWhereWithAggregatesInput = {
+    AND?: ProductRecordErrorScalarWhereWithAggregatesInput | ProductRecordErrorScalarWhereWithAggregatesInput[]
+    OR?: ProductRecordErrorScalarWhereWithAggregatesInput[]
+    NOT?: ProductRecordErrorScalarWhereWithAggregatesInput | ProductRecordErrorScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProductRecordError"> | string
+    errorId?: UuidWithAggregatesFilter<"ProductRecordError"> | string
+    errorCode?: EnumScrapingErrorCodeWithAggregatesFilter<"ProductRecordError"> | $Enums.ScrapingErrorCode
+    recordId?: UuidWithAggregatesFilter<"ProductRecordError"> | string
+    field?: EnumProductRecordDataFieldWithAggregatesFilter<"ProductRecordError"> | $Enums.ProductRecordDataField
+    message?: StringWithAggregatesFilter<"ProductRecordError"> | string
   }
 
   export type ProductRecordWhereInput = {
@@ -13412,12 +15492,17 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     createdById?: UuidFilter<"ProductRecord"> | string
     updatedById?: UuidFilter<"ProductRecord"> | string
-    recordType?: EnumProductRecordTypeFilter<"ProductRecord"> | $Enums.ProductRecordType
-    recordId?: UuidFilter<"ProductRecord"> | string
+    updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
+    price?: FloatNullableFilter<"ProductRecord"> | number | null
+    rawPrice?: StringNullableFilter<"ProductRecord"> | string | null
+    status?: EnumProductRecordStatusNullableFilter<"ProductRecord"> | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFilter<"ProductRecord"> | boolean
+    manuallyChangedFields?: EnumProductRecordDataFieldNullableListFilter<"ProductRecord">
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     updatedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductRelationFilter, ProductWhereInput>
+    errors?: ProductRecordErrorListRelationFilter
   }
 
   export type ProductRecordOrderByWithRelationInput = {
@@ -13425,42 +15510,57 @@ export namespace Prisma {
     timestamp?: SortOrder
     createdById?: SortOrder
     updatedById?: SortOrder
-    recordType?: SortOrder
-    recordId?: SortOrder
+    updatedAt?: SortOrder
     productId?: SortOrder
+    price?: SortOrderInput | SortOrder
+    rawPrice?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
+    wasManuallyCreated?: SortOrder
+    manuallyChangedFields?: SortOrder
     createdBy?: UserOrderByWithRelationInput
     updatedBy?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
+    errors?: ProductRecordErrorOrderByRelationAggregateInput
   }
 
   export type ProductRecordWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    recordId?: string
-    productId_recordId?: ProductRecordProductIdRecordIdCompoundUniqueInput
     AND?: ProductRecordWhereInput | ProductRecordWhereInput[]
     OR?: ProductRecordWhereInput[]
     NOT?: ProductRecordWhereInput | ProductRecordWhereInput[]
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     createdById?: UuidFilter<"ProductRecord"> | string
     updatedById?: UuidFilter<"ProductRecord"> | string
-    recordType?: EnumProductRecordTypeFilter<"ProductRecord"> | $Enums.ProductRecordType
+    updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
+    price?: FloatNullableFilter<"ProductRecord"> | number | null
+    rawPrice?: StringNullableFilter<"ProductRecord"> | string | null
+    status?: EnumProductRecordStatusNullableFilter<"ProductRecord"> | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFilter<"ProductRecord"> | boolean
+    manuallyChangedFields?: EnumProductRecordDataFieldNullableListFilter<"ProductRecord">
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     updatedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductRelationFilter, ProductWhereInput>
-  }, "id" | "recordId" | "productId_recordId">
+    errors?: ProductRecordErrorListRelationFilter
+  }, "id">
 
   export type ProductRecordOrderByWithAggregationInput = {
     id?: SortOrder
     timestamp?: SortOrder
     createdById?: SortOrder
     updatedById?: SortOrder
-    recordType?: SortOrder
-    recordId?: SortOrder
+    updatedAt?: SortOrder
     productId?: SortOrder
+    price?: SortOrderInput | SortOrder
+    rawPrice?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
+    wasManuallyCreated?: SortOrder
+    manuallyChangedFields?: SortOrder
     _count?: ProductRecordCountOrderByAggregateInput
+    _avg?: ProductRecordAvgOrderByAggregateInput
     _max?: ProductRecordMaxOrderByAggregateInput
     _min?: ProductRecordMinOrderByAggregateInput
+    _sum?: ProductRecordSumOrderByAggregateInput
   }
 
   export type ProductRecordScalarWhereWithAggregatesInput = {
@@ -13471,9 +15571,13 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
     createdById?: UuidWithAggregatesFilter<"ProductRecord"> | string
     updatedById?: UuidWithAggregatesFilter<"ProductRecord"> | string
-    recordType?: EnumProductRecordTypeWithAggregatesFilter<"ProductRecord"> | $Enums.ProductRecordType
-    recordId?: UuidWithAggregatesFilter<"ProductRecord"> | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
     productId?: UuidWithAggregatesFilter<"ProductRecord"> | string
+    price?: FloatNullableWithAggregatesFilter<"ProductRecord"> | number | null
+    rawPrice?: StringNullableWithAggregatesFilter<"ProductRecord"> | string | null
+    status?: EnumProductRecordStatusNullableWithAggregatesFilter<"ProductRecord"> | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolWithAggregatesFilter<"ProductRecord"> | boolean
+    manuallyChangedFields?: EnumProductRecordDataFieldNullableListFilter<"ProductRecord">
   }
 
   export type ProductWhereInput = {
@@ -13650,6 +15754,118 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type HttpNetworkErrorDataCreateInput = {
+    id?: string
+    url: string
+  }
+
+  export type HttpNetworkErrorDataUncheckedCreateInput = {
+    id?: string
+    url: string
+  }
+
+  export type HttpNetworkErrorDataUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpNetworkErrorDataUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpNetworkErrorDataCreateManyInput = {
+    id?: string
+    url: string
+  }
+
+  export type HttpNetworkErrorDataUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpNetworkErrorDataUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpSerializationErrorDataCreateInput = {
+    id?: string
+    url: string
+  }
+
+  export type HttpSerializationErrorDataUncheckedCreateInput = {
+    id?: string
+    url: string
+  }
+
+  export type HttpSerializationErrorDataUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpSerializationErrorDataUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpSerializationErrorDataCreateManyInput = {
+    id?: string
+    url: string
+  }
+
+  export type HttpSerializationErrorDataUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpSerializationErrorDataUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HttpClientErrorDataCreateInput = {
+    id?: string
+    url: string
+    status: number
+  }
+
+  export type HttpClientErrorDataUncheckedCreateInput = {
+    id?: string
+    url: string
+    status: number
+  }
+
+  export type HttpClientErrorDataUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    status?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type HttpClientErrorDataUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    status?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type HttpClientErrorDataCreateManyInput = {
+    id?: string
+    url: string
+    status: number
+  }
+
+  export type HttpClientErrorDataUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    status?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type HttpClientErrorDataUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    status?: IntFieldUpdateOperationsInput | number
+  }
+
   export type MissingAttributeErrorDataCreateInput = {
     id?: string
     attribute: $Enums.ElementAttribute
@@ -13743,114 +15959,114 @@ export namespace Prisma {
 
   export type InvalidTextErrorDataCreateInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
     value: string
   }
 
   export type InvalidTextErrorDataUncheckedCreateInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
     value: string
   }
 
   export type InvalidTextErrorDataUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
     value?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvalidTextErrorDataUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
     value?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvalidTextErrorDataCreateManyInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
     value: string
   }
 
   export type InvalidTextErrorDataUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
     value?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvalidTextErrorDataUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
     value?: StringFieldUpdateOperationsInput | string
   }
 
   export type MissingTextErrorDataCreateInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
   }
 
   export type MissingTextErrorDataUncheckedCreateInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
   }
 
   export type MissingTextErrorDataUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MissingTextErrorDataUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MissingTextErrorDataCreateManyInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
   }
 
   export type MissingTextErrorDataUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MissingTextErrorDataUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NonUniqueTextErrorDataCreateInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
   }
 
   export type NonUniqueTextErrorDataUncheckedCreateInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
   }
 
   export type NonUniqueTextErrorDataUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NonUniqueTextErrorDataUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NonUniqueTextErrorDataCreateManyInput = {
     id?: string
-    parentHtml: string
+    parentHtml?: string | null
   }
 
   export type NonUniqueTextErrorDataUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NonUniqueTextErrorDataUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    parentHtml?: StringFieldUpdateOperationsInput | string
+    parentHtml?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MissingElementErrorDataCreateInput = {
@@ -13937,126 +16153,81 @@ export namespace Prisma {
     selector?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ScrapingErrorRecordCreateInput = {
+  export type ProductRecordErrorCreateInput = {
     id?: string
     errorId: string
     errorCode: $Enums.ScrapingErrorCode
+    field: $Enums.ProductRecordDataField
+    message: string
+    record: ProductRecordCreateNestedOneWithoutErrorsInput
   }
 
-  export type ScrapingErrorRecordUncheckedCreateInput = {
+  export type ProductRecordErrorUncheckedCreateInput = {
     id?: string
     errorId: string
     errorCode: $Enums.ScrapingErrorCode
+    recordId: string
+    field: $Enums.ProductRecordDataField
+    message: string
   }
 
-  export type ScrapingErrorRecordUpdateInput = {
+  export type ProductRecordErrorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     errorId?: StringFieldUpdateOperationsInput | string
     errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
+    record?: ProductRecordUpdateOneRequiredWithoutErrorsNestedInput
   }
 
-  export type ScrapingErrorRecordUncheckedUpdateInput = {
+  export type ProductRecordErrorUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     errorId?: StringFieldUpdateOperationsInput | string
     errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
+    recordId?: StringFieldUpdateOperationsInput | string
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ScrapingErrorRecordCreateManyInput = {
+  export type ProductRecordErrorCreateManyInput = {
     id?: string
     errorId: string
     errorCode: $Enums.ScrapingErrorCode
+    recordId: string
+    field: $Enums.ProductRecordDataField
+    message: string
   }
 
-  export type ScrapingErrorRecordUpdateManyMutationInput = {
+  export type ProductRecordErrorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     errorId?: StringFieldUpdateOperationsInput | string
     errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ScrapingErrorRecordUncheckedUpdateManyInput = {
+  export type ProductRecordErrorUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     errorId?: StringFieldUpdateOperationsInput | string
     errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
-  }
-
-  export type ProductRecordedRecordCreateInput = {
-    id?: string
-    updatedAt?: Date | string
-    price: number
-    rawPrice: string
-    status: $Enums.ProductRecordStatus
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: ProductRecordedRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
-  }
-
-  export type ProductRecordedRecordUncheckedCreateInput = {
-    id?: string
-    updatedAt?: Date | string
-    price: number
-    rawPrice: string
-    status: $Enums.ProductRecordStatus
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: ProductRecordedRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
-  }
-
-  export type ProductRecordedRecordUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    price?: FloatFieldUpdateOperationsInput | number
-    rawPrice?: StringFieldUpdateOperationsInput | string
-    status?: EnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
-    manuallyChangedFields?: ProductRecordedRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
-  }
-
-  export type ProductRecordedRecordUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    price?: FloatFieldUpdateOperationsInput | number
-    rawPrice?: StringFieldUpdateOperationsInput | string
-    status?: EnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
-    manuallyChangedFields?: ProductRecordedRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
-  }
-
-  export type ProductRecordedRecordCreateManyInput = {
-    id?: string
-    updatedAt?: Date | string
-    price: number
-    rawPrice: string
-    status: $Enums.ProductRecordStatus
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: ProductRecordedRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
-  }
-
-  export type ProductRecordedRecordUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    price?: FloatFieldUpdateOperationsInput | number
-    rawPrice?: StringFieldUpdateOperationsInput | string
-    status?: EnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
-    manuallyChangedFields?: ProductRecordedRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
-  }
-
-  export type ProductRecordedRecordUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    price?: FloatFieldUpdateOperationsInput | number
-    rawPrice?: StringFieldUpdateOperationsInput | string
-    status?: EnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus
-    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
-    manuallyChangedFields?: ProductRecordedRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataFields[]
+    recordId?: StringFieldUpdateOperationsInput | string
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProductRecordCreateInput = {
     id?: string
     timestamp?: Date | string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     createdBy: UserCreateNestedOneWithoutCreatedProductRecordsInput
     updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
     product: ProductCreateNestedOneWithoutRecordsInput
+    errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateInput = {
@@ -14064,19 +16235,29 @@ export namespace Prisma {
     timestamp?: Date | string
     createdById: string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
     productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductRecordsNestedInput
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
+    errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateInput = {
@@ -14084,9 +16265,14 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordCreateManyInput = {
@@ -14094,16 +16280,24 @@ export namespace Prisma {
     timestamp?: Date | string
     createdById: string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
     productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductRecordUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductRecordUncheckedUpdateManyInput = {
@@ -14111,9 +16305,13 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductCreateInput = {
@@ -14378,6 +16576,89 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type HttpNetworkErrorDataCountOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpNetworkErrorDataMaxOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpNetworkErrorDataMinOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpSerializationErrorDataCountOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpSerializationErrorDataMaxOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type HttpSerializationErrorDataMinOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type HttpClientErrorDataCountOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+  }
+
+  export type HttpClientErrorDataAvgOrderByAggregateInput = {
+    status?: SortOrder
+  }
+
+  export type HttpClientErrorDataMaxOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+  }
+
+  export type HttpClientErrorDataMinOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+  }
+
+  export type HttpClientErrorDataSumOrderByAggregateInput = {
+    status?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type EnumElementAttributeFilter<$PrismaModel = never> = {
     equals?: $Enums.ElementAttribute | EnumElementAttributeFieldRefInput<$PrismaModel>
     in?: $Enums.ElementAttribute[] | ListEnumElementAttributeFieldRefInput<$PrismaModel>
@@ -14525,22 +16806,43 @@ export namespace Prisma {
     not?: NestedEnumScrapingErrorCodeFilter<$PrismaModel> | $Enums.ScrapingErrorCode
   }
 
-  export type ScrapingErrorRecordCountOrderByAggregateInput = {
-    id?: SortOrder
-    errorId?: SortOrder
-    errorCode?: SortOrder
+  export type EnumProductRecordDataFieldFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordDataField | EnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductRecordDataFieldFilter<$PrismaModel> | $Enums.ProductRecordDataField
   }
 
-  export type ScrapingErrorRecordMaxOrderByAggregateInput = {
-    id?: SortOrder
-    errorId?: SortOrder
-    errorCode?: SortOrder
+  export type ProductRecordRelationFilter = {
+    is?: ProductRecordWhereInput
+    isNot?: ProductRecordWhereInput
   }
 
-  export type ScrapingErrorRecordMinOrderByAggregateInput = {
+  export type ProductRecordErrorCountOrderByAggregateInput = {
     id?: SortOrder
     errorId?: SortOrder
     errorCode?: SortOrder
+    recordId?: SortOrder
+    field?: SortOrder
+    message?: SortOrder
+  }
+
+  export type ProductRecordErrorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    errorId?: SortOrder
+    errorCode?: SortOrder
+    recordId?: SortOrder
+    field?: SortOrder
+    message?: SortOrder
+  }
+
+  export type ProductRecordErrorMinOrderByAggregateInput = {
+    id?: SortOrder
+    errorId?: SortOrder
+    errorCode?: SortOrder
+    recordId?: SortOrder
+    field?: SortOrder
+    message?: SortOrder
   }
 
   export type EnumScrapingErrorCodeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14553,22 +16855,32 @@ export namespace Prisma {
     _max?: NestedEnumScrapingErrorCodeFilter<$PrismaModel>
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+  export type EnumProductRecordDataFieldWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordDataField | EnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductRecordDataFieldWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordDataField
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProductRecordDataFieldFilter<$PrismaModel>
+    _max?: NestedEnumProductRecordDataFieldFilter<$PrismaModel>
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type EnumProductRecordStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordStatusFilter<$PrismaModel> | $Enums.ProductRecordStatus
+  export type EnumProductRecordStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumProductRecordStatusNullableFilter<$PrismaModel> | $Enums.ProductRecordStatus | null
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -14576,89 +16888,12 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type EnumProductRecordDataFieldsNullableListFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordDataFields[] | ListEnumProductRecordDataFieldsFieldRefInput<$PrismaModel> | null
-    has?: $Enums.ProductRecordDataFields | EnumProductRecordDataFieldsFieldRefInput<$PrismaModel> | null
-    hasEvery?: $Enums.ProductRecordDataFields[] | ListEnumProductRecordDataFieldsFieldRefInput<$PrismaModel>
-    hasSome?: $Enums.ProductRecordDataFields[] | ListEnumProductRecordDataFieldsFieldRefInput<$PrismaModel>
+  export type EnumProductRecordDataFieldNullableListFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel> | null
+    has?: $Enums.ProductRecordDataField | EnumProductRecordDataFieldFieldRefInput<$PrismaModel> | null
+    hasEvery?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    hasSome?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
     isEmpty?: boolean
-  }
-
-  export type ProductRecordedRecordCountOrderByAggregateInput = {
-    id?: SortOrder
-    updatedAt?: SortOrder
-    price?: SortOrder
-    rawPrice?: SortOrder
-    status?: SortOrder
-    wasManuallyCreated?: SortOrder
-    manuallyChangedFields?: SortOrder
-  }
-
-  export type ProductRecordedRecordAvgOrderByAggregateInput = {
-    price?: SortOrder
-  }
-
-  export type ProductRecordedRecordMaxOrderByAggregateInput = {
-    id?: SortOrder
-    updatedAt?: SortOrder
-    price?: SortOrder
-    rawPrice?: SortOrder
-    status?: SortOrder
-    wasManuallyCreated?: SortOrder
-  }
-
-  export type ProductRecordedRecordMinOrderByAggregateInput = {
-    id?: SortOrder
-    updatedAt?: SortOrder
-    price?: SortOrder
-    rawPrice?: SortOrder
-    status?: SortOrder
-    wasManuallyCreated?: SortOrder
-  }
-
-  export type ProductRecordedRecordSumOrderByAggregateInput = {
-    price?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type EnumProductRecordStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProductRecordStatusFilter<$PrismaModel>
-    _max?: NestedEnumProductRecordStatusFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type EnumProductRecordTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordType | EnumProductRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordTypeFilter<$PrismaModel> | $Enums.ProductRecordType
   }
 
   export type UserRelationFilter = {
@@ -14671,9 +16906,14 @@ export namespace Prisma {
     isNot?: ProductWhereInput
   }
 
-  export type ProductRecordProductIdRecordIdCompoundUniqueInput = {
-    productId: string
-    recordId: string
+  export type ProductRecordErrorListRelationFilter = {
+    every?: ProductRecordErrorWhereInput
+    some?: ProductRecordErrorWhereInput
+    none?: ProductRecordErrorWhereInput
+  }
+
+  export type ProductRecordErrorOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ProductRecordCountOrderByAggregateInput = {
@@ -14681,9 +16921,17 @@ export namespace Prisma {
     timestamp?: SortOrder
     createdById?: SortOrder
     updatedById?: SortOrder
-    recordType?: SortOrder
-    recordId?: SortOrder
+    updatedAt?: SortOrder
     productId?: SortOrder
+    price?: SortOrder
+    rawPrice?: SortOrder
+    status?: SortOrder
+    wasManuallyCreated?: SortOrder
+    manuallyChangedFields?: SortOrder
+  }
+
+  export type ProductRecordAvgOrderByAggregateInput = {
+    price?: SortOrder
   }
 
   export type ProductRecordMaxOrderByAggregateInput = {
@@ -14691,9 +16939,12 @@ export namespace Prisma {
     timestamp?: SortOrder
     createdById?: SortOrder
     updatedById?: SortOrder
-    recordType?: SortOrder
-    recordId?: SortOrder
+    updatedAt?: SortOrder
     productId?: SortOrder
+    price?: SortOrder
+    rawPrice?: SortOrder
+    status?: SortOrder
+    wasManuallyCreated?: SortOrder
   }
 
   export type ProductRecordMinOrderByAggregateInput = {
@@ -14701,19 +16952,50 @@ export namespace Prisma {
     timestamp?: SortOrder
     createdById?: SortOrder
     updatedById?: SortOrder
-    recordType?: SortOrder
-    recordId?: SortOrder
+    updatedAt?: SortOrder
     productId?: SortOrder
+    price?: SortOrder
+    rawPrice?: SortOrder
+    status?: SortOrder
+    wasManuallyCreated?: SortOrder
   }
 
-  export type EnumProductRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordType | EnumProductRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordType
+  export type ProductRecordSumOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type EnumProductRecordStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumProductRecordStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumProductRecordStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumProductRecordStatusNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProductRecordTypeFilter<$PrismaModel>
-    _max?: NestedEnumProductRecordTypeFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProductCountOrderByAggregateInput = {
@@ -14932,19 +17214,7 @@ export namespace Prisma {
     deleteMany?: ProductRecordScalarWhereInput | ProductRecordScalarWhereInput[]
   }
 
-  export type EnumElementAttributeFieldUpdateOperationsInput = {
-    set?: $Enums.ElementAttribute
-  }
-
-  export type EnumScrapingErrorCodeFieldUpdateOperationsInput = {
-    set?: $Enums.ScrapingErrorCode
-  }
-
-  export type ProductRecordedRecordCreatemanuallyChangedFieldsInput = {
-    set: $Enums.ProductRecordDataFields[]
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
+  export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
@@ -14952,17 +17222,34 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumProductRecordStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ProductRecordStatus
+  export type EnumElementAttributeFieldUpdateOperationsInput = {
+    set?: $Enums.ElementAttribute
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type ProductRecordCreateNestedOneWithoutErrorsInput = {
+    create?: XOR<ProductRecordCreateWithoutErrorsInput, ProductRecordUncheckedCreateWithoutErrorsInput>
+    connectOrCreate?: ProductRecordCreateOrConnectWithoutErrorsInput
+    connect?: ProductRecordWhereUniqueInput
   }
 
-  export type ProductRecordedRecordUpdatemanuallyChangedFieldsInput = {
-    set?: $Enums.ProductRecordDataFields[]
-    push?: $Enums.ProductRecordDataFields | $Enums.ProductRecordDataFields[]
+  export type EnumScrapingErrorCodeFieldUpdateOperationsInput = {
+    set?: $Enums.ScrapingErrorCode
+  }
+
+  export type EnumProductRecordDataFieldFieldUpdateOperationsInput = {
+    set?: $Enums.ProductRecordDataField
+  }
+
+  export type ProductRecordUpdateOneRequiredWithoutErrorsNestedInput = {
+    create?: XOR<ProductRecordCreateWithoutErrorsInput, ProductRecordUncheckedCreateWithoutErrorsInput>
+    connectOrCreate?: ProductRecordCreateOrConnectWithoutErrorsInput
+    upsert?: ProductRecordUpsertWithoutErrorsInput
+    connect?: ProductRecordWhereUniqueInput
+    update?: XOR<XOR<ProductRecordUpdateToOneWithWhereWithoutErrorsInput, ProductRecordUpdateWithoutErrorsInput>, ProductRecordUncheckedUpdateWithoutErrorsInput>
+  }
+
+  export type ProductRecordCreatemanuallyChangedFieldsInput = {
+    set: $Enums.ProductRecordDataField[]
   }
 
   export type UserCreateNestedOneWithoutCreatedProductRecordsInput = {
@@ -14983,8 +17270,39 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput
   }
 
-  export type EnumProductRecordTypeFieldUpdateOperationsInput = {
-    set?: $Enums.ProductRecordType
+  export type ProductRecordErrorCreateNestedManyWithoutRecordInput = {
+    create?: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput> | ProductRecordErrorCreateWithoutRecordInput[] | ProductRecordErrorUncheckedCreateWithoutRecordInput[]
+    connectOrCreate?: ProductRecordErrorCreateOrConnectWithoutRecordInput | ProductRecordErrorCreateOrConnectWithoutRecordInput[]
+    createMany?: ProductRecordErrorCreateManyRecordInputEnvelope
+    connect?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+  }
+
+  export type ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput = {
+    create?: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput> | ProductRecordErrorCreateWithoutRecordInput[] | ProductRecordErrorUncheckedCreateWithoutRecordInput[]
+    connectOrCreate?: ProductRecordErrorCreateOrConnectWithoutRecordInput | ProductRecordErrorCreateOrConnectWithoutRecordInput[]
+    createMany?: ProductRecordErrorCreateManyRecordInputEnvelope
+    connect?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableEnumProductRecordStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProductRecordStatus | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type ProductRecordUpdatemanuallyChangedFieldsInput = {
+    set?: $Enums.ProductRecordDataField[]
+    push?: $Enums.ProductRecordDataField | $Enums.ProductRecordDataField[]
   }
 
   export type UserUpdateOneRequiredWithoutCreatedProductRecordsNestedInput = {
@@ -15009,6 +17327,34 @@ export namespace Prisma {
     upsert?: ProductUpsertWithoutRecordsInput
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutRecordsInput, ProductUpdateWithoutRecordsInput>, ProductUncheckedUpdateWithoutRecordsInput>
+  }
+
+  export type ProductRecordErrorUpdateManyWithoutRecordNestedInput = {
+    create?: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput> | ProductRecordErrorCreateWithoutRecordInput[] | ProductRecordErrorUncheckedCreateWithoutRecordInput[]
+    connectOrCreate?: ProductRecordErrorCreateOrConnectWithoutRecordInput | ProductRecordErrorCreateOrConnectWithoutRecordInput[]
+    upsert?: ProductRecordErrorUpsertWithWhereUniqueWithoutRecordInput | ProductRecordErrorUpsertWithWhereUniqueWithoutRecordInput[]
+    createMany?: ProductRecordErrorCreateManyRecordInputEnvelope
+    set?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    disconnect?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    delete?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    connect?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    update?: ProductRecordErrorUpdateWithWhereUniqueWithoutRecordInput | ProductRecordErrorUpdateWithWhereUniqueWithoutRecordInput[]
+    updateMany?: ProductRecordErrorUpdateManyWithWhereWithoutRecordInput | ProductRecordErrorUpdateManyWithWhereWithoutRecordInput[]
+    deleteMany?: ProductRecordErrorScalarWhereInput | ProductRecordErrorScalarWhereInput[]
+  }
+
+  export type ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput = {
+    create?: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput> | ProductRecordErrorCreateWithoutRecordInput[] | ProductRecordErrorUncheckedCreateWithoutRecordInput[]
+    connectOrCreate?: ProductRecordErrorCreateOrConnectWithoutRecordInput | ProductRecordErrorCreateOrConnectWithoutRecordInput[]
+    upsert?: ProductRecordErrorUpsertWithWhereUniqueWithoutRecordInput | ProductRecordErrorUpsertWithWhereUniqueWithoutRecordInput[]
+    createMany?: ProductRecordErrorCreateManyRecordInputEnvelope
+    set?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    disconnect?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    delete?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    connect?: ProductRecordErrorWhereUniqueInput | ProductRecordErrorWhereUniqueInput[]
+    update?: ProductRecordErrorUpdateWithWhereUniqueWithoutRecordInput | ProductRecordErrorUpdateWithWhereUniqueWithoutRecordInput[]
+    updateMany?: ProductRecordErrorUpdateManyWithWhereWithoutRecordInput | ProductRecordErrorUpdateManyWithWhereWithoutRecordInput[]
+    deleteMany?: ProductRecordErrorScalarWhereInput | ProductRecordErrorScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedProductsInput = {
@@ -15215,6 +17561,33 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumElementAttributeFilter<$PrismaModel = never> = {
     equals?: $Enums.ElementAttribute | EnumElementAttributeFieldRefInput<$PrismaModel>
     in?: $Enums.ElementAttribute[] | ListEnumElementAttributeFieldRefInput<$PrismaModel>
@@ -15239,6 +17612,13 @@ export namespace Prisma {
     not?: NestedEnumScrapingErrorCodeFilter<$PrismaModel> | $Enums.ScrapingErrorCode
   }
 
+  export type NestedEnumProductRecordDataFieldFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordDataField | EnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductRecordDataFieldFilter<$PrismaModel> | $Enums.ProductRecordDataField
+  }
+
   export type NestedEnumScrapingErrorCodeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ScrapingErrorCode | EnumScrapingErrorCodeFieldRefInput<$PrismaModel>
     in?: $Enums.ScrapingErrorCode[] | ListEnumScrapingErrorCodeFieldRefInput<$PrismaModel>
@@ -15249,22 +17629,32 @@ export namespace Prisma {
     _max?: NestedEnumScrapingErrorCodeFilter<$PrismaModel>
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+  export type NestedEnumProductRecordDataFieldWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordDataField | EnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductRecordDataField[] | ListEnumProductRecordDataFieldFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductRecordDataFieldWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordDataField
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProductRecordDataFieldFilter<$PrismaModel>
+    _max?: NestedEnumProductRecordDataFieldFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumProductRecordStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordStatusFilter<$PrismaModel> | $Enums.ProductRecordStatus
+  export type NestedEnumProductRecordStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumProductRecordStatusNullableFilter<$PrismaModel> | $Enums.ProductRecordStatus | null
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -15272,30 +17662,30 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumProductRecordStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProductRecordStatusFilter<$PrismaModel>
-    _max?: NestedEnumProductRecordStatusFilter<$PrismaModel>
+  export type NestedEnumProductRecordStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductRecordStatus | EnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ProductRecordStatus[] | ListEnumProductRecordStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumProductRecordStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumProductRecordStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumProductRecordStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -15304,23 +17694,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedEnumProductRecordTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordType | EnumProductRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordTypeFilter<$PrismaModel> | $Enums.ProductRecordType
-  }
-
-  export type NestedEnumProductRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductRecordType | EnumProductRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProductRecordType[] | ListEnumProductRecordTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumProductRecordTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProductRecordType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProductRecordTypeFilter<$PrismaModel>
-    _max?: NestedEnumProductRecordTypeFilter<$PrismaModel>
   }
 
   export type ProductCreateWithoutCreatedByInput = {
@@ -15394,19 +17767,29 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutCreatedByInput = {
     id?: string
     timestamp?: Date | string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
     product: ProductCreateNestedOneWithoutRecordsInput
+    errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutCreatedByInput = {
     id?: string
     timestamp?: Date | string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
     productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutCreatedByInput = {
@@ -15422,19 +17805,29 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutUpdatedByInput = {
     id?: string
     timestamp?: Date | string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     createdBy: UserCreateNestedOneWithoutCreatedProductRecordsInput
     product: ProductCreateNestedOneWithoutRecordsInput
+    errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutUpdatedByInput = {
     id?: string
     timestamp?: Date | string
     createdById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
     productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutUpdatedByInput = {
@@ -15518,9 +17911,13 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     createdById?: UuidFilter<"ProductRecord"> | string
     updatedById?: UuidFilter<"ProductRecord"> | string
-    recordType?: EnumProductRecordTypeFilter<"ProductRecord"> | $Enums.ProductRecordType
-    recordId?: UuidFilter<"ProductRecord"> | string
+    updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
+    price?: FloatNullableFilter<"ProductRecord"> | number | null
+    rawPrice?: StringNullableFilter<"ProductRecord"> | string | null
+    status?: EnumProductRecordStatusNullableFilter<"ProductRecord"> | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFilter<"ProductRecord"> | boolean
+    manuallyChangedFields?: EnumProductRecordDataFieldNullableListFilter<"ProductRecord">
   }
 
   export type ProductRecordUpsertWithWhereUniqueWithoutUpdatedByInput = {
@@ -15537,6 +17934,78 @@ export namespace Prisma {
   export type ProductRecordUpdateManyWithWhereWithoutUpdatedByInput = {
     where: ProductRecordScalarWhereInput
     data: XOR<ProductRecordUpdateManyMutationInput, ProductRecordUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type ProductRecordCreateWithoutErrorsInput = {
+    id?: string
+    timestamp?: Date | string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    createdBy: UserCreateNestedOneWithoutCreatedProductRecordsInput
+    updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
+    product: ProductCreateNestedOneWithoutRecordsInput
+  }
+
+  export type ProductRecordUncheckedCreateWithoutErrorsInput = {
+    id?: string
+    timestamp?: Date | string
+    createdById: string
+    updatedById: string
+    updatedAt?: Date | string
+    productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+  }
+
+  export type ProductRecordCreateOrConnectWithoutErrorsInput = {
+    where: ProductRecordWhereUniqueInput
+    create: XOR<ProductRecordCreateWithoutErrorsInput, ProductRecordUncheckedCreateWithoutErrorsInput>
+  }
+
+  export type ProductRecordUpsertWithoutErrorsInput = {
+    update: XOR<ProductRecordUpdateWithoutErrorsInput, ProductRecordUncheckedUpdateWithoutErrorsInput>
+    create: XOR<ProductRecordCreateWithoutErrorsInput, ProductRecordUncheckedCreateWithoutErrorsInput>
+    where?: ProductRecordWhereInput
+  }
+
+  export type ProductRecordUpdateToOneWithWhereWithoutErrorsInput = {
+    where?: ProductRecordWhereInput
+    data: XOR<ProductRecordUpdateWithoutErrorsInput, ProductRecordUncheckedUpdateWithoutErrorsInput>
+  }
+
+  export type ProductRecordUpdateWithoutErrorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    createdBy?: UserUpdateOneRequiredWithoutCreatedProductRecordsNestedInput
+    updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
+    product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
+  }
+
+  export type ProductRecordUncheckedUpdateWithoutErrorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    updatedById?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type UserCreateWithoutCreatedProductRecordsInput = {
@@ -15632,6 +18101,32 @@ export namespace Prisma {
   export type ProductCreateOrConnectWithoutRecordsInput = {
     where: ProductWhereUniqueInput
     create: XOR<ProductCreateWithoutRecordsInput, ProductUncheckedCreateWithoutRecordsInput>
+  }
+
+  export type ProductRecordErrorCreateWithoutRecordInput = {
+    id?: string
+    errorId: string
+    errorCode: $Enums.ScrapingErrorCode
+    field: $Enums.ProductRecordDataField
+    message: string
+  }
+
+  export type ProductRecordErrorUncheckedCreateWithoutRecordInput = {
+    id?: string
+    errorId: string
+    errorCode: $Enums.ScrapingErrorCode
+    field: $Enums.ProductRecordDataField
+    message: string
+  }
+
+  export type ProductRecordErrorCreateOrConnectWithoutRecordInput = {
+    where: ProductRecordErrorWhereUniqueInput
+    create: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput>
+  }
+
+  export type ProductRecordErrorCreateManyRecordInputEnvelope = {
+    data: ProductRecordErrorCreateManyRecordInput | ProductRecordErrorCreateManyRecordInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutCreatedProductRecordsInput = {
@@ -15747,6 +18242,34 @@ export namespace Prisma {
     imageSrc?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ProductRecordErrorUpsertWithWhereUniqueWithoutRecordInput = {
+    where: ProductRecordErrorWhereUniqueInput
+    update: XOR<ProductRecordErrorUpdateWithoutRecordInput, ProductRecordErrorUncheckedUpdateWithoutRecordInput>
+    create: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput>
+  }
+
+  export type ProductRecordErrorUpdateWithWhereUniqueWithoutRecordInput = {
+    where: ProductRecordErrorWhereUniqueInput
+    data: XOR<ProductRecordErrorUpdateWithoutRecordInput, ProductRecordErrorUncheckedUpdateWithoutRecordInput>
+  }
+
+  export type ProductRecordErrorUpdateManyWithWhereWithoutRecordInput = {
+    where: ProductRecordErrorScalarWhereInput
+    data: XOR<ProductRecordErrorUpdateManyMutationInput, ProductRecordErrorUncheckedUpdateManyWithoutRecordInput>
+  }
+
+  export type ProductRecordErrorScalarWhereInput = {
+    AND?: ProductRecordErrorScalarWhereInput | ProductRecordErrorScalarWhereInput[]
+    OR?: ProductRecordErrorScalarWhereInput[]
+    NOT?: ProductRecordErrorScalarWhereInput | ProductRecordErrorScalarWhereInput[]
+    id?: UuidFilter<"ProductRecordError"> | string
+    errorId?: UuidFilter<"ProductRecordError"> | string
+    errorCode?: EnumScrapingErrorCodeFilter<"ProductRecordError"> | $Enums.ScrapingErrorCode
+    recordId?: UuidFilter<"ProductRecordError"> | string
+    field?: EnumProductRecordDataFieldFilter<"ProductRecordError"> | $Enums.ProductRecordDataField
+    message?: StringFilter<"ProductRecordError"> | string
+  }
+
   export type UserCreateWithoutCreatedProductsInput = {
     id?: string
     clerkId: string
@@ -15816,10 +18339,15 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutProductInput = {
     id?: string
     timestamp?: Date | string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     createdBy: UserCreateNestedOneWithoutCreatedProductRecordsInput
     updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
+    errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutProductInput = {
@@ -15827,8 +18355,13 @@ export namespace Prisma {
     timestamp?: Date | string
     createdById: string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutProductInput = {
@@ -15961,18 +18494,26 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
     productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductRecordCreateManyUpdatedByInput = {
     id?: string
     timestamp?: Date | string
     createdById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
     productId: string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductUpdateWithoutCreatedByInput = {
@@ -16048,55 +18589,115 @@ export namespace Prisma {
   export type ProductRecordUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
+    errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateManyWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductRecordUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductRecordsNestedInput
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
+    errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateManyWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+  }
+
+  export type ProductRecordErrorCreateManyRecordInput = {
+    id?: string
+    errorId: string
+    errorCode: $Enums.ScrapingErrorCode
+    field: $Enums.ProductRecordDataField
+    message: string
+  }
+
+  export type ProductRecordErrorUpdateWithoutRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    errorId?: StringFieldUpdateOperationsInput | string
+    errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProductRecordErrorUncheckedUpdateWithoutRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    errorId?: StringFieldUpdateOperationsInput | string
+    errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProductRecordErrorUncheckedUpdateManyWithoutRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    errorId?: StringFieldUpdateOperationsInput | string
+    errorCode?: EnumScrapingErrorCodeFieldUpdateOperationsInput | $Enums.ScrapingErrorCode
+    field?: EnumProductRecordDataFieldFieldUpdateOperationsInput | $Enums.ProductRecordDataField
+    message?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProductRecordCreateManyProductInput = {
@@ -16104,17 +18705,26 @@ export namespace Prisma {
     timestamp?: Date | string
     createdById: string
     updatedById: string
-    recordType: $Enums.ProductRecordType
-    recordId: string
+    updatedAt?: Date | string
+    price?: number | null
+    rawPrice?: string | null
+    status?: $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: boolean
+    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
   export type ProductRecordUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductRecordsNestedInput
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
+    errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutProductInput = {
@@ -16122,8 +18732,13 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
+    errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateManyWithoutProductInput = {
@@ -16131,8 +18746,12 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
-    recordType?: EnumProductRecordTypeFieldUpdateOperationsInput | $Enums.ProductRecordType
-    recordId?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumProductRecordStatusFieldUpdateOperationsInput | $Enums.ProductRecordStatus | null
+    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
+    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
   }
 
 
@@ -16145,6 +18764,10 @@ export namespace Prisma {
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use ProductRecordCountOutputTypeDefaultArgs instead
+     */
+    export type ProductRecordCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductRecordCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use ProductCountOutputTypeDefaultArgs instead
      */
     export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -16152,6 +18775,18 @@ export namespace Prisma {
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use HttpNetworkErrorDataDefaultArgs instead
+     */
+    export type HttpNetworkErrorDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = HttpNetworkErrorDataDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use HttpSerializationErrorDataDefaultArgs instead
+     */
+    export type HttpSerializationErrorDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = HttpSerializationErrorDataDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use HttpClientErrorDataDefaultArgs instead
+     */
+    export type HttpClientErrorDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = HttpClientErrorDataDefaultArgs<ExtArgs>
     /**
      * @deprecated Use MissingAttributeErrorDataDefaultArgs instead
      */
@@ -16181,13 +18816,9 @@ export namespace Prisma {
      */
     export type NonUniqueElementErrorDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NonUniqueElementErrorDataDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use ScrapingErrorRecordDefaultArgs instead
+     * @deprecated Use ProductRecordErrorDefaultArgs instead
      */
-    export type ScrapingErrorRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ScrapingErrorRecordDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ProductRecordedRecordDefaultArgs instead
-     */
-    export type ProductRecordedRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductRecordedRecordDefaultArgs<ExtArgs>
+    export type ProductRecordErrorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductRecordErrorDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ProductRecordDefaultArgs instead
      */

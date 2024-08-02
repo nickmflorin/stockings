@@ -1,25 +1,22 @@
 import { logger } from "~/internal/logger";
 
-import {
-  type ProductsPageId,
-  type ProductsSubPageId,
-} from "~/scraping/integrations/lie-nielsen/paths";
+import { dataValueIsFieldValue, dataValueIsValue } from "~/scraping/models";
 
-import { type ScrapedProduct, type ScrapedThumbnailProduct } from "./scraped-product";
-import { type ScrapedThumbnail } from "./scraped-thumbnail";
+import { type IScrapedProductData, type ProcessedScrapedProduct } from "./scraped-product";
+import { type IScrapedThumbnailData } from "./scraped-thumbnail";
 
-type InconsistencyCheck<F extends keyof ScrapedProduct & keyof ScrapedThumbnail> = {
+type InconsistencyCheck<F extends keyof IScrapedProductData & keyof IScrapedThumbnailData> = {
   readonly field: F;
 };
 
 const InconsistencyChecks: [InconsistencyCheck<"name">] = [{ field: "name" }];
 
 export type AllowedScrapedProductInconsistency<
-  F extends keyof ScrapedProduct & keyof ScrapedThumbnail,
+  F extends keyof IScrapedProductData & keyof IScrapedThumbnailData,
 > = {
   readonly field: F;
-  readonly productValue: ScrapedProduct[F];
-  readonly thumbnailValue: ScrapedThumbnail[F];
+  readonly productValue: IScrapedProductData[F];
+  readonly thumbnailValue: IScrapedThumbnailData[F];
 };
 
 export const AllowedScrapedProductInconsistencies: [
@@ -38,7 +35,7 @@ export const AllowedScrapedProductInconsistencies: [
   },
 ];
 
-const inconsistencyIsAllowed = <F extends keyof ScrapedProduct & keyof ScrapedThumbnail>(
+const inconsistencyIsAllowed = <F extends keyof IScrapedProductData & keyof IScrapedThumbnailData>(
   field: F,
   values: Pick<AllowedScrapedProductInconsistency<F>, "productValue" | "thumbnailValue">,
 ): boolean =>
@@ -49,16 +46,21 @@ const inconsistencyIsAllowed = <F extends keyof ScrapedProduct & keyof ScrapedTh
       a.thumbnailValue === values.thumbnailValue,
   ).length > 0;
 
-export const checkScrapedProductInconsistencies = <
-  P extends ProductsPageId = ProductsPageId,
-  S extends ProductsSubPageId<P> = ProductsSubPageId<P>,
->(
-  product: ScrapedThumbnailProduct<P, S>,
-) => {
+export const checkScrapedProductInconsistencies = (product: ProcessedScrapedProduct) => {
   for (const check of InconsistencyChecks) {
-    const productValue = product[check.field];
-    const thumbnailValue = product.thumbnail[check.field];
-    if (productValue !== thumbnailValue) {
+    const rawProductValue = product.data[check.field];
+    /* The value on the scraped product may be an error object { error: ... } if there was an
+       error scraping the field.  In this case, inconsistencies should not be checked. */
+    const productValue = dataValueIsValue(rawProductValue)
+      ? rawProductValue
+      : dataValueIsFieldValue(rawProductValue)
+        ? rawProductValue.value
+        : null;
+    /* The value on the scraped thumbnail is guaranteed to be a direct value because the scraped
+       product cannot be instantiated with an invalid or partially invalid thumbnail. */
+    const thumbnailValue = product.thumbnail.data[check.field];
+
+    if (productValue !== null && productValue !== thumbnailValue) {
       if (inconsistencyIsAllowed(check.field, { productValue, thumbnailValue })) {
         continue;
       }

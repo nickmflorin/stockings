@@ -1,20 +1,21 @@
 import * as cheerio from "cheerio";
 import { chunk } from "lodash-es";
 
-import type { ILieNielsenClient } from "./client";
+import type { ILieNielsenClient } from "../../http/lie-nielsen-client";
 
 import { logger } from "~/internal/logger";
 
-import { api } from "~/scraping/dom";
+import { DomApi } from "~/scraping/dom";
 import type { DomApiType } from "~/scraping/dom/api";
 import { type ScrapingError } from "~/scraping/errors";
-import { ScrapingHttpError, isScrapingHttpError } from "~/scraping/http";
+import { isScrapingHttpError } from "~/scraping/errors";
 
-import { LieNielsenClient } from "./client";
+import { LieNielsenClient } from "../../http/lie-nielsen-client";
+
 import * as paths from "./paths";
-import { ScrapedThumbnail, ScrapedProduct, ScrapedThumbnailProduct } from "./scraped-models";
+import { ScrapedThumbnail, ScrapedProduct, type ValidScrapedThumbnail } from "./scraped-models";
 
-const processor = (html: string) => api.DomApi(cheerio.load(html));
+const processor = (html: string) => DomApi(cheerio.load(html));
 
 const client = new LieNielsenClient({ processor });
 
@@ -27,13 +28,9 @@ type ScrapeProductOptions = {
   readonly strict?: boolean;
 };
 
-type ScrapedProductRT<
-  O extends ScrapeProductOptions,
-  P extends paths.ProductsPageId,
-  S extends paths.ProductsSubPageId<P>,
-> = O extends { strict: true }
-  ? ScrapedThumbnailProduct<P, S>
-  : ScrapingError | ScrapedThumbnailProduct<P, S>;
+type ScrapedProductRT<O extends ScrapeProductOptions> = O extends { strict: true }
+  ? ScrapedProduct
+  : ScrapingError | ScrapedProduct;
 
 export class LieNielsenScrapeClient {
   private readonly client: ILieNielsenClient<typeof processor>;
@@ -42,29 +39,28 @@ export class LieNielsenScrapeClient {
     this.client = client;
   }
 
-  public async scrapeProduct(slug: string): Promise<ScrapedProduct> {
-    const sel = await this.client.fetchProduct(slug);
-    return new ScrapedProduct(sel);
-  }
+  /* public async scrapeProduct(slug: string): Promise<ScrapedProduct> {
+       const sel = await this.client.fetchProduct(slug);
+       return new ScrapedProduct(sel);
+     } */
 
-  public async scrapeThumbnailProduct<
-    O extends ScrapeProductOptions,
-    P extends paths.ProductsPageId,
-    S extends paths.ProductsSubPageId<P>,
-  >(thumbnail: ScrapedThumbnail<P, S>, options: O): Promise<ScrapedProductRT<O, P, S>> {
+  public async scrapeProduct<O extends ScrapeProductOptions>(
+    thumbnail: ValidScrapedThumbnail,
+    options: O,
+  ): Promise<ScrapedProductRT<O>> {
     let domApi: DomApiType;
     try {
-      domApi = await this.client.fetchProduct(thumbnail.slug);
+      domApi = await this.client.fetchProduct(thumbnail.data.slug);
     } catch (e) {
       if (isScrapingHttpError(e) && options.strict !== true) {
-        return e as ScrapedProductRT<O, P, S>;
+        return e as ScrapedProductRT<O>;
       }
       throw e;
     }
-    return new ScrapedThumbnailProduct<P, S>(domApi, thumbnail);
+    return new ScrapedProduct(domApi, { thumbnail });
   }
 
-  public async scrapeThumbnailProducts<P extends paths.ProductsPageId>(
+  public async scrapeProducts<P extends paths.ProductsPageId>(
     page: P,
     { limit, batchSize = 10 }: ScrapeThumbnailProductsContext,
   ) {
@@ -76,18 +72,18 @@ export class LieNielsenScrapeClient {
 
     const chunks = chunk(limited, batchSize);
 
-    let scrapedProducts: ScrapedThumbnailProduct<P>[] = [];
+    let scrapedProducts: ScrapedProduct[] = [];
     for (let i = 0; i < chunks.length; i++) {
       logger.info(
         `Processing Product Thumbnail Chunk ${i + 1}/${chunks.length} of ` +
           `Size ${chunks[i].length} for Page ${page}.`,
       );
-      const promises: Promise<ScrapedThumbnailProduct<P>>[] = chunks[i].map(thumb =>
-        this.scrapeThumbnailProduct(thumb, { strict: true }),
+      const promises: Promise<ScrapedProduct>[] = chunks[i].map(thumb =>
+        this.scrapeProduct(thumb, { strict: true }),
       );
       scrapedProducts = [...scrapedProducts, ...(await Promise.all(promises))];
     }
-    return ScrapedThumbnailProduct.processScrapedProducts(scrapedProducts);
+    return ScrapedProduct.processScrapedProducts(scrapedProducts);
   }
 
   public async scrapeProductsPageThumbnails<P extends paths.ProductsPageId>(
@@ -97,11 +93,11 @@ export class LieNielsenScrapeClient {
     const data = await this.client.fetchProductsPage(page, { paginated: true });
     const thumbnails = data.flatMap(d => {
       const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
-      return elements.map(e => new ScrapedThumbnail<P>(e, { page }));
+      return elements.map(e => new ScrapedThumbnail(e, { page }));
     });
-    if (options?.process !== false) {
-      return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
-    }
+    /* if (options?.process !== false) {
+         return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
+       } */
     return thumbnails;
   }
 
@@ -112,11 +108,11 @@ export class LieNielsenScrapeClient {
     const data = await this.client.fetchProductsPage(page, { paginated: true });
     const thumbnails = data.flatMap(d => {
       const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
-      return elements.map(e => new ScrapedThumbnail<P, S>(e, { page, subPage }));
+      return elements.map(e => new ScrapedThumbnail(e, { page, subPage }));
     });
-    if (options?.process !== false) {
-      return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
-    }
+    /* if (options?.process !== false) {
+         return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
+       } */
     return thumbnails;
   }
 

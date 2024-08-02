@@ -2,9 +2,10 @@ import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-lite
 
 import { type ElementAttribute } from "~/prisma/model";
 
-import { sanitizeString } from "./util";
+import { InvalidTextError, InvalidAttributeError } from "~/scraping/errors";
 
-import { InvalidTextError, InvalidAttributeError, type ApiElement } from ".";
+import { type ApiElement } from "./element";
+import { sanitizeString } from "./util";
 
 export const PARSER_NAMES = enumeratedLiterals(["price", "priceRange", "productSlug"] as const, {});
 export type ParserName = EnumeratedLiteralsType<typeof PARSER_NAMES>;

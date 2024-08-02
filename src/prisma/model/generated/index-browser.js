@@ -118,6 +118,22 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.HttpNetworkErrorDataScalarFieldEnum = {
+  id: 'id',
+  url: 'url'
+};
+
+exports.Prisma.HttpSerializationErrorDataScalarFieldEnum = {
+  id: 'id',
+  url: 'url'
+};
+
+exports.Prisma.HttpClientErrorDataScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  status: 'status'
+};
+
 exports.Prisma.MissingAttributeErrorDataScalarFieldEnum = {
   id: 'id',
   attribute: 'attribute',
@@ -159,20 +175,13 @@ exports.Prisma.NonUniqueElementErrorDataScalarFieldEnum = {
   selector: 'selector'
 };
 
-exports.Prisma.ScrapingErrorRecordScalarFieldEnum = {
+exports.Prisma.ProductRecordErrorScalarFieldEnum = {
   id: 'id',
   errorId: 'errorId',
-  errorCode: 'errorCode'
-};
-
-exports.Prisma.ProductRecordedRecordScalarFieldEnum = {
-  id: 'id',
-  updatedAt: 'updatedAt',
-  price: 'price',
-  rawPrice: 'rawPrice',
-  status: 'status',
-  wasManuallyCreated: 'wasManuallyCreated',
-  manuallyChangedFields: 'manuallyChangedFields'
+  errorCode: 'errorCode',
+  recordId: 'recordId',
+  field: 'field',
+  message: 'message'
 };
 
 exports.Prisma.ProductRecordScalarFieldEnum = {
@@ -180,9 +189,13 @@ exports.Prisma.ProductRecordScalarFieldEnum = {
   timestamp: 'timestamp',
   createdById: 'createdById',
   updatedById: 'updatedById',
-  recordType: 'recordType',
-  recordId: 'recordId',
-  productId: 'productId'
+  updatedAt: 'updatedAt',
+  productId: 'productId',
+  price: 'price',
+  rawPrice: 'rawPrice',
+  status: 'status',
+  wasManuallyCreated: 'wasManuallyCreated',
+  manuallyChangedFields: 'manuallyChangedFields'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -231,6 +244,12 @@ exports.ScrapingErrorCode = exports.$Enums.ScrapingErrorCode = {
   HTTP_SERIALIZATION: 'HTTP_SERIALIZATION'
 };
 
+exports.ProductRecordDataField = exports.$Enums.ProductRecordDataField = {
+  PRICE: 'PRICE',
+  RAW_PRICE: 'RAW_PRICE',
+  STATUS: 'STATUS'
+};
+
 exports.ProductRecordStatus = exports.$Enums.ProductRecordStatus = {
   OUT_OF_STOCK: 'OUT_OF_STOCK',
   IN_STOCK: 'IN_STOCK',
@@ -238,19 +257,11 @@ exports.ProductRecordStatus = exports.$Enums.ProductRecordStatus = {
   NOT_LISTED: 'NOT_LISTED'
 };
 
-exports.ProductRecordDataFields = exports.$Enums.ProductRecordDataFields = {
-  PRICE: 'PRICE',
-  RAW_PRICE: 'RAW_PRICE',
-  STATUS: 'STATUS'
-};
-
-exports.ProductRecordType = exports.$Enums.ProductRecordType = {
-  RECORDED: 'RECORDED',
-  ERROR: 'ERROR'
-};
-
 exports.Prisma.ModelName = {
   User: 'User',
+  HttpNetworkErrorData: 'HttpNetworkErrorData',
+  HttpSerializationErrorData: 'HttpSerializationErrorData',
+  HttpClientErrorData: 'HttpClientErrorData',
   MissingAttributeErrorData: 'MissingAttributeErrorData',
   InvalidAttributeErrorData: 'InvalidAttributeErrorData',
   InvalidTextErrorData: 'InvalidTextErrorData',
@@ -258,8 +269,7 @@ exports.Prisma.ModelName = {
   NonUniqueTextErrorData: 'NonUniqueTextErrorData',
   MissingElementErrorData: 'MissingElementErrorData',
   NonUniqueElementErrorData: 'NonUniqueElementErrorData',
-  ScrapingErrorRecord: 'ScrapingErrorRecord',
-  ProductRecordedRecord: 'ProductRecordedRecord',
+  ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
   Product: 'Product'
 };

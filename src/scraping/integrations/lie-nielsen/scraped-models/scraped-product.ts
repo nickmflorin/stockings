@@ -1,24 +1,25 @@
-import type { ScrapedThumbnail } from "./scraped-thumbnail";
-
 import { logger } from "~/internal/logger";
-import { ProductRecordStatus, type ProductRecordedRecord } from "~/prisma/model";
+import { ProductRecordStatus, type ProductRecord } from "~/prisma/model";
 
-import { Differences, type DifferenceField } from "~/lib/differences";
-import { type api } from "~/scraping/dom";
-import { InvalidTextError, type DomApiType } from "~/scraping/dom/api";
+import { type DifferenceField, Differences } from "~/lib/differences";
+import { type ParserResult, type DomApiType } from "~/scraping/dom";
+import { InvalidTextError } from "~/scraping/errors";
 import {
-  type ProductsPageId,
-  type ProductsSubPageId,
-} from "~/scraping/integrations/lie-nielsen/paths";
-import { ScrapedApiModel, ScrapedApiModelDataCls } from "~/scraping/scraped-model";
+  ScrapedModel,
+  BaseScrapedModel,
+  ValidScrapedModel,
+  InvalidScrapedModel,
+  dataValueIsFieldValue,
+} from "~/scraping/models";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
+import { type ValidScrapedThumbnail } from "./scraped-thumbnail";
 
-const logExisting = <
-  P extends ProductsPageId = ProductsPageId,
-  S extends ProductsSubPageId<P> = ProductsSubPageId<P>,
->(
-  products: [ScrapedThumbnailProduct<P, S>, ScrapedThumbnailProduct<P, S>],
+const logExisting = (
+  products: [
+    ValidScrapedProduct | InvalidScrapedProduct,
+    ValidScrapedProduct | InvalidScrapedProduct,
+  ],
 ) => {
   const differences = products[0].compare(products[1]);
   if (differences.hasDifferences) {
@@ -57,7 +58,7 @@ export const parseProductScrapedState = (value: string): ProductScrapedStatus | 
 };
 
 export type IScrapedProductData = {
-  readonly price: api.ParserResult<"price">;
+  readonly price: ParserResult<"price">;
   readonly rawPrice: string;
   readonly imageSrc: string;
   readonly name: string;
@@ -65,7 +66,11 @@ export type IScrapedProductData = {
   readonly code: string;
 };
 
-class ScrapedProductData extends ScrapedApiModelDataCls implements IScrapedProductData {
+export type ScrapedProductConfig = {
+  readonly thumbnail: ValidScrapedThumbnail;
+};
+
+class ScrapedProductData extends BaseScrapedModel<DomApiType> implements IScrapedProductData {
   private get priceElement() {
     /* eslint-disable-next-line quotes */
     return this.root('div[itemprop="offerDetails"]', {})
@@ -151,92 +156,115 @@ class ScrapedProductData extends ScrapedApiModelDataCls implements IScrapedProdu
   }
 }
 
-export class ScrapedProduct extends ScrapedApiModel<IScrapedProductData> {
-  protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
+export class ScrapedProduct extends ScrapedModel<
+  DomApiType,
+  IScrapedProductData,
+  ValidScrapedProduct,
+  InvalidScrapedProduct,
+  ScrapedProductConfig
+> {
+  protected ValidCls = ValidScrapedProduct;
+  protected InvalidCls = InvalidScrapedProduct;
+  // protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
   protected fields = ["price", "rawPrice", "imageSrc", "name", "status", "code"] as const;
-  protected recordComparisonFields: DifferenceField<ProductRecordedRecord, IScrapedProductData>[] =
-    ["price", "status"] as const;
 
-  constructor(root: DomApiType) {
-    super(root, new ScrapedProductData(root));
+  constructor(root: DomApiType, config: ScrapedProductConfig) {
+    super(root, new ScrapedProductData(root), config);
   }
 
-  public compareRecord(record: ProductRecordedRecord) {
-    return Differences([this.processedData, record], this.recordComparisonFields);
+  public static processScrapedProducts(
+    products: ScrapedProduct[] | ScrapedProduct[][],
+  ): (ValidScrapedProduct | InvalidScrapedProduct)[] {
+    const ts = (Array.isArray(products[0]) ? products : [products]) as ScrapedProduct[][];
+    return ts.reduce(
+      (
+        prev: (ValidScrapedProduct | InvalidScrapedProduct)[],
+        curr: ScrapedProduct[],
+      ): (ValidScrapedProduct | InvalidScrapedProduct)[] =>
+        curr.reduce(
+          (
+            p: (ValidScrapedProduct | InvalidScrapedProduct)[],
+            c: ScrapedProduct,
+          ): (ValidScrapedProduct | InvalidScrapedProduct)[] => {
+            const validated = c.validate();
+            const existing = p.find(pi => pi.thumbnail.data.slug === validated.slug);
+            if (existing) {
+              logExisting([existing, validated]);
+              return p;
+            }
+            validated.checkInconsistencies();
+            return [...p, validated];
+          },
+          prev,
+        ),
+      [] as (ValidScrapedProduct | InvalidScrapedProduct)[],
+    );
   }
 }
 
-export class ScrapedThumbnailProduct<
-  P extends ProductsPageId = ProductsPageId,
-  S extends ProductsSubPageId<P> = ProductsSubPageId<P>,
-> extends ScrapedProduct {
-  public thumbnail: ScrapedThumbnail<P, S>;
+export class ValidScrapedProduct extends ValidScrapedModel<
+  IScrapedProductData,
+  ScrapedProductConfig
+> {
+  protected recordComparisonFields = ["price", "status"] as const satisfies DifferenceField<
+    ProductRecord,
+    IScrapedProductData
+  >[];
 
-  constructor(root: DomApiType, thumbnail: ScrapedThumbnail<P, S>) {
-    super(root);
-    this.thumbnail = thumbnail;
-    if (this.thumbnail.isComposite) {
-      throw new Error(
-        "A ScrapedThumbnailProduct cannot be instantiated from a composite thumbnail!",
-      );
-    }
+  public get thumbnail() {
+    return this.options.thumbnail;
   }
 
   public get slug() {
-    /* The thumbnail will already be valid before it is used to instantiate the
-       ScrapedThumbnailProduct, so the slug property can be safely exposed without having to ensure
-       that parsing it does not throw an error (as with the other fields of this class).
-       Additionally, the slug needs to be accessible for the ScrapedModelProduct at all times,
-       regardless of whether or not the data can be properly parsed, because it is used as a unique
-       identifier to relate to other models. */
-    return this.thumbnail.slug;
+    return this.thumbnail.data.slug;
   }
 
   public checkInconsistencies() {
     checkScrapedProductInconsistencies(this);
   }
 
-  public process(others: ScrapedThumbnailProduct<P, S>[]) {
-    /* Accessing the slug property will not result in an ElementError being thrown because it is
-       accessed from the underlying Thumbnail, which must be valid in order to instantiate the
-       ScrapedThumbnailProduct. */
-    const existing = others.find(pi => pi.slug === this.slug);
-    if (existing) {
-      logExisting([existing, this]);
-      return false;
-    }
-    this.checkInconsistencies();
-    return true;
-  }
-
-  public static processScrapedProducts<
-    P extends ProductsPageId = ProductsPageId,
-    S extends ProductsSubPageId<P> = ProductsSubPageId<P>,
-  >(
-    products: ScrapedThumbnailProduct<P, S>[] | ScrapedThumbnailProduct<P, S>[][],
-  ): ScrapedThumbnailProduct<P, S>[] {
-    const ts = (Array.isArray(products[0]) ? products : [products]) as ScrapedThumbnailProduct<
-      P,
-      S
-    >[][];
-    return ts.reduce(
-      (prev: ScrapedThumbnailProduct<P, S>[], curr: ScrapedThumbnailProduct<P, S>[]) =>
-        curr.reduce(
-          (
-            p: ScrapedThumbnailProduct<P, S>[],
-            c: ScrapedThumbnailProduct<P, S>,
-          ): ScrapedThumbnailProduct<P, S>[] => {
-            const existing = p.find(pi => pi.slug === c.slug);
-            if (existing) {
-              logExisting([existing, c]);
-              return p;
-            }
-            c.checkInconsistencies();
-            return [...p, c];
-          },
-          prev,
-        ),
-      [] as ScrapedThumbnailProduct<P, S>[],
-    );
+  public compareToRecord(record: ProductRecord) {
+    return Differences([this.data, record], this.recordComparisonFields);
   }
 }
+
+export class InvalidScrapedProduct extends InvalidScrapedModel<
+  IScrapedProductData,
+  ScrapedProductConfig
+> {
+  protected recordComparisonFields = ["price", "status"] as const satisfies DifferenceField<
+    ProductRecord,
+    IScrapedProductData
+  >[];
+
+  public get thumbnail() {
+    return this.options.thumbnail;
+  }
+
+  public get slug() {
+    return this.thumbnail.data.slug;
+  }
+
+  public checkInconsistencies() {
+    checkScrapedProductInconsistencies(this);
+  }
+
+  public compareToRecord(record: ProductRecord) {
+    type DiffData = {
+      [key in (typeof this.recordComparisonFields)[number]]: IScrapedProductData[key] | undefined;
+    };
+    const data = this.recordComparisonFields.reduce(
+      (prev: DiffData, curr: (typeof this.recordComparisonFields)[number]) => {
+        const v = this.data[curr];
+        if (dataValueIsFieldValue(v)) {
+          return { ...prev, [curr]: v.value };
+        }
+        return { ...prev, [curr]: undefined };
+      },
+      {} as DiffData,
+    );
+    return Differences([data, record], this.recordComparisonFields);
+  }
+}
+
+export type ProcessedScrapedProduct = InvalidScrapedProduct | ValidScrapedProduct;

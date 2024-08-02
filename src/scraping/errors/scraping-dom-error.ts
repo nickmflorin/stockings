@@ -1,16 +1,15 @@
 import { isError } from "~/application/errors";
 import { getAttributeKey, type ElementAttribute, ScrapingErrorCode } from "~/prisma/model";
 
-import { BaseScrapingError } from "~/scraping/errors";
+import { type ApiElement, type ApiSelector } from "~/scraping/dom";
 
-import { type ApiElement } from "./element";
-import { type ApiSelector } from "./selector";
+import { BaseScrapingError } from "./base-scraping-error";
 
 interface ElementErrorConfig {
   readonly parent?: ApiElement;
 }
 
-export abstract class ElementError extends BaseScrapingError {
+export abstract class ElementError<E extends ScrapingErrorCode> extends BaseScrapingError<E> {
   protected readonly parent: ApiElement | undefined;
   public abstract message: string;
 
@@ -20,11 +19,11 @@ export abstract class ElementError extends BaseScrapingError {
   }
 
   public get html() {
-    return this.parent?.html;
+    return this.parent?.html ?? null;
   }
 }
 
-export abstract class ApiSelectorError extends ElementError {
+export abstract class ApiSelectorError<E extends ScrapingErrorCode> extends ElementError<E> {
   protected readonly selector: ApiSelector | string;
 
   constructor(selector: ApiSelector | string, config?: ElementErrorConfig) {
@@ -33,7 +32,9 @@ export abstract class ApiSelectorError extends ElementError {
   }
 }
 
-export class MissingElementError extends ApiSelectorError {
+export class MissingElementError extends ApiSelectorError<
+  typeof ScrapingErrorCode.MISSING_ELEMENT
+> {
   public errorCode = ScrapingErrorCode.MISSING_ELEMENT;
 
   public get message() {
@@ -42,9 +43,15 @@ export class MissingElementError extends ApiSelectorError {
     }
     return `The selector '${this.selector.toString()}' did not match any children.`;
   }
+
+  public get errorData() {
+    return { parentHtml: this.html, selector: this.selector.toString() };
+  }
 }
 
-export class NonUniqueElementError extends ApiSelectorError {
+export class NonUniqueElementError extends ApiSelectorError<
+  typeof ScrapingErrorCode.NONUNIQUE_ELEMENT
+> {
   public errorCode = ScrapingErrorCode.NONUNIQUE_ELEMENT;
 
   public get message() {
@@ -53,9 +60,13 @@ export class NonUniqueElementError extends ApiSelectorError {
     }
     return `The selector '${this.selector.toString()}' unexpectedly matched multiple children.`;
   }
+
+  public get errorData() {
+    return { parentHtml: this.html, selector: this.selector.toString() };
+  }
 }
 
-export class MissingTextError extends ElementError {
+export class MissingTextError extends ElementError<typeof ScrapingErrorCode.MISSING_TEXT> {
   public errorCode = ScrapingErrorCode.MISSING_TEXT;
 
   public get message() {
@@ -64,9 +75,13 @@ export class MissingTextError extends ElementError {
     }
     return "The parent did not have a child text node.";
   }
+
+  public get errorData() {
+    return { parentHtml: this.html };
+  }
 }
 
-export class NonUniqueTextError extends ElementError {
+export class NonUniqueTextError extends ElementError<typeof ScrapingErrorCode.NONUNIQUE_TEXT> {
   public errorCode = ScrapingErrorCode.NONUNIQUE_TEXT;
 
   public get message() {
@@ -75,9 +90,13 @@ export class NonUniqueTextError extends ElementError {
     }
     return "The parent had multiple child text nodes when only 1 was expected.";
   }
+
+  public get errorData() {
+    return { parentHtml: this.html };
+  }
 }
 
-export class InvalidTextError extends ElementError {
+export class InvalidTextError extends ElementError<typeof ScrapingErrorCode.INVALID_TEXT> {
   public errorCode = ScrapingErrorCode.INVALID_TEXT;
   private readonly value: string;
 
@@ -92,9 +111,15 @@ export class InvalidTextError extends ElementError {
     }
     return `The element had an invalid text value, '${this.value}'.`;
   }
+
+  public get errorData() {
+    return { parentHtml: this.html, value: this.value };
+  }
 }
 
-export abstract class AttributeError extends ElementError {
+export abstract class AttributeError<
+  E extends typeof ScrapingErrorCode.MISSING_ATTRIBUTE | typeof ScrapingErrorCode.INVALID_ATTRIBUTE,
+> extends ElementError<E> {
   protected readonly attribute: ElementAttribute;
 
   constructor(attribute: ElementAttribute, config?: ElementErrorConfig) {
@@ -107,7 +132,9 @@ export abstract class AttributeError extends ElementError {
   }
 }
 
-export class MissingAttributeError extends AttributeError {
+export class MissingAttributeError extends AttributeError<
+  typeof ScrapingErrorCode.MISSING_ATTRIBUTE
+> {
   public errorCode = ScrapingErrorCode.MISSING_ATTRIBUTE;
 
   public get message() {
@@ -116,9 +143,15 @@ export class MissingAttributeError extends AttributeError {
     }
     return `The element did not have the attribute '${this.key}'.`;
   }
+
+  public get errorData() {
+    return { attribute: this.attribute, parentHtml: this.html };
+  }
 }
 
-export class InvalidAttributeError extends AttributeError {
+export class InvalidAttributeError extends AttributeError<
+  typeof ScrapingErrorCode.INVALID_ATTRIBUTE
+> {
   private readonly value: string;
   public errorCode = ScrapingErrorCode.INVALID_ATTRIBUTE;
 
@@ -132,6 +165,10 @@ export class InvalidAttributeError extends AttributeError {
       return `The element ${this.parent.toString()} had an invalid value, '${this.value}', for the attribute '${this.attribute}'.`;
     }
     return `The element had an invalid value, '${this.value}', for the attribute '${this.attribute}'.`;
+  }
+
+  public get errorData() {
+    return { attribute: this.attribute, parentHtml: this.html, value: this.value };
   }
 }
 

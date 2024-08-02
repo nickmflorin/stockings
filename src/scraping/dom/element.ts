@@ -14,7 +14,8 @@ import {
   InvalidAttributeError,
   NonUniqueElementError,
   NonUniqueTextError,
-} from "./errors";
+} from "~/scraping/errors";
+
 import { Parsers, type ParserName, type ParserOptions, type ParserReturn } from "./parsers";
 import { type IApiSelector, type ApiSelectorParams, ApiSelector } from "./selector";
 import { isText, isApiValidElement } from "./types";

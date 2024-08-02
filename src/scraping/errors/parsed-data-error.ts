@@ -1,5 +1,6 @@
-import { type ScrapingDomError } from "~/scraping/dom/api";
 import { humanizeList } from "~/lib/formatters";
+
+import { type ScrapingDomError } from "./scraping-dom-error";
 
 export class ParsedDataError<
   D,
