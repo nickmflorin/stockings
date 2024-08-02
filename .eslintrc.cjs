@@ -2,7 +2,7 @@ const ModuleGroups = [
   ["prisma", "environment", "application", "support", "internal"],
   ["integrations", "lib", "scraping"],
   ["app", "actions"],
-  ["components", "hooks", "styles"],
+  ["components", "features", "hooks", "styles"],
 ];
 
 const toAbsoluteImports = v => [`~/${v}`, `~/${v}/**`];

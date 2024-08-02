@@ -91,7 +91,7 @@ export abstract class ProcessedScrapedModel<
       throw new Error("Cannot access validated data when the model is invalid.");
     }
     return Object.entries(this.data).reduce((curr, [k, v]) => {
-      if (v.value) {
+      if (v.value !== undefined) {
         return { ...curr, [k]: v.value };
       }
       throw new Error(`Encountered error for field '${k}' after validity of model was checked!`);

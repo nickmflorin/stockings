@@ -6,7 +6,7 @@ import { type ParserResult } from "~/scraping/dom/parsers";
 import type * as paths from "~/scraping/integrations/lie-nielsen/paths";
 import { ScrapedModel, BaseScrapedModel, ProcessedScrapedModel } from "~/scraping/models";
 
-const subPageMessage = (a: ValidScrapedThumbnail, b: ValidScrapedThumbnail): string => {
+const subPageMessage = (a: ProcessedScrapedThumbnail, b: ProcessedScrapedThumbnail): string => {
   if (a.subPage && b.subPage) {
     return (
       `The first thumbnail was encountered on sub-page '${a.subPage}', and the ` +
@@ -27,45 +27,45 @@ const subPageMessage = (a: ValidScrapedThumbnail, b: ValidScrapedThumbnail): str
   }
 };
 
-const logExisting = (thumbs: [ValidScrapedThumbnail, ValidScrapedThumbnail]) => {
-  if (thumbs[0].page !== thumbs[1].page || thumbs[0].data.slug !== thumbs[1].data.slug) {
-    throw new TypeError(
-      "Improper Method Usage: The thumbnails must not have differing slugs and/or pages to log.",
-    );
-  }
-  const differences = thumbs[0].compare(thumbs[1]);
-  if (differences.hasDifferences) {
-    logger.warn(
-      `Encountered two thumbnails with the same slug, '${thumbs[0].data.slug}', that have ` +
-        `differing data: ${differences.toString()}.` +
-        subPageMessage(thumbs[0], thumbs[1]),
-      {
-        differences: differences.differences,
-        slug: thumbs[0].data.slug,
-        // thumbnails: [thumbs[0], thumbs[1]],
-        page: thumbs[0].page,
-        subPages: [
-          thumbs[0].subPage ?? "main product page",
-          thumbs[1].subPage ?? "main product page",
-        ],
-      },
-    );
-  } else {
-    logger.debug(
-      `Encountered two identical thumbnails with the same slug, '${thumbs[0].data.slug}'. ` +
-        subPageMessage(thumbs[0], thumbs[1]),
-      {
-        slug: thumbs[0].data.slug,
-        // thumbnails: [thumbs[0], thumbs[1]],
-        page: thumbs[0].page,
-        subPages: [
-          thumbs[0].subPage ?? "main product page",
-          thumbs[1].subPage ?? "main product page",
-        ],
-      },
-    );
-  }
-};
+/* const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbnail]) => {
+     if (thumbs[0].page !== thumbs[1].page || thumbs[0].data.slug !== thumbs[1].data.slug) {
+       throw new TypeError(
+         "Improper Method Usage: The thumbnails must not have differing slugs and/or pages to log.",
+       );
+     }
+     const differences = thumbs[0].compare(thumbs[1]);
+     if (differences.hasDifferences) {
+       logger.warn(
+         `Encountered two thumbnails with the same slug, '${thumbs[0].data.slug}', that have ` +
+           `differing data: ${differences.toString()}.` +
+           subPageMessage(thumbs[0], thumbs[1]),
+         {
+           differences: differences.differences,
+           slug: thumbs[0].data.slug,
+           // thumbnails: [thumbs[0], thumbs[1]],
+           page: thumbs[0].page,
+           subPages: [
+             thumbs[0].subPage ?? "main product page",
+             thumbs[1].subPage ?? "main product page",
+           ],
+         },
+       );
+     } else {
+       logger.debug(
+         `Encountered two identical thumbnails with the same slug, '${thumbs[0].data.slug}'. ` +
+           subPageMessage(thumbs[0], thumbs[1]),
+         {
+           slug: thumbs[0].data.slug,
+           // thumbnails: [thumbs[0], thumbs[1]],
+           page: thumbs[0].page,
+           subPages: [
+             thumbs[0].subPage ?? "main product page",
+             thumbs[1].subPage ?? "main product page",
+           ],
+         },
+       );
+     }
+   }; */
 
 export type ScrapedThumbnailConfig = {
   readonly page: paths.ProductsPageId;
@@ -168,14 +168,11 @@ class ScrapedThumbnailData extends BaseScrapedModel<ApiElement> {
 export class ScrapedThumbnail extends ScrapedModel<
   ApiElement,
   IScrapedThumbnailData,
-  ValidScrapedThumbnail,
-  InvalidScrapedThumbnail,
-  ScrapedThumbnailConfig
+  ScrapedThumbnailConfig,
+  ProcessedScrapedThumbnail
 > {
-  protected ValidCls = ValidScrapedThumbnail;
-  protected InvalidCls = InvalidScrapedThumbnail;
+  protected ProcessedCls = ProcessedScrapedThumbnail;
 
-  // protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
   protected fields = [
     "path",
     "slug",
@@ -185,10 +182,6 @@ export class ScrapedThumbnail extends ScrapedModel<
     "price",
     "isComposite",
   ] as const;
-
-  /* protected recordComparisonFields: DifferenceField<ProductRecordedRecord,
-     IScrapedProductData>[] =
-       ["price", "status"] as const; */
 
   constructor(root: ApiElement, config: ScrapedThumbnailConfig) {
     super(root, new ScrapedThumbnailData(root), config);
@@ -204,28 +197,33 @@ export class ScrapedThumbnail extends ScrapedModel<
 
   public static processScrapedThumbnails(
     thumbnails: ScrapedThumbnail[] | ScrapedThumbnail[][],
-  ): ValidScrapedThumbnail[] {
+  ): ProcessedScrapedThumbnail[] {
     const ts = (Array.isArray(thumbnails[0]) ? thumbnails : [thumbnails]) as ScrapedThumbnail[][];
     return ts.reduce(
-      (prev: ValidScrapedThumbnail[], curr: ScrapedThumbnail[]) =>
-        curr.reduce((p: ValidScrapedThumbnail[], c: ScrapedThumbnail): ValidScrapedThumbnail[] => {
-          const validated = c.validate();
-          if (validated.isValid) {
-            if (!validated.data.isComposite) {
-              const existing = p.find(pi => pi.data.slug === validated.data.slug);
-              if (existing) {
-                logExisting([existing, validated]);
-                return p;
+      (prev: ProcessedScrapedThumbnail[], curr: ScrapedThumbnail[]) =>
+        curr.reduce(
+          (p: ProcessedScrapedThumbnail[], c: ScrapedThumbnail): ProcessedScrapedThumbnail[] => {
+            const processed = c.process();
+            if (processed.isValid) {
+              if (!processed.validatedData.isComposite) {
+                const existing = p.find(
+                  pi => pi.validatedData.slug === processed.validatedData.slug,
+                );
+                if (existing) {
+                  // logExisting([existing, processed]);
+                  return p;
+                }
+                return [...p, processed];
               }
-              return [...p, validated];
+            } else {
+              // TODO: Improve this logic.
+              logger.warn("Encountered an invalid thumbnail.  Cannot process.");
             }
-          } else {
-            // TODO: Improve this logic.
-            logger.warn("Encountered an invalid thumbnail.  Cannot process.");
-          }
-          return p;
-        }, prev),
-      [] as ValidScrapedThumbnail[],
+            return p;
+          },
+          prev,
+        ),
+      [] as ProcessedScrapedThumbnail[],
     );
   }
 }

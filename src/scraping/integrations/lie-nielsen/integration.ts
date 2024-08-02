@@ -256,7 +256,7 @@ export class LieNielsenIntegration {
 
     const results = await prisma.$transaction(async tx => {
       const promises = scrapedProducts.map(scrapedProduct => {
-        if (scrapedProduct.thumbnail.data.isComposite) {
+        if (scrapedProduct.thumbnail.validatedData.isComposite) {
           throw new Error("Unexpectedly encountered product with composite thumbnail!");
         }
         const existing = products.find(p => p.slug === scrapedProduct.slug);
