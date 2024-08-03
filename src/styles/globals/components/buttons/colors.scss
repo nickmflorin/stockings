@@ -9,16 +9,16 @@
 
 $button-solid-colors: (
   "primary": (
-    background-color: theme("colors.indigo.700"),
+    background-color: theme("colors.blue.700"),
     color: theme("colors.white"),
-    outline-color: theme("colors.indigo.700"),
+    outline-color: theme("colors.blue.700"),
     hovered: (
-      background-color: theme("colors.indigo.800"),
-      outline-color: theme("colors.indigo.800"),
+      background-color: theme("colors.blue.800"),
+      outline-color: theme("colors.blue.800"),
     ),
     focused: (
-      background-color: theme("colors.indigo.800"),
-      outline-color: theme("colors.indigo.800"),
+      background-color: theme("colors.blue.800"),
+      outline-color: theme("colors.blue.800"),
     ),
     disabled: (
       background-color: theme("colors.disabled-background"),
@@ -80,16 +80,16 @@ $button-solid-colors: (
 
 $button-outlined-colors: (
   "primary": (
-    outline-color: theme("colors.indigo.700"),
+    outline-color: theme("colors.blue.700"),
     background-color: theme("colors.white"),
-    color: theme("colors.indigo.700"),
+    color: theme("colors.blue.700"),
     hovered: (
-      color: theme("colors.indigo.800"),
-      outline-color: theme("colors.indigo.800"),
+      color: theme("colors.blue.800"),
+      outline-color: theme("colors.blue.800"),
     ),
     focused: (
-      color: theme("colors.indigo.800"),
-      outline-color: theme("colors.indigo.800"),
+      color: theme("colors.blue.800"),
+      outline-color: theme("colors.blue.800"),
     ),
     disabled: (
       color: theme("colors.disabled"),
@@ -155,13 +155,13 @@ $button-transparent-colors: (
   "primary": (
     outline-color: theme("colors.transparent"),
     background-color: theme("colors.transparent"),
-    color: theme("colors.indigo.700"),
+    color: theme("colors.blue.700"),
     hovered: (
-      color: theme("colors.indigo.800"),
+      color: theme("colors.blue.800"),
       background-color: theme("colors.gray.50"),
     ),
     focused: (
-      color: theme("colors.indigo.800"),
+      color: theme("colors.blue.800"),
       background-color: theme("colors.gray.50"),
     ),
     disabled: (
@@ -221,12 +221,12 @@ $button-transparent-colors: (
 $link-colors: (
   "primary": (
     background-color: theme("colors.transparent"),
-    color: theme("colors.indigo.700"),
+    color: theme("colors.blue.700"),
     hovered: (
-      color: theme("colors.indigo.800"),
+      color: theme("colors.blue.800"),
     ),
     focused: (
-      color: theme("colors.indigo.800"),
+      color: theme("colors.blue.800"),
     ),
     disabled: (
       color: theme("colors.disabled"),

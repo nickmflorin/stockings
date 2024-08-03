@@ -17,3 +17,38 @@ type _HexColor = `#${HexChar}${HexChar}${string}`;
  * Represents a hexidecimal color string.
  */
 export type HexColor = Uppercase<_HexColor> | _HexColor;
+
+export type TailwindPaletteColor =
+  | "blue"
+  | "cyan"
+  | "purple"
+  | "blue"
+  | "red"
+  | "yellow"
+  | "green"
+  | "gray"
+  | "pink"
+  | "orange"
+  | "indigo";
+
+export type TailwindDirectColor = "description" | "body" | "label" | "title" | "border" | "primary";
+
+export type TailwindPaletteColorShade =
+  | "50"
+  | "100"
+  | "200"
+  | "300"
+  | "400"
+  | "500"
+  | "600"
+  | "700"
+  | "800"
+  | "900";
+
+export type TailwindTextColorClassName =
+  | `text-${TailwindPaletteColor}-${TailwindPaletteColorShade}`
+  | `text-${TailwindDirectColor}`;
+
+export type TailwindBgColorClassName =
+  | `bg-${TailwindPaletteColor}-${TailwindPaletteColorShade}`
+  | `bg-${TailwindDirectColor}`;

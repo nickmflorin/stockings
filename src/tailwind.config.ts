@@ -5,6 +5,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/database/model/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   plugins: [],
   important: true,
@@ -281,7 +282,6 @@ const config: Config = {
       title: "#111827",
       body: "#515151",
       description: "#868E96", // Gray 600
-      textHover: "#404040",
       label: "#6a6a6a",
       appBackground: "#fbfbfb",
       border: "#eeeeee",

@@ -44,7 +44,7 @@ const parseParameterizedArgs = (args: string[]) =>
 async function main() {
   const args = parseParameterizedArgs(process.argv);
 
-  db.$transaction(async tx => {
+  await db.$transaction(async tx => {
     let key: JsonifiableModel;
     for (key in Jsonifiers) {
       const jsonifier = Jsonifiers[key] as Jsonifier<typeof key>;

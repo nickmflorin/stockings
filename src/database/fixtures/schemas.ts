@@ -11,6 +11,7 @@ export const ProductJsonSchema = z.object({
   imageSrc: z.string().nullable().optional(),
   status: z.nativeEnum(ProductStatus).nullable().optional(),
   category: z.nativeEnum(ProductCategory),
+  price: z.number().nullable().optional(),
   subCategories: z.array(z.nativeEnum(ProductSubCategory)).optional(),
 });
 
