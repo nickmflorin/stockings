@@ -1,5 +1,5 @@
 "use client";
-import { type Product } from "~/prisma/model";
+import { type Product } from "~/database/model";
 
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
 
@@ -9,8 +9,6 @@ export interface ClientProductsTableBodyProps {
   readonly data: Product[];
 }
 
-export const ClientProductsTableBody = async ({
-  data,
-}: ClientProductsTableBodyProps): Promise<JSX.Element> => (
+export const ClientProductsTableBody = ({ data }: ClientProductsTableBodyProps): JSX.Element => (
   <DataTableBody columns={Columns} data={data} />
 );

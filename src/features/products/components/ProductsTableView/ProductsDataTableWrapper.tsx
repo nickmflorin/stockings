@@ -1,5 +1,7 @@
 "use client";
-import { type Product } from "~/prisma/model";
+import TableContainer from "@mui/material/TableContainer";
+
+import { type Product } from "~/database/model";
 
 import { type DataTableColumn } from "~/components/tables";
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
@@ -10,10 +12,12 @@ export interface ProductsDataTableWrapperProps {
   readonly children: JSX.Element;
 }
 
-export const ProductsDataTableWrapper = async ({
+export const ProductsDataTableWrapper = ({
   children,
-}: ProductsDataTableWrapperProps): Promise<JSX.Element> => (
-  <DataTableWrapper<Product, DataTableColumn<Product>> columns={Columns}>
-    {children}
-  </DataTableWrapper>
+}: ProductsDataTableWrapperProps): JSX.Element => (
+  <TableContainer sx={{ maxHeight: "400px" }}>
+    <DataTableWrapper<Product, DataTableColumn<Product>> columns={Columns}>
+      {children}
+    </DataTableWrapper>
+  </TableContainer>
 );

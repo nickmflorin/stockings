@@ -16,11 +16,14 @@
     flex-direction: row;
     overflow: hidden;
     position: relative;
-    @include partials.fully-constrained-dimension(width, calc(100% - constants.$layout-nav-width));
-    @include partials.fully-constrained-dimension(height, 100%);
+    @include partials.fully-constrained-dimension(width, 100%);
+    @include partials.fully-constrained-dimension(height, calc(100% - constants.$header-height));
 
     > .content {
-      @include partials.fully-constrained-dimension(width, 100%);
+      @include partials.fully-constrained-dimension(
+        width,
+        calc(100% - constants.$layout-nav-width)
+      );
       @include partials.fully-constrained-dimension(height, 100%);
       position: relative;
       overflow-x: hidden;

@@ -24,13 +24,14 @@ export const DataTableWrapper = <
   ordering,
   headerHeight,
   children,
+  columns,
   onSort,
   ...props
 }: DataTableWrapperProps<D, C>): JSX.Element => (
-  <Table {...props}>
+  <Table {...props} stickyHeader>
     <Table.Head>
       <DataTableHeaderRow<D, C>
-        columns={props.columns}
+        columns={columns}
         ordering={ordering}
         height={headerHeight}
         onSort={(e, col) => {

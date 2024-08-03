@@ -7,7 +7,7 @@
  *
  * @param {T[]} arr The array for which the value should be appended to or replaced in.
  *
- * @param {T | T[] | ((v: T | undefined) => T)} value
+ * @param {{ value: T } | ((v: T | undefined) => T)} value
  *   The value that should be appended to or replaced in the array.  If defined as an array, each
  *   value in the array will be replaced in or appended to the array based on the result of the
  *   'predicate'.  If the value being inserted into the array, {@link T[]}, depends on the
@@ -18,26 +18,20 @@
  *
  * @returns {T[]}
  */
-export const replaceInOrAppendToArray = <T extends Record<string, unknown> | string | number>(
+export const replaceInOrAppendToArray = <T>(
   arr: T[],
-  value: T | T[] | ((v: T | undefined) => T),
+  value: { value: T } | ((v: T | undefined) => T),
   predicate: (v: T) => boolean,
 ): T[] => {
-  if (!Array.isArray(value)) {
-    const ind = arr.findIndex((v: T) => predicate(v) === true);
-    if (ind !== -1) {
-      return [
-        ...arr.slice(0, ind),
-        typeof value === "function" ? value(arr[ind] as T) : value,
-        ...arr.slice(ind + 1),
-      ];
-    }
-    return [...arr, typeof value === "function" ? value(undefined) : value];
+  const ind = arr.findIndex((v: T) => predicate(v) === true);
+  if (ind !== -1) {
+    return [
+      ...arr.slice(0, ind),
+      typeof value === "function" ? value(arr[ind] as T) : value.value,
+      ...arr.slice(ind + 1),
+    ];
   }
-  return value.reduce(
-    (prev: T[], curr: T): T[] => replaceInOrAppendToArray(prev, curr, predicate),
-    arr,
-  );
+  return [...arr, typeof value === "function" ? value(undefined) : value.value];
 };
 
 /**
@@ -50,7 +44,7 @@ export const replaceInOrAppendToArray = <T extends Record<string, unknown> | str
  *
  * @param {T[]} arr The array for which the value should be appended to or replaced in.
  *
- * @param {T | ((v: P) => T)} value
+ * @param {{ value: T } | ((v: P) => T)} value
  *   The value that should be inserted into the array in place of a potentially existing value.  If
  *   the value being inserted into the array {@link T[]}, depends on the potentially existing value
  *   in the array, {@link T}, this parameter can be provided as a callback.
@@ -59,9 +53,9 @@ export const replaceInOrAppendToArray = <T extends Record<string, unknown> | str
  *
  * @returns {[true, T, T[]] | [false, undefined, T[]]}
  */
-export const replaceInArray = <T extends Record<string, unknown> | string | number, P extends T>(
+export const replaceInArray = <T, P extends T>(
   arr: T[],
-  value: T | ((v: P) => T),
+  value: { value: T } | ((v: P) => T),
   predicate: ((v: T) => v is P) | ((v: T) => boolean),
 ): [true, T, T[]] | [false, undefined, T[]] => {
   const ind = arr.findIndex((v: T) => predicate(v) === true);
@@ -72,7 +66,7 @@ export const replaceInArray = <T extends Record<string, unknown> | string | numb
       currentV,
       [
         ...arr.slice(0, ind),
-        typeof value === "function" ? value(currentV) : value,
+        typeof value === "function" ? value(currentV) : value.value,
         ...arr.slice(ind + 1),
       ],
     ];

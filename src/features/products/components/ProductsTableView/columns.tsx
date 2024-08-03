@@ -1,4 +1,4 @@
-import { type Product } from "~/prisma/model";
+import { type Product } from "~/database/model";
 
 import { type DataTableColumn } from "~/components/tables";
 
@@ -21,6 +21,16 @@ export const Columns: DataTableColumn<Product>[] = [
     // sortMethod: (order, a, b) => (a.name && b.name ? a.name > b.name : false),
     cellRenderer(datum) {
       return datum.slug;
+    },
+  },
+  {
+    id: "category",
+    label: "Category",
+    isOrderable: true,
+    width: 120,
+    // sortMethod: (order, a, b) => (a.name && b.name ? a.name > b.name : false),
+    cellRenderer(datum) {
+      return datum.category;
     },
   },
 ];

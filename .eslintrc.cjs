@@ -1,6 +1,6 @@
 const ModuleGroups = [
-  ["prisma", "environment", "application", "support", "internal"],
-  ["integrations", "lib", "scraping"],
+  ["database", "environment", "application", "support", "internal"],
+  ["integrations", "lib"],
   ["app", "actions"],
   ["components", "features", "hooks", "styles"],
 ];

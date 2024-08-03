@@ -1,10 +1,10 @@
 import { type User as ClerkUser } from "@clerk/clerk-sdk-node";
 import clerk from "@clerk/clerk-sdk-node";
 
+import { db, type PrismaClient, type Transaction } from "~/database";
+import { type User } from "~/database/model";
+import { upsertUserFromClerk } from "~/database/model/user";
 import { environment } from "~/environment";
-import { prisma, type PrismaClient, type Transaction } from "~/prisma/client";
-import { type User } from "~/prisma/model";
-import { upsertUserFromClerk } from "~/prisma/model/user";
 
 export type SeedContext = {
   readonly clerkUser: ClerkUser;
@@ -32,7 +32,7 @@ export async function getScriptContext(
     tx = arg0 as Transaction;
     upsertUser = arg1.upsertUser ?? true;
   } else {
-    tx = prisma;
+    tx = db;
     upsertUser = (arg0 as ScriptContextOptions).upsertUser ?? true;
   }
   const { NODE_ENV, VERCEL_ENV, CLERK_SECRET_KEY } = environment.pick([

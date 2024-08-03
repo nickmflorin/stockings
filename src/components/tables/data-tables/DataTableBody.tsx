@@ -21,6 +21,7 @@ export interface DataTableBodyProps<
   readonly ordering?: types.TableOrdering<types.DataTableField<C>> | null;
   readonly rowHoveredClassName?: ClassName;
   readonly highlightRowOnHover?: boolean;
+  readonly scrollable?: boolean;
   readonly rowHeight?: QuantitativeSize<"px">;
   readonly getRowId?: (datum: D) => string;
   readonly onRowClick?: (id: string, datum: D) => void;
