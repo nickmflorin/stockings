@@ -78,6 +78,43 @@ export class LieNielsenClient
     return await this.fetchContent(url, options);
   }
 
+  private async scrapeProductsPageThumbnails(page: paths.ProductsPageId) {
+    const data = await this.fetchProductsPage(page, { paginated: true });
+    return data.flatMap(d => {
+      const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
+      return elements.map(e => new ScrapedThumbnail(e, { page }));
+    });
+  }
+
+  private async scrapeSubProductsPageThumbnails(
+    page: paths.ProductsPageId,
+    subPage: paths.ProductsSubPageId,
+  ) {
+    const data = await this.fetchSubProductsPage(subPage, { paginated: true });
+    return data.flatMap(d => {
+      const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
+      return elements.map(e => new ScrapedThumbnail(e, { page, subPage }));
+    });
+  }
+
+  private getThumbnailPromises(page?: paths.ProductsPageId): Promise<ScrapedThumbnail[]>[] {
+    if (page) {
+      return [
+        this.scrapeProductsPageThumbnails(page),
+        ...paths.ProductsSubPages.models
+          .filter(p => p.parent === page)
+          .map(({ value: subPage }) => this.scrapeSubProductsPageThumbnails(page, subPage)),
+      ];
+    }
+    return paths.ProductsPages.models.flatMap(({ value: page }) => this.getThumbnailPromises(page));
+  }
+
+  public async scrapeThumbnails(options?: { page?: paths.ProductsPageId }) {
+    const promises = this.getThumbnailPromises(options?.page);
+    const thumbnails = await Promise.all(promises);
+    return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
+  }
+
   public async scrapeProduct<O extends ScrapeProductOptions>(
     thumbnail: ProcessedScrapedThumbnail,
     options: O,
@@ -97,14 +134,15 @@ export class LieNielsenClient
     return new ScrapedProduct(domApi, { thumbnail });
   }
 
-  public async scrapeProducts<P extends paths.ProductsPageId>(
-    page: P,
-    { limit, batchSize = 10 }: ScrapeThumbnailProductsContext,
-  ) {
+  public async scrapeProducts({
+    limit,
+    batchSize = 10,
+    page,
+  }: ScrapeThumbnailProductsContext & { readonly page?: paths.ProductsPageId }) {
     /* Note: Ideally, we would incorporate the limit into the scraping of the thumbnails in order to
        avoid unnecessary requests - but we cannot do that due to the concurrent nature of how the
        requests are made with Promise.all() - at least not easily, or right now. */
-    const thumbnails = await this.scrapeProductAndSubProductsPageThumbnails(page);
+    const thumbnails = await this.scrapeThumbnails({ page });
     const limited = limit ? thumbnails.slice(0, limit) : thumbnails;
 
     const chunks = chunk(limited, batchSize);
@@ -113,7 +151,7 @@ export class LieNielsenClient
     for (let i = 0; i < chunks.length; i++) {
       logger.info(
         `Processing Product Thumbnail Chunk ${i + 1}/${chunks.length} of ` +
-          `Size ${chunks[i].length} for Page ${page}.`,
+          `Size ${chunks[i].length}.`,
       );
       const promises: Promise<ScrapedProduct>[] = chunks[i].map(thumb =>
         this.scrapeProduct(thumb, { strict: true }),
@@ -121,52 +159,6 @@ export class LieNielsenClient
       scrapedProducts = [...scrapedProducts, ...(await Promise.all(promises))];
     }
     return ScrapedProduct.processScrapedProducts(scrapedProducts);
-  }
-
-  public async scrapeProductsPageThumbnails<P extends paths.ProductsPageId>(
-    page: P,
-    options?: { process: boolean },
-  ) {
-    const data = await this.fetchProductsPage(page, { paginated: true });
-    const thumbnails = data.flatMap(d => {
-      const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
-      return elements.map(e => new ScrapedThumbnail(e, { page }));
-    });
-    /* if (options?.process !== false) {
-         return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
-       } */
-    return thumbnails;
-  }
-
-  public async scrapeSubProductsPageThumbnails(
-    page: paths.ProductsPageId,
-    subPage: paths.ProductsSubPageId,
-    options?: { process: boolean },
-  ) {
-    const data = await this.fetchProductsPage(page, { paginated: true });
-    const thumbnails = data.flatMap(d => {
-      const elements = d(".product-list > .product-list-item > .thumbnail", { multiple: true });
-      return elements.map(e => new ScrapedThumbnail(e, { page, subPage }));
-    });
-    /* if (options?.process !== false) {
-         return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
-       } */
-    return thumbnails;
-  }
-
-  public async scrapeProductAndSubProductsPageThumbnails(page: paths.ProductsPageId) {
-    const promises = [
-      this.scrapeProductsPageThumbnails(page, { process: false }),
-      ...paths.ProductsSubPages.models
-        .filter(p => p.parent === page)
-        .map(({ value: subPage }) =>
-          this.scrapeSubProductsPageThumbnails(page, subPage, {
-            process: false,
-          }),
-        ),
-    ];
-    const thumbnails = await Promise.all(promises);
-    return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
   }
 }
 

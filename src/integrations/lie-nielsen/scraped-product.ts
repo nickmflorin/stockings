@@ -1,4 +1,14 @@
-import { ProductStatus, type ProductRecord, type ProductSubCategory } from "~/database/model";
+import { type Transaction } from "~/database";
+import {
+  ProductStatus,
+  type ProductRecord,
+  type ProductSubCategory,
+  type Product,
+  type User,
+  ProductRecordDataField,
+  type ScrapingErrorData,
+} from "~/database/model";
+import { createScrapingErrorData } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import {
@@ -7,6 +17,8 @@ import {
   type ProductsSubPageId,
 } from "~/integrations/lie-nielsen/paths";
 import {
+  type ScrapedModelField,
+  type ScrapingDomError,
   type ParserResult,
   type DomApiType,
   InvalidTextError,
@@ -16,8 +28,9 @@ import {
   type ProcessedScrapedModelConfig,
   dataValueIsFieldValue,
 } from "~/integrations/scraping";
-import { replaceInArray } from "~/lib/arrays";
+import { replaceInArray, arraysHaveSameElements } from "~/lib/arrays";
 import { type DifferenceField, Differences } from "~/lib/differences";
+import { humanizeList } from "~/lib/formatters";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
 import { type ProcessedScrapedThumbnail } from "./scraped-thumbnail";
@@ -66,6 +79,23 @@ export type IScrapedProductData = {
   readonly name: string;
   readonly status: ProductScrapedStatus;
   readonly code: string;
+};
+
+const ProductRecordDataFieldMap: {
+  [key in Extract<
+    ScrapedModelField<IScrapedProductData>,
+    "price" | "rawPrice" | "status"
+  >]: ProductRecordDataField;
+} = {
+  price: ProductRecordDataField.PRICE,
+  status: ProductRecordDataField.STATUS,
+  rawPrice: ProductRecordDataField.RAW_PRICE,
+};
+
+export type PersistedError = {
+  readonly data: ScrapingErrorData;
+  readonly error: ScrapingDomError;
+  readonly field: ProductRecordDataField;
 };
 
 export type ScrapedProductConfig = {
@@ -274,6 +304,27 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
     return this._subCategories;
   }
 
+  public async persistErrors(tx: Transaction): Promise<PersistedError[]> {
+    const _createScrapingErrorData = async (
+      field: ProductRecordDataField,
+      error: ScrapingDomError,
+    ) => {
+      const data = await createScrapingErrorData(tx, error);
+      return { data, error, field };
+    };
+
+    return await Promise.all(
+      Object.entries(this.errors).reduce((curr: Promise<PersistedError>[], [field, error]) => {
+        const fieldName =
+          ProductRecordDataFieldMap[field as keyof typeof ProductRecordDataFieldMap];
+        if (fieldName) {
+          return [...curr, _createScrapingErrorData(fieldName, error)];
+        }
+        return curr;
+      }, [] as Promise<PersistedError>[]),
+    );
+  }
+
   public addSubCategory(subPage: ProductsSubPageId) {
     const subCat = ProductsSubPages.getModel(subPage).subCategory;
     if (subCat !== null && !this._subCategories.includes(subCat)) {
@@ -300,5 +351,129 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
       {} as DiffData,
     );
     return Differences([data, record], this.recordComparisonFields);
+  }
+
+  public compareToProduct(product: Product) {
+    let updateData: Partial<
+      Pick<
+        Product,
+        "code" | "name" | "imageSrc" | "status" | "price" | "subCategories" | "category"
+      >
+    > = {};
+    /* The 'name' associated with the scraped product might not be present if there was an error
+       parsing the name from the HTML. */
+    const name = this.data.name.value ?? null;
+    if (name !== null && product.name !== name) {
+      logger.warn(
+        `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
+          `the product name '${product.name}' differs from the scraped name, '${name}'!`,
+        { scrapedName: name, product },
+      );
+      updateData = { ...updateData, name };
+    }
+    /* The 'code' associated with the scraped product might not be present if there was an error
+       parsing the code from the HTML. */
+    const code = this.data.code.value ?? null;
+    if (code !== null && product.code !== code) {
+      logger.warn(
+        `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
+          `the product code '${product.code}' differs from the scraped code, '${code}'!`,
+        { scrapedCode: code, product },
+      );
+      updateData = { ...updateData, code };
+    }
+    /* The 'code' associated with the scraped product might not be present if there was an error
+       parsing the code from the HTML. */
+    const imageSrc = this.data.imageSrc.value ?? null;
+    if (imageSrc !== null && product.imageSrc !== imageSrc) {
+      logger.warn(
+        `Product '${product.id}' has the same slug as the scraped product, '${product.slug}', but ` +
+          `the product image '${product.imageSrc}' differs from the scraped image, '${imageSrc}'!`,
+        { scrapedImageSrc: imageSrc, product },
+      );
+      updateData = { ...updateData, imageSrc };
+    }
+    if (this.data.status.value !== undefined && this.data.status.value !== product.status) {
+      updateData = { ...updateData, status: this.data.status.value };
+    }
+    if (this.data.price.value !== undefined && this.data.price.value !== product.price) {
+      updateData = { ...updateData, price: this.data.price.value };
+    }
+    if (!arraysHaveSameElements(this.subCategories, product.subCategories)) {
+      updateData = { ...updateData, subCategories: this.subCategories };
+    }
+    if (this.category !== product.category) {
+      updateData = { ...updateData, category: this.category };
+    }
+    return updateData;
+  }
+
+  public async createProduct(tx: Transaction, ctx: { user: User }) {
+    return await tx.product.create({
+      data: {
+        name: this.data.name.value ?? null,
+        code: this.data.code.value ?? null,
+        slug: this.slug,
+        status: this.data.status.value ?? null,
+        price: this.data.price.value ?? null,
+        imageSrc: this.data.imageSrc.value ?? null,
+        subCategories: this.subCategories,
+        category: this.category,
+        createdBy: { connect: { id: ctx.user.id } },
+        updatedBy: { connect: { id: ctx.user.id } },
+      },
+    });
+  }
+
+  public async syncProduct(tx: Transaction, product: Product, ctx: { user: User }) {
+    const updateData = this.compareToProduct(product);
+    if (Object.keys(updateData).length !== 0) {
+      const humanized = humanizeList(Object.keys(updateData), { formatter: v => `'${v}'` });
+      logger.info(
+        `Updating field(s) ${humanized} for product '${product.id}' (slug = '${product.slug}').`,
+        {
+          id: product.id,
+          slug: product.slug,
+          updateData,
+        },
+      );
+      return await tx.product.update({
+        where: { id: product.id },
+        data: {
+          ...updateData,
+          updatedById: ctx.user.id,
+        },
+      });
+    }
+    return product;
+  }
+
+  public async createProductRecord(
+    tx: Transaction,
+    product: Product,
+    ctx: { user: User },
+  ): Promise<ProductRecord> {
+    const errors = await this.persistErrors(tx);
+    return await tx.productRecord.create({
+      data: {
+        product: { connect: { id: product.id } },
+        createdBy: { connect: { id: ctx.user.id } },
+        updatedBy: { connect: { id: ctx.user.id } },
+        wasManuallyCreated: false,
+        price: this.data.price.value,
+        rawPrice: this.data.rawPrice.value,
+        status: this.data.status.value,
+        errors: {
+          createMany: {
+            data: errors.map(({ data, error, field }) => ({
+              errorId: data.id,
+              errorCode: error.errorCode,
+              message: error.message,
+              field,
+            })),
+          },
+        },
+      },
+    });
   }
 }

@@ -36,6 +36,8 @@
     "seeddb-prod": "pnpm validate-node-version && pnpm manual-prod-env-setup -- prisma db seed",
     "pullenv": "vercel env pull ./.env --environment=development",
     "pullenv-prod": "vercel env pull ./.env --environment=production",
+    "jsonify-fixtures": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/jsonify/index.ts --live && pnpm format-json-fixtures",
+    "format-json-fixtures": "npx prettier ./src/database/fixtures/json/*.json --write --ignore-path=./.prettierignore",
     "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape.ts"
   },
   "dependencies": {
@@ -138,6 +140,6 @@
   },
   "prisma": {
     "schema": "src/database/prisma/schema.prisma",
-    "seed": "npx tsx --tsconfig ./tsconfig.json src/scripts/seed.ts"
+    "seed": "npx tsx --tsconfig ./tsconfig.json src/scripts/seed/index.ts"
   }
 }

@@ -10,7 +10,7 @@ logger.level = LogLevel.INFO;
 
 async function main() {
   const { user } = await getScriptContext({ upsertUser: true });
-  await integration.updateProductRecords("hand-tools", { batchSize: 10, user });
+  await integration.updateProducts({ batchSize: 10, user });
 }
 
 main()
