@@ -33,6 +33,8 @@ export interface DataTableColumn<D extends DataTableDatum> {
   readonly align?: TableHeaderCellProps["align"];
   readonly accessor?: Exclude<keyof D, "id">;
   readonly width?: QuantitativeSize<"px">;
+  readonly minWidth?: QuantitativeSize<"px">;
+  readonly maxWidth?: QuantitativeSize<"px">;
   readonly skeleton?: ReactNode;
   readonly sortMethod?: (order: TableOrder, a: D, b: D) => number;
   readonly cellProps?: (datum: D) => Omit<TableBodyCellProps, "children">;

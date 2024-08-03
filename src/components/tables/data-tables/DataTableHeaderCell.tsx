@@ -26,10 +26,9 @@ export const DataTableHeaderCell = <
     align={column.align ?? "left"}
     isOrderable={column.isOrderable}
     order={order}
-    sx={[
-      ...(Array.isArray(column.props?.sx) ? column.props.sx : [column.props?.sx]),
-      { width: column.width },
-    ]}
+    width={column.width}
+    maxWidth={column.maxWidth}
+    minWidth={column.minWidth}
   >
     {column.label}
   </TableHeaderCell>

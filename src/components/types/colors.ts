@@ -27,9 +27,22 @@ export type TailwindPaletteColor =
   | "yellow"
   | "green"
   | "gray"
+  | "amber"
+  | "neutral"
+  | "stone"
+  | "slate"
+  | "zinc"
+  | "lime"
+  | "emerald"
+  | "teal"
+  | "sky"
   | "pink"
   | "orange"
-  | "indigo";
+  | "indigo"
+  | "violet"
+  | "fuchsia"
+  | "rose"
+  | "danger";
 
 export type TailwindDirectColor = "description" | "body" | "label" | "title" | "border" | "primary";
 

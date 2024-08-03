@@ -44,8 +44,8 @@ export const ProductSubCategories = enumeratedLiterals(
     {
       value: ProductSubCategory.HandPlanes,
       label: "Hand Planes",
-      badgeBgColorClassName: "bg-cyan-300",
-      badgeTextColorClassName: "text-cyan-800",
+      badgeBgColorClassName: "bg-rose-300",
+      badgeTextColorClassName: "text-rose-800",
     },
     {
       value: ProductSubCategory.Saws,
