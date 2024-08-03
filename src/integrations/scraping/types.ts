@@ -3,6 +3,8 @@ import { ElementType } from "htmlparser2";
 
 import type * as cheerio from "cheerio";
 
+import { type Prettify } from "~/lib/types";
+
 import { type ApiElement, type ApiSelector } from "./dom";
 import { type ScrapingDomError } from "./errors";
 
@@ -104,3 +106,14 @@ export type ScrapedModelFieldErrors<D extends BaseScrapedModelData> = Partial<{
 }>;
 
 export type ScrapedModelField<D extends BaseScrapedModelData> = keyof D & string;
+
+export type PartiallyValidData<
+  D extends BaseScrapedModelData,
+  F extends readonly ScrapedModelField<D>[],
+> = Prettify<
+  {
+    [key in Extract<keyof D, F[number]>]: D[key];
+  } & {
+    [key in Exclude<keyof D, F[number]>]?: D[key];
+  }
+>;

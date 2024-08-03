@@ -14,19 +14,22 @@ export class BaseScrapedModel<T extends ApiElement | types.DomApiType> {
 export abstract class ScrapedModel<
   T extends ApiElement | types.DomApiType,
   D extends types.BaseScrapedModelData,
+  F extends readonly types.ScrapedModelField<D>[],
   O extends Record<string, unknown> = Record<string, unknown>,
-  P extends ProcessedScrapedModel<D, O> = ProcessedScrapedModel<D, O>,
+  P extends ProcessedScrapedModel<D, O, F> = ProcessedScrapedModel<D, O, F>,
 > extends BaseScrapedModel<T> {
   private __data__: D;
+  private _strictFields: F;
   protected options: O;
 
   protected abstract fields: readonly types.ScrapedModelField<D>[];
-  protected abstract ProcessedCls: ProcessedScrapedModelCls<D, O, P>;
+  protected abstract ProcessedCls: ProcessedScrapedModelCls<D, O, P, F>;
 
-  constructor(root: T, data: D, options: O) {
+  constructor(root: T, data: D, strictFields: F, options: O) {
     super(root);
     this.__data__ = data;
     this.options = options;
+    this._strictFields = strictFields;
   }
 
   public process(): P {
@@ -42,39 +45,52 @@ export abstract class ScrapedModel<
         }
       }
     }
-    return new this.ProcessedCls({ data, fields: this.fields, options: this.options });
+    return new this.ProcessedCls({
+      data,
+      fields: this.fields,
+      options: this.options,
+      strictFields: this._strictFields,
+    });
   }
 }
 
 export interface ProcessedScrapedModelConfig<
   D extends types.BaseScrapedModelData,
   O extends Record<string, unknown>,
+  F extends readonly types.ScrapedModelField<D>[],
 > {
   readonly data: types.ScrapedModelData<D>;
   readonly fields: readonly types.ScrapedModelField<D>[];
   readonly options: O;
+  readonly strictFields: F;
 }
 
 interface ProcessedScrapedModelCls<
   D extends types.BaseScrapedModelData,
   O extends Record<string, unknown>,
-  I extends ProcessedScrapedModel<D, O>,
+  I extends ProcessedScrapedModel<D, O, F>,
+  F extends readonly types.ScrapedModelField<D>[],
 > {
-  new (config: ProcessedScrapedModelConfig<D, O>): I;
+  new (config: ProcessedScrapedModelConfig<D, O, F>): I;
 }
 
 export abstract class ProcessedScrapedModel<
   D extends types.BaseScrapedModelData,
   O extends Record<string, unknown>,
+  F extends readonly types.ScrapedModelField<D>[],
 > {
-  protected readonly _config: ProcessedScrapedModelConfig<D, O>;
+  protected readonly _config: ProcessedScrapedModelConfig<D, O, F>;
 
-  constructor(config: ProcessedScrapedModelConfig<D, O>) {
+  constructor(config: ProcessedScrapedModelConfig<D, O, F>) {
     this._config = config;
   }
 
   public get data() {
     return this._config.data;
+  }
+
+  private get strictFields() {
+    return this._config.strictFields;
   }
 
   public get errors(): types.ScrapedModelFieldErrors<D> {
@@ -95,6 +111,23 @@ export abstract class ProcessedScrapedModel<
     }, {} as D);
   }
 
+  public get partiallyValidatedData(): types.PartiallyValidData<D, F> {
+    if (!this.isPartiallyValid) {
+      throw new Error(
+        "Cannot access partially validated data when the model is partially invalid.",
+      );
+    }
+    return Object.entries(this.data).reduce(
+      (curr, [k, v]) => {
+        if (v.value !== undefined) {
+          return { ...curr, [k]: v.value };
+        }
+        return { ...curr, [k]: undefined };
+      },
+      {} as types.PartiallyValidData<D, F>,
+    );
+  }
+
   public get validatedData(): D {
     if (!this.isValid) {
       throw new Error("Cannot access validated data when the model is invalid.");
@@ -113,5 +146,9 @@ export abstract class ProcessedScrapedModel<
 
   public get isValid() {
     return Object.keys(this.errors).length === 0;
+  }
+
+  public get isPartiallyValid() {
+    return this.strictFields.every(f => this.data[f].value !== undefined);
   }
 }

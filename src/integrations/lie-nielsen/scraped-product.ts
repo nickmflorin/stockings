@@ -2,7 +2,6 @@ import { type Transaction } from "~/database";
 import {
   ProductStatus,
   type ProductRecord,
-  type ProductSubCategory,
   type Product,
   type User,
   ProductRecordDataField,
@@ -12,11 +11,6 @@ import { createScrapingErrorData } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import {
-  ProductsSubPages,
-  ProductsPages,
-  type ProductsSubPageId,
-} from "~/integrations/lie-nielsen/paths";
-import {
   type ScrapedModelField,
   type ScrapingDomError,
   type ParserResult,
@@ -25,35 +19,34 @@ import {
   ScrapedModel,
   BaseScrapedModel,
   ProcessedScrapedModel,
-  type ProcessedScrapedModelConfig,
 } from "~/integrations/scraping";
-import { replaceInArray, arraysHaveSameElements } from "~/lib/arrays";
+import { arraysHaveSameElements } from "~/lib/arrays";
 import { type DifferenceField, Differences } from "~/lib/differences";
 import { humanizeList } from "~/lib/formatters";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
 import { type ProcessedScrapedThumbnail } from "./scraped-thumbnail";
 
-const logExisting = (products: [ProcessedScrapedProduct, ProcessedScrapedProduct]) => {
-  const differences = Differences(
-    [products[0].unvalidatedData, products[1].unvalidatedData],
-    ["price", "rawPrice", "status"],
-  );
-  if (differences.hasDifferences) {
-    logger.warn(
-      `Encountered two products with the same slug, '${products[0].slug}', that have ` +
-        `differing data: ${differences.toString()}.`,
-      {
-        differences: differences.differences,
-        slug: products[0].slug,
-      },
-    );
-  } else {
-    logger.warn(`Encountered two identical products with the same slug, '${products[0].slug}'.`, {
-      slug: products[0].slug,
-    });
-  }
-};
+/* const logExisting = (products: [ProcessedScrapedProduct, ProcessedScrapedProduct]) => {
+     const differences = Differences(
+       [products[0].unvalidatedData, products[1].unvalidatedData],
+       ["price", "rawPrice", "status"],
+     );
+     if (differences.hasDifferences) {
+       logger.warn(
+         `Encountered two products with the same slug, '${products[0].slug}', that have ` +
+           `differing data: ${differences.toString()}.`,
+         {
+           differences: differences.differences,
+           slug: products[0].slug,
+         },
+       );
+     } else {
+       logger.warn(`Encountered two identical products with the same slug, '${products[0].slug}'.` {
+         slug: products[0].slug,
+       });
+     }
+   }; */
 
 export type ProductScrapedStatus = Exclude<ProductStatus, typeof ProductStatus.NOT_LISTED>;
 
@@ -190,15 +183,15 @@ class ScrapedProductData extends BaseScrapedModel<DomApiType> implements IScrape
 export class ScrapedProduct extends ScrapedModel<
   DomApiType,
   IScrapedProductData,
+  readonly [],
   ScrapedProductConfig,
   ProcessedScrapedProduct
 > {
   protected ProcessedCls = ProcessedScrapedProduct;
-  // protected comparisonFields = ["price", "rawPrice", "imageSrc", "code"] as const;
   protected fields = ["price", "rawPrice", "imageSrc", "name", "status", "code"] as const;
 
   constructor(root: DomApiType, config: ScrapedProductConfig) {
-    super(root, new ScrapedProductData(root), config);
+    super(root, new ScrapedProductData(root), [] as const, config);
   }
 
   public static processScrapedProducts(
@@ -213,30 +206,10 @@ export class ScrapedProduct extends ScrapedModel<
             processed.checkInconsistencies();
 
             const existing = p.find(pi => pi.slug === processed.slug);
+            /* This should not happen, because the thumbnails that are used to derive the scraped
+               products should be unique after they are processed. */
             if (existing) {
-              logExisting([existing, processed]);
-
-              if (processed.subPage) {
-                /* If the scraped product already exists in the previously processed set of
-                   products, but it has a sub-page that may potentially be different from the
-                   previously processed product's sub-page, we want to make sure we add the
-                   sub-categories for the new sub-page to the existing product. */
-                const cloned = existing.clone();
-                cloned.addSubCategory(processed.subPage);
-                const [replaced, _, newArray] = replaceInArray(
-                  p,
-                  { value: cloned },
-                  pi => pi.slug === processed.slug,
-                );
-                if (!replaced) {
-                  throw new Error(
-                    "The array replacement should have been made because the predicate was " +
-                      "already evaluated for its presence in the array.",
-                  );
-                }
-                return newArray;
-              }
-              return p;
+              throw new Error("Encountered duplicate products!");
             }
             return [...p, processed];
           },
@@ -249,35 +222,13 @@ export class ScrapedProduct extends ScrapedModel<
 
 export class ProcessedScrapedProduct extends ProcessedScrapedModel<
   IScrapedProductData,
-  ScrapedProductConfig
+  ScrapedProductConfig,
+  readonly []
 > {
-  private _subCategories: ProductSubCategory[] = [];
   protected recordComparisonFields = ["price", "status"] as const satisfies DifferenceField<
     ProductRecord,
     IScrapedProductData
   >[];
-
-  constructor({
-    __cloned_sub_categories__,
-    ...config
-  }: ProcessedScrapedModelConfig<IScrapedProductData, ScrapedProductConfig> & {
-    readonly __cloned_sub_categories__?: ProductSubCategory[];
-  }) {
-    super(config);
-    if (__cloned_sub_categories__ === undefined) {
-      const subCat = this.subPage ? ProductsSubPages.getModel(this.subPage).subCategory : null;
-      this._subCategories = subCat ? [subCat] : [];
-    } else {
-      this._subCategories = __cloned_sub_categories__;
-    }
-  }
-
-  public clone() {
-    return new ProcessedScrapedProduct({
-      ...this._config,
-      __cloned_sub_categories__: this.subCategories,
-    });
-  }
 
   public get thumbnail() {
     return this.options.thumbnail;
@@ -296,11 +247,11 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
   }
 
   public get category() {
-    return ProductsPages.getModel(this.page).category;
+    return this.thumbnail.category;
   }
 
   public get subCategories() {
-    return this._subCategories;
+    return this.thumbnail.subCategories;
   }
 
   public async persistErrors(tx: Transaction): Promise<PersistedError[]> {
@@ -322,13 +273,6 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
         return curr;
       }, [] as Promise<PersistedError>[]),
     );
-  }
-
-  public addSubCategory(subPage: ProductsSubPageId) {
-    const subCat = ProductsSubPages.getModel(subPage).subCategory;
-    if (subCat !== null && !this._subCategories.includes(subCat)) {
-      this._subCategories.push(subCat);
-    }
   }
 
   public checkInconsistencies() {

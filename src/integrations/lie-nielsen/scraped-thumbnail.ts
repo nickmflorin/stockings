@@ -1,6 +1,4 @@
-import type * as paths from "./paths";
-
-import { ElementAttribute, ProductCategory, type ProductSubCategory } from "~/database/model";
+import { ElementAttribute, type ProductSubCategory } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import {
@@ -11,8 +9,25 @@ import {
   ProcessedScrapedModel,
   type ProcessedScrapedModelConfig,
 } from "~/integrations/scraping";
+import { replaceInArray } from "~/lib/arrays";
+import { Differences } from "~/lib/differences";
 
-import { ProductsSubPages, ProductsPages } from "./paths";
+import {
+  type ProductsSubPageId,
+  ProductsSubPages,
+  ProductsPages,
+  type ProductsPageId,
+} from "./paths";
+
+const SCRAPED_THUMBNAIL_FIELDS = [
+  "path",
+  "slug",
+  "name",
+  "imageSrc",
+  "rawPrice",
+  "price",
+  "isComposite",
+] as const;
 
 const subPageMessage = (a: ProcessedScrapedThumbnail, b: ProcessedScrapedThumbnail): string => {
   if (a.subPage && b.subPage) {
@@ -36,21 +51,27 @@ const subPageMessage = (a: ProcessedScrapedThumbnail, b: ProcessedScrapedThumbna
 };
 
 const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbnail]) => {
-  if (thumbs[0].page !== thumbs[1].page || thumbs[0].data.slug !== thumbs[1].data.slug) {
+  // Note: This method assumes that both thumbnails were partially valid.
+  if (
+    thumbs[0].page !== thumbs[1].page ||
+    thumbs[0].partiallyValidatedData.slug !== thumbs[1].partiallyValidatedData.slug
+  ) {
     throw new TypeError(
       "Improper Method Usage: The thumbnails must not have differing slugs and/or pages to log.",
     );
   }
-  const differences = thumbs[0].compare(thumbs[1]);
+  const differences = Differences(
+    [thumbs[0].unvalidatedData, thumbs[1].unvalidatedData],
+    [...SCRAPED_THUMBNAIL_FIELDS].filter(f => f !== "slug" && f !== "isComposite"),
+  );
   if (differences.hasDifferences) {
     logger.warn(
-      `Encountered two thumbnails with the same slug, '${thumbs[0].data.slug}', that have ` +
-        `differing data: ${differences.toString()}.` +
+      `Encountered two thumbnails with the same slug, '${thumbs[0].partiallyValidatedData.slug}', ` +
+        `that have differing data: ${differences.toString()}.` +
         subPageMessage(thumbs[0], thumbs[1]),
       {
         differences: differences.differences,
-        slug: thumbs[0].data.slug,
-        // thumbnails: [thumbs[0], thumbs[1]],
+        slug: thumbs[0].partiallyValidatedData.slug,
         page: thumbs[0].page,
         subPages: [
           thumbs[0].subPage ?? "main product page",
@@ -60,11 +81,11 @@ const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbna
     );
   } else {
     logger.debug(
-      `Encountered two identical thumbnails with the same slug, '${thumbs[0].data.slug}'. ` +
+      "Encountered two identical thumbnails with the same slug, " +
+        `'${thumbs[0].partiallyValidatedData.slug}'. ` +
         subPageMessage(thumbs[0], thumbs[1]),
       {
-        slug: thumbs[0].data.slug,
-        // thumbnails: [thumbs[0], thumbs[1]],
+        slug: thumbs[0].partiallyValidatedData.slug,
         page: thumbs[0].page,
         subPages: [
           thumbs[0].subPage ?? "main product page",
@@ -75,9 +96,9 @@ const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbna
   }
 };
 
-export type ScrapedThumbnailConfig = {
-  readonly page: paths.ProductsPageId;
-  readonly subPage?: paths.ProductsSubPageId;
+export type ScrapedThumbnailOptions = {
+  readonly page: ProductsPageId;
+  readonly subPage?: ProductsSubPageId;
 };
 
 export type IScrapedThumbnailData = {
@@ -176,23 +197,16 @@ class ScrapedThumbnailData extends BaseScrapedModel<ApiElement> {
 export class ScrapedThumbnail extends ScrapedModel<
   ApiElement,
   IScrapedThumbnailData,
-  ScrapedThumbnailConfig,
+  readonly ["slug", "isComposite"],
+  ScrapedThumbnailOptions,
   ProcessedScrapedThumbnail
 > {
   protected ProcessedCls = ProcessedScrapedThumbnail;
 
-  protected fields = [
-    "path",
-    "slug",
-    "name",
-    "imageSrc",
-    "rawPrice",
-    "price",
-    "isComposite",
-  ] as const;
+  protected fields = SCRAPED_THUMBNAIL_FIELDS;
 
-  constructor(root: ApiElement, config: ScrapedThumbnailConfig) {
-    super(root, new ScrapedThumbnailData(root), config);
+  constructor(root: ApiElement, config: ScrapedThumbnailOptions) {
+    super(root, new ScrapedThumbnailData(root), ["slug", "isComposite"] as const, config);
   }
 
   public get page() {
@@ -213,42 +227,42 @@ export class ScrapedThumbnail extends ScrapedModel<
           (p: ProcessedScrapedThumbnail[], c: ScrapedThumbnail): ProcessedScrapedThumbnail[] => {
             const processed = c.process();
 
-            if (processed.unvalidatedData.slug !== undefined) {
-              if (processed.unvalidatedData.isComposite !== undefined) {
+            if (processed.isPartiallyValid) {
+              // TODO: Should we still combine the thumbnails, if one is a composite?
+              if (processed.partiallyValidatedData.isComposite === false) {
                 const existing = p.find(
-                  pi => pi.validatedData.slug === processed.validatedData.slug,
-                );
-              } else {
-                logger.warn(
-                  "Encountered thumbnail whose 'isComposite' value could not be parsed.  " +
-                    "The thumbnail cannot be processed.",
-                  { thumbnail: processed.data },
-                );
-              }
-            } else {
-              logger.warn(
-                "Encountered thumbnail whose 'slug' value could not be parsed.  " +
-                  "The thumbnail cannot be processed.",
-                { thumbnail: processed.data },
-              );
-            }
-
-            if (processed.isValid) {
-              if (!processed.validatedData.isComposite) {
-                const existing = p.find(
-                  pi => pi.validatedData.slug === processed.validatedData.slug,
+                  pi =>
+                    pi.isPartiallyValid &&
+                    pi.partiallyValidatedData.slug === processed.partiallyValidatedData.slug,
                 );
                 if (existing) {
-                  // logExisting([existing, processed]);
-                  return p;
+                  const newProcessed = existing.combine(processed);
+                  const [replaced, _, newArray] = replaceInArray(
+                    p,
+                    { value: newProcessed },
+                    pi =>
+                      pi.isPartiallyValid &&
+                      pi.partiallyValidatedData.slug === processed.partiallyValidatedData.slug,
+                  );
+                  if (!replaced) {
+                    throw new Error(
+                      "The array replacement should have been made because the predicate was " +
+                        "already evaluated for its presence in the array.",
+                    );
+                  }
+                  return newArray;
                 }
                 return [...p, processed];
               }
+              return p;
             } else {
-              // TODO: Improve this logic.
-              logger.warn("Encountered an invalid thumbnail.  Cannot process.");
+              logger.warn(
+                "Encountered thumbnail whose 'slug' and/or 'isComposite' value(s) could not be " +
+                  "parsed. The thumbnail cannot be processed.",
+                { thumbnail: processed.data },
+              );
+              return p;
             }
-            return p;
           },
           prev,
         ),
@@ -259,14 +273,19 @@ export class ScrapedThumbnail extends ScrapedModel<
 
 export class ProcessedScrapedThumbnail extends ProcessedScrapedModel<
   IScrapedThumbnailData,
-  ScrapedThumbnailConfig
+  ScrapedThumbnailOptions,
+  readonly ["slug", "isComposite"]
 > {
   private _subCategories: ProductSubCategory[] = [];
 
   constructor({
     __cloned_sub_categories__,
     ...config
-  }: ProcessedScrapedModelConfig<IScrapedThumbnailData, ScrapedThumbnailConfig> & {
+  }: ProcessedScrapedModelConfig<
+    IScrapedThumbnailData,
+    ScrapedThumbnailOptions,
+    readonly ["slug", "isComposite"]
+  > & {
     readonly __cloned_sub_categories__?: ProductSubCategory[];
   }) {
     super(config);
@@ -279,7 +298,15 @@ export class ProcessedScrapedThumbnail extends ProcessedScrapedModel<
   }
 
   public combine(other: ProcessedScrapedThumbnail) {
-    logExisting([existing, processed]);
+    logExisting([this, other]);
+    const cloned = this.clone();
+    if (other.subPage) {
+      cloned.addSubCategory(other.subPage);
+    }
+    return cloned;
+  }
+
+  public clone() {
     return new ProcessedScrapedThumbnail({
       ...this._config,
       __cloned_sub_categories__: this.subCategories,
