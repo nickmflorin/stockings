@@ -13,6 +13,8 @@ export const ProductJsonSchema = z.object({
   category: z.nativeEnum(ProductCategory),
   price: z.number().nullable().optional(),
   subCategories: z.array(z.nativeEnum(ProductSubCategory)).optional(),
+  priceRecordedAt: z.coerce.date().nullable().optional(),
+  statusRecordedAt: z.coerce.date().nullable().optional(),
 });
 
 export const JsonSchemas = {

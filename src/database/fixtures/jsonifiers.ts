@@ -1,4 +1,3 @@
-import { omit } from "lodash-es";
 import { type z } from "zod";
 
 import type * as types from "./types";
@@ -23,6 +22,6 @@ export const Jsonifiers: {
 } = {
   product: {
     data: async tx => await tx.product.findMany(),
-    jsonify: model => omit(cleanModel(model), "calculatedExperience"),
+    jsonify: model => cleanModel(model),
   },
 };

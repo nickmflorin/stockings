@@ -80,7 +80,7 @@ export abstract class ProcessedScrapedModel<
   public get errors(): types.ScrapedModelFieldErrors<D> {
     return Object.entries(this.data).reduce((curr, [k, v]) => {
       if (v.error) {
-        return { ...curr, [k]: v };
+        return { ...curr, [k]: v.error };
       }
       return curr;
     }, {} as types.ScrapedModelFieldErrors<D>);

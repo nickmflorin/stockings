@@ -1,6 +1,6 @@
 import type * as paths from "./paths";
 
-import { ElementAttribute } from "~/database/model";
+import { ElementAttribute, ProductCategory, type ProductSubCategory } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import {
@@ -9,7 +9,10 @@ import {
   ScrapedModel,
   BaseScrapedModel,
   ProcessedScrapedModel,
+  type ProcessedScrapedModelConfig,
 } from "~/integrations/scraping";
+
+import { ProductsSubPages, ProductsPages } from "./paths";
 
 const subPageMessage = (a: ProcessedScrapedThumbnail, b: ProcessedScrapedThumbnail): string => {
   if (a.subPage && b.subPage) {
@@ -32,45 +35,45 @@ const subPageMessage = (a: ProcessedScrapedThumbnail, b: ProcessedScrapedThumbna
   }
 };
 
-/* const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbnail]) => {
-     if (thumbs[0].page !== thumbs[1].page || thumbs[0].data.slug !== thumbs[1].data.slug) {
-       throw new TypeError(
-         "Improper Method Usage: The thumbnails must not have differing slugs and/or pages to log.",
-       );
-     }
-     const differences = thumbs[0].compare(thumbs[1]);
-     if (differences.hasDifferences) {
-       logger.warn(
-         `Encountered two thumbnails with the same slug, '${thumbs[0].data.slug}', that have ` +
-           `differing data: ${differences.toString()}.` +
-           subPageMessage(thumbs[0], thumbs[1]),
-         {
-           differences: differences.differences,
-           slug: thumbs[0].data.slug,
-           // thumbnails: [thumbs[0], thumbs[1]],
-           page: thumbs[0].page,
-           subPages: [
-             thumbs[0].subPage ?? "main product page",
-             thumbs[1].subPage ?? "main product page",
-           ],
-         },
-       );
-     } else {
-       logger.debug(
-         `Encountered two identical thumbnails with the same slug, '${thumbs[0].data.slug}'. ` +
-           subPageMessage(thumbs[0], thumbs[1]),
-         {
-           slug: thumbs[0].data.slug,
-           // thumbnails: [thumbs[0], thumbs[1]],
-           page: thumbs[0].page,
-           subPages: [
-             thumbs[0].subPage ?? "main product page",
-             thumbs[1].subPage ?? "main product page",
-           ],
-         },
-       );
-     }
-   }; */
+const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbnail]) => {
+  if (thumbs[0].page !== thumbs[1].page || thumbs[0].data.slug !== thumbs[1].data.slug) {
+    throw new TypeError(
+      "Improper Method Usage: The thumbnails must not have differing slugs and/or pages to log.",
+    );
+  }
+  const differences = thumbs[0].compare(thumbs[1]);
+  if (differences.hasDifferences) {
+    logger.warn(
+      `Encountered two thumbnails with the same slug, '${thumbs[0].data.slug}', that have ` +
+        `differing data: ${differences.toString()}.` +
+        subPageMessage(thumbs[0], thumbs[1]),
+      {
+        differences: differences.differences,
+        slug: thumbs[0].data.slug,
+        // thumbnails: [thumbs[0], thumbs[1]],
+        page: thumbs[0].page,
+        subPages: [
+          thumbs[0].subPage ?? "main product page",
+          thumbs[1].subPage ?? "main product page",
+        ],
+      },
+    );
+  } else {
+    logger.debug(
+      `Encountered two identical thumbnails with the same slug, '${thumbs[0].data.slug}'. ` +
+        subPageMessage(thumbs[0], thumbs[1]),
+      {
+        slug: thumbs[0].data.slug,
+        // thumbnails: [thumbs[0], thumbs[1]],
+        page: thumbs[0].page,
+        subPages: [
+          thumbs[0].subPage ?? "main product page",
+          thumbs[1].subPage ?? "main product page",
+        ],
+      },
+    );
+  }
+};
 
 export type ScrapedThumbnailConfig = {
   readonly page: paths.ProductsPageId;
@@ -209,6 +212,27 @@ export class ScrapedThumbnail extends ScrapedModel<
         curr.reduce(
           (p: ProcessedScrapedThumbnail[], c: ScrapedThumbnail): ProcessedScrapedThumbnail[] => {
             const processed = c.process();
+
+            if (processed.unvalidatedData.slug !== undefined) {
+              if (processed.unvalidatedData.isComposite !== undefined) {
+                const existing = p.find(
+                  pi => pi.validatedData.slug === processed.validatedData.slug,
+                );
+              } else {
+                logger.warn(
+                  "Encountered thumbnail whose 'isComposite' value could not be parsed.  " +
+                    "The thumbnail cannot be processed.",
+                  { thumbnail: processed.data },
+                );
+              }
+            } else {
+              logger.warn(
+                "Encountered thumbnail whose 'slug' value could not be parsed.  " +
+                  "The thumbnail cannot be processed.",
+                { thumbnail: processed.data },
+              );
+            }
+
             if (processed.isValid) {
               if (!processed.validatedData.isComposite) {
                 const existing = p.find(
@@ -237,11 +261,51 @@ export class ProcessedScrapedThumbnail extends ProcessedScrapedModel<
   IScrapedThumbnailData,
   ScrapedThumbnailConfig
 > {
+  private _subCategories: ProductSubCategory[] = [];
+
+  constructor({
+    __cloned_sub_categories__,
+    ...config
+  }: ProcessedScrapedModelConfig<IScrapedThumbnailData, ScrapedThumbnailConfig> & {
+    readonly __cloned_sub_categories__?: ProductSubCategory[];
+  }) {
+    super(config);
+    if (__cloned_sub_categories__ === undefined) {
+      const subCat = this.subPage ? ProductsSubPages.getModel(this.subPage).subCategory : null;
+      this._subCategories = subCat ? [subCat] : [];
+    } else {
+      this._subCategories = __cloned_sub_categories__;
+    }
+  }
+
+  public combine(other: ProcessedScrapedThumbnail) {
+    logExisting([existing, processed]);
+    return new ProcessedScrapedThumbnail({
+      ...this._config,
+      __cloned_sub_categories__: this.subCategories,
+    });
+  }
+
   public get page() {
     return this.options.page;
   }
 
   public get subPage() {
     return this.options.subPage;
+  }
+
+  public get category() {
+    return ProductsPages.getModel(this.page).category;
+  }
+
+  public get subCategories() {
+    return this._subCategories;
+  }
+
+  public addSubCategory(subPage: ProductsSubPageId) {
+    const subCat = ProductsSubPages.getModel(subPage).subCategory;
+    if (subCat !== null && !this._subCategories.includes(subCat)) {
+      this._subCategories.push(subCat);
+    }
   }
 }

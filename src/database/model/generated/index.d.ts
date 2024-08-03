@@ -13691,7 +13691,9 @@ export namespace Prisma {
     code: string | null
     imageSrc: string | null
     status: $Enums.ProductStatus | null
+    statusRecordedAt: Date | null
     price: number | null
+    priceRecordedAt: Date | null
     category: $Enums.ProductCategory | null
   }
 
@@ -13706,7 +13708,9 @@ export namespace Prisma {
     code: string | null
     imageSrc: string | null
     status: $Enums.ProductStatus | null
+    statusRecordedAt: Date | null
     price: number | null
+    priceRecordedAt: Date | null
     category: $Enums.ProductCategory | null
   }
 
@@ -13721,7 +13725,9 @@ export namespace Prisma {
     code: number
     imageSrc: number
     status: number
+    statusRecordedAt: number
     price: number
+    priceRecordedAt: number
     category: number
     subCategories: number
     _all: number
@@ -13747,7 +13753,9 @@ export namespace Prisma {
     code?: true
     imageSrc?: true
     status?: true
+    statusRecordedAt?: true
     price?: true
+    priceRecordedAt?: true
     category?: true
   }
 
@@ -13762,7 +13770,9 @@ export namespace Prisma {
     code?: true
     imageSrc?: true
     status?: true
+    statusRecordedAt?: true
     price?: true
+    priceRecordedAt?: true
     category?: true
   }
 
@@ -13777,7 +13787,9 @@ export namespace Prisma {
     code?: true
     imageSrc?: true
     status?: true
+    statusRecordedAt?: true
     price?: true
+    priceRecordedAt?: true
     category?: true
     subCategories?: true
     _all?: true
@@ -13880,7 +13892,9 @@ export namespace Prisma {
     code: string | null
     imageSrc: string | null
     status: $Enums.ProductStatus | null
+    statusRecordedAt: Date | null
     price: number | null
+    priceRecordedAt: Date | null
     category: $Enums.ProductCategory
     subCategories: $Enums.ProductSubCategory[]
     _count: ProductCountAggregateOutputType | null
@@ -13915,7 +13929,9 @@ export namespace Prisma {
     code?: boolean
     imageSrc?: boolean
     status?: boolean
+    statusRecordedAt?: boolean
     price?: boolean
+    priceRecordedAt?: boolean
     category?: boolean
     subCategories?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -13935,7 +13951,9 @@ export namespace Prisma {
     code?: boolean
     imageSrc?: boolean
     status?: boolean
+    statusRecordedAt?: boolean
     price?: boolean
+    priceRecordedAt?: boolean
     category?: boolean
     subCategories?: boolean
   }
@@ -13966,7 +13984,9 @@ export namespace Prisma {
       code: string | null
       imageSrc: string | null
       status: $Enums.ProductStatus | null
+      statusRecordedAt: Date | null
       price: number | null
+      priceRecordedAt: Date | null
       category: $Enums.ProductCategory
       subCategories: $Enums.ProductSubCategory[]
     }, ExtArgs["result"]["product"]>
@@ -14378,7 +14398,9 @@ export namespace Prisma {
     readonly code: FieldRef<"Product", 'String'>
     readonly imageSrc: FieldRef<"Product", 'String'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
+    readonly statusRecordedAt: FieldRef<"Product", 'DateTime'>
     readonly price: FieldRef<"Product", 'Float'>
+    readonly priceRecordedAt: FieldRef<"Product", 'DateTime'>
     readonly category: FieldRef<"Product", 'ProductCategory'>
     readonly subCategories: FieldRef<"Product", 'ProductSubCategory[]'>
   }
@@ -14884,7 +14906,9 @@ export namespace Prisma {
     code: 'code',
     imageSrc: 'imageSrc',
     status: 'status',
+    statusRecordedAt: 'statusRecordedAt',
     price: 'price',
+    priceRecordedAt: 'priceRecordedAt',
     category: 'category',
     subCategories: 'subCategories'
   };
@@ -15727,7 +15751,9 @@ export namespace Prisma {
     code?: StringNullableFilter<"Product"> | string | null
     imageSrc?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusNullableFilter<"Product"> | $Enums.ProductStatus | null
+    statusRecordedAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+    priceRecordedAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
     subCategories?: EnumProductSubCategoryNullableListFilter<"Product">
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
@@ -15746,7 +15772,9 @@ export namespace Prisma {
     code?: SortOrderInput | SortOrder
     imageSrc?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
+    statusRecordedAt?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    priceRecordedAt?: SortOrderInput | SortOrder
     category?: SortOrder
     subCategories?: SortOrder
     createdBy?: UserOrderByWithRelationInput
@@ -15768,7 +15796,9 @@ export namespace Prisma {
     code?: StringNullableFilter<"Product"> | string | null
     imageSrc?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusNullableFilter<"Product"> | $Enums.ProductStatus | null
+    statusRecordedAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+    priceRecordedAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
     subCategories?: EnumProductSubCategoryNullableListFilter<"Product">
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
@@ -15787,7 +15817,9 @@ export namespace Prisma {
     code?: SortOrderInput | SortOrder
     imageSrc?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
+    statusRecordedAt?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    priceRecordedAt?: SortOrderInput | SortOrder
     category?: SortOrder
     subCategories?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -15811,7 +15843,9 @@ export namespace Prisma {
     code?: StringNullableWithAggregatesFilter<"Product"> | string | null
     imageSrc?: StringNullableWithAggregatesFilter<"Product"> | string | null
     status?: EnumProductStatusNullableWithAggregatesFilter<"Product"> | $Enums.ProductStatus | null
+    statusRecordedAt?: DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
     price?: FloatNullableWithAggregatesFilter<"Product"> | number | null
+    priceRecordedAt?: DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
     category?: EnumProductCategoryWithAggregatesFilter<"Product"> | $Enums.ProductCategory
     subCategories?: EnumProductSubCategoryNullableListFilter<"Product">
   }
@@ -16478,7 +16512,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
@@ -16497,7 +16533,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     records?: ProductRecordUncheckedCreateNestedManyWithoutProductInput
@@ -16512,7 +16550,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
@@ -16531,7 +16571,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     records?: ProductRecordUncheckedUpdateManyWithoutProductNestedInput
@@ -16548,7 +16590,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -16562,7 +16606,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -16578,7 +16624,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -17181,6 +17229,17 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type EnumProductCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductCategory | EnumProductCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.ProductCategory[] | ListEnumProductCategoryFieldRefInput<$PrismaModel>
@@ -17207,7 +17266,9 @@ export namespace Prisma {
     code?: SortOrder
     imageSrc?: SortOrder
     status?: SortOrder
+    statusRecordedAt?: SortOrder
     price?: SortOrder
+    priceRecordedAt?: SortOrder
     category?: SortOrder
     subCategories?: SortOrder
   }
@@ -17227,7 +17288,9 @@ export namespace Prisma {
     code?: SortOrder
     imageSrc?: SortOrder
     status?: SortOrder
+    statusRecordedAt?: SortOrder
     price?: SortOrder
+    priceRecordedAt?: SortOrder
     category?: SortOrder
   }
 
@@ -17242,12 +17305,28 @@ export namespace Prisma {
     code?: SortOrder
     imageSrc?: SortOrder
     status?: SortOrder
+    statusRecordedAt?: SortOrder
     price?: SortOrder
+    priceRecordedAt?: SortOrder
     category?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
     price?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumProductCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -17613,6 +17692,10 @@ export namespace Prisma {
     connect?: ProductRecordWhereUniqueInput | ProductRecordWhereUniqueInput[]
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type EnumProductCategoryFieldUpdateOperationsInput = {
     set?: $Enums.ProductCategory
   }
@@ -17935,11 +18018,36 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumProductCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductCategory | EnumProductCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.ProductCategory[] | ListEnumProductCategoryFieldRefInput<$PrismaModel>
     notIn?: $Enums.ProductCategory[] | ListEnumProductCategoryFieldRefInput<$PrismaModel>
     not?: NestedEnumProductCategoryFilter<$PrismaModel> | $Enums.ProductCategory
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumProductCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -17961,7 +18069,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     updatedBy: UserCreateNestedOneWithoutUpdatedProductsInput
@@ -17978,7 +18088,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     records?: ProductRecordUncheckedCreateNestedManyWithoutProductInput
@@ -18003,7 +18115,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
@@ -18020,7 +18134,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     records?: ProductRecordUncheckedCreateNestedManyWithoutProductInput
@@ -18142,7 +18258,9 @@ export namespace Prisma {
     code?: StringNullableFilter<"Product"> | string | null
     imageSrc?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusNullableFilter<"Product"> | $Enums.ProductStatus | null
+    statusRecordedAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+    priceRecordedAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
     subCategories?: EnumProductSubCategoryNullableListFilter<"Product">
   }
@@ -18359,7 +18477,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
     createdBy: UserCreateNestedOneWithoutCreatedProductsInput
@@ -18377,7 +18497,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -18511,7 +18633,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
@@ -18529,7 +18653,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -18770,7 +18896,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -18785,7 +18913,9 @@ export namespace Prisma {
     code?: string | null
     imageSrc?: string | null
     status?: $Enums.ProductStatus | null
+    statusRecordedAt?: Date | string | null
     price?: number | null
+    priceRecordedAt?: Date | string | null
     category: $Enums.ProductCategory
     subCategories?: ProductCreatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -18825,7 +18955,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductsNestedInput
@@ -18842,7 +18974,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     records?: ProductRecordUncheckedUpdateManyWithoutProductNestedInput
@@ -18858,7 +18992,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
@@ -18872,7 +19008,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     createdBy?: UserUpdateOneRequiredWithoutCreatedProductsNestedInput
@@ -18889,7 +19027,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
     records?: ProductRecordUncheckedUpdateManyWithoutProductNestedInput
@@ -18905,7 +19045,9 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
+    statusRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceRecordedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     subCategories?: ProductUpdatesubCategoriesInput | $Enums.ProductSubCategory[]
   }
