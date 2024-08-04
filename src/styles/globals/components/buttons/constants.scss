@@ -4,10 +4,10 @@ $button-outline-offset: -$button-outline-width;
 $button-state-names: ("hovered", "focused", "disabled", "active");
 
 $button-default-font-family: theme("fontFamily.body");
-$button-default-border-radius: theme("borderRadius.full");
+$button-default-border-radius: theme("borderRadius.sm");
 $button-default-font-weight: theme("fontWeight.medium");
 
-$button-schemes: ("primary", "light", "danger", "success");
+$button-schemes: ("primary", "light", "danger", "success", "secondary");
 $button-variants: ("solid", "outlined", "transparent");
 
 $button-default-scheme: "primary";

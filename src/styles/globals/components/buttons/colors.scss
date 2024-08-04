@@ -25,6 +25,32 @@ $button-solid-colors: (
       outline-color: theme("colors.disabled-border"),
     ),
   ),
+  "secondary": (
+    background-color: theme("colors.gray.200"),
+    color: theme("colors.gray.700"),
+    outline-color: theme("colors.gray.200"),
+    hovered: (
+      background-color: theme("colors.gray.300"),
+      outline-color: theme("colors.gray.300"),
+      active: (
+        outline-color: theme("colors.gray.500"),
+      ),
+    ),
+    focused: (
+      background-color: theme("colors.gray.300"),
+      outline-color: theme("colors.gray.300"),
+      active: (
+        outline-color: theme("colors.gray.500"),
+      ),
+    ),
+    active: (
+      outline-color: theme("colors.gray.500"),
+    ),
+    disabled: (
+      background-color: theme("colors.disabled-background"),
+      outline-color: theme("colors.disabled-border"),
+    ),
+  ),
   "success": (
     background-color: theme("colors.green.500"),
     color: theme("colors.white"),
@@ -90,6 +116,23 @@ $button-outlined-colors: (
     focused: (
       color: theme("colors.blue.800"),
       outline-color: theme("colors.blue.800"),
+    ),
+    disabled: (
+      color: theme("colors.disabled"),
+      outline-color: theme("colors.disabled-border"),
+    ),
+  ),
+  "secondary": (
+    outline-color: theme("colors.gray.700"),
+    background-color: theme("colors.white"),
+    color: theme("colors.gray.700"),
+    hovered: (
+      color: theme("colors.gray.800"),
+      outline-color: theme("colors.gray.800"),
+    ),
+    focused: (
+      color: theme("colors.gray.800"),
+      outline-color: theme("colors.gray.800"),
     ),
     disabled: (
       color: theme("colors.disabled"),
@@ -168,6 +211,22 @@ $button-transparent-colors: (
       color: theme("colors.disabled"),
     ),
   ),
+  "secondary": (
+    outline-color: theme("colors.transparent"),
+    background-color: theme("colors.transparent"),
+    color: theme("colors.gray.700"),
+    hovered: (
+      color: theme("colors.gray.800"),
+      background-color: theme("colors.gray.50"),
+    ),
+    focused: (
+      color: theme("colors.gray.800"),
+      background-color: theme("colors.gray.50"),
+    ),
+    disabled: (
+      color: theme("colors.disabled"),
+    ),
+  ),
   "danger": (
     outline-color: theme("colors.transparent"),
     background-color: theme("colors.transparent"),
@@ -227,6 +286,19 @@ $link-colors: (
     ),
     focused: (
       color: theme("colors.blue.800"),
+    ),
+    disabled: (
+      color: theme("colors.disabled"),
+    ),
+  ),
+  "secondary": (
+    background-color: theme("colors.transparent"),
+    color: theme("colors.gray.700"),
+    hovered: (
+      color: theme("colors.gray.800"),
+    ),
+    focused: (
+      color: theme("colors.gray.800"),
     ),
     disabled: (
       color: theme("colors.disabled"),

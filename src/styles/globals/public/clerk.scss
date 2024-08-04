@@ -1,0 +1,104 @@
+@use "partials";
+
+@use "../components/typography" as typography;
+// @use "../components/buttons" as buttons;
+
+@mixin auth-page($auth-name) {
+  .cl-#{$auth-name}-root {
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .cl-#{$auth-name}-start {
+      box-shadow: none;
+      max-height: 800px;
+    }
+  }
+}
+
+@include auth-page(signUp);
+
+@include auth-page(signIn);
+
+h1.cl-headerTitle {
+  @include typography.font("title", $size: "md");
+}
+
+h2.cl-headerTitle {
+  @include typography.font("title", $size: "md");
+}
+
+h3.cl-headerTitle {
+  @include typography.font("title", $size: "md");
+}
+
+h4.cl-headerTitle {
+  @include typography.font("title", $size: "sm");
+}
+
+h5.cl-headerTitle {
+  @include typography.font("title", $size: "xs");
+}
+
+h6.cl-headerTitle {
+  @include typography.font("title", $size: "xxs");
+}
+
+button.cl-formButtonPrimary {
+  // @include buttons.button("button", $variant: "primary", $size: "small");
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button.cl-socialButtonsBlockButton__google {
+  // @include buttons.button("button", $variant: "secondary", $size: "medium");
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.cl-userButtonPopoverCard {
+  @include partials.border-radius(theme("borderRadius.md"));
+
+  .cl-userButtonPopoverActions {
+    .cl-userButtonPopoverActionButton {
+      padding: 0.875rem 12px;
+    }
+  }
+
+  // This contains the "Powered by Clerk" watermark.
+  .cl-userButtonPopoverFooter {
+    display: none;
+  }
+}
+
+.cl-userButtonTrigger {
+  > .cl-avatarBox {
+    height: 36px;
+    width: auto;
+    aspect-ratio: 1;
+  }
+}
+
+.cl-signIn-start {
+  .cl-footer {
+    // Hides the Sign Up link.
+    display: none;
+
+    & + * {
+      // Changes the color of the Powered By Clerk tag.  Note: We could remove that with a
+      // display: none;, but we don't want to get in trouble - since we do not have a paid
+      // subscription.
+      background-color: theme("colors.blue.800");
+    }
+  }
+}
+
+.cl-formFieldInputShowPasswordButton {
+  // These styles override our internal styles on button elements that are not applicable here.
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}

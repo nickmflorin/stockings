@@ -130,6 +130,7 @@ model ProductRecord {
   timestamp             DateTime                 @default(now())
   createdBy             User                     @relation("createdProductRecords", fields: [createdById], references: [id])
   createdById           String                   @db.Uuid
+  createdAt             DateTime                 @default(now())
   updatedBy             User                     @relation("updatedProductRecords", fields: [updatedById], references: [id])
   updatedById           String                   @db.Uuid
   updatedAt             DateTime                 @updatedAt

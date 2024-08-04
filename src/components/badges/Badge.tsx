@@ -2,7 +2,7 @@ import React, { type ReactNode } from "react";
 
 import clsx from "clsx";
 
-import { IconButton } from "~/components/buttons/generic";
+import { IconButton } from "~/components/buttons";
 import { type IconProp, type IconName, isIconProp } from "~/components/icons";
 import { Icon } from "~/components/icons/Icon";
 import {

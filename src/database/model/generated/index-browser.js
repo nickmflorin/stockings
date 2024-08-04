@@ -188,6 +188,7 @@ exports.Prisma.ProductRecordScalarFieldEnum = {
   id: 'id',
   timestamp: 'timestamp',
   createdById: 'createdById',
+  createdAt: 'createdAt',
   updatedById: 'updatedById',
   updatedAt: 'updatedAt',
   productId: 'productId',

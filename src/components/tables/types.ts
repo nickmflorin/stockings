@@ -24,8 +24,8 @@ export interface DataTableDatum {
   [key: string]: unknown;
 }
 
-export interface DataTableColumn<D extends DataTableDatum> {
-  readonly id: string;
+export interface DataTableColumnConfig<D extends DataTableDatum, I extends string = string> {
+  readonly id: I;
   readonly icon?: IconProp | IconName;
   readonly label?: string;
   readonly isOrderable?: boolean;
@@ -37,21 +37,48 @@ export interface DataTableColumn<D extends DataTableDatum> {
   readonly maxWidth?: QuantitativeSize<"px">;
   readonly skeleton?: ReactNode;
   readonly sortMethod?: (order: TableOrder, a: D, b: D) => number;
+}
+
+export interface DataTableColumn<
+  D extends DataTableDatum,
+  I extends string = string,
+  // C extends DataTableColumnConfig<D, I> = DataTableColumnConfig<D, I>,
+> {
+  readonly id: I;
+  readonly config: DataTableColumnConfig<D, I>;
   readonly cellProps?: (datum: D) => Omit<TableBodyCellProps, "children">;
   readonly cellRenderer?: (datum: D) => ReactNode;
 }
+
+type ColumnProperties<
+  D extends DataTableDatum,
+  I extends string,
+  // C extends DataTableColumnConfig<D, I>,
+> = Partial<{
+  [key in I]: Pick<DataTableColumn<D, I>, "cellProps" | "cellRenderer">;
+}>;
+
+export const convertConfigsToColumns = <
+  D extends DataTableDatum,
+  I extends string,
+  // C extends DataTableColumnConfig<D, I>,
+>(
+  configs: DataTableColumnConfig<D, I>[],
+  properties: ColumnProperties<D, I>,
+): DataTableColumn<D, I>[] =>
+  configs.map(
+    (config): DataTableColumn<D, I> => ({
+      id: config.id,
+      config,
+      cellProps: properties[config.id]?.cellProps,
+      cellRenderer: properties[config.id]?.cellRenderer,
+    }),
+  );
 
 export type TableOrder = "asc" | "desc";
 
 // Right now, we are only supporting single column ordering.
 export type TableOrdering<I extends string> = { field: I; order: TableOrder };
-
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export type DataTableField<C extends DataTableColumn<any>> = C extends {
-  readonly field: infer I extends string;
-}
-  ? I
-  : never;
 
 export type DataTableOptions<D extends DataTableDatum> = {
   readonly getRowId?: (datum: D) => string | number;

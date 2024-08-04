@@ -7,10 +7,8 @@ import { type QuantitativeSize, type ClassName } from "~/components/types";
 import { DataTableBody } from "./DataTableBody";
 import { type DataTableWrapperProps, DataTableWrapper } from "./DataTableWrapper";
 
-export interface DataTableProps<
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D> = types.DataTableColumn<D>,
-> extends Omit<DataTableWrapperProps<D, C>, "children" | "onSort"> {
+export interface DataTableProps<D extends types.DataTableDatum, I extends string = string>
+  extends Omit<DataTableWrapperProps<D, I>, "children" | "onSort" | "columns"> {
   readonly data: D[];
   readonly loadingIndicator?: types.TableLoadingIndicator;
   readonly rowHoveredClassName?: ClassName;
@@ -21,16 +19,17 @@ export interface DataTableProps<
   readonly emptyState?: ReactNode;
   readonly numSkeletonRows?: number;
   readonly skeletonRowHeight?: QuantitativeSize<"px">;
+  readonly columns: types.DataTableColumn<D, I>[];
   readonly getRowId?: (datum: D) => string;
   readonly onRowClick?: (id: string, datum: D) => void;
   readonly onSort?: (
     event: React.MouseEvent<unknown>,
-    col: C,
-    ordering: types.TableOrdering<types.DataTableField<C>> | null,
+    col: types.DataTableColumnConfig<D, I>,
+    ordering: types.TableOrdering<I> | null,
   ) => void;
 }
 
-export const DataTable = <D extends types.DataTableDatum, C extends types.DataTableColumn<D>>({
+export const DataTable = <D extends types.DataTableDatum, I extends string>({
   data,
   rowHoveredClassName,
   highlightRowOnHover,
@@ -45,23 +44,23 @@ export const DataTable = <D extends types.DataTableDatum, C extends types.DataTa
   getRowId,
   onRowClick,
   ...props
-}: DataTableProps<D, C>): JSX.Element => {
-  const [_ordering, setOrdering, applyOrderingUpdate] = useTableOrdering<types.DataTableField<C>>();
+}: DataTableProps<D, I>): JSX.Element => {
+  const [_ordering, setOrdering, applyOrderingUpdate] = useTableOrdering<I>();
   const ordering = propOrdering === undefined ? _ordering : propOrdering;
 
   return (
-    <DataTableWrapper<D, C>
+    <DataTableWrapper<D, I>
       {...props}
       onSort={(e, col) => {
         // Update the internal ordering state.
-        setOrdering({ field: col.id as types.DataTableField<C> });
+        setOrdering({ field: col.id });
         const updatedOrdering = applyOrderingUpdate(ordering, {
-          field: col.id as types.DataTableField<C>,
+          field: col.id,
         });
         props.onSort?.(e, col, updatedOrdering);
       }}
     >
-      <DataTableBody<D, C>
+      <DataTableBody<D, I>
         isEmpty={isEmpty}
         emptyState={emptyState}
         data={data}

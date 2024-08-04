@@ -12,13 +12,11 @@ import { type ClassName, type QuantitativeSize } from "~/components/types";
 import { DataTableBodyRow } from "./DataTableBodyRow";
 import { getDatumId } from "./util";
 
-export interface DataTableBodyProps<
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D> = types.DataTableColumn<D>,
-> extends Omit<TableBodyProps, "cellSkeletons" | "numSkeletonColumns" | "children"> {
+export interface DataTableBodyProps<D extends types.DataTableDatum, I extends string = string>
+  extends Omit<TableBodyProps, "cellSkeletons" | "numSkeletonColumns" | "children"> {
   readonly data: D[];
-  readonly columns: C[];
-  readonly ordering?: types.TableOrdering<types.DataTableField<C>> | null;
+  readonly columns: types.DataTableColumn<D, I>[];
+  readonly ordering?: types.TableOrdering<I> | null;
   readonly rowHoveredClassName?: ClassName;
   readonly highlightRowOnHover?: boolean;
   readonly scrollable?: boolean;
@@ -27,7 +25,7 @@ export interface DataTableBodyProps<
   readonly onRowClick?: (id: string, datum: D) => void;
 }
 
-export const DataTableBody = <D extends types.DataTableDatum, C extends types.DataTableColumn<D>>({
+export const DataTableBody = <D extends types.DataTableDatum, I extends string>({
   data,
   rowHoveredClassName,
   highlightRowOnHover,
@@ -37,7 +35,7 @@ export const DataTableBody = <D extends types.DataTableDatum, C extends types.Da
   getRowId,
   onRowClick,
   ...props
-}: DataTableBodyProps<D, C>): JSX.Element => {
+}: DataTableBodyProps<D, I>): JSX.Element => {
   const processedData = useMemo(() => {
     if (ordering) {
       const col = columns.find(c => c.id === ordering.field);
@@ -48,7 +46,7 @@ export const DataTableBody = <D extends types.DataTableDatum, C extends types.Da
         );
         return data;
       }
-      const sortMethod = col.sortMethod;
+      const sortMethod = col.config.sortMethod;
       if (sortMethod) {
         return data.sort((a, b) => sortMethod(ordering.order, a, b));
       }
@@ -61,13 +59,13 @@ export const DataTableBody = <D extends types.DataTableDatum, C extends types.Da
       {...props}
       skeletonRowHeight={props.skeletonRowHeight ?? rowHeight}
       cellSkeletons={columns.map(
-        ({ skeleton }, i) => skeleton ?? <Skeleton key={i} variant="text" />,
+        ({ config: { skeleton } }, i) => skeleton ?? <Skeleton key={i} variant="text" />,
       )}
     >
       {processedData.map((datum, index) => {
         const rowId = getDatumId(datum, { index, getRowId });
         return (
-          <DataTableBodyRow<D, C>
+          <DataTableBodyRow<D, I>
             datum={datum}
             columns={columns}
             key={rowId}

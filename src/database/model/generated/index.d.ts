@@ -12632,6 +12632,7 @@ export namespace Prisma {
     id: string | null
     timestamp: Date | null
     createdById: string | null
+    createdAt: Date | null
     updatedById: string | null
     updatedAt: Date | null
     productId: string | null
@@ -12645,6 +12646,7 @@ export namespace Prisma {
     id: string | null
     timestamp: Date | null
     createdById: string | null
+    createdAt: Date | null
     updatedById: string | null
     updatedAt: Date | null
     productId: string | null
@@ -12658,6 +12660,7 @@ export namespace Prisma {
     id: number
     timestamp: number
     createdById: number
+    createdAt: number
     updatedById: number
     updatedAt: number
     productId: number
@@ -12682,6 +12685,7 @@ export namespace Prisma {
     id?: true
     timestamp?: true
     createdById?: true
+    createdAt?: true
     updatedById?: true
     updatedAt?: true
     productId?: true
@@ -12695,6 +12699,7 @@ export namespace Prisma {
     id?: true
     timestamp?: true
     createdById?: true
+    createdAt?: true
     updatedById?: true
     updatedAt?: true
     productId?: true
@@ -12708,6 +12713,7 @@ export namespace Prisma {
     id?: true
     timestamp?: true
     createdById?: true
+    createdAt?: true
     updatedById?: true
     updatedAt?: true
     productId?: true
@@ -12809,6 +12815,7 @@ export namespace Prisma {
     id: string
     timestamp: Date
     createdById: string
+    createdAt: Date
     updatedById: string
     updatedAt: Date
     productId: string
@@ -12842,6 +12849,7 @@ export namespace Prisma {
     id?: boolean
     timestamp?: boolean
     createdById?: boolean
+    createdAt?: boolean
     updatedById?: boolean
     updatedAt?: boolean
     productId?: boolean
@@ -12861,6 +12869,7 @@ export namespace Prisma {
     id?: boolean
     timestamp?: boolean
     createdById?: boolean
+    createdAt?: boolean
     updatedById?: boolean
     updatedAt?: boolean
     productId?: boolean
@@ -12892,6 +12901,7 @@ export namespace Prisma {
       id: string
       timestamp: Date
       createdById: string
+      createdAt: Date
       updatedById: string
       updatedAt: Date
       productId: string
@@ -13304,6 +13314,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductRecord", 'String'>
     readonly timestamp: FieldRef<"ProductRecord", 'DateTime'>
     readonly createdById: FieldRef<"ProductRecord", 'String'>
+    readonly createdAt: FieldRef<"ProductRecord", 'DateTime'>
     readonly updatedById: FieldRef<"ProductRecord", 'String'>
     readonly updatedAt: FieldRef<"ProductRecord", 'DateTime'>
     readonly productId: FieldRef<"ProductRecord", 'String'>
@@ -14882,6 +14893,7 @@ export namespace Prisma {
     id: 'id',
     timestamp: 'timestamp',
     createdById: 'createdById',
+    createdAt: 'createdAt',
     updatedById: 'updatedById',
     updatedAt: 'updatedAt',
     productId: 'productId',
@@ -15648,6 +15660,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductRecord"> | string
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     createdById?: UuidFilter<"ProductRecord"> | string
+    createdAt?: DateTimeFilter<"ProductRecord"> | Date | string
     updatedById?: UuidFilter<"ProductRecord"> | string
     updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
@@ -15666,6 +15679,7 @@ export namespace Prisma {
     id?: SortOrder
     timestamp?: SortOrder
     createdById?: SortOrder
+    createdAt?: SortOrder
     updatedById?: SortOrder
     updatedAt?: SortOrder
     productId?: SortOrder
@@ -15687,6 +15701,7 @@ export namespace Prisma {
     NOT?: ProductRecordWhereInput | ProductRecordWhereInput[]
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     createdById?: UuidFilter<"ProductRecord"> | string
+    createdAt?: DateTimeFilter<"ProductRecord"> | Date | string
     updatedById?: UuidFilter<"ProductRecord"> | string
     updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
@@ -15705,6 +15720,7 @@ export namespace Prisma {
     id?: SortOrder
     timestamp?: SortOrder
     createdById?: SortOrder
+    createdAt?: SortOrder
     updatedById?: SortOrder
     updatedAt?: SortOrder
     productId?: SortOrder
@@ -15727,6 +15743,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ProductRecord"> | string
     timestamp?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
     createdById?: UuidWithAggregatesFilter<"ProductRecord"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
     updatedById?: UuidWithAggregatesFilter<"ProductRecord"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
     productId?: UuidWithAggregatesFilter<"ProductRecord"> | string
@@ -16407,6 +16424,7 @@ export namespace Prisma {
   export type ProductRecordCreateInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedAt?: Date | string
     price?: number | null
     rawPrice?: string | null
@@ -16423,6 +16441,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     productId: string
@@ -16437,6 +16456,7 @@ export namespace Prisma {
   export type ProductRecordUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16453,6 +16473,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -16468,6 +16489,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     productId: string
@@ -16481,6 +16503,7 @@ export namespace Prisma {
   export type ProductRecordUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16493,6 +16516,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -17151,6 +17175,7 @@ export namespace Prisma {
     id?: SortOrder
     timestamp?: SortOrder
     createdById?: SortOrder
+    createdAt?: SortOrder
     updatedById?: SortOrder
     updatedAt?: SortOrder
     productId?: SortOrder
@@ -17169,6 +17194,7 @@ export namespace Prisma {
     id?: SortOrder
     timestamp?: SortOrder
     createdById?: SortOrder
+    createdAt?: SortOrder
     updatedById?: SortOrder
     updatedAt?: SortOrder
     productId?: SortOrder
@@ -17182,6 +17208,7 @@ export namespace Prisma {
     id?: SortOrder
     timestamp?: SortOrder
     createdById?: SortOrder
+    createdAt?: SortOrder
     updatedById?: SortOrder
     updatedAt?: SortOrder
     productId?: SortOrder
@@ -18155,6 +18182,7 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutCreatedByInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedAt?: Date | string
     price?: number | null
     rawPrice?: string | null
@@ -18169,6 +18197,7 @@ export namespace Prisma {
   export type ProductRecordUncheckedCreateWithoutCreatedByInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     productId: string
@@ -18193,6 +18222,7 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutUpdatedByInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedAt?: Date | string
     price?: number | null
     rawPrice?: string | null
@@ -18208,6 +18238,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedAt?: Date | string
     productId: string
     price?: number | null
@@ -18304,6 +18335,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductRecord"> | string
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     createdById?: UuidFilter<"ProductRecord"> | string
+    createdAt?: DateTimeFilter<"ProductRecord"> | Date | string
     updatedById?: UuidFilter<"ProductRecord"> | string
     updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
@@ -18333,6 +18365,7 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutErrorsInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedAt?: Date | string
     price?: number | null
     rawPrice?: string | null
@@ -18348,6 +18381,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     productId: string
@@ -18377,6 +18411,7 @@ export namespace Prisma {
   export type ProductRecordUpdateWithoutErrorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18392,6 +18427,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -18757,6 +18793,7 @@ export namespace Prisma {
   export type ProductRecordCreateWithoutProductInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedAt?: Date | string
     price?: number | null
     rawPrice?: string | null
@@ -18772,6 +18809,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     price?: number | null
@@ -18923,6 +18961,7 @@ export namespace Prisma {
   export type ProductRecordCreateManyCreatedByInput = {
     id?: string
     timestamp?: Date | string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     productId: string
@@ -18937,6 +18976,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedAt?: Date | string
     productId: string
     price?: number | null
@@ -19055,6 +19095,7 @@ export namespace Prisma {
   export type ProductRecordUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19069,6 +19110,7 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -19083,6 +19125,7 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateManyWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -19096,6 +19139,7 @@ export namespace Prisma {
   export type ProductRecordUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19111,6 +19155,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -19125,6 +19170,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -19170,6 +19216,7 @@ export namespace Prisma {
     id?: string
     timestamp?: Date | string
     createdById: string
+    createdAt?: Date | string
     updatedById: string
     updatedAt?: Date | string
     price?: number | null
@@ -19182,6 +19229,7 @@ export namespace Prisma {
   export type ProductRecordUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19197,6 +19245,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -19211,6 +19260,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null

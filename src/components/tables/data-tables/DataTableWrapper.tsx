@@ -6,31 +6,31 @@ import { type QuantitativeSize } from "~/components/types";
 
 import { DataTableHeaderRow } from "./DataTableHeaderRow";
 
-export type DataTableWrapperProps<
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D> = types.DataTableColumn<D>,
-> = Omit<TableProps, "children"> & {
-  readonly ordering?: types.TableOrdering<types.DataTableField<C>> | null;
+export type DataTableWrapperProps<D extends types.DataTableDatum, I extends string = string> = Omit<
+  TableProps,
+  "children"
+> & {
+  readonly ordering?: types.TableOrdering<I> | null;
   readonly headerHeight?: QuantitativeSize<"px">;
-  readonly columns: C[];
+  readonly columns: types.DataTableColumnConfig<D, I>[];
   readonly children: ReactNode;
-  readonly onSort?: (event: React.MouseEvent<unknown>, col: C) => void;
+  readonly onSort?: (
+    event: React.MouseEvent<unknown>,
+    col: types.DataTableColumnConfig<D, I>,
+  ) => void;
 };
 
-export const DataTableWrapper = <
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D>,
->({
+export const DataTableWrapper = <D extends types.DataTableDatum, I extends string>({
   ordering,
   headerHeight,
   children,
   columns,
   onSort,
   ...props
-}: DataTableWrapperProps<D, C>): JSX.Element => (
+}: DataTableWrapperProps<D, I>): JSX.Element => (
   <Table {...props} stickyHeader>
     <Table.Head>
-      <DataTableHeaderRow<D, C>
+      <DataTableHeaderRow<D, I>
         columns={columns}
         ordering={ordering}
         height={headerHeight}

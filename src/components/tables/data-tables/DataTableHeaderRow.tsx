@@ -4,27 +4,25 @@ import type * as types from "~/components/tables/types";
 
 import { DataTableHeaderCell } from "./DataTableHeaderCell";
 
-export interface DataTableHeaderRowProps<
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D> = types.DataTableColumn<D>,
-> extends Omit<TableHeaderRowProps, "children"> {
-  readonly columns: C[];
-  readonly ordering?: types.TableOrdering<types.DataTableField<C>> | null;
-  readonly onSort?: (event: React.MouseEvent<unknown>, col: C) => void;
+export interface DataTableHeaderRowProps<D extends types.DataTableDatum, I extends string = string>
+  extends Omit<TableHeaderRowProps, "children"> {
+  readonly columns: types.DataTableColumnConfig<D, I>[];
+  readonly ordering?: types.TableOrdering<I> | null;
+  readonly onSort?: (
+    event: React.MouseEvent<unknown>,
+    col: types.DataTableColumnConfig<D, I>,
+  ) => void;
 }
 
-export const DataTableHeaderRow = <
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D>,
->({
+export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends string>({
   columns,
   ordering,
   onSort,
   ...props
-}: DataTableHeaderRowProps<D, C>): JSX.Element => (
+}: DataTableHeaderRowProps<D, I>): JSX.Element => (
   <Table.HeaderRow {...props}>
     {columns.map(column => (
-      <DataTableHeaderCell<D, C>
+      <DataTableHeaderCell<D, I>
         key={column.id}
         column={column}
         order={ordering?.field === column.id ? ordering.order : null}

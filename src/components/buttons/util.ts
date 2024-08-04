@@ -133,3 +133,9 @@ export const getButtonStyle = <
         minHeight: sizeToString(props.size, "px"),
       }
     : props.style;
+
+export type ButtonClassNameStyleProps<
+  T extends types.ButtonType,
+  E extends types.ButtonElement,
+  P extends types.ButtonComponentProps<E>,
+> = Pick<types.AbstractProps<T, E, P>, ButtonStylePropName | ButtonClassNamePropName>;

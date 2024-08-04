@@ -1,6 +1,6 @@
 import { forwardRef, type ReactNode } from "react";
 
-import { IconButton } from "~/components/buttons/generic";
+import { IconButton } from "~/components/buttons";
 import { type IconProp, type IconName } from "~/components/icons";
 import { CaretIcon } from "~/components/icons/CaretIcon";
 import { Icon } from "~/components/icons/Icon";

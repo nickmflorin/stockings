@@ -1,7 +1,7 @@
 const ModuleGroups = [
   ["database", "environment", "application", "support", "internal"],
   ["integrations", "lib"],
-  ["app", "actions"],
+  ["app", "actions", "events"],
   ["components", "features", "hooks", "styles"],
 ];
 

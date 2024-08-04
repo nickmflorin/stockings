@@ -6,6 +6,11 @@ import { Loading } from "~/components/loading/Loading";
 import { CookiesProvider } from "./CookiesProvider";
 import ClientConfig from "./ClientConfig";
 
+import "@mantine/core/styles.layer.css";
+import "@mantine/dates/styles.css";
+
+import "~/styles/globals/index.scss"; // Import this last.
+
 export interface AppConfigProps {
   readonly children: ReactNode;
 }

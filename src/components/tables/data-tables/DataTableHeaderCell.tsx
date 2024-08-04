@@ -4,22 +4,17 @@ import {
 } from "~/components/tables/generic/TableHeaderCell";
 import type * as types from "~/components/tables/types";
 
-export interface DataTableHeaderCellProps<
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D> = types.DataTableColumn<D>,
-> extends Omit<TableHeaderCellProps, "ordering" | "icon" | "id" | "isOrderable" | "children"> {
-  readonly column: C;
+export interface DataTableHeaderCellProps<D extends types.DataTableDatum, I extends string = string>
+  extends Omit<TableHeaderCellProps, "ordering" | "icon" | "id" | "isOrderable" | "children"> {
+  readonly column: types.DataTableColumnConfig<D, I>;
   readonly order?: types.TableOrder | null;
 }
 
-export const DataTableHeaderCell = <
-  D extends types.DataTableDatum,
-  C extends types.DataTableColumn<D>,
->({
+export const DataTableHeaderCell = <D extends types.DataTableDatum, I extends string>({
   order,
   column,
   ...props
-}: DataTableHeaderCellProps<D, C>): JSX.Element => (
+}: DataTableHeaderCellProps<D, I>): JSX.Element => (
   <TableHeaderCell
     {...props}
     {...column.props}

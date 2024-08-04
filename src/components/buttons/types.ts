@@ -21,7 +21,7 @@ export const ButtonTypes = enumeratedLiterals(
 export type ButtonType = EnumeratedLiteralsType<typeof ButtonTypes>;
 
 export const ButtonColorSchemes = enumeratedLiterals(
-  ["primary", "danger", "light", "success"] as const,
+  ["primary", "danger", "light", "success", "secondary"] as const,
   {},
 );
 export type ButtonColorScheme = EnumeratedLiteralsType<typeof ButtonColorSchemes>;

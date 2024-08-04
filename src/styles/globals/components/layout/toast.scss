@@ -6,6 +6,7 @@
   left: 0;
   width: 100vw;
   margin-left: constants.$layout-nav-width;
+  z-index: -1;
 
   .toast-container {
     min-width: 300px;
