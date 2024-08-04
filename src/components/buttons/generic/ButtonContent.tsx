@@ -1,6 +1,5 @@
 import { type ReactNode } from "react";
 
-import clsx from "clsx";
 import { type Required } from "utility-types";
 
 import * as types from "~/components/buttons";
@@ -8,6 +7,7 @@ import { toIconSize } from "~/components/buttons/util";
 import { isIconProp, type IconProp, type IconName } from "~/components/icons";
 import { Icon } from "~/components/icons/Icon";
 import { Spinner } from "~/components/icons/Spinner";
+import { classNames } from "~/components/types";
 import {
   type ComponentProps,
   type Size,
@@ -59,7 +59,7 @@ const RenderOrSpinner = ({
       <Spinner
         size={spinnerSize ?? toIconSize(iconSize)}
         isLoading={true}
-        className={clsx(iconClassName, spinnerClassName)}
+        className={classNames(iconClassName, spinnerClassName)}
       />
     );
   }
@@ -95,7 +95,7 @@ const ContentIcon = ({
     fit="square"
     dimension="height"
     size={toIconSize(iconSize)}
-    loadingClassName={clsx(iconClassName, spinnerClassName)}
+    loadingClassName={className(iconClassName, spinnerClassName)}
     className={iconClassName}
   />
 );
@@ -142,7 +142,7 @@ export const ButtonContent = ({
   return (
     <div
       {...props}
-      className={clsx("button__content", props.className)}
+      className={className("button__content", props.className)}
       style={{ ...props.style, gap: gap !== undefined ? sizeToString(gap, "px") : undefined }}
     >
       {leftIcon && isIconProp(leftIcon) ? (
@@ -153,7 +153,7 @@ export const ButtonContent = ({
         </RenderOrSpinner>
       )}
       <div
-        className={clsx("button__sub-content", {
+        className={className("button__sub-content", {
           "opacity-0": isLoading && loadingLocation === "over",
         })}
       >
@@ -161,7 +161,7 @@ export const ButtonContent = ({
       </div>
       <Spinner
         size={spinnerSize ?? toIconSize(iconSize)}
-        className={clsx("absolute mx-auto", iconClassName, spinnerClassName)}
+        className={className("absolute mx-auto", iconClassName, spinnerClassName)}
         isLoading={isLoading && loadingLocation === "over"}
       />
       {rightIcon && isIconProp(rightIcon) ? (

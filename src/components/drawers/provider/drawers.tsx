@@ -3,7 +3,7 @@ import React from "react";
 
 import { Loading } from "~/components/loading/Loading";
 
-import { DrawerIds } from "../types";
+import { DrawerIds, type DrawerId } from "../types";
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export const Drawer = <D extends DrawerId, C extends React.ComponentType<any>>(

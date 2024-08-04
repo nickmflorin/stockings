@@ -28,7 +28,7 @@ export const Pagination = <P extends types.PaginationParams>({
     count={
       pagination.count
         ? Math.ceil(pagination.count / Math.max(pagination.pageSize, 1))
-        : pagination.numPages ?? 1
+        : (pagination.numPages ?? 1)
     }
     onChange={(e, page) => {
       let params: types.PaginationChangeParams<P>;

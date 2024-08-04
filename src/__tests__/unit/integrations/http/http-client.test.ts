@@ -1,6 +1,7 @@
 import {
   HttpNetworkError,
   HttpClientError,
+  HttpSerializationError,
   HttpClient,
   type HttpMethod,
   STATUS_CODES,
@@ -59,6 +60,8 @@ describe("HTTP Client properly functions", () => {
   const client = new HttpClient({
     NetworkErrorClass: HttpNetworkError,
     ClientErrorClass: HttpClientError,
+    SerializationErrorClass: HttpSerializationError,
+    processor: async response => ({ data: await response.json() }),
   });
 
   describe("GET request properly returns", () => {
@@ -85,7 +88,7 @@ describe("HTTP Client properly functions", () => {
     it("properly returns successful raw response when not strict", async () => {
       mockFetchResponse(MOCK);
       // Here, the response is the raw Response object.
-      const { response } = await client.get("/api/bills/5/", {}, { json: false });
+      const { response } = await client.get("/api/bills/5/", {}, { processed: false });
       expect(response).toBeDefined();
       expect(response?.url).toBe(URL);
     });
@@ -99,7 +102,7 @@ describe("HTTP Client properly functions", () => {
     it("properly returns successful raw response when strict", async () => {
       mockFetchResponse(MOCK);
       // Here, the response is the raw Response object.
-      const response = await client.get("/api/bills/", {}, { json: false, strict: true });
+      const response = await client.get("/api/bills/", {}, { processed: false, strict: true });
       expect(response).toBeDefined();
       expect(response?.url).toBe(URL);
     });
@@ -158,7 +161,11 @@ describe("HTTP Client properly functions", () => {
     it("properly returns successful raw response when not strict", async () => {
       mockFetchResponse(MOCK);
       // Here, the response is the raw Response object.
-      const { response } = await client.post("/api/bills/", { name: "Bill A" }, { json: false });
+      const { response } = await client.post(
+        "/api/bills/",
+        { name: "Bill A" },
+        { processed: false },
+      );
       expect(response).toBeDefined();
       expect(response?.url).toBe(URL);
     });
@@ -175,7 +182,7 @@ describe("HTTP Client properly functions", () => {
       const response = await client.post(
         "/api/bills/",
         { name: "Bill A" },
-        { json: false, strict: true },
+        { processed: false, strict: true },
       );
       expect(response).toBeDefined();
       expect(response?.url).toBe(URL);
@@ -238,7 +245,11 @@ describe("HTTP Client properly functions", () => {
     it("properly returns successful raw response when not strict", async () => {
       mockFetchResponse(MOCK);
       // Here, the response is the raw Response object.
-      const { response } = await client.patch("/api/bills/5/", { name: "Bill A" }, { json: false });
+      const { response } = await client.patch(
+        "/api/bills/5/",
+        { name: "Bill A" },
+        { processed: false },
+      );
       expect(response).toBeDefined();
       expect(response?.url).toBe(URL);
     });
@@ -255,7 +266,7 @@ describe("HTTP Client properly functions", () => {
       const response = await client.patch(
         "/api/bills/5/",
         { name: "Bill A" },
-        { json: false, strict: true },
+        { processed: false, strict: true },
       );
       expect(response).toBeDefined();
       expect(response?.url).toBe(URL);
@@ -306,7 +317,7 @@ describe("HTTP Client properly functions", () => {
 
     it("properly returns successful response when not strict", async () => {
       mockFetchResponse(MOCK);
-      const result = await client.delete("/api/bills/5/", { json: true });
+      const result = await client.delete("/api/bills/5/", { processed: true });
       expect(result).toStrictEqual({
         response: { data: { id: "5", name: "Bill A", description: "Bill Description" } },
         meta: {
@@ -325,7 +336,7 @@ describe("HTTP Client properly functions", () => {
     });
     it("properly returns successful response when strict", async () => {
       mockFetchResponse(MOCK);
-      const result = await client.delete("/api/bills/5/", { strict: true, json: true });
+      const result = await client.delete("/api/bills/5/", { strict: true, processed: true });
       expect(result).toStrictEqual({
         data: { id: "5", name: "Bill A", description: "Bill Description" },
       });

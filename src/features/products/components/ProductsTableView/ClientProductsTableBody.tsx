@@ -1,4 +1,6 @@
 "use client";
+import dynamic from "next/dynamic";
+
 import { type Product } from "~/database/model";
 
 import { ProductCategoryBadge } from "~/components/badges/ProductCategoryBadge";
@@ -11,6 +13,8 @@ import { CurrencyText } from "~/components/typography/CurrencyText";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 
 import { Columns } from "./columns";
+
+const SubscribeCell = dynamic(() => import("./cells/SubscribeCell"));
 
 export interface ClientProductsTableBodyProps {
   readonly data: Product[];
@@ -74,6 +78,11 @@ export const ClientProductsTableBody = ({ data }: ClientProductsTableBodyProps):
               ))}
             </div>
           );
+        },
+      },
+      subscribe: {
+        cellRenderer(datum) {
+          return <SubscribeCell product={datum} />;
         },
       },
     })}

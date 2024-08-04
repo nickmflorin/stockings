@@ -1,15 +1,10 @@
-import { enumeratedLiterals } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
 
 import type { DrawerDynamicProps } from "./provider/drawers";
 
 export const DrawerIds = enumeratedLiterals(["modify-product-subscription"] as const, {});
 
-// Used for event mapping of drawers in the events.d.ts file.
-export type TypeOfDrawerIds = typeof DrawerIds;
-
-export type DrawerIdPropsPair<I extends DrawerId = DrawerId> = I extends DrawerId
-  ? { id: I; props: DrawerDynamicProps<I> }
-  : never;
+export type DrawerId = EnumeratedLiteralsType<typeof DrawerIds>;
 
 export interface DrawersManager {
   readonly isReady: boolean;
@@ -21,13 +16,3 @@ export interface DrawersManager {
 export interface ExtendingDrawerProps {
   readonly onClose: () => void;
 }
-
-export interface ClientDrawerProps<D extends DrawerId> {
-  readonly id: D;
-  readonly props: DrawerDynamicProps<D>;
-  readonly push?: boolean;
-}
-
-export type ClientDrawerComponent = {
-  <D extends DrawerId>(props: ClientDrawerProps<D>): JSX.Element;
-};

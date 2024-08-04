@@ -95,7 +95,10 @@ export class HttpSerializationError extends HttpClientError {
   }
 }
 
-export type HttpError = HttpNetworkError | HttpClientError;
+export type HttpError = HttpNetworkError | HttpClientError | HttpSerializationError;
 
 export const isHttpError = (e: unknown): e is HttpError =>
-  isError(e) && (e instanceof HttpNetworkError || e instanceof HttpClientError);
+  isError(e) &&
+  (e instanceof HttpNetworkError ||
+    e instanceof HttpClientError ||
+    e instanceof HttpSerializationError);

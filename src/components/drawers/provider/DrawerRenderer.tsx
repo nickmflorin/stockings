@@ -1,3 +1,5 @@
+import { type DrawerId } from "~/components/drawers/types";
+
 import { DrawerContainer } from "../DrawerContainer";
 
 import { type DrawerDynamicProps } from "./drawers";
@@ -5,8 +7,8 @@ import { getDrawerComponent } from "./drawers";
 
 interface DrawerRendererProps<D extends DrawerId> {
   readonly id: D;
-  readonly onClose: () => void;
   readonly props: DrawerDynamicProps<D>;
+  readonly onClose: () => void;
 }
 
 export const DrawerRenderer = <D extends DrawerId>({

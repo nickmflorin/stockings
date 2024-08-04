@@ -1,8 +1,7 @@
-import clsx from "clsx";
-
 import { Popover, type PopoverProps } from "~/components/floating/Popover";
 import { PopoverContent } from "~/components/floating/PopoverContent";
 import type { ComponentProps } from "~/components/types";
+import { classNames } from "~/components/types";
 
 export interface DropdownMenuProps
   extends Pick<
@@ -42,7 +41,7 @@ export const DropdownMenu = ({
     content={
       <PopoverContent
         style={contentStyle}
-        className={clsx("p-[0px] rounded-md overflow-hidden", contentClassName)}
+        className={classNames("p-[0px] rounded-md overflow-hidden", contentClassName)}
       >
         {content}
       </PopoverContent>

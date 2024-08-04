@@ -17,7 +17,7 @@ export const withLintConfig = (__dirname: string, config: ModuleConfig) =>
     testMatch: [
       `${__dirname}/**/*`,
       "!**/__snapshots__/**",
-      `!${__dirname}/src/prisma/model/generated/**`,
+      `!${__dirname}/src/database/model/generated/**`,
       ...(config.testMatch || []),
     ],
   });

@@ -168,7 +168,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
             <DataSelectInput<M, O>
               {...params}
               {...props}
-              getBadgeIcon={showIconsInChips ? getModelIcon ?? getBadgeIcon : undefined}
+              getBadgeIcon={showIconsInChips ? (getModelIcon ?? getBadgeIcon) : undefined}
               isDisabled={props.isDisabled || managed.modelValue === types.NOTSET}
               options={options}
               value={value}

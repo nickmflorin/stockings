@@ -1,6 +1,5 @@
-import clsx from "clsx";
-
 import { type IconProps } from "~/components/icons/types";
+import { classNames } from "~/components/types";
 
 import { getNativeIconStyle, type DynamicIconClassNamePropName } from "./util";
 
@@ -10,7 +9,10 @@ export const NativeIcon = (
     "style" | "className" | DynamicIconClassNamePropName
   >,
 ) => (
-  <i className={clsx(props.className)} style={{ ...props.style, ...getNativeIconStyle(props) }}>
+  <i
+    className={classNames(props.className)}
+    style={{ ...props.style, ...getNativeIconStyle(props) }}
+  >
     {props.children}
   </i>
 );

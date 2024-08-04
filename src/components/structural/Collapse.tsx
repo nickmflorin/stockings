@@ -6,7 +6,7 @@ import { CaretIcon } from "~/components/icons/CaretIcon";
 import { Actions, type Action } from "~/components/structural/Actions";
 import type { ClassName, ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
-import { Typography, type TypographyProps } from "~/components/typography/Typography";
+import { Text, type TextProps } from "~/components/typography";
 
 export interface CollapseProps extends ComponentProps {
   readonly isOpen?: boolean;
@@ -19,7 +19,7 @@ export interface CollapseProps extends ComponentProps {
   readonly openClassName?: ClassName;
   readonly closedClassName?: ClassName;
   readonly headerClassName?: ClassName;
-  readonly titleProps?: Omit<TypographyProps, "children">;
+  readonly titleProps?: Omit<TextProps<"div">, "children" | "ref">;
   readonly onOpenChange?: (isOpen: boolean) => void;
 }
 
@@ -62,7 +62,7 @@ export const Collapse = ({
         }}
       >
         <div className="collapse__title">
-          {typeof title === "string" ? <Typography {...titleProps}>{title}</Typography> : title}
+          {typeof title === "string" ? <Text {...titleProps}>{title}</Text> : title}
         </div>
         <div className="collapse__affixes">
           <Actions actions={typeof actions === "function" ? actions({ isOpen }) : actions} />

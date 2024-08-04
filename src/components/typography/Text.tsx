@@ -1,6 +1,5 @@
 import React, { forwardRef, type ForwardedRef } from "react";
 
-import clsx from "clsx";
 import { isFragment } from "react-is";
 
 import {
@@ -8,6 +7,7 @@ import {
   type HTMLElementProps,
   type TypographyCharacteristics,
   getTypographyClassName,
+  classNames,
 } from "~/components/types";
 
 export type TextComponent = "span" | "div" | "p";
@@ -59,7 +59,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps<TextComponent>>(
     }
     const ps = {
       ...props,
-      className: clsx(
+      className: classNames(
         "text",
         { "text--inherit": inherit, ["flex flex-row items-center"]: flex },
         getTypographyClassName({

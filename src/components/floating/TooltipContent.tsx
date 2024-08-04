@@ -1,7 +1,6 @@
 import { forwardRef } from "react";
 
-import clsx from "clsx";
-
+import { classNames } from "~/components/types";
 import { Text } from "~/components/typography/Text";
 
 import { PopoverContent, type PopoverContentProps } from "./PopoverContent";
@@ -17,7 +16,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     }: TooltipContentProps,
     ref,
   ) => (
-    <PopoverContent {...props} ref={ref} className={clsx(className)}>
+    <PopoverContent {...props} ref={ref} className={classNames(className)}>
       {typeof children === "string" ? (
         <Text inherit className="whitespace-nowrap">
           {children}

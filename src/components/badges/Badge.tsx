@@ -1,7 +1,5 @@
 import React, { type ReactNode } from "react";
 
-import clsx from "clsx";
-
 import { IconButton } from "~/components/buttons";
 import { type IconProp, type IconName, isIconProp } from "~/components/icons";
 import { Icon } from "~/components/icons/Icon";
@@ -46,7 +44,7 @@ export const Badge = ({
 }: BadgeProps): JSX.Element => (
   <div
     {...props}
-    className={clsx(
+    className={classNames(
       "badge",
       `badge--size-${size}`,
       radius ? `badge--radius-${radius}` : "",

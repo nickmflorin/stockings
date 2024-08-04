@@ -2,12 +2,11 @@
 import Link, { type LinkProps } from "next/link";
 import { forwardRef } from "react";
 
-import clsx from "clsx";
-
 import type * as types from "./types";
 
 import { Tooltip } from "~/components/floating/Tooltip";
 import { type ILayoutNavItem } from "~/components/layout/types";
+import { classNames } from "~/components/types";
 import { useNavigatable } from "~/hooks";
 
 import { IconButton, type IconButtonProps } from "./generic";
@@ -31,7 +30,7 @@ export const LayoutNavAnchor = forwardRef<
           component={Link}
           isLoading={isPending}
           onClick={() => setActiveOptimistically()}
-          className={clsx("z-0", props.className)}
+          className={classNames("z-0", props.className)}
           ref={instance => {
             ref(instance);
             if (typeof forwardedRef === "function") {

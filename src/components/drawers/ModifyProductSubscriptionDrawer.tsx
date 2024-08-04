@@ -1,3 +1,3 @@
-export const ModifyProductSubscriptionDrawer = () => <></>;
+export const ModifyProductSubscriptionDrawer = () => <>Test</>;
 
 export default ModifyProductSubscriptionDrawer;

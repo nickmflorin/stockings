@@ -32,4 +32,8 @@ export const Columns: DataTableColumnConfig<Product>[] = [
     label: "Sub Categories",
     isOrderable: true,
   },
+  {
+    id: "subscribe",
+    label: "",
+  },
 ];

@@ -1,8 +1,7 @@
 import React, { type ForwardedRef, forwardRef } from "react";
 
-import clsx from "clsx";
-
 import { PopoverContent, type PopoverContentProps } from "~/components/floating/PopoverContent";
+import { classNames } from "~/components/types";
 
 export interface SelectPopoverContentProps extends Omit<PopoverContentProps, "children" | "ref"> {
   readonly children: JSX.Element;
@@ -15,7 +14,7 @@ export const SelectPopoverContent = forwardRef<HTMLDivElement, SelectPopoverCont
     <PopoverContent
       {...props}
       ref={ref}
-      className={clsx("p-0 border-none overflow-hidden", props.className)}
+      className={classNames("p-0 border-none overflow-hidden", props.className)}
     >
       {children}
     </PopoverContent>
