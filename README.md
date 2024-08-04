@@ -36,7 +36,7 @@ Windows/Ubuntu machine as well, but the steps will not be exactly as they are de
 Clone this repository locally and `cd` into the directory.
 
 ```bash
-$ git clone git@github.com:nickmflorin/stockings.git
+$ git clone git@github.com:nickmflorin/tooltrack.git
 ```
 
 ### 1.2: Installing System Requirements
