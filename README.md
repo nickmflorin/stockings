@@ -1,8 +1,9 @@
 # nick.florin
 
 This repository contains a web application that is used for scraping publically available web data
-from specific e-commerce websites and allowing users to monitor, manage and configure notifications
-and alerts for events that occur in relation to products that the specific e-commerce sites offer.
+from specific e-commerce websites that sell woodworking tools and allowing users to monitor, manage
+and configure notifications and alerts for events that occur in relation to products that the
+specific e-commerce sites offer.
 
 &copy; Nick Florin, 2024
 
