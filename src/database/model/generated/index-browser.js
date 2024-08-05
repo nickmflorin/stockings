@@ -217,6 +217,36 @@ exports.Prisma.ProductScalarFieldEnum = {
   subCategories: 'subCategories'
 };
 
+exports.Prisma.PriceChangeEventConfigScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  createdById: 'createdById',
+  updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  productNotificationConfigId: 'productNotificationConfigId',
+  configType: 'configType'
+};
+
+exports.Prisma.StatusChangeEventConfigScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  createdById: 'createdById',
+  updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  productNotificationConfigId: 'productNotificationConfigId',
+  statuses: 'statuses'
+};
+
+exports.Prisma.ProductNotificationConfigScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  createdById: 'createdById',
+  updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  productId: 'productId',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -277,6 +307,11 @@ exports.ProductSubCategory = exports.$Enums.ProductSubCategory = {
   AccessoryTools: 'AccessoryTools'
 };
 
+exports.PriceChangeEventConfigType = exports.$Enums.PriceChangeEventConfigType = {
+  PRICE_INCREASE: 'PRICE_INCREASE',
+  PRICE_DECREASE: 'PRICE_DECREASE'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   HttpNetworkErrorData: 'HttpNetworkErrorData',
@@ -291,7 +326,10 @@ exports.Prisma.ModelName = {
   NonUniqueElementErrorData: 'NonUniqueElementErrorData',
   ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
-  Product: 'Product'
+  Product: 'Product',
+  PriceChangeEventConfig: 'PriceChangeEventConfig',
+  StatusChangeEventConfig: 'StatusChangeEventConfig',
+  ProductNotificationConfig: 'ProductNotificationConfig'
 };
 
 /**
