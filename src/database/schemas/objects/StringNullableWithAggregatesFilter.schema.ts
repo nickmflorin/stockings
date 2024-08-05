@@ -5,7 +5,7 @@ import { NestedStringNullableWithAggregatesFilterObjectSchema } from './NestedSt
 import { NestedIntNullableFilterObjectSchema } from './NestedIntNullableFilter.schema';
 import { NestedStringNullableFilterObjectSchema } from './NestedStringNullableFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StringNullableWithAggregatesFilter>;
 export const StringNullableWithAggregatesFilterObjectSchema: SchemaType = z.object({

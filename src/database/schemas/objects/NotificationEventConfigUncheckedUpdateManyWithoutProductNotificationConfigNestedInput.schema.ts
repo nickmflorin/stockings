@@ -10,7 +10,7 @@ import { NotificationEventConfigUpdateWithWhereUniqueWithoutProductNotificationC
 import { NotificationEventConfigUpdateManyWithWhereWithoutProductNotificationConfigInputObjectSchema } from './NotificationEventConfigUpdateManyWithWhereWithoutProductNotificationConfigInput.schema';
 import { NotificationEventConfigScalarWhereInputObjectSchema } from './NotificationEventConfigScalarWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigUncheckedUpdateManyWithoutProductNotificationConfigNestedInput>;
 export const NotificationEventConfigUncheckedUpdateManyWithoutProductNotificationConfigNestedInputObjectSchema: SchemaType = z.object({

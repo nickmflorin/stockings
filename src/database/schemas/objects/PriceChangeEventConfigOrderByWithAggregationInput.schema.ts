@@ -5,7 +5,7 @@ import { PriceChangeEventConfigCountOrderByAggregateInputObjectSchema } from './
 import { PriceChangeEventConfigMaxOrderByAggregateInputObjectSchema } from './PriceChangeEventConfigMaxOrderByAggregateInput.schema';
 import { PriceChangeEventConfigMinOrderByAggregateInputObjectSchema } from './PriceChangeEventConfigMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.PriceChangeEventConfigOrderByWithAggregationInput>;
 export const PriceChangeEventConfigOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

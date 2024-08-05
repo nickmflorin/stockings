@@ -4,7 +4,7 @@ import { HttpClientErrorDataWhereInputObjectSchema } from './HttpClientErrorData
 import { StringFilterObjectSchema } from './StringFilter.schema';
 import { IntFilterObjectSchema } from './IntFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.HttpClientErrorDataWhereUniqueInput>;
 export const HttpClientErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

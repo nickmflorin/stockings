@@ -6,7 +6,7 @@ import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelat
 import { ProductOrderByWithRelationInputObjectSchema } from './ProductOrderByWithRelationInput.schema';
 import { ProductRecordErrorOrderByRelationAggregateInputObjectSchema } from './ProductRecordErrorOrderByRelationAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordOrderByWithRelationInput>;
 export const ProductRecordOrderByWithRelationInputObjectSchema: SchemaType = z.object({

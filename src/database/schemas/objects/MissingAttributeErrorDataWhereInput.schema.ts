@@ -5,7 +5,7 @@ import { EnumElementAttributeFilterObjectSchema } from './EnumElementAttributeFi
 import { ElementAttributeSchema } from '../enums/ElementAttribute.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingAttributeErrorDataWhereInput>;
 export const MissingAttributeErrorDataWhereInputObjectSchema: SchemaType = z.object({

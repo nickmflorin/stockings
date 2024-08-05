@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { InvalidTextErrorDataSelectObjectSchema } from './InvalidTextErrorDataSelect.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.InvalidTextErrorDataArgs>;
 export const InvalidTextErrorDataArgsObjectSchema: SchemaType = z.object({

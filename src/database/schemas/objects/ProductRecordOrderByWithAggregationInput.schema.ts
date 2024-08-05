@@ -8,7 +8,7 @@ import { ProductRecordMaxOrderByAggregateInputObjectSchema } from './ProductReco
 import { ProductRecordMinOrderByAggregateInputObjectSchema } from './ProductRecordMinOrderByAggregateInput.schema';
 import { ProductRecordSumOrderByAggregateInputObjectSchema } from './ProductRecordSumOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordOrderByWithAggregationInput>;
 export const ProductRecordOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

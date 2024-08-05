@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { MissingTextErrorDataWhereInputObjectSchema } from './MissingTextErrorDataWhereInput.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingTextErrorDataWhereUniqueInput>;
 export const MissingTextErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

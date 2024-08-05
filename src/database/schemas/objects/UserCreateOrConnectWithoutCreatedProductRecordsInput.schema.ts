@@ -4,7 +4,7 @@ import { UserWhereUniqueInputObjectSchema } from './UserWhereUniqueInput.schema'
 import { UserCreateWithoutCreatedProductRecordsInputObjectSchema } from './UserCreateWithoutCreatedProductRecordsInput.schema';
 import { UserUncheckedCreateWithoutCreatedProductRecordsInputObjectSchema } from './UserUncheckedCreateWithoutCreatedProductRecordsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserCreateOrConnectWithoutCreatedProductRecordsInput>;
 export const UserCreateOrConnectWithoutCreatedProductRecordsInputObjectSchema: SchemaType = z.object({

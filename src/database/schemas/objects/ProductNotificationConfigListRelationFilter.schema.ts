@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { ProductNotificationConfigWhereInputObjectSchema } from './ProductNotificationConfigWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigListRelationFilter>;
 export const ProductNotificationConfigListRelationFilterObjectSchema: SchemaType = z.object({

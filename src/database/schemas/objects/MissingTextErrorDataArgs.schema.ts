@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { MissingTextErrorDataSelectObjectSchema } from './MissingTextErrorDataSelect.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingTextErrorDataArgs>;
 export const MissingTextErrorDataArgsObjectSchema: SchemaType = z.object({

@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserRelationFilter>;
 export const UserRelationFilterObjectSchema: SchemaType = z.object({

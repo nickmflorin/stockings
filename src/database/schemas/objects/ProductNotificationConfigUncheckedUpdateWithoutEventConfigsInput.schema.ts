@@ -5,7 +5,7 @@ import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldU
 import { PriceChangeEventConfigUncheckedUpdateManyWithoutProductNotificationConfigNestedInputObjectSchema } from './PriceChangeEventConfigUncheckedUpdateManyWithoutProductNotificationConfigNestedInput.schema';
 import { StatusChangeEventConfigUncheckedUpdateManyWithoutProductNotificationConfigNestedInputObjectSchema } from './StatusChangeEventConfigUncheckedUpdateManyWithoutProductNotificationConfigNestedInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigUncheckedUpdateWithoutEventConfigsInput>;
 export const ProductNotificationConfigUncheckedUpdateWithoutEventConfigsInputObjectSchema: SchemaType = z.object({

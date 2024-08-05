@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { UuidFilterObjectSchema } from './UuidFilter.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.HttpNetworkErrorDataWhereInput>;
 export const HttpNetworkErrorDataWhereInputObjectSchema: SchemaType = z.object({

@@ -6,7 +6,7 @@ import { StatusChangeEventConfigCreateOrConnectWithoutUpdatedByInputObjectSchema
 import { StatusChangeEventConfigCreateManyUpdatedByInputEnvelopeObjectSchema } from './StatusChangeEventConfigCreateManyUpdatedByInputEnvelope.schema';
 import { StatusChangeEventConfigWhereUniqueInputObjectSchema } from './StatusChangeEventConfigWhereUniqueInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigUncheckedCreateNestedManyWithoutUpdatedByInput>;
 export const StatusChangeEventConfigUncheckedCreateNestedManyWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

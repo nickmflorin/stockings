@@ -7,7 +7,7 @@ import { EnumNotificationEventConfigContentTypeFieldUpdateOperationsInputObjectS
 import { StatusChangeEventConfigUpdateeventTypesInputObjectSchema } from './StatusChangeEventConfigUpdateeventTypesInput.schema';
 import { ProductStatusSchema } from '../enums/ProductStatus.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigUncheckedUpdateWithoutCreatedByInput>;
 export const StatusChangeEventConfigUncheckedUpdateWithoutCreatedByInputObjectSchema: SchemaType = z.object({

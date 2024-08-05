@@ -4,7 +4,7 @@ import { MissingElementErrorDataWhereInputObjectSchema } from './MissingElementE
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingElementErrorDataWhereUniqueInput>;
 export const MissingElementErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

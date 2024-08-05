@@ -8,7 +8,7 @@ import { PriceChangeEventConfigInputSchema } from '../input/PriceChangeEventConf
 import { StatusChangeEventConfigInputSchema } from '../input/StatusChangeEventConfigInput.schema';
 import { UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserInclude>;
 export const UserIncludeObjectSchema: SchemaType = z.object({

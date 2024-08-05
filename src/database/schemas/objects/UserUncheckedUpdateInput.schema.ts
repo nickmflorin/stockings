@@ -17,7 +17,7 @@ import { StatusChangeEventConfigUncheckedUpdateManyWithoutCreatedByNestedInputOb
 import { PriceChangeEventConfigUncheckedUpdateManyWithoutUpdatedByNestedInputObjectSchema } from './PriceChangeEventConfigUncheckedUpdateManyWithoutUpdatedByNestedInput.schema';
 import { StatusChangeEventConfigUncheckedUpdateManyWithoutUpdatedByNestedInputObjectSchema } from './StatusChangeEventConfigUncheckedUpdateManyWithoutUpdatedByNestedInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserUncheckedUpdateInput>;
 export const UserUncheckedUpdateInputObjectSchema: SchemaType = z.object({

@@ -4,7 +4,7 @@ import { InvalidTextErrorDataWhereInputObjectSchema } from './InvalidTextErrorDa
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.InvalidTextErrorDataWhereUniqueInput>;
 export const InvalidTextErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

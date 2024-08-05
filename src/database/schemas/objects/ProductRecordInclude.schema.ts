@@ -5,7 +5,7 @@ import { ProductArgsObjectSchema } from './ProductArgs.schema';
 import { ProductRecordErrorInputSchema } from '../input/ProductRecordErrorInput.schema';
 import { ProductRecordCountOutputTypeArgsObjectSchema } from './ProductRecordCountOutputTypeArgs.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordInclude>;
 export const ProductRecordIncludeObjectSchema: SchemaType = z.object({

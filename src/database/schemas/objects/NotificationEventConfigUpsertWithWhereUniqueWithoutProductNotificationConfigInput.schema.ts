@@ -6,7 +6,7 @@ import { NotificationEventConfigUncheckedUpdateWithoutProductNotificationConfigI
 import { NotificationEventConfigCreateWithoutProductNotificationConfigInputObjectSchema } from './NotificationEventConfigCreateWithoutProductNotificationConfigInput.schema';
 import { NotificationEventConfigUncheckedCreateWithoutProductNotificationConfigInputObjectSchema } from './NotificationEventConfigUncheckedCreateWithoutProductNotificationConfigInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigUpsertWithWhereUniqueWithoutProductNotificationConfigInput>;
 export const NotificationEventConfigUpsertWithWhereUniqueWithoutProductNotificationConfigInputObjectSchema: SchemaType = z.object({

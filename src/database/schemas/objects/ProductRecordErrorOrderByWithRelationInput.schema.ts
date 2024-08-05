@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { ProductRecordOrderByWithRelationInputObjectSchema } from './ProductRecordOrderByWithRelationInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorOrderByWithRelationInput>;
 export const ProductRecordErrorOrderByWithRelationInputObjectSchema: SchemaType = z.object({

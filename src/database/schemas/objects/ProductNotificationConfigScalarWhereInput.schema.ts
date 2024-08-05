@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { UuidFilterObjectSchema } from './UuidFilter.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigScalarWhereInput>;
 export const ProductNotificationConfigScalarWhereInputObjectSchema: SchemaType = z.object({

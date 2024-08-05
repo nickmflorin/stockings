@@ -6,7 +6,7 @@ import { EnumNotificationEventConfigContentTypeWithAggregatesFilterObjectSchema 
 import { NotificationEventConfigContentTypeSchema } from '../enums/NotificationEventConfigContentType.schema';
 import { EnumProductStatusNullableListFilterObjectSchema } from './EnumProductStatusNullableListFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigScalarWhereWithAggregatesInput>;
 export const StatusChangeEventConfigScalarWhereWithAggregatesInputObjectSchema: SchemaType = z.object({

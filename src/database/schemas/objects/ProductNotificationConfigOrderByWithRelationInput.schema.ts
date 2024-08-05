@@ -7,7 +7,7 @@ import { NotificationEventConfigOrderByRelationAggregateInputObjectSchema } from
 import { PriceChangeEventConfigOrderByRelationAggregateInputObjectSchema } from './PriceChangeEventConfigOrderByRelationAggregateInput.schema';
 import { StatusChangeEventConfigOrderByRelationAggregateInputObjectSchema } from './StatusChangeEventConfigOrderByRelationAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigOrderByWithRelationInput>;
 export const ProductNotificationConfigOrderByWithRelationInputObjectSchema: SchemaType = z.object({

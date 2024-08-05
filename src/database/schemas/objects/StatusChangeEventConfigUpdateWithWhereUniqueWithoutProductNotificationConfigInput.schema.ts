@@ -4,7 +4,7 @@ import { StatusChangeEventConfigWhereUniqueInputObjectSchema } from './StatusCha
 import { StatusChangeEventConfigUpdateWithoutProductNotificationConfigInputObjectSchema } from './StatusChangeEventConfigUpdateWithoutProductNotificationConfigInput.schema';
 import { StatusChangeEventConfigUncheckedUpdateWithoutProductNotificationConfigInputObjectSchema } from './StatusChangeEventConfigUncheckedUpdateWithoutProductNotificationConfigInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigUpdateWithWhereUniqueWithoutProductNotificationConfigInput>;
 export const StatusChangeEventConfigUpdateWithWhereUniqueWithoutProductNotificationConfigInputObjectSchema: SchemaType = z.object({

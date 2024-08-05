@@ -4,7 +4,7 @@ import { PriceChangeEventConfigScalarWhereInputObjectSchema } from './PriceChang
 import { PriceChangeEventConfigUpdateManyMutationInputObjectSchema } from './PriceChangeEventConfigUpdateManyMutationInput.schema';
 import { PriceChangeEventConfigUncheckedUpdateManyWithoutUpdatedByInputObjectSchema } from './PriceChangeEventConfigUncheckedUpdateManyWithoutUpdatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.PriceChangeEventConfigUpdateManyWithWhereWithoutUpdatedByInput>;
 export const PriceChangeEventConfigUpdateManyWithWhereWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

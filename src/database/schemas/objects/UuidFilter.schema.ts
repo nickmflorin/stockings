@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { QueryModeSchema } from '../enums/QueryMode.schema';
 import { NestedUuidFilterObjectSchema } from './NestedUuidFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UuidFilter>;
 export const UuidFilterObjectSchema: SchemaType = z.object({

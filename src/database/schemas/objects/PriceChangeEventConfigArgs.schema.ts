@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { PriceChangeEventConfigSelectObjectSchema } from './PriceChangeEventConfigSelect.schema';
 import { PriceChangeEventConfigIncludeObjectSchema } from './PriceChangeEventConfigInclude.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.PriceChangeEventConfigArgs>;
 export const PriceChangeEventConfigArgsObjectSchema: SchemaType = z.object({

@@ -4,7 +4,7 @@ import { NestedDateTimeNullableWithAggregatesFilterObjectSchema } from './Nested
 import { NestedIntNullableFilterObjectSchema } from './NestedIntNullableFilter.schema';
 import { NestedDateTimeNullableFilterObjectSchema } from './NestedDateTimeNullableFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.DateTimeNullableWithAggregatesFilter>;
 export const DateTimeNullableWithAggregatesFilterObjectSchema: SchemaType = z.object({

@@ -5,7 +5,7 @@ import { ElementAttributeSchema } from '../enums/ElementAttribute.schema';
 import { EnumElementAttributeFieldUpdateOperationsInputObjectSchema } from './EnumElementAttributeFieldUpdateOperationsInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.InvalidAttributeErrorDataUpdateInput>;
 export const InvalidAttributeErrorDataUpdateInputObjectSchema: SchemaType = z.object({

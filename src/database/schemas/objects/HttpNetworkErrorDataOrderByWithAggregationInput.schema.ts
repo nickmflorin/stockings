@@ -5,7 +5,7 @@ import { HttpNetworkErrorDataCountOrderByAggregateInputObjectSchema } from './Ht
 import { HttpNetworkErrorDataMaxOrderByAggregateInputObjectSchema } from './HttpNetworkErrorDataMaxOrderByAggregateInput.schema';
 import { HttpNetworkErrorDataMinOrderByAggregateInputObjectSchema } from './HttpNetworkErrorDataMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.HttpNetworkErrorDataOrderByWithAggregationInput>;
 export const HttpNetworkErrorDataOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

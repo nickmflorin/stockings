@@ -1,7 +1,7 @@
-import uniqBy from "lodash.uniqby";
+import { uniqBy } from "lodash-es";
 import { type z } from "zod";
 
-import { logger } from "~/application/logger";
+import { logger } from "~/internal/logger";
 
 import { type ApiClientFieldErrorCode, ApiClientFieldErrorCodes } from "../codes";
 import {
@@ -12,8 +12,6 @@ import {
   isZodError,
   type RawApiClientFieldErrorObj,
 } from "../types";
-
-import { ApiClientFormError } from ".";
 
 export type IssueLookup<L extends string> = { [key in L]?: (issue: z.ZodIssue) => boolean };
 
@@ -231,20 +229,5 @@ export class ApiClientFieldErrors<F extends string = string> {
 
   public get hasErrors(): boolean {
     return Object.keys(this.errors).length !== 0;
-  }
-
-  public get error(): ApiClientFormError<F> {
-    if (this.isEmpty) {
-      throw new Error("Cannot convert an empty set of field errors to an error.");
-    }
-    return ApiClientFormError.BadRequest(this.errors);
-  }
-
-  public get json() {
-    return this.error.json;
-  }
-
-  public get response() {
-    return this.error.response;
   }
 }

@@ -6,7 +6,7 @@ import { StatusChangeEventConfigUncheckedUpdateWithoutCreatedByInputObjectSchema
 import { StatusChangeEventConfigCreateWithoutCreatedByInputObjectSchema } from './StatusChangeEventConfigCreateWithoutCreatedByInput.schema';
 import { StatusChangeEventConfigUncheckedCreateWithoutCreatedByInputObjectSchema } from './StatusChangeEventConfigUncheckedCreateWithoutCreatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigUpsertWithWhereUniqueWithoutCreatedByInput>;
 export const StatusChangeEventConfigUpsertWithWhereUniqueWithoutCreatedByInputObjectSchema: SchemaType = z.object({

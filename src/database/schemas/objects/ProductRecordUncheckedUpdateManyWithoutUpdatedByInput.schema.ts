@@ -10,7 +10,7 @@ import { BoolFieldUpdateOperationsInputObjectSchema } from './BoolFieldUpdateOpe
 import { ProductRecordUpdatemanuallyChangedFieldsInputObjectSchema } from './ProductRecordUpdatemanuallyChangedFieldsInput.schema';
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordUncheckedUpdateManyWithoutUpdatedByInput>;
 export const ProductRecordUncheckedUpdateManyWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

@@ -4,7 +4,7 @@ import { NotificationEventConfigContentTypeSchema } from '../enums/NotificationE
 import { UserCreateNestedOneWithoutCreatedNotificationEventConfigsInputObjectSchema } from './UserCreateNestedOneWithoutCreatedNotificationEventConfigsInput.schema';
 import { UserCreateNestedOneWithoutUpdatedNotificationEventConfigsInputObjectSchema } from './UserCreateNestedOneWithoutUpdatedNotificationEventConfigsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigCreateWithoutProductNotificationConfigInput>;
 export const NotificationEventConfigCreateWithoutProductNotificationConfigInputObjectSchema: SchemaType = z.object({

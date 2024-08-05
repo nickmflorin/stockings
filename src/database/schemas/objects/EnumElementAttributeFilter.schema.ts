@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ElementAttributeSchema } from '../enums/ElementAttribute.schema';
 import { NestedEnumElementAttributeFilterObjectSchema } from './NestedEnumElementAttributeFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumElementAttributeFilter>;
 export const EnumElementAttributeFilterObjectSchema: SchemaType = z.object({

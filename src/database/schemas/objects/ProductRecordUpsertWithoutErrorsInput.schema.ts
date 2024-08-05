@@ -6,7 +6,7 @@ import { ProductRecordCreateWithoutErrorsInputObjectSchema } from './ProductReco
 import { ProductRecordUncheckedCreateWithoutErrorsInputObjectSchema } from './ProductRecordUncheckedCreateWithoutErrorsInput.schema';
 import { ProductRecordWhereInputObjectSchema } from './ProductRecordWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordUpsertWithoutErrorsInput>;
 export const ProductRecordUpsertWithoutErrorsInputObjectSchema: SchemaType = z.object({

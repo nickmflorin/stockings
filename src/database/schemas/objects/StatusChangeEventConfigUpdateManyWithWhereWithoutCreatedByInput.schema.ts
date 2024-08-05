@@ -4,7 +4,7 @@ import { StatusChangeEventConfigScalarWhereInputObjectSchema } from './StatusCha
 import { StatusChangeEventConfigUpdateManyMutationInputObjectSchema } from './StatusChangeEventConfigUpdateManyMutationInput.schema';
 import { StatusChangeEventConfigUncheckedUpdateManyWithoutCreatedByInputObjectSchema } from './StatusChangeEventConfigUncheckedUpdateManyWithoutCreatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigUpdateManyWithWhereWithoutCreatedByInput>;
 export const StatusChangeEventConfigUpdateManyWithWhereWithoutCreatedByInputObjectSchema: SchemaType = z.object({

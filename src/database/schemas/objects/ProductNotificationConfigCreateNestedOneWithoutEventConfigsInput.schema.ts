@@ -5,7 +5,7 @@ import { ProductNotificationConfigUncheckedCreateWithoutEventConfigsInputObjectS
 import { ProductNotificationConfigCreateOrConnectWithoutEventConfigsInputObjectSchema } from './ProductNotificationConfigCreateOrConnectWithoutEventConfigsInput.schema';
 import { ProductNotificationConfigWhereUniqueInputObjectSchema } from './ProductNotificationConfigWhereUniqueInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigCreateNestedOneWithoutEventConfigsInput>;
 export const ProductNotificationConfigCreateNestedOneWithoutEventConfigsInputObjectSchema: SchemaType = z.object({

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { QueryModeSchema } from '../enums/QueryMode.schema';
 import { NestedStringFilterObjectSchema } from './NestedStringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StringFilter>;
 export const StringFilterObjectSchema: SchemaType = z.object({

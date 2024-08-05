@@ -6,7 +6,7 @@ import { PriceChangeEventConfigCreateOrConnectWithoutCreatedByInputObjectSchema 
 import { PriceChangeEventConfigCreateManyCreatedByInputEnvelopeObjectSchema } from './PriceChangeEventConfigCreateManyCreatedByInputEnvelope.schema';
 import { PriceChangeEventConfigWhereUniqueInputObjectSchema } from './PriceChangeEventConfigWhereUniqueInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.PriceChangeEventConfigUncheckedCreateNestedManyWithoutCreatedByInput>;
 export const PriceChangeEventConfigUncheckedCreateNestedManyWithoutCreatedByInputObjectSchema: SchemaType = z.object({

@@ -6,7 +6,7 @@ import { UserCreateWithoutUpdatedProductNotificationConfigsInputObjectSchema } f
 import { UserUncheckedCreateWithoutUpdatedProductNotificationConfigsInputObjectSchema } from './UserUncheckedCreateWithoutUpdatedProductNotificationConfigsInput.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserUpsertWithoutUpdatedProductNotificationConfigsInput>;
 export const UserUpsertWithoutUpdatedProductNotificationConfigsInputObjectSchema: SchemaType = z.object({

@@ -6,7 +6,7 @@ import { InvalidAttributeErrorDataCountOrderByAggregateInputObjectSchema } from 
 import { InvalidAttributeErrorDataMaxOrderByAggregateInputObjectSchema } from './InvalidAttributeErrorDataMaxOrderByAggregateInput.schema';
 import { InvalidAttributeErrorDataMinOrderByAggregateInputObjectSchema } from './InvalidAttributeErrorDataMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.InvalidAttributeErrorDataOrderByWithAggregationInput>;
 export const InvalidAttributeErrorDataOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

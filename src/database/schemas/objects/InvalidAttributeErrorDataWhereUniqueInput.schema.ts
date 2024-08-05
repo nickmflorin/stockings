@@ -6,7 +6,7 @@ import { ElementAttributeSchema } from '../enums/ElementAttribute.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.InvalidAttributeErrorDataWhereUniqueInput>;
 export const InvalidAttributeErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

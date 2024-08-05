@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ScrapingErrorCodeSchema } from '../enums/ScrapingErrorCode.schema';
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorCreateManyInput>;
 export const ProductRecordErrorCreateManyInputObjectSchema: SchemaType = z.object({

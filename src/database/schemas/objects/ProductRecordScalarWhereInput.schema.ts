@@ -9,7 +9,7 @@ import { ProductStatusSchema } from '../enums/ProductStatus.schema';
 import { BoolFilterObjectSchema } from './BoolFilter.schema';
 import { EnumProductRecordDataFieldNullableListFilterObjectSchema } from './EnumProductRecordDataFieldNullableListFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordScalarWhereInput>;
 export const ProductRecordScalarWhereInputObjectSchema: SchemaType = z.object({

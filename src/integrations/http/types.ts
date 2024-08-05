@@ -2,6 +2,7 @@ import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-lite
 
 export type JsonValue =
   | JsonObject
+  | JsonObject[]
   | JsonValue[]
   | boolean
   | number
@@ -9,9 +10,9 @@ export type JsonValue =
   | readonly JsonValue[]
   | null;
 
-export type JsonObject = {
+export type JsonObject = Partial<{
   [k: string]: JsonValue;
-};
+}>;
 
 export const HttpMethods = enumeratedLiterals(["GET", "POST", "PATCH", "DELETE"] as const, {});
 export type HttpMethod = EnumeratedLiteralsType<typeof HttpMethods>;

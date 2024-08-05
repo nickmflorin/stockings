@@ -9,7 +9,7 @@ import { StringFilterObjectSchema } from './StringFilter.schema';
 import { ProductRecordRelationFilterObjectSchema } from './ProductRecordRelationFilter.schema';
 import { ProductRecordWhereInputObjectSchema } from './ProductRecordWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorWhereUniqueInput>;
 export const ProductRecordErrorWhereUniqueInputObjectSchema: SchemaType = z.object({

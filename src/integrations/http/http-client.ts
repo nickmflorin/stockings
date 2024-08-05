@@ -1,10 +1,10 @@
 import { type Required } from "utility-types";
 
-import type * as errors from "./errors";
 import type * as query from "./query";
 
 import { UnreachableCaseError, isError } from "~/application/errors";
 
+import * as errors from "./errors";
 import { withoutLeadingSlashes, withoutTrailingSlashes } from "./paths";
 import { addQueryParamsToUrl } from "./query";
 import * as types from "./types";
@@ -55,68 +55,87 @@ export type ClientRequestOptions<
   J extends boolean = boolean,
 > = ClientDynamicRequestOptions<S, J> & Omit<RequestInit, "body" | "method">;
 
-type ClientResponseOrError<
-  C extends errors.HttpClientError,
-  N extends errors.HttpNetworkError,
-  S extends errors.HttpSerializationError,
-  P,
-> =
-  | { readonly error: C | N | S; readonly response?: never; readonly meta?: never }
-  | { readonly response: P; readonly error?: never; readonly meta: ResponseMeta };
-
-export type ClientResponse<
-  C extends errors.HttpClientError,
-  N extends errors.HttpNetworkError,
-  S extends errors.HttpSerializationError,
-  P,
-> = P | ClientResponseOrError<C, N, S, P>;
-
-export type HttpClientResponseProcessor<
-  T = unknown,
-  S extends errors.HttpSerializationError = errors.HttpSerializationError,
-> = (
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export type ClientOkResponseProcessor<T = any, E extends errors.HttpClientError = any> = (
   response: Response,
   params: { readonly url: string; readonly method: types.HttpMethod; readonly status: number },
-) => Promise<{ data: T; error?: never } | { data?: never; error: S }>;
+) => Promise<{ data: T; error?: never } | { data?: never; error: E }>;
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export type ClientNotOkResponseProcessor<E extends errors.HttpClientError = any> = (
+  response: Response,
+  params: { readonly url: string; readonly method: types.HttpMethod; readonly status: number },
+) => Promise<E>;
+
+export type HttpClientResponseProcessors = {
+  readonly okayResponseProcessor?: ClientOkResponseProcessor;
+  readonly notOkayResponseProcessor?: ClientNotOkResponseProcessor;
+};
+
+type InferredOkayProcessorError<P extends HttpClientResponseProcessors> = P extends {
+  readonly okayResponseProcessor?: infer Pi;
+}
+  ? /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    Pi extends ClientOkResponseProcessor<any, infer E extends errors.HttpClientError>
+    ? E
+    : never
+  : errors.HttpClientError;
+
+type InferredNotOkayProcessorError<P extends HttpClientResponseProcessors> = P extends {
+  readonly notOkayResponseProcessor?: infer Pi;
+}
+  ? Pi extends ClientNotOkResponseProcessor<infer E extends errors.HttpClientError>
+    ? E
+    : never
+  : errors.HttpClientError;
+
+type ClientResponseOrError<
+  T,
+  N extends errors.HttpNetworkError,
+  P extends HttpClientResponseProcessors,
+> =
+  | {
+      readonly error: N | InferredNotOkayProcessorError<P> | InferredOkayProcessorError<P>;
+      readonly response?: never;
+      readonly meta?: never;
+    }
+  | { readonly response: T; readonly error?: never; readonly meta: ResponseMeta };
+
+export type ClientResponse<
+  T,
+  N extends errors.HttpNetworkError,
+  P extends HttpClientResponseProcessors,
+> = T | ClientResponseOrError<T, N, P>;
 
 export type HttpClientConfig<
-  C extends errors.HttpClientError,
   N extends errors.HttpNetworkError,
-  S extends errors.HttpSerializationError,
-  P extends HttpClientResponseProcessor<unknown, S>,
+  P extends HttpClientResponseProcessors,
 > = RequestInit & {
   readonly baseUrl?: string;
-  readonly processor: P;
-  readonly SerializationErrorClass: errors.SerializationErrorClass<S>;
-  readonly ClientErrorClass: errors.ClientErrorClass<C>;
+  readonly processors: P;
   readonly NetworkErrorClass: errors.NetworkErrorClass<N>;
 };
 
-export type HttpClientProcessedResponseData<P, S extends errors.HttpSerializationError> =
-  P extends HttpClientResponseProcessor<infer T, S> ? T : never;
+export type HttpClientProcessedResponseData<P extends HttpClientResponseProcessors> = P extends {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  readonly okayResponseProcessor: ClientOkResponseProcessor<infer T, any>;
+}
+  ? T
+  : Response;
 
 /**
  * A standardized interface that should be used to make HTTP requests using the native
  * {@link fetch} API in the application.
  */
-export class HttpClient<
-  C extends errors.HttpClientError,
-  N extends errors.HttpNetworkError,
-  S extends errors.HttpSerializationError,
-  P extends HttpClientResponseProcessor<unknown, S>,
-> {
-  private readonly config: HttpClientConfig<C, N, S, P>;
+export class HttpClient<N extends errors.HttpNetworkError, P extends HttpClientResponseProcessors> {
+  private readonly config: HttpClientConfig<N, P>;
 
-  constructor(config: HttpClientConfig<C, N, S, P>) {
+  constructor(config: HttpClientConfig<N, P>) {
     this.config = config || {};
   }
 
   private get baseUrl(): string | null {
     return this.config?.baseUrl ?? null;
-  }
-
-  private get ClientErrorClass(): errors.ClientErrorClass<C> {
-    return this.config.ClientErrorClass;
   }
 
   private get NetworkErrorClass(): errors.NetworkErrorClass<N> {
@@ -130,17 +149,33 @@ export class HttpClient<
     return path;
   }
 
-  private processResponse = async (
+  private processOkResponse = async (
     response: Response,
     params: { readonly url: string; readonly method: types.HttpMethod; readonly status: number },
   ): Promise<
-    { data: HttpClientProcessedResponseData<P, S>; error?: never } | { error: S; data?: never }
+    | { data: HttpClientProcessedResponseData<P>; error?: never }
+    | { error: InferredOkayProcessorError<P>; data?: never }
   > => {
-    const processor = this.config.processor;
-    const result = await processor(response, params);
-    return result as
-      | { data: HttpClientProcessedResponseData<P, S>; error?: never }
-      | { error: S; data?: never };
+    const processor = this.config.processors.okayResponseProcessor as ClientOkResponseProcessor<
+      HttpClientProcessedResponseData<P>,
+      InferredOkayProcessorError<P>
+    >;
+    if (!processor) {
+      return { data: response as HttpClientProcessedResponseData<P> };
+    }
+    return await processor(response, params);
+  };
+
+  private processNotOkResponse = async (
+    response: Response,
+    params: { readonly url: string; readonly method: types.HttpMethod; readonly status: number },
+  ): Promise<InferredNotOkayProcessorError<P>> => {
+    const processor = this.config.processors
+      .notOkayResponseProcessor as ClientNotOkResponseProcessor<InferredNotOkayProcessorError<P>>;
+    if (!processor) {
+      return new errors.HttpClientError(params) as InferredNotOkayProcessorError<P>;
+    }
+    return await processor(response, params);
   };
 
   private addQueryParamsToUrl(url: string, query?: query.QueryParamObj | undefined): string {
@@ -166,9 +201,9 @@ export class HttpClient<
     path: string,
     method: types.HttpMethod,
     options?: ClientRequestOptions & { readonly body?: string },
-  ): Promise<ClientResponse<C, N, S, HttpClientProcessedResponseData<P, S> | Response>> => {
+  ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> => {
     let response: Response | null = null;
-    let error: C | N | S | null = null;
+    let error: N | InferredNotOkayProcessorError<P> | InferredOkayProcessorError<P> | null = null;
 
     const url = this.constructUrl(path);
     const request = new Request(url, { ...this.staticRequestOptions, ...options, method });
@@ -185,18 +220,18 @@ export class HttpClient<
         method: request.method.toUpperCase() as types.HttpMethod,
       });
     }
-    let returnResponse: HttpClientProcessedResponseData<P, S> | Response | null = null;
+    let returnResponse: HttpClientProcessedResponseData<P> | Response | null = null;
 
     if (response !== null && !response.ok) {
       // Here, the server returned a response - but the response had a 4xx or 5xx status code.
-      error = new this.ClientErrorClass({
+      error = await this.processNotOkResponse(response, {
         method: request.method.toUpperCase() as types.HttpMethod,
         url: request.url,
         status: response.status,
       });
     } else if (response !== null) {
       if (HttpClient.getDynamicOption("processed", method, options)) {
-        const processed = await this.processResponse(response, {
+        const processed = await this.processOkResponse(response, {
           method: request.method.toUpperCase() as types.HttpMethod,
           url: request.url,
           status: response.status,
@@ -246,13 +281,13 @@ export class HttpClient<
     path: string,
     query: query.QueryParamObj | undefined,
     options: Required<ClientRequestOptions<true, true>, "strict">,
-  ): Promise<HttpClientProcessedResponseData<P, S>>;
+  ): Promise<HttpClientProcessedResponseData<P>>;
 
   public async get(
     path: string,
     query?: query.QueryParamObj,
     options?: ClientRequestOptions<false, true>,
-  ): Promise<ClientResponseOrError<C, N, S, HttpClientProcessedResponseData<P, S>>>;
+  ): Promise<ClientResponseOrError<HttpClientProcessedResponseData<P>, N, P>>;
 
   public async get(
     path: string,
@@ -264,7 +299,7 @@ export class HttpClient<
     path: string,
     query?: query.QueryParamObj,
     options?: Required<ClientRequestOptions<false, false>, "processed">,
-  ): Promise<ClientResponseOrError<C, N, S, Response>>;
+  ): Promise<ClientResponseOrError<Response, N, P>>;
 
   /**
    * Sends a GET request to the provided path, {@link string} with the provided query,
@@ -280,7 +315,7 @@ export class HttpClient<
    *
    *   @see {HttpClient}
    *
-   * @returns {Promise<ClientResponse<C, N, HttpClientProcessedResponseData<P, S> | Response>>}
+   * @returns {Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>>}
    *   A {@link Promise} whose contents depend on the dynamic request options,
    *   {@link ClientDynamicRequestOptions}, that were supplied to the method.
    *
@@ -290,7 +325,7 @@ export class HttpClient<
     path: string,
     query?: query.QueryParamObj,
     options?: ClientRequestOptions,
-  ): Promise<ClientResponse<C, N, S, HttpClientProcessedResponseData<P, S> | Response>> {
+  ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
     path = this.addQueryParamsToUrl(path, query);
     return this.request(path, types.HttpMethods.GET, options);
   }
@@ -299,13 +334,13 @@ export class HttpClient<
     path: string,
     body: types.JsonObject | undefined,
     options: Required<ClientRequestOptions<true, true>, "strict">,
-  ): Promise<HttpClientProcessedResponseData<P, S>>;
+  ): Promise<HttpClientProcessedResponseData<P>>;
 
   public async post(
     path: string,
     body?: types.JsonObject,
     options?: ClientRequestOptions<false, true>,
-  ): Promise<ClientResponseOrError<C, N, S, HttpClientProcessedResponseData<P, S>>>;
+  ): Promise<ClientResponseOrError<HttpClientProcessedResponseData<P>, N, P>>;
 
   public async post(
     path: string,
@@ -317,14 +352,14 @@ export class HttpClient<
     path: string,
     body: types.JsonObject | undefined,
     options: Required<ClientRequestOptions<false, false>, "processed">,
-  ): Promise<ClientResponseOrError<C, N, S, Response>>;
+  ): Promise<ClientResponseOrError<Response, N, P>>;
 
   /**
    * Sends a POST request to the provided path, {@link string}, with the provided body, {@link P}.
    *
    * @param {string} path The path to send the POST request.
    *
-   * @param {P} body The JSON body that should be attached to the request.
+   * @param {types.JsonObject} body The JSON body that should be attached to the request.
    *
    * @param {ClientRequestOptions} options
    * 	 The options for the request.  These options will override any options that were provided
@@ -332,7 +367,7 @@ export class HttpClient<
    *
    *   @see {HttpClient}
    *
-   * @returns {Promise<ClientResponse<C, N, HttpClientProcessedResponseData<P, S> | Response>>}
+   * @returns {Promise<CClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>>}
    *   A {@link Promise} whose contents depend on the dynamic request options,
    *   {@link ClientDynamicRequestOptions}, that were supplied to the method.
    *
@@ -342,7 +377,7 @@ export class HttpClient<
     path: string,
     body?: types.JsonObject,
     options?: ClientRequestOptions,
-  ): Promise<ClientResponse<C, N, S, HttpClientProcessedResponseData<P, S> | Response>> {
+  ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
     return this.request(path, types.HttpMethods.POST, {
       ...options,
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -353,13 +388,13 @@ export class HttpClient<
     path: string,
     // For a DELETE request, the default value of the `processed` option is false.
     options: Required<ClientRequestOptions<true, true>, keyof ClientDynamicRequestOptions>,
-  ): Promise<HttpClientProcessedResponseData<P, S>>;
+  ): Promise<HttpClientProcessedResponseData<P>>;
 
   public async delete(
     path: string,
     // For a DELETE request, the default value of the `processed` option is false.
     options: Required<ClientRequestOptions<false, true>, "processed">,
-  ): Promise<ClientResponseOrError<C, N, S, HttpClientProcessedResponseData<P, S>>>;
+  ): Promise<ClientResponseOrError<HttpClientProcessedResponseData<P>, N, P>>;
 
   public async delete(
     path: string,
@@ -369,7 +404,7 @@ export class HttpClient<
   public async delete(
     path: string,
     options?: ClientRequestOptions<false, false>,
-  ): Promise<ClientResponseOrError<C, N, S, Response>>;
+  ): Promise<ClientResponseOrError<Response, N, P>>;
 
   /**
    * Sends a DELETE request to the provided path, {@link string}.
@@ -385,7 +420,7 @@ export class HttpClient<
    *
    *   @see {HttpClient}
    *
-   * @returns {Promise<ClientResponse<C, N, HttpClientProcessedResponseData<P, S> | Response>>}
+   * @returns {Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>>}
    *   A {@link Promise} whose contents depend on the dynamic request options,
    *   {@link ClientDynamicRequestOptions}, that were supplied to the method.
    *
@@ -394,7 +429,7 @@ export class HttpClient<
   public async delete(
     path: string,
     options?: ClientRequestOptions,
-  ): Promise<ClientResponse<C, N, S, HttpClientProcessedResponseData<P, S> | Response>> {
+  ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
     return this.request(path, types.HttpMethods.DELETE, options);
   }
 
@@ -402,13 +437,13 @@ export class HttpClient<
     path: string,
     body: types.JsonObject | undefined,
     options: Required<ClientRequestOptions<true, true>, "strict">,
-  ): Promise<HttpClientProcessedResponseData<P, S>>;
+  ): Promise<HttpClientProcessedResponseData<P>>;
 
   public async patch(
     path: string,
     body?: types.JsonObject,
     options?: ClientRequestOptions<false, true>,
-  ): Promise<ClientResponseOrError<C, N, S, HttpClientProcessedResponseData<P, S>>>;
+  ): Promise<ClientResponseOrError<HttpClientProcessedResponseData<P>, N, P>>;
 
   public async patch(
     path: string,
@@ -420,7 +455,7 @@ export class HttpClient<
     path: string,
     body: types.JsonObject | undefined,
     options: Required<ClientRequestOptions<false, false>, "processed">,
-  ): Promise<ClientResponseOrError<C, N, S, Response>>;
+  ): Promise<ClientResponseOrError<Response, N, P>>;
 
   /**
    * Sends a PATCH request to the provided path, {@link string} with the provided body, {@link P}.
@@ -433,7 +468,7 @@ export class HttpClient<
    * 	 The options for the request.  These options will override any options that were provided
    *   during the configuration of the {@link HttpClient} instance.
    *
-   * @returns {Promise<ClientResponse<C, N, HttpClientProcessedResponseData<P, S> | Response>>}
+   * @returns {Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>>}
    *   A {@link Promise} whose contents depend on the dynamic request options,
    *   {@link ClientDynamicRequestOptions}, that were supplied to the method.
    *
@@ -443,7 +478,7 @@ export class HttpClient<
     path: string,
     body?: types.JsonObject,
     options?: ClientRequestOptions,
-  ): Promise<ClientResponse<C, N, S, HttpClientProcessedResponseData<P, S> | Response>> {
+  ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
     return this.request(path, types.HttpMethods.PATCH, {
       ...options,
       body: body === undefined ? undefined : JSON.stringify(body),

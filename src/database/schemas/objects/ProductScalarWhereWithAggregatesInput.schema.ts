@@ -12,7 +12,7 @@ import { EnumProductCategoryWithAggregatesFilterObjectSchema } from './EnumProdu
 import { ProductCategorySchema } from '../enums/ProductCategory.schema';
 import { EnumProductSubCategoryNullableListFilterObjectSchema } from './EnumProductSubCategoryNullableListFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductScalarWhereWithAggregatesInput>;
 export const ProductScalarWhereWithAggregatesInputObjectSchema: SchemaType = z.object({

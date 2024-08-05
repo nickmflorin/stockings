@@ -4,7 +4,7 @@ import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
 import { ProductNotificationConfigOrderByWithRelationInputObjectSchema } from './ProductNotificationConfigOrderByWithRelationInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigOrderByWithRelationInput>;
 export const StatusChangeEventConfigOrderByWithRelationInputObjectSchema: SchemaType = z.object({

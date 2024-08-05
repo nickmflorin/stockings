@@ -1,6 +1,6 @@
 import { db } from "~/database";
 
-import { convertToPlainObject } from "~/actions/serialization";
+import { convertToPlainObject } from "~/api/serialization";
 
 import { ClientProductsTableBody } from "./ClientProductsTableBody";
 

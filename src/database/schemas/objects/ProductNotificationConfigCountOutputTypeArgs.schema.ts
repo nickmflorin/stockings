@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { ProductNotificationConfigCountOutputTypeSelectObjectSchema } from './ProductNotificationConfigCountOutputTypeSelect.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigCountOutputTypeArgs>;
 export const ProductNotificationConfigCountOutputTypeArgsObjectSchema: SchemaType = z.object({

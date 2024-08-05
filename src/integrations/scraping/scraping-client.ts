@@ -1,4 +1,8 @@
-import { HttpClient, type HttpClientResponseProcessor } from "~/integrations/http";
+import {
+  HttpClient,
+  type ClientOkResponseProcessor,
+  type ClientNotOkResponseProcessor,
+} from "~/integrations/http";
 
 import * as errors from "./errors/http-errors";
 
@@ -22,32 +26,34 @@ export type ProcessedRequestData<D extends RequestDataProcessor> = D extends (
   ? R
   : never;
 
-const clientProcessor: HttpClientResponseProcessor<
-  string,
-  errors.ScrapingSerializationError
-> = async (response, params) => {
-  try {
-    return { data: await response.text() };
-  } catch (e) {
-    return { error: new errors.ScrapingSerializationError(params) };
-  }
+const processors: {
+  readonly okayResponseProcessor: ClientOkResponseProcessor<
+    string,
+    errors.ScrapingSerializationError
+  >;
+  readonly notOkayResponseProcessor: ClientNotOkResponseProcessor<errors.ScrapingClientError>;
+} = {
+  notOkayResponseProcessor: async (response, params) => new errors.ScrapingClientError(params),
+  okayResponseProcessor: async (response, params) => {
+    try {
+      return { data: await response.text() };
+    } catch (e) {
+      return { error: new errors.ScrapingSerializationError(params) };
+    }
+  },
 };
 
 export abstract class ScrapingHttpClient<D extends RequestDataProcessor> extends HttpClient<
-  errors.ScrapingClientError,
   errors.ScrapingNetworkError,
-  errors.ScrapingSerializationError,
-  typeof clientProcessor
+  typeof processors
 > {
   private readonly processor: D;
   private readonly paginator: RequestPaginator;
 
   constructor({ processor, paginator }: { processor: D; paginator: RequestPaginator }) {
     super({
-      processor: clientProcessor,
+      processors,
       NetworkErrorClass: errors.ScrapingNetworkError,
-      ClientErrorClass: errors.ScrapingClientError,
-      SerializationErrorClass: errors.ScrapingSerializationError,
     });
     this.processor = processor;
     this.paginator = paginator;

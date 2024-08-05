@@ -9,7 +9,7 @@ import { UserUpdateToOneWithWhereWithoutUpdatedProductNotificationConfigsInputOb
 import { UserUpdateWithoutUpdatedProductNotificationConfigsInputObjectSchema } from './UserUpdateWithoutUpdatedProductNotificationConfigsInput.schema';
 import { UserUncheckedUpdateWithoutUpdatedProductNotificationConfigsInputObjectSchema } from './UserUncheckedUpdateWithoutUpdatedProductNotificationConfigsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserUpdateOneRequiredWithoutUpdatedProductNotificationConfigsNestedInput>;
 export const UserUpdateOneRequiredWithoutUpdatedProductNotificationConfigsNestedInputObjectSchema: SchemaType = z.object({

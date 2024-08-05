@@ -4,7 +4,7 @@ import { ProductNotificationConfigWhereUniqueInputObjectSchema } from './Product
 import { ProductNotificationConfigUpdateWithoutCreatedByInputObjectSchema } from './ProductNotificationConfigUpdateWithoutCreatedByInput.schema';
 import { ProductNotificationConfigUncheckedUpdateWithoutCreatedByInputObjectSchema } from './ProductNotificationConfigUncheckedUpdateWithoutCreatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigUpdateWithWhereUniqueWithoutCreatedByInput>;
 export const ProductNotificationConfigUpdateWithWhereUniqueWithoutCreatedByInputObjectSchema: SchemaType = z.object({

@@ -4,7 +4,7 @@ import { NotificationEventConfigWhereUniqueInputObjectSchema } from './Notificat
 import { NotificationEventConfigUpdateWithoutUpdatedByInputObjectSchema } from './NotificationEventConfigUpdateWithoutUpdatedByInput.schema';
 import { NotificationEventConfigUncheckedUpdateWithoutUpdatedByInputObjectSchema } from './NotificationEventConfigUncheckedUpdateWithoutUpdatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigUpdateWithWhereUniqueWithoutUpdatedByInput>;
 export const NotificationEventConfigUpdateWithWhereUniqueWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

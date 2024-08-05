@@ -7,7 +7,7 @@ import { EnumProductRecordDataFieldFilterObjectSchema } from './EnumProductRecor
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorScalarWhereInput>;
 export const ProductRecordErrorScalarWhereInputObjectSchema: SchemaType = z.object({

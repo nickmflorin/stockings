@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { PriceChangeEventTypeSchema } from '../enums/PriceChangeEventType.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumPriceChangeEventTypeNullableListFilter>;
 export const EnumPriceChangeEventTypeNullableListFilterObjectSchema: SchemaType = z.object({

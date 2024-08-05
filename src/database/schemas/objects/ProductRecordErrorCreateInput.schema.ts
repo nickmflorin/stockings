@@ -4,7 +4,7 @@ import { ScrapingErrorCodeSchema } from '../enums/ScrapingErrorCode.schema';
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 import { ProductRecordCreateNestedOneWithoutErrorsInputObjectSchema } from './ProductRecordCreateNestedOneWithoutErrorsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorCreateInput>;
 export const ProductRecordErrorCreateInputObjectSchema: SchemaType = z.object({

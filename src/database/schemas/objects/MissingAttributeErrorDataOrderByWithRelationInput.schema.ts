@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { SortOrderInputObjectSchema } from './SortOrderInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingAttributeErrorDataOrderByWithRelationInput>;
 export const MissingAttributeErrorDataOrderByWithRelationInputObjectSchema: SchemaType = z.object({

@@ -12,7 +12,7 @@ import { EnumProductCategoryFieldUpdateOperationsInputObjectSchema } from './Enu
 import { ProductUpdatesubCategoriesInputObjectSchema } from './ProductUpdatesubCategoriesInput.schema';
 import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUncheckedUpdateManyWithoutUpdatedByInput>;
 export const ProductUncheckedUpdateManyWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

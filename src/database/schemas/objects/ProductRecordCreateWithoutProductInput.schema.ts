@@ -7,7 +7,7 @@ import { UserCreateNestedOneWithoutCreatedProductRecordsInputObjectSchema } from
 import { UserCreateNestedOneWithoutUpdatedProductRecordsInputObjectSchema } from './UserCreateNestedOneWithoutUpdatedProductRecordsInput.schema';
 import { ProductRecordErrorCreateNestedManyWithoutRecordInputObjectSchema } from './ProductRecordErrorCreateNestedManyWithoutRecordInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordCreateWithoutProductInput>;
 export const ProductRecordCreateWithoutProductInputObjectSchema: SchemaType = z.object({

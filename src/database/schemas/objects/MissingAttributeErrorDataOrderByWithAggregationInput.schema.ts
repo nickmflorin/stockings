@@ -6,7 +6,7 @@ import { MissingAttributeErrorDataCountOrderByAggregateInputObjectSchema } from 
 import { MissingAttributeErrorDataMaxOrderByAggregateInputObjectSchema } from './MissingAttributeErrorDataMaxOrderByAggregateInput.schema';
 import { MissingAttributeErrorDataMinOrderByAggregateInputObjectSchema } from './MissingAttributeErrorDataMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingAttributeErrorDataOrderByWithAggregationInput>;
 export const MissingAttributeErrorDataOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

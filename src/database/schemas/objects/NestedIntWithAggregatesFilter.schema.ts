@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedFloatFilterObjectSchema } from './NestedFloatFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NestedIntWithAggregatesFilter>;
 export const NestedIntWithAggregatesFilterObjectSchema: SchemaType = z.object({

@@ -15,7 +15,7 @@ import { UserUpdateOneRequiredWithoutCreatedProductsNestedInputObjectSchema } fr
 import { UserUpdateOneRequiredWithoutUpdatedProductsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutUpdatedProductsNestedInput.schema';
 import { ProductNotificationConfigUpdateManyWithoutProductNestedInputObjectSchema } from './ProductNotificationConfigUpdateManyWithoutProductNestedInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUpdateWithoutRecordsInput>;
 export const ProductUpdateWithoutRecordsInputObjectSchema: SchemaType = z.object({

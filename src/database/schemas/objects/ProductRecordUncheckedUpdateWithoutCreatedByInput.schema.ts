@@ -11,7 +11,7 @@ import { ProductRecordUpdatemanuallyChangedFieldsInputObjectSchema } from './Pro
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 import { ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInputObjectSchema } from './ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordUncheckedUpdateWithoutCreatedByInput>;
 export const ProductRecordUncheckedUpdateWithoutCreatedByInputObjectSchema: SchemaType = z.object({

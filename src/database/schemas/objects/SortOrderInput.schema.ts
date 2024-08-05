@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { NullsOrderSchema } from '../enums/NullsOrder.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.SortOrderInput>;
 export const SortOrderInputObjectSchema: SchemaType = z.object({

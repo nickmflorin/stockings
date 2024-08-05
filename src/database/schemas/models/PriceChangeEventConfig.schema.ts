@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { z } from 'zod';
-import { PriceChangeEventType } from '@zenstackhq/runtime/models';
+import { PriceChangeEventType } from '../../../../generated/models';
 import { NotificationEventConfigContentTypeSchema } from '../enums/NotificationEventConfigContentType.schema';
 import { PriceChangeEventTypeSchema } from '../enums/PriceChangeEventType.schema';
 const baseSchema = z.object({

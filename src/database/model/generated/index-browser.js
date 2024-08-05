@@ -186,11 +186,11 @@ exports.Prisma.ProductRecordErrorScalarFieldEnum = {
 
 exports.Prisma.ProductRecordScalarFieldEnum = {
   id: 'id',
-  timestamp: 'timestamp',
-  createdById: 'createdById',
   createdAt: 'createdAt',
-  updatedById: 'updatedById',
+  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  timestamp: 'timestamp',
   productId: 'productId',
   price: 'price',
   rawPrice: 'rawPrice',
@@ -217,24 +217,24 @@ exports.Prisma.ProductScalarFieldEnum = {
   subCategories: 'subCategories'
 };
 
-exports.Prisma.PriceChangeEventConfigScalarFieldEnum = {
+exports.Prisma.NotificationEventConfigScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   createdById: 'createdById',
   updatedAt: 'updatedAt',
   updatedById: 'updatedById',
   productNotificationConfigId: 'productNotificationConfigId',
-  configType: 'configType'
+  contentType: 'contentType'
+};
+
+exports.Prisma.PriceChangeEventConfigScalarFieldEnum = {
+  id: 'id',
+  eventTypes: 'eventTypes'
 };
 
 exports.Prisma.StatusChangeEventConfigScalarFieldEnum = {
   id: 'id',
-  createdAt: 'createdAt',
-  createdById: 'createdById',
-  updatedAt: 'updatedAt',
-  updatedById: 'updatedById',
-  productNotificationConfigId: 'productNotificationConfigId',
-  statuses: 'statuses'
+  eventTypes: 'eventTypes'
 };
 
 exports.Prisma.ProductNotificationConfigScalarFieldEnum = {
@@ -307,9 +307,14 @@ exports.ProductSubCategory = exports.$Enums.ProductSubCategory = {
   AccessoryTools: 'AccessoryTools'
 };
 
-exports.PriceChangeEventConfigType = exports.$Enums.PriceChangeEventConfigType = {
-  PRICE_INCREASE: 'PRICE_INCREASE',
-  PRICE_DECREASE: 'PRICE_DECREASE'
+exports.NotificationEventConfigContentType = exports.$Enums.NotificationEventConfigContentType = {
+  PriceChange: 'PriceChange',
+  StatusChange: 'StatusChange'
+};
+
+exports.PriceChangeEventType = exports.$Enums.PriceChangeEventType = {
+  PriceIncrease: 'PriceIncrease',
+  PriceDecrease: 'PriceDecrease'
 };
 
 exports.Prisma.ModelName = {
@@ -327,6 +332,7 @@ exports.Prisma.ModelName = {
   ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
   Product: 'Product',
+  NotificationEventConfig: 'NotificationEventConfig',
   PriceChangeEventConfig: 'PriceChangeEventConfig',
   StatusChangeEventConfig: 'StatusChangeEventConfig',
   ProductNotificationConfig: 'ProductNotificationConfig'

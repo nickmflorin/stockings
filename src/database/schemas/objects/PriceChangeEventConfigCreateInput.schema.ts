@@ -7,7 +7,7 @@ import { UserCreateNestedOneWithoutDelegate_aux_User_createdNotificationEventCon
 import { UserCreateNestedOneWithoutDelegate_aux_User_updatedNotificationEventConfigs_P_0InputObjectSchema } from './UserCreateNestedOneWithoutDelegate_aux_User_updatedNotificationEventConfigs_P_0Input.schema';
 import { ProductNotificationConfigCreateNestedOneWithoutDelegate_aux_ProductNotificationConfig_eventConfigs_0InputObjectSchema } from './ProductNotificationConfigCreateNestedOneWithoutDelegate_aux_ProductNotificationConfig_eventConfigs_0Input.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.PriceChangeEventConfigCreateInput>;
 export const PriceChangeEventConfigCreateInputObjectSchema: SchemaType = z.object({

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { QueryModeSchema } from '../enums/QueryMode.schema';
 import { NestedStringNullableFilterObjectSchema } from './NestedStringNullableFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StringNullableFilter>;
 export const StringNullableFilterObjectSchema: SchemaType = z.object({

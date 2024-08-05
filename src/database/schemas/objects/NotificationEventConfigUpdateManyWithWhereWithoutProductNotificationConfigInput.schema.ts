@@ -4,7 +4,7 @@ import { NotificationEventConfigScalarWhereInputObjectSchema } from './Notificat
 import { NotificationEventConfigUpdateManyMutationInputObjectSchema } from './NotificationEventConfigUpdateManyMutationInput.schema';
 import { NotificationEventConfigUncheckedUpdateManyWithoutProductNotificationConfigInputObjectSchema } from './NotificationEventConfigUncheckedUpdateManyWithoutProductNotificationConfigInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigUpdateManyWithWhereWithoutProductNotificationConfigInput>;
 export const NotificationEventConfigUpdateManyWithWhereWithoutProductNotificationConfigInputObjectSchema: SchemaType = z.object({

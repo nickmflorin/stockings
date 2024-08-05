@@ -7,7 +7,7 @@ import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.sc
 import { EnumProductRecordDataFieldFieldUpdateOperationsInputObjectSchema } from './EnumProductRecordDataFieldFieldUpdateOperationsInput.schema';
 import { ProductRecordUpdateOneRequiredWithoutErrorsNestedInputObjectSchema } from './ProductRecordUpdateOneRequiredWithoutErrorsNestedInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorUpdateInput>;
 export const ProductRecordErrorUpdateInputObjectSchema: SchemaType = z.object({

@@ -5,7 +5,7 @@ import { EnumElementAttributeWithAggregatesFilterObjectSchema } from './EnumElem
 import { ElementAttributeSchema } from '../enums/ElementAttribute.schema';
 import { StringNullableWithAggregatesFilterObjectSchema } from './StringNullableWithAggregatesFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.MissingAttributeErrorDataScalarWhereWithAggregatesInput>;
 export const MissingAttributeErrorDataScalarWhereWithAggregatesInputObjectSchema: SchemaType = z.object({

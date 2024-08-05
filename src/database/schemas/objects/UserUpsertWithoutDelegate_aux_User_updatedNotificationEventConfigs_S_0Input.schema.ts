@@ -6,7 +6,7 @@ import { UserCreateWithoutDelegate_aux_User_updatedNotificationEventConfigs_S_0I
 import { UserUncheckedCreateWithoutDelegate_aux_User_updatedNotificationEventConfigs_S_0InputObjectSchema } from './UserUncheckedCreateWithoutDelegate_aux_User_updatedNotificationEventConfigs_S_0Input.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserUpsertWithoutDelegate_aux_User_updatedNotificationEventConfigs_S_0Input>;
 export const UserUpsertWithoutDelegate_aux_User_updatedNotificationEventConfigs_S_0InputObjectSchema: SchemaType = z.object({

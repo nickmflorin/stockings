@@ -4,23 +4,29 @@ import { isError } from "~/application/errors";
 
 export interface HttpErrorConfig {
   readonly message?: string;
-  readonly url: string;
-  readonly method: HttpMethod;
+  readonly url?: string;
+  readonly method?: HttpMethod;
 }
 
 export abstract class BaseHttpError extends Error {
-  protected readonly url: string;
-  public readonly method: HttpMethod;
+  protected readonly url: string | null = null;
+  public readonly method: HttpMethod | null = null;
 
   constructor({ url, message, method }: HttpErrorConfig) {
     super(
       message
-        ? `[${method}] ${message}`
-        : `[${method}] There was an error making a request to ${url}.`,
+        ? method
+          ? `[${method}] ${message}`
+          : message
+        : url && method
+          ? `[${method}] There was an error making a request to ${url}.`
+          : url
+            ? `There was an error making a request to ${url}.`
+            : "There was an error with the request.",
     );
     this.name = "HttpError";
-    this.url = url;
-    this.method = method;
+    this.url = url ?? null;
+    this.method = method ?? null;
   }
 }
 
@@ -35,7 +41,10 @@ export class HttpNetworkError extends BaseHttpError {
     super({
       ...config,
       message:
-        config.message ?? `There was a network error making a request to ${config.url}: ${error}`,
+        config.message ??
+        (config.url
+          ? `There was a network error making a request to ${config.url}: ${error}`
+          : `There was a network error with the request: ${error}`),
     });
     this.error = error;
     this.name = "HttpNetworkError";
@@ -67,7 +76,9 @@ export class HttpClientError extends BaseHttpError {
       ...config,
       message: config.message
         ? `[${status}] ${config.message}`
-        : `[${status}] There was a client error making a request to ${config.url}.`,
+        : config.url
+          ? `[${status}] There was a client error making a request to ${config.url}.`
+          : `[${status}] There was a client error with the request.`,
     });
     this.status = status;
     this.name = "HttpClientError";
@@ -93,7 +104,9 @@ export class HttpSerializationError extends HttpClientError {
       ...config,
       message: config.message
         ? `[${config.status}] ${config.message}`
-        : `[${config.status}] There was an error serializing/processing the response for the request to ${config.url}.`,
+        : config.url
+          ? `[${config.status}] There was an error serializing/processing the response for the request to ${config.url}.`
+          : `[${config.status}] There was an error serializing/processing the response from the request.`,
     });
     this.name = "HttpSerializationError";
   }

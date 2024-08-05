@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { UuidWithAggregatesFilterObjectSchema } from './UuidWithAggregatesFilter.schema';
 import { DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigScalarWhereWithAggregatesInput>;
 export const ProductNotificationConfigScalarWhereWithAggregatesInputObjectSchema: SchemaType = z.object({

@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUpdatesubCategoriesInput>;
 export const ProductUpdatesubCategoriesInputObjectSchema: SchemaType = z.object({

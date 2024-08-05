@@ -31,7 +31,7 @@
     "migrate-prod": "pnpm validate-node-version && pnpm manual-prod-env-setup -- prisma migrate dev",
     "migrate-reset": "pnpm validate-node-version && pnpm manual-dev-env-setup -- prisma migrate reset",
     "pushdb": "pnpm validate-node-version && prisma db push",
-    "generate-db-client": "pnpm validate-node-version && prisma generate",
+    "generate-db": "pnpm validate-node-version && npx zenstack generate",
     "seeddb": "pnpm validate-node-version && pnpm manual-dev-env-setup -- cross-env NODE_ENV=development prisma db seed",
     "seeddb-prod": "pnpm validate-node-version && pnpm manual-prod-env-setup -- prisma db seed",
     "pullenv": "vercel env pull ./.env --environment=development",

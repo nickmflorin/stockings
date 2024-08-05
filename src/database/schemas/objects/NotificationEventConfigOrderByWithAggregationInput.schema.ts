@@ -5,7 +5,7 @@ import { NotificationEventConfigCountOrderByAggregateInputObjectSchema } from '.
 import { NotificationEventConfigMaxOrderByAggregateInputObjectSchema } from './NotificationEventConfigMaxOrderByAggregateInput.schema';
 import { NotificationEventConfigMinOrderByAggregateInputObjectSchema } from './NotificationEventConfigMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigOrderByWithAggregationInput>;
 export const NotificationEventConfigOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

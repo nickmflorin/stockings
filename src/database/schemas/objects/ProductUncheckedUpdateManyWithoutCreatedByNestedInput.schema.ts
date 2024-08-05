@@ -10,7 +10,7 @@ import { ProductUpdateWithWhereUniqueWithoutCreatedByInputObjectSchema } from '.
 import { ProductUpdateManyWithWhereWithoutCreatedByInputObjectSchema } from './ProductUpdateManyWithWhereWithoutCreatedByInput.schema';
 import { ProductScalarWhereInputObjectSchema } from './ProductScalarWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUncheckedUpdateManyWithoutCreatedByNestedInput>;
 export const ProductUncheckedUpdateManyWithoutCreatedByNestedInputObjectSchema: SchemaType = z.object({

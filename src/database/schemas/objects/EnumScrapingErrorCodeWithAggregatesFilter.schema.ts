@@ -5,7 +5,7 @@ import { NestedEnumScrapingErrorCodeWithAggregatesFilterObjectSchema } from './N
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedEnumScrapingErrorCodeFilterObjectSchema } from './NestedEnumScrapingErrorCodeFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumScrapingErrorCodeWithAggregatesFilter>;
 export const EnumScrapingErrorCodeWithAggregatesFilterObjectSchema: SchemaType = z.object({

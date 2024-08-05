@@ -6,7 +6,7 @@ import { UserCountOrderByAggregateInputObjectSchema } from './UserCountOrderByAg
 import { UserMaxOrderByAggregateInputObjectSchema } from './UserMaxOrderByAggregateInput.schema';
 import { UserMinOrderByAggregateInputObjectSchema } from './UserMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserOrderByWithAggregationInput>;
 export const UserOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

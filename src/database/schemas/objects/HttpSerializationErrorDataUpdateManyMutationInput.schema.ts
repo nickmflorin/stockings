@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.HttpSerializationErrorDataUpdateManyMutationInput>;
 export const HttpSerializationErrorDataUpdateManyMutationInputObjectSchema: SchemaType = z.object({

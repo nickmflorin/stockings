@@ -6,7 +6,7 @@ import { ProductStatusSchema } from '../enums/ProductStatus.schema';
 import { UserCreateNestedOneWithoutDelegate_aux_User_createdNotificationEventConfigs_S_0InputObjectSchema } from './UserCreateNestedOneWithoutDelegate_aux_User_createdNotificationEventConfigs_S_0Input.schema';
 import { ProductNotificationConfigCreateNestedOneWithoutDelegate_aux_ProductNotificationConfig_eventConfigs_1InputObjectSchema } from './ProductNotificationConfigCreateNestedOneWithoutDelegate_aux_ProductNotificationConfig_eventConfigs_1Input.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigCreateWithoutUpdatedByInput>;
 export const StatusChangeEventConfigCreateWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

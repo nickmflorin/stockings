@@ -6,7 +6,7 @@ import { EnumScrapingErrorCodeFieldUpdateOperationsInputObjectSchema } from './E
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 import { EnumProductRecordDataFieldFieldUpdateOperationsInputObjectSchema } from './EnumProductRecordDataFieldFieldUpdateOperationsInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorUncheckedUpdateWithoutRecordInput>;
 export const ProductRecordErrorUncheckedUpdateWithoutRecordInputObjectSchema: SchemaType = z.object({

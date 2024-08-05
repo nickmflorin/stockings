@@ -4,7 +4,7 @@ import { ProductStatusSchema } from '../enums/ProductStatus.schema';
 import { ProductRecordCreatemanuallyChangedFieldsInputObjectSchema } from './ProductRecordCreatemanuallyChangedFieldsInput.schema';
 import { ProductRecordDataFieldSchema } from '../enums/ProductRecordDataField.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordCreateManyUpdatedByInput>;
 export const ProductRecordCreateManyUpdatedByInputObjectSchema: SchemaType = z.object({

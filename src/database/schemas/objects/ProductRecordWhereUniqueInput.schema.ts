@@ -15,7 +15,7 @@ import { ProductRelationFilterObjectSchema } from './ProductRelationFilter.schem
 import { ProductWhereInputObjectSchema } from './ProductWhereInput.schema';
 import { ProductRecordErrorListRelationFilterObjectSchema } from './ProductRecordErrorListRelationFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordWhereUniqueInput>;
 export const ProductRecordWhereUniqueInputObjectSchema: SchemaType = z.object({

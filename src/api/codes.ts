@@ -4,34 +4,29 @@ import {
   enumeratedLiterals,
 } from "enumerated-literals";
 
-export const ApiClientErrorCodes = enumeratedLiterals(
+export const ApiClientGlobalErrorCodes = enumeratedLiterals(
   [
     {
       value: "NOT_AUTHENTICATED",
-      statusCode: 403,
+      status: 403,
       message: "You must be authenticated to perform this action.",
     },
     {
       value: "NOT_FOUND",
-      statusCode: 404,
+      status: 404,
       message: "The requested resource could not be found.",
     },
-    { value: "BAD_REQUEST", statusCode: 400, message: "Bad request." },
+    { value: "BAD_REQUEST", status: 400, message: "Bad request." },
     {
       value: "FORBIDDEN",
-      statusCode: 401,
+      status: 401,
       message: "You do not have permission to perform this action.",
     },
   ] as const,
   {},
 );
 
-export type ApiClientErrorCode = EnumeratedLiteralsType<typeof ApiClientErrorCodes>;
-
-export type ApiClientErrorStatusCode<C extends ApiClientErrorCode = ApiClientErrorCode> = Extract<
-  EnumeratedLiteralsModel<typeof ApiClientErrorCodes>,
-  { value: C }
->["statusCode"];
+export type ApiClientGlobalErrorCode = EnumeratedLiteralsType<typeof ApiClientGlobalErrorCodes>;
 
 export const ApiClientFieldErrorCodes = enumeratedLiterals(
   [
@@ -57,3 +52,7 @@ export const ApiClientFieldErrorCodes = enumeratedLiterals(
 );
 
 export type ApiClientFieldErrorCode = EnumeratedLiteralsType<typeof ApiClientFieldErrorCodes>;
+
+export type ApiClientGlobalErrorStatusCode<
+  C extends ApiClientGlobalErrorCode = ApiClientGlobalErrorCode,
+> = Extract<EnumeratedLiteralsModel<typeof ApiClientGlobalErrorCodes>, { value: C }>["status"];

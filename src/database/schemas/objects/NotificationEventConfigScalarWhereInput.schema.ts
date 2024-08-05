@@ -5,7 +5,7 @@ import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { EnumNotificationEventConfigContentTypeFilterObjectSchema } from './EnumNotificationEventConfigContentTypeFilter.schema';
 import { NotificationEventConfigContentTypeSchema } from '../enums/NotificationEventConfigContentType.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigScalarWhereInput>;
 export const NotificationEventConfigScalarWhereInputObjectSchema: SchemaType = z.object({

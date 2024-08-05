@@ -7,7 +7,7 @@ import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 import { ProductRecordUncheckedCreateNestedManyWithoutProductInputObjectSchema } from './ProductRecordUncheckedCreateNestedManyWithoutProductInput.schema';
 import { ProductNotificationConfigUncheckedCreateNestedManyWithoutProductInputObjectSchema } from './ProductNotificationConfigUncheckedCreateNestedManyWithoutProductInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUncheckedCreateInput>;
 export const ProductUncheckedCreateInputObjectSchema: SchemaType = z.object({

@@ -14,7 +14,7 @@ import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 import { ProductRecordUncheckedUpdateManyWithoutProductNestedInputObjectSchema } from './ProductRecordUncheckedUpdateManyWithoutProductNestedInput.schema';
 import { ProductNotificationConfigUncheckedUpdateManyWithoutProductNestedInputObjectSchema } from './ProductNotificationConfigUncheckedUpdateManyWithoutProductNestedInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUncheckedUpdateWithoutUpdatedByInput>;
 export const ProductUncheckedUpdateWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

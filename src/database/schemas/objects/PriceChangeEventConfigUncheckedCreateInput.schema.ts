@@ -4,7 +4,7 @@ import { NotificationEventConfigContentTypeSchema } from '../enums/NotificationE
 import { PriceChangeEventConfigCreateeventTypesInputObjectSchema } from './PriceChangeEventConfigCreateeventTypesInput.schema';
 import { PriceChangeEventTypeSchema } from '../enums/PriceChangeEventType.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.PriceChangeEventConfigUncheckedCreateInput>;
 export const PriceChangeEventConfigUncheckedCreateInputObjectSchema: SchemaType = z.object({

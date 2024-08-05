@@ -4,7 +4,7 @@ import { NotificationEventConfigUncheckedCreateNestedManyWithoutProductNotificat
 import { PriceChangeEventConfigUncheckedCreateNestedManyWithoutProductNotificationConfigInputObjectSchema } from './PriceChangeEventConfigUncheckedCreateNestedManyWithoutProductNotificationConfigInput.schema';
 import { StatusChangeEventConfigUncheckedCreateNestedManyWithoutProductNotificationConfigInputObjectSchema } from './StatusChangeEventConfigUncheckedCreateNestedManyWithoutProductNotificationConfigInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductNotificationConfigUncheckedCreateWithoutUserInput>;
 export const ProductNotificationConfigUncheckedCreateWithoutUserInputObjectSchema: SchemaType = z.object({

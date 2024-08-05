@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { NestedBoolFilterObjectSchema } from './NestedBoolFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.BoolFilter>;
 export const BoolFilterObjectSchema: SchemaType = z.object({

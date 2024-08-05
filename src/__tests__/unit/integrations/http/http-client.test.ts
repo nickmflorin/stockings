@@ -1,7 +1,6 @@
 import {
   HttpNetworkError,
   HttpClientError,
-  HttpSerializationError,
   HttpClient,
   type HttpMethod,
   STATUS_CODES,
@@ -59,9 +58,7 @@ const mockFetchClientError = ({
 describe("HTTP Client properly functions", () => {
   const client = new HttpClient({
     NetworkErrorClass: HttpNetworkError,
-    ClientErrorClass: HttpClientError,
-    SerializationErrorClass: HttpSerializationError,
-    processor: async response => ({ data: await response.json() }),
+    processors: { okayResponseProcessor: async response => ({ data: await response.json() }) },
   });
 
   describe("GET request properly returns", () => {

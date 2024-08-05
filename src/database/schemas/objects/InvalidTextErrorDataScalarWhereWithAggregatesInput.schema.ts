@@ -4,7 +4,7 @@ import { UuidWithAggregatesFilterObjectSchema } from './UuidWithAggregatesFilter
 import { StringNullableWithAggregatesFilterObjectSchema } from './StringNullableWithAggregatesFilter.schema';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.InvalidTextErrorDataScalarWhereWithAggregatesInput>;
 export const InvalidTextErrorDataScalarWhereWithAggregatesInputObjectSchema: SchemaType = z.object({

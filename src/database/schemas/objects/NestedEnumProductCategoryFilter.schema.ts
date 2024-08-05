@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { ProductCategorySchema } from '../enums/ProductCategory.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NestedEnumProductCategoryFilter>;
 export const NestedEnumProductCategoryFilterObjectSchema: SchemaType = z.object({

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { NotificationEventConfigSelectObjectSchema } from './NotificationEventConfigSelect.schema';
 import { NotificationEventConfigIncludeObjectSchema } from './NotificationEventConfigInclude.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigArgs>;
 export const NotificationEventConfigArgsObjectSchema: SchemaType = z.object({

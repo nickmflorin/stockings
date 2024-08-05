@@ -5,7 +5,7 @@ import { ProductCategorySchema } from '../enums/ProductCategory.schema';
 import { ProductCreatesubCategoriesInputObjectSchema } from './ProductCreatesubCategoriesInput.schema';
 import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductCreateManyInput>;
 export const ProductCreateManyInputObjectSchema: SchemaType = z.object({

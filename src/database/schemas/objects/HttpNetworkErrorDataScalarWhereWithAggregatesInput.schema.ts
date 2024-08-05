@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { UuidWithAggregatesFilterObjectSchema } from './UuidWithAggregatesFilter.schema';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.HttpNetworkErrorDataScalarWhereWithAggregatesInput>;
 export const HttpNetworkErrorDataScalarWhereWithAggregatesInputObjectSchema: SchemaType = z.object({

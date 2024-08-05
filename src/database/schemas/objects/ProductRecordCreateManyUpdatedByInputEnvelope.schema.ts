@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { ProductRecordCreateManyUpdatedByInputObjectSchema } from './ProductRecordCreateManyUpdatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordCreateManyUpdatedByInputEnvelope>;
 export const ProductRecordCreateManyUpdatedByInputEnvelopeObjectSchema: SchemaType = z.object({

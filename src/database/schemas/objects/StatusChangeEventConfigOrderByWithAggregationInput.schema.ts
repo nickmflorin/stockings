@@ -5,7 +5,7 @@ import { StatusChangeEventConfigCountOrderByAggregateInputObjectSchema } from '.
 import { StatusChangeEventConfigMaxOrderByAggregateInputObjectSchema } from './StatusChangeEventConfigMaxOrderByAggregateInput.schema';
 import { StatusChangeEventConfigMinOrderByAggregateInputObjectSchema } from './StatusChangeEventConfigMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigOrderByWithAggregationInput>;
 export const StatusChangeEventConfigOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

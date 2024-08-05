@@ -154,6 +154,7 @@ module.exports = {
     "src/database/prisma/migrations/*",
     "src/database/model/generated/*",
     "src/database/schemas/**",
+    "src/database/zenstack/generated/**",
     "/node_modules/**",
     ".next/*",
   ],

@@ -6,7 +6,7 @@ import { NonUniqueTextErrorDataCountOrderByAggregateInputObjectSchema } from './
 import { NonUniqueTextErrorDataMaxOrderByAggregateInputObjectSchema } from './NonUniqueTextErrorDataMaxOrderByAggregateInput.schema';
 import { NonUniqueTextErrorDataMinOrderByAggregateInputObjectSchema } from './NonUniqueTextErrorDataMinOrderByAggregateInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NonUniqueTextErrorDataOrderByWithAggregationInput>;
 export const NonUniqueTextErrorDataOrderByWithAggregationInputObjectSchema: SchemaType = z.object({

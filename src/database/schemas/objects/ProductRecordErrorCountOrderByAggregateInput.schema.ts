@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorCountOrderByAggregateInput>;
 export const ProductRecordErrorCountOrderByAggregateInputObjectSchema: SchemaType = z.object({

@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { NotificationEventConfigCreateManyUpdatedByInputObjectSchema } from './NotificationEventConfigCreateManyUpdatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigCreateManyUpdatedByInputEnvelope>;
 export const NotificationEventConfigCreateManyUpdatedByInputEnvelopeObjectSchema: SchemaType = z.object({

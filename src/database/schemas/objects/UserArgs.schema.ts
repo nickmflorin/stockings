@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { UserSelectObjectSchema } from './UserSelect.schema';
 import { UserIncludeObjectSchema } from './UserInclude.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.UserArgs>;
 export const UserArgsObjectSchema: SchemaType = z.object({

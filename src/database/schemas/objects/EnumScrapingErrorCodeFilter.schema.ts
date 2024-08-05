@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ScrapingErrorCodeSchema } from '../enums/ScrapingErrorCode.schema';
 import { NestedEnumScrapingErrorCodeFilterObjectSchema } from './NestedEnumScrapingErrorCodeFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumScrapingErrorCodeFilter>;
 export const EnumScrapingErrorCodeFilterObjectSchema: SchemaType = z.object({

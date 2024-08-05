@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { ProductRecordErrorWhereInputObjectSchema } from './ProductRecordErrorWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorListRelationFilter>;
 export const ProductRecordErrorListRelationFilterObjectSchema: SchemaType = z.object({

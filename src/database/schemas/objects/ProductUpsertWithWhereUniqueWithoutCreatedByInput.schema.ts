@@ -6,7 +6,7 @@ import { ProductUncheckedUpdateWithoutCreatedByInputObjectSchema } from './Produ
 import { ProductCreateWithoutCreatedByInputObjectSchema } from './ProductCreateWithoutCreatedByInput.schema';
 import { ProductUncheckedCreateWithoutCreatedByInputObjectSchema } from './ProductUncheckedCreateWithoutCreatedByInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductUpsertWithWhereUniqueWithoutCreatedByInput>;
 export const ProductUpsertWithWhereUniqueWithoutCreatedByInputObjectSchema: SchemaType = z.object({

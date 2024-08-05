@@ -5,7 +5,7 @@ import { NestedEnumNotificationEventConfigContentTypeWithAggregatesFilterObjectS
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedEnumNotificationEventConfigContentTypeFilterObjectSchema } from './NestedEnumNotificationEventConfigContentTypeFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumNotificationEventConfigContentTypeWithAggregatesFilter>;
 export const EnumNotificationEventConfigContentTypeWithAggregatesFilterObjectSchema: SchemaType = z.object({

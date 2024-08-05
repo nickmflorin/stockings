@@ -4,7 +4,7 @@ import { NonUniqueElementErrorDataWhereInputObjectSchema } from './NonUniqueElem
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NonUniqueElementErrorDataWhereUniqueInput>;
 export const NonUniqueElementErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

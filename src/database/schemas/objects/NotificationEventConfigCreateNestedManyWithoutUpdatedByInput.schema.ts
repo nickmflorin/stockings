@@ -6,7 +6,7 @@ import { NotificationEventConfigCreateOrConnectWithoutUpdatedByInputObjectSchema
 import { NotificationEventConfigCreateManyUpdatedByInputEnvelopeObjectSchema } from './NotificationEventConfigCreateManyUpdatedByInputEnvelope.schema';
 import { NotificationEventConfigWhereUniqueInputObjectSchema } from './NotificationEventConfigWhereUniqueInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigCreateNestedManyWithoutUpdatedByInput>;
 export const NotificationEventConfigCreateNestedManyWithoutUpdatedByInputObjectSchema: SchemaType = z.object({

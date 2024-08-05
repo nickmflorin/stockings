@@ -5,7 +5,7 @@ import { NestedEnumProductStatusNullableWithAggregatesFilterObjectSchema } from 
 import { NestedIntNullableFilterObjectSchema } from './NestedIntNullableFilter.schema';
 import { NestedEnumProductStatusNullableFilterObjectSchema } from './NestedEnumProductStatusNullableFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumProductStatusNullableWithAggregatesFilter>;
 export const EnumProductStatusNullableWithAggregatesFilterObjectSchema: SchemaType = z.object({

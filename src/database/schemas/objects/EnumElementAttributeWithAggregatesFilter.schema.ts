@@ -5,7 +5,7 @@ import { NestedEnumElementAttributeWithAggregatesFilterObjectSchema } from './Ne
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedEnumElementAttributeFilterObjectSchema } from './NestedEnumElementAttributeFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.EnumElementAttributeWithAggregatesFilter>;
 export const EnumElementAttributeWithAggregatesFilterObjectSchema: SchemaType = z.object({

@@ -9,7 +9,7 @@ import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 import { ProductNotificationConfigRelationFilterObjectSchema } from './ProductNotificationConfigRelationFilter.schema';
 import { ProductNotificationConfigWhereInputObjectSchema } from './ProductNotificationConfigWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.NotificationEventConfigWhereInput>;
 export const NotificationEventConfigWhereInputObjectSchema: SchemaType = z.object({

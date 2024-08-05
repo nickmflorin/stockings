@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { HttpSerializationErrorDataWhereInputObjectSchema } from './HttpSerializationErrorDataWhereInput.schema';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.HttpSerializationErrorDataWhereUniqueInput>;
 export const HttpSerializationErrorDataWhereUniqueInputObjectSchema: SchemaType = z.object({

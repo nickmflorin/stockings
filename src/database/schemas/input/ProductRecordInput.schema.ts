@@ -1,7 +1,7 @@
 
 /* eslint-disable */
 import { z } from 'zod';
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 ;
 import { ProductRecordSelectObjectSchema } from '../objects/ProductRecordSelect.schema';

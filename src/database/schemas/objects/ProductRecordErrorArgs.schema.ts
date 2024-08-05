@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ProductRecordErrorSelectObjectSchema } from './ProductRecordErrorSelect.schema';
 import { ProductRecordErrorIncludeObjectSchema } from './ProductRecordErrorInclude.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.ProductRecordErrorArgs>;
 export const ProductRecordErrorArgsObjectSchema: SchemaType = z.object({

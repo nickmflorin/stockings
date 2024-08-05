@@ -10,7 +10,7 @@ import { StatusChangeEventConfigUpdateWithWhereUniqueWithoutUpdatedByInputObject
 import { StatusChangeEventConfigUpdateManyWithWhereWithoutUpdatedByInputObjectSchema } from './StatusChangeEventConfigUpdateManyWithWhereWithoutUpdatedByInput.schema';
 import { StatusChangeEventConfigScalarWhereInputObjectSchema } from './StatusChangeEventConfigScalarWhereInput.schema';
 
-import type { Prisma } from '@zenstackhq/runtime/models';
+import type { Prisma } from '../../../../generated/models';
 
 type SchemaType = z.ZodType<Prisma.StatusChangeEventConfigUpdateManyWithoutUpdatedByNestedInput>;
 export const StatusChangeEventConfigUpdateManyWithoutUpdatedByNestedInputObjectSchema: SchemaType = z.object({
