@@ -2,7 +2,7 @@ import type { HttpMethod } from "./types";
 
 import { isError } from "~/application/errors";
 
-interface HttpErrorConfig {
+export interface HttpErrorConfig {
   readonly message?: string;
   readonly url: string;
   readonly method: HttpMethod;
@@ -51,14 +51,18 @@ export class HttpNetworkError extends BaseHttpError {
   }
 }
 
+export interface HttpClientErrorConfig extends HttpErrorConfig {
+  readonly status: number;
+}
+
 export type ClientErrorClass<C extends HttpClientError> = {
-  new (config: HttpErrorConfig & { readonly status: number }): C;
+  new (config: HttpClientErrorConfig): C;
 };
 
 export class HttpClientError extends BaseHttpError {
   public readonly status: number;
 
-  constructor({ status, ...config }: HttpErrorConfig & { readonly status: number }) {
+  constructor({ status, ...config }: HttpClientErrorConfig) {
     super({
       ...config,
       message: config.message
@@ -80,11 +84,11 @@ export class HttpClientError extends BaseHttpError {
 }
 
 export type SerializationErrorClass<C extends HttpSerializationError> = {
-  new (config: HttpErrorConfig & { readonly status: number }): C;
+  new (config: HttpClientErrorConfig): C;
 };
 
 export class HttpSerializationError extends HttpClientError {
-  constructor(config: HttpErrorConfig & { readonly status: number }) {
+  constructor(config: HttpClientErrorConfig) {
     super({
       ...config,
       message: config.message

@@ -3,3 +3,4 @@
 /build/**
 src/database/model/generated/**
 src/database/prisma/migrations/**
+src/database/schemas/**

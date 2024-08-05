@@ -185,6 +185,8 @@ export class HttpClient<
         method: request.method.toUpperCase() as types.HttpMethod,
       });
     }
+    let returnResponse: HttpClientProcessedResponseData<P, S> | Response | null = null;
+
     if (response !== null && !response.ok) {
       // Here, the server returned a response - but the response had a 4xx or 5xx status code.
       error = new this.ClientErrorClass({
@@ -192,16 +194,7 @@ export class HttpClient<
         url: request.url,
         status: response.status,
       });
-    }
-    if (error) {
-      /* If the method was called with the 'strict' flag, the calling logic expects that the method
-         returns a Response object if there is a valid response, and throws an Error otherwise. */
-      if (HttpClient.getDynamicOption("strict", method, options)) {
-        throw error;
-      }
-      return { error };
-    } else if (response) {
-      let returnResponse: HttpClientProcessedResponseData<P, S> | Response = response;
+    } else if (response !== null) {
       if (HttpClient.getDynamicOption("processed", method, options)) {
         const processed = await this.processResponse(response, {
           method: request.method.toUpperCase() as types.HttpMethod,
@@ -211,14 +204,23 @@ export class HttpClient<
         if (processed.data) {
           returnResponse = processed.data;
         } else if (processed.error) {
-          if (HttpClient.getDynamicOption("strict", method, options)) {
-            throw processed.error;
-          }
-          return { error: processed.error };
+          error = processed.error;
         } else {
           throw new Error("The request data processor did not return data or an error object!");
         }
+      } else {
+        returnResponse = response;
       }
+    }
+
+    if (error) {
+      /* If the method was called with the 'strict' flag, the calling logic expects that the method
+         returns a Response object if there is a valid response, and throws an Error otherwise. */
+      if (HttpClient.getDynamicOption("strict", method, options)) {
+        throw error;
+      }
+      return { error };
+    } else if (returnResponse) {
       /* If the method was called with the 'strict' flag, the calling logic is already expecting
          that (and the return of the method on the HttpClient that was called is typed such that)
          the return is simply just the Response object or the JSON response body - because if there
@@ -230,7 +232,9 @@ export class HttpClient<
             meta: {
               method: request.method.toUpperCase() as types.HttpMethod,
               url: request.url,
-              status: response?.status,
+              /* This type coercion is safe because the 'returnResponse' will only ever be non-null
+                 if the 'response' is present. */
+              status: (response as Response).status,
             },
           };
     } else {

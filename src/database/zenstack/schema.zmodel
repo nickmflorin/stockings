@@ -1,0 +1,229 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // Uses Connection Pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a Direct Connection
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output          = "../../model/generated"
+}
+
+plugin prisma {
+  provider = "@core/prisma"
+  output = "../prisma/schema.prisma"
+}
+
+plugin zod {
+  provider = '@core/zod'
+  output = '../schemas'
+  compile = false
+}
+
+
+model User {
+  id                                String                      @id @default(uuid()) @db.Uuid
+  clerkId                           String                      @unique
+  firstName                         String
+  lastName                          String
+  profileImageUrl                   String?
+  emailAddress                      String
+  createdAt                         DateTime                    @default(now())
+  updatedAt                         DateTime                    @updatedAt
+  createdProducts                   Product[]                   @relation("createdProducts")
+  updatedProducts                   Product[]                   @relation("updatedProducts")
+  createdProductRecords             ProductRecord[]             @relation("createdProductRecords")
+  updatedProductRecords             ProductRecord[]             @relation("updatedProductRecords")
+  productNotificationConfigs        ProductNotificationConfig[] @relation("productNotificationConfigs")
+  createdProductNotificationConfigs ProductNotificationConfig[] @relation("createdProductNotificationConfigs")
+  updatedProductNotificationConfigs ProductNotificationConfig[] @relation("updatedProductNotificationConfigs")
+  createdNotificationEventConfigs   NotificationEventConfig[]   @relation("createdNotificationEventConfigs")
+  updatedNotificationEventConfigs   NotificationEventConfig[]   @relation("updatedNotificationEventConfigs")
+}
+
+abstract model Model {
+  id String @id @default(uuid()) @db.Uuid
+}
+
+abstract model ModelMeta extends Model {
+  createdAt   DateTime @default(now())
+  createdById String   @db.Uuid
+  updatedAt   DateTime @updatedAt
+  updatedById String   @db.Uuid
+}
+
+enum ElementAttribute {
+  HREF
+  SRC
+  VALUE
+  DATA_GA_PRODUCT_NAME
+}
+
+enum ScrapingErrorCode {
+  MISSING_ATTRIBUTE
+  INVALID_ATTRIBUTE
+  MISSING_TEXT
+  INVALID_TEXT
+  NONUNIQUE_TEXT
+  MISSING_ELEMENT
+  NONUNIQUE_ELEMENT
+  HTTP_NETWORK
+  HTTP_CLIENT
+  HTTP_SERIALIZATION
+}
+
+enum ProductRecordDataField {
+  PRICE
+  RAW_PRICE
+  STATUS
+}
+
+model HttpNetworkErrorData  extends Model {
+  url String
+}
+
+model HttpSerializationErrorData  extends Model {
+  url String
+}
+
+model HttpClientErrorData  extends Model {
+  url    String
+  status Int
+}
+
+model MissingAttributeErrorData  extends Model {
+  attribute  ElementAttribute
+  parentHtml String?
+}
+
+model InvalidAttributeErrorData  extends Model {
+  attribute  ElementAttribute
+  parentHtml String?
+  value      String
+}
+
+model InvalidTextErrorData  extends Model {
+  parentHtml String?
+  value      String
+}
+
+model MissingTextErrorData  extends Model {
+  parentHtml String?
+}
+
+model NonUniqueTextErrorData extends Model {
+  parentHtml String?
+}
+
+model MissingElementErrorData extends Model {
+  parentHtml String?
+  selector   String
+}
+
+model NonUniqueElementErrorData extends Model {
+  parentHtml String?
+  selector   String
+}
+
+model ProductRecordError extends Model {
+  errorId   String                 @unique @db.Uuid
+  errorCode ScrapingErrorCode
+  record    ProductRecord          @relation("errors", fields: [recordId], references: [id])
+  recordId  String                 @unique @db.Uuid
+  field     ProductRecordDataField
+  message   String
+}
+
+enum ProductStatus {
+  OUT_OF_STOCK
+  IN_STOCK
+  AVAILABLE_FOR_BACKORDER
+  NOT_LISTED
+}
+
+model ProductRecord extends ModelMeta {
+  timestamp             DateTime                 @default(now())
+  createdBy             User                     @relation("createdProductRecords", fields: [createdById], references: [id])
+  updatedBy             User                     @relation("updatedProductRecords", fields: [updatedById], references: [id])
+  product               Product                  @relation("records", fields: [productId], references: [id])
+  productId             String                   @db.Uuid
+  price                 Float?
+  rawPrice              String?
+  status                ProductStatus?
+  wasManuallyCreated    Boolean                  @default(false)
+  manuallyChangedFields ProductRecordDataField[] @default([])
+  errors                ProductRecordError[]     @relation("errors")
+}
+
+enum ProductCategory {
+  HandTools
+}
+
+enum ProductSubCategory {
+  HandPlanes
+  Saws
+  Chisels
+  Spokeshaves
+  GreenWoodworking
+  AccessoryTools
+}
+
+model Product extends ModelMeta {
+  createdBy           User                        @relation("createdProducts", fields: [createdById], references: [id])
+  updatedBy           User                        @relation("updatedProducts", fields: [updatedById], references: [id])
+  name                String?
+  slug                String                      @unique
+  code                String?
+  imageSrc            String?
+  records             ProductRecord[]             @relation("records")
+  status              ProductStatus?
+  statusRecordedAt    DateTime?
+  price               Float?
+  priceRecordedAt     DateTime?
+  category            ProductCategory
+  subCategories       ProductSubCategory[]
+  notificationConfigs ProductNotificationConfig[] @relation("notificationConfigs")
+}
+
+enum PriceChangeEventType {
+  PriceIncrease
+  PriceDecrease
+}
+
+enum NotificationEventConfigContentType {
+  PriceChange
+  StatusChange
+}
+
+
+model NotificationEventConfig extends ModelMeta {
+  createdBy                   User                               @relation("createdNotificationEventConfigs", fields: [createdById], references: [id])
+  updatedBy                   User                               @relation("updatedNotificationEventConfigs", fields: [updatedById], references: [id])
+  productNotificationConfig   ProductNotificationConfig          @relation("eventConfigs", fields: [productNotificationConfigId], references: [id])
+  productNotificationConfigId String                             @db.Uuid
+  contentType                 NotificationEventConfigContentType
+
+  @@delegate(contentType)
+}
+
+
+model PriceChangeEventConfig extends NotificationEventConfig {
+  eventTypes PriceChangeEventType[] @default([PriceIncrease, PriceDecrease])
+}
+
+model StatusChangeEventConfig extends NotificationEventConfig {
+  eventTypes ProductStatus[]
+}
+
+model ProductNotificationConfig extends ModelMeta {
+  createdBy    User                      @relation("createdProductNotificationConfigs", fields: [createdById], references: [id])
+  updatedBy    User                      @relation("updatedProductNotificationConfigs", fields: [updatedById], references: [id])
+  product      Product                   @relation("notificationConfigs", fields: [productId], references: [id])
+  productId    String                    @db.Uuid
+  // For now, we will keep the user that should receive the notification separate from the user that
+  // created it - even though, for all intents and purposes, they will be the same.  This is just
+  // to allow some flexibility in the future.
+  user         User                      @relation("productNotificationConfigs", fields: [userId], references: [id])
+  userId       String                    @db.Uuid
+  eventConfigs NotificationEventConfig[] @relation("eventConfigs")
+}
