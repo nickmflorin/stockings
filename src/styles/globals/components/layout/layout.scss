@@ -20,11 +20,9 @@
     @include partials.fully-constrained-dimension(height, calc(100% - constants.$header-height));
 
     > .content {
-      @include partials.fully-constrained-dimension(
-        width,
-        calc(100% - constants.$layout-nav-width)
-      );
       @include partials.fully-constrained-dimension(height, 100%);
+      flex-grow: 100;
+      max-width: calc(100% - constants.$layout-nav-width);
       position: relative;
       overflow-x: hidden;
       overflow-y: hidden;

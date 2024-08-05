@@ -11,6 +11,7 @@ export const DrawerCloseButton = (props: DrawerCloseButtonProps): JSX.Element =>
     element="button"
     size="xsmall"
     iconSize="large"
+    scheme="light"
     className={classNames("drawer__close-button", props.className)}
     icon={{ name: "xmark", iconStyle: "solid" }}
   />

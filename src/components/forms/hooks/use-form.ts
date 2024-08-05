@@ -15,16 +15,6 @@ import {
 
 import { logger } from "~/internal/logger";
 
-import {
-  type ApiClientError,
-  type HttpError,
-  ApiClientFieldErrorCodes,
-  type ApiClientErrorJson,
-  isApiClientFormErrorJson,
-  type ApiClientFieldErrorsObj,
-  isHttpError,
-  ApiClientFormError,
-} from "~/integrations/http";
 import { humanizeList } from "~/lib/formatters";
 
 import {
@@ -35,8 +25,7 @@ import {
   type ControlledFieldChangeHandler,
   type FieldErrors,
   type SetFormErrors,
-  type SetFormStaticErrors,
-} from "../types";
+} from "../generic/types";
 
 /* TODO: We may have to revisit this.  When determining the string error message from a react hook
    form field error, the message attribute may either be a string, undefined, or another error
@@ -109,7 +98,6 @@ export const useForm = <I extends BaseFormValues, IN = I>({
   ...options
 }: FormConfig<I, IN>): FormInstance<I> => {
   const [internalFieldErrors, _setInternalFieldErrors] = useState<FieldErrors<I>>({});
-  const [internalStaticFieldErrors, _setInternalStaticFieldErrors] = useState<FieldErrors<I>>({});
   const [globalErrors, setGlobalErrors] = useState<string[]>([]);
   const registeredFields = useRef<FieldName<I>[]>([]);
 
@@ -199,58 +187,11 @@ export const useForm = <I extends BaseFormValues, IN = I>({
     return _setInternalFieldErrors(fieldErrors);
   }, []);
 
-  const setInternalStaticFieldErrors = useCallback(
-    (fieldErrors: FieldErrors<I> | ((curr: FieldErrors<I>) => FieldErrors<I>)) => {
-      const validate = (fieldErrors: FieldErrors<I>) => {
-        const invalidFields = Object.keys(fieldErrors).reduce((prev: string[], curr: string) => {
-          if (!registeredFields.current.includes(curr as FieldName<I>)) {
-            return [...prev, curr];
-          }
-          return prev;
-        }, [] as string[]);
-        if (invalidFields.length !== 0) {
-          const humanized = humanizeList(registeredFields.current, {
-            conjunction: "and",
-            formatter: v => `'${v}'`,
-          });
-          logger.warn(
-            "The form received static field errors for fields that are not registered with the " +
-              `form! Current fields registered with the form are: ${humanized}.`,
-            { invalidFields, registered: registeredFields.current },
-          );
-        }
-      };
-      if (typeof fieldErrors === "function") {
-        return _setInternalStaticFieldErrors(curr => {
-          validate(curr);
-          return fieldErrors(curr);
-        });
-      }
-      validate(fieldErrors);
-      return _setInternalStaticFieldErrors(fieldErrors);
-    },
-    [],
-  );
-
   const clearErrors = useCallback(() => {
     setGlobalErrors([]);
     setInternalFieldErrors({});
     clearNativeErrors();
   }, [clearNativeErrors, setInternalFieldErrors]);
-
-  const setStaticErrors: SetFormStaticErrors<I> = useCallback(
-    (arg0: FieldName<I> | FieldErrors<I>, arg1?: string | string[]) => {
-      if (arg1 && typeof arg0 === "string") {
-        const fieldName = arg0 as FieldName<I>;
-        return setInternalStaticFieldErrors(curr => mergeIntoFieldErrors(curr, fieldName, arg1));
-      } else if (arg0 && typeof arg0 !== "string") {
-        return setInternalStaticFieldErrors(curr => mergeIntoFieldErrors(curr, arg0));
-      } else {
-        throw new TypeError("Invalid method implementation!");
-      }
-    },
-    [setInternalStaticFieldErrors],
-  );
 
   const setErrors: SetFormErrors<I> = useCallback(
     (arg0: FieldName<I> | FieldErrors<I> | string | string[], arg1?: string | string[]) => {
@@ -270,68 +211,65 @@ export const useForm = <I extends BaseFormValues, IN = I>({
     [setInternalFieldErrors],
   );
 
-  const setInternalFieldErrorsFromResponse = useCallback(
-    (e: ApiClientError | ApiClientErrorJson, errs: ApiClientFieldErrorsObj) => {
-      // If this happens, it means the API incorrectly returned an error response.
-      if (Object.keys(errs).length === 0) {
-        logger.warn(
-          "The form received an ApiClientFieldErrorsObj object with an empty set of errors!",
-          { error: e },
-        );
-      }
-      return setInternalFieldErrors(
-        Object.keys(errs).reduce((prev: FieldErrors<I>, key): FieldErrors<I> => {
-          const _details = (errs as ApiClientFieldErrorsObj)[key];
-          const details = _details ? (Array.isArray(_details) ? _details : [_details]) : _details;
-          if (details && details.length !== 0) {
-            return {
-              ...prev,
-              [key as FieldName<I>]: details.map(detail => {
-                const fn = ApiClientFieldErrorCodes.getAttribute(detail.code, "message");
-                return detail.message ?? fn(key);
-              }),
-            };
-          }
-          // If this happens, it means the API incorrectly returned an error response.
-          logger.warn(
-            "The form received an ApiClientFieldErrorsObj object with an error " +
-              `key '${key}' that does not contain any errors!`,
-            { error: e, key },
-          );
-          return prev;
-        }, {} as FieldErrors<I>),
-      );
-    },
-    [setInternalFieldErrors],
-  );
+  /* const setInternalFieldErrorsFromResponse = useCallback(
+       (e: ApiClientError | ApiClientErrorJson, errs: ApiClientFieldErrorsObj) => {
+         // If this happens, it means the API incorrectly returned an error response.
+         if (Object.keys(errs).length === 0) {
+           logger.warn(
+             "The form received an ApiClientFieldErrorsObj object with an empty set of errors!",
+             { error: e },
+           );
+         }
+         return setInternalFieldErrors(
+           Object.keys(errs).reduce((prev: FieldErrors<I>, key): FieldErrors<I> => {
+             const _details = (errs as ApiClientFieldErrorsObj)[key];
+             const details = _details ? (Array.isArray(_details) ? _details : [_details]) :
+             _details;
+             if (details && details.length !== 0) {
+               return {
+                 ...prev,
+                 [key as FieldName<I>]: details.map(detail => {
+                   const fn = ApiClientFieldErrorCodes.getAttribute(detail.code, "message");
+                   return detail.message ?? fn(key);
+                 }),
+               };
+             }
+             // If this happens, it means the API incorrectly returned an error response.
+             logger.warn(
+               "The form received an ApiClientFieldErrorsObj object with an error " +
+                 `key '${key}' that does not contain any errors!`,
+               { error: e, key },
+             );
+             return prev;
+           }, {} as FieldErrors<I>),
+         );
+       },
+       [setInternalFieldErrors],
+     ); */
 
-  const handleApiError = useCallback(
-    (e: HttpError | ApiClientErrorJson) => {
-      if (isHttpError(e)) {
-        if (e instanceof ApiClientFormError) {
-          return setInternalFieldErrorsFromResponse(e, e.errors);
-        }
-        /* In this case, the ApiClientError does not contain errors for individual fields, and
-           should be treated globally. */
-        return setErrors(e.message);
-      } else if (isApiClientFormErrorJson(e)) {
-        return setInternalFieldErrorsFromResponse(e, e.errors);
-      } else {
-        /* In this case, the ApiClientError does not contain errors for individual fields, and
-           should be treated globally. */
-        return setErrors(e.message);
-      }
-    },
-    [setErrors, setInternalFieldErrorsFromResponse],
-  );
+  // const handleApiError = useCallback(
+  //   (e: HttpError | ApiClientErrorJson) => {
+  //     if (isHttpError(e)) {
+  //       if (e instanceof ApiClientFormError) {
+  //         return setInternalFieldErrorsFromResponse(e, e.errors);
+  //       }
+  //       /* In this case, the ApiClientError does not contain errors for individual fields, and
+  //          should be treated globally. */
+  //       return setErrors(e.message);
+  //     } else if (isApiClientFormErrorJson(e)) {
+  //       return setInternalFieldErrorsFromResponse(e, e.errors);
+  //     } else {
+  //       /* In this case, the ApiClientError does not contain errors for individual fields, and
+  //          should be treated globally. */
+  //       return setErrors(e.message);
+  //     }
+  //   },
+  //   [setErrors, setInternalFieldErrorsFromResponse],
+  // );
 
   const fieldErrors = useMemo(
-    () =>
-      mergeIntoFieldErrors(
-        mergeIntoFieldErrors(internalStaticFieldErrors, internalFieldErrors),
-        formState.errors,
-      ),
-    [formState.errors, internalStaticFieldErrors, internalFieldErrors],
+    () => mergeIntoFieldErrors(internalFieldErrors, formState.errors),
+    [formState.errors, internalFieldErrors],
   );
 
   const handleSubmit = useCallback(
@@ -353,10 +291,8 @@ export const useForm = <I extends BaseFormValues, IN = I>({
     register,
     getValues,
     registerChangeHandler,
-    handleApiError,
     clearErrors,
     setErrors,
-    setStaticErrors,
     ...omit(form, ["setError"]),
   };
 };

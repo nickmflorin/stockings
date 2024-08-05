@@ -1,6 +1,6 @@
 import { type DrawerId } from "~/components/drawers/types";
 
-import { DrawerContainer } from "../DrawerContainer";
+import { DrawerContainer } from "../generic";
 
 import { type DrawerDynamicProps } from "./drawers";
 import { getDrawerComponent } from "./drawers";

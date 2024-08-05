@@ -15,7 +15,7 @@ export const Drawer = <D extends DrawerId, C extends React.ComponentType<any>>(
 });
 
 const ModifyProductSubscriptionDrawer = dynamic(
-  () => import("../ModifyProductSubscriptionDrawer"),
+  () => import("../CreateProductNotificationDrawer"),
   { loading: () => <Loading isLoading={true} /> },
 );
 

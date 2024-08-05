@@ -40,7 +40,6 @@ p.text.text--inherit {
 
   @include mixins.with-font-weights();
   @include mixins.with-text-transforms();
-  @include mixins.with-font-families();
   @include mixins.with-fonts("body");
 }
 
@@ -50,6 +49,5 @@ p.text:not(.text--inherit) {
 
   @include mixins.with-font-weights();
   @include mixins.with-text-transforms();
-  @include mixins.with-font-families();
   @include mixins.with-fonts("body");
 }

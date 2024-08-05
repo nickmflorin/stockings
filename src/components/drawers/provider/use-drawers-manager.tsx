@@ -3,8 +3,6 @@ import React, { useState, useCallback } from "react";
 
 import type * as types from "../types";
 
-import { publish } from "~/events/drawer-state-change-event";
-
 import { Loading } from "~/components/loading/Loading";
 
 import { type DrawerDynamicProps } from "./drawers";
@@ -17,18 +15,13 @@ export const useDrawersManager = (): Omit<types.DrawersManager, "isReady"> => {
   const [drawer, setDrawer] = useState<JSX.Element | null>(null);
 
   const close = useCallback(() => {
-    setTimeout(() => {
-      publish({ state: "closed" });
-    });
+    setDrawer(null);
   }, []);
 
   const open = useCallback(
-    <D extends DrawerId>(id: D, props: DrawerDynamicProps<D>) => {
+    <D extends types.DrawerId>(id: D, props: DrawerDynamicProps<D>) => {
       const newDrawer = <DrawerRenderer id={id} props={props} onClose={() => close()} />;
       setDrawer(newDrawer);
-      setTimeout(() => {
-        publish({ state: "opened", id, props });
-      });
     },
     [close],
   );

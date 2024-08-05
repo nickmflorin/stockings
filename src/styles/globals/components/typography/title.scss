@@ -6,7 +6,6 @@
 
 @mixin title-base() {
   @include mixins.with-text-transforms();
-  @include mixins.with-font-families();
 
   /* The combination of font-size and line-height will be determined primarily by the heading
      tag (e.g. "h1", "h2", etc).  But, if attributed with a 'font-size-<size>' class, the font-size

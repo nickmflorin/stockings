@@ -8,8 +8,6 @@ import {
 } from "react-hook-form";
 import { type z } from "zod";
 
-import { type ApiClientErrorJson, type HttpError } from "~/api";
-
 export type BaseFormValues = FieldValues;
 
 // We will likely need to expand this type.
@@ -61,11 +59,6 @@ export type SetFormErrors<I extends BaseFormValues> = {
   (errors: FieldErrors<I>): void;
 };
 
-export type SetFormStaticErrors<I extends BaseFormValues> = {
-  (field: FieldName<I>, errors: string | string[]): void;
-  (errors: FieldErrors<I>): void;
-};
-
 export type FormInstance<I extends BaseFormValues> = Omit<UseFormReturn<I>, "setError"> & {
   readonly errors: string[];
   readonly fieldErrors: FieldErrors<I>;
@@ -76,6 +69,5 @@ export type FormInstance<I extends BaseFormValues> = Omit<UseFormReturn<I>, "set
   readonly setValues: (values: FormValues<I>) => void;
   readonly clearErrors: () => void;
   readonly setErrors: SetFormErrors<I>;
-  readonly setStaticErrors: SetFormStaticErrors<I>;
-  readonly handleApiError: (e: HttpError | ApiClientErrorJson) => void;
+  // readonly handleApiError: (e: HttpError | ApiClientErrorJson) => void;
 };

@@ -1,7 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useDrawers } from "./hooks/use-drawers";
+import { useDrawers } from "./hooks";
 
 export const LayoutDrawer = () => {
   const { drawer } = useDrawers();

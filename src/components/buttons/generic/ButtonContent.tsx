@@ -95,7 +95,7 @@ const ContentIcon = ({
     fit="square"
     dimension="height"
     size={toIconSize(iconSize)}
-    loadingClassName={className(iconClassName, spinnerClassName)}
+    loadingClassName={classNames(iconClassName, spinnerClassName)}
     className={iconClassName}
   />
 );
@@ -142,7 +142,7 @@ export const ButtonContent = ({
   return (
     <div
       {...props}
-      className={className("button__content", props.className)}
+      className={classNames("button__content", props.className)}
       style={{ ...props.style, gap: gap !== undefined ? sizeToString(gap, "px") : undefined }}
     >
       {leftIcon && isIconProp(leftIcon) ? (
@@ -153,7 +153,7 @@ export const ButtonContent = ({
         </RenderOrSpinner>
       )}
       <div
-        className={className("button__sub-content", {
+        className={classNames("button__sub-content", {
           "opacity-0": isLoading && loadingLocation === "over",
         })}
       >
@@ -161,7 +161,7 @@ export const ButtonContent = ({
       </div>
       <Spinner
         size={spinnerSize ?? toIconSize(iconSize)}
-        className={className("absolute mx-auto", iconClassName, spinnerClassName)}
+        className={classNames("absolute mx-auto", iconClassName, spinnerClassName)}
         isLoading={isLoading && loadingLocation === "over"}
       />
       {rightIcon && isIconProp(rightIcon) ? (

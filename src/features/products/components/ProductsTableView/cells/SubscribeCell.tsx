@@ -12,7 +12,10 @@ export const SubscribeCell = ({ product }: SubscribeCellProps): JSX.Element => {
   const { open } = useDrawers();
 
   return (
-    <Button.Solid element="button" onClick={() => open(DrawerIds.MODIFY_PRODUCT_SUBSCRIPTION, {})}>
+    <Button.Solid
+      element="button"
+      onClick={() => open(DrawerIds.MODIFY_PRODUCT_SUBSCRIPTION, { product })}
+    >
       Subscribe
     </Button.Solid>
   );
