@@ -6,7 +6,9 @@ import { ProductCreatesubCategoriesInputObjectSchema } from './ProductCreatesubC
 import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 import { UserCreateNestedOneWithoutCreatedProductsInputObjectSchema } from './UserCreateNestedOneWithoutCreatedProductsInput.schema';
 import { UserCreateNestedOneWithoutUpdatedProductsInputObjectSchema } from './UserCreateNestedOneWithoutUpdatedProductsInput.schema';
-import { ProductNotificationConfigCreateNestedManyWithoutProductInputObjectSchema } from './ProductNotificationConfigCreateNestedManyWithoutProductInput.schema';
+import { NotificationEventCreateNestedManyWithoutProductInputObjectSchema } from './NotificationEventCreateNestedManyWithoutProductInput.schema';
+import { PriceChangeEventCCreateNestedManyWithoutProductInputObjectSchema } from './PriceChangeEventCCreateNestedManyWithoutProductInput.schema';
+import { StatusChangeEventCreateNestedManyWithoutProductInputObjectSchema } from './StatusChangeEventCreateNestedManyWithoutProductInput.schema';
 
 import type { Prisma } from '../../../../generated/models';
 
@@ -20,5 +22,5 @@ export const ProductCreateWithoutRecordsInputObjectSchema: SchemaType = z.object
     z.null()]).optional().nullable(), price: z.union([z.number(),
     z.null()]).optional().nullable(), priceRecordedAt: z.union([z.union([z.date(), z.string().datetime().optional()]),
     z.null()]).optional().nullable(), category: z.lazy(() => ProductCategorySchema), subCategories: z.union([z.lazy(() => ProductCreatesubCategoriesInputObjectSchema),
-    z.lazy(() => ProductSubCategorySchema).array()]).optional(), createdBy: z.lazy(() => UserCreateNestedOneWithoutCreatedProductsInputObjectSchema), updatedBy: z.lazy(() => UserCreateNestedOneWithoutUpdatedProductsInputObjectSchema), notificationConfigs: z.lazy(() => ProductNotificationConfigCreateNestedManyWithoutProductInputObjectSchema).optional()
+    z.lazy(() => ProductSubCategorySchema).array()]).optional(), createdBy: z.lazy(() => UserCreateNestedOneWithoutCreatedProductsInputObjectSchema), updatedBy: z.lazy(() => UserCreateNestedOneWithoutUpdatedProductsInputObjectSchema), notificationEvents: z.lazy(() => NotificationEventCreateNestedManyWithoutProductInputObjectSchema).optional(), delegate_aux_Product_notificationEvents_PriceChange_0: z.lazy(() => PriceChangeEventCCreateNestedManyWithoutProductInputObjectSchema).optional(), delegate_aux_Product_notificationEvents_StatusChang_0: z.lazy(() => StatusChangeEventCreateNestedManyWithoutProductInputObjectSchema).optional()
 }).strict() as SchemaType;

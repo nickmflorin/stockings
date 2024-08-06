@@ -42,10 +42,10 @@ export interface DataTableColumnConfig<D extends DataTableDatum, I extends strin
 export interface DataTableColumn<
   D extends DataTableDatum,
   I extends string = string,
-  // C extends DataTableColumnConfig<D, I> = DataTableColumnConfig<D, I>,
+  C extends DataTableColumnConfig<D, I> = DataTableColumnConfig<D, I>,
 > {
   readonly id: I;
-  readonly config: DataTableColumnConfig<D, I>;
+  readonly config: C;
   readonly cellProps?: (datum: D) => Omit<TableBodyCellProps, "children">;
   readonly cellRenderer?: (datum: D) => ReactNode;
 }
@@ -58,20 +58,35 @@ type ColumnProperties<
   [key in I]: Pick<DataTableColumn<D, I>, "cellProps" | "cellRenderer">;
 }>;
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+type InferColumnDatum<C extends DataTableColumnConfig<any, string>[]> = C extends (infer Ci)[]
+  ? /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    Ci extends DataTableColumnConfig<infer D extends DataTableDatum, any>
+    ? D
+    : never
+  : never;
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+type InferColumnId<C extends DataTableColumnConfig<any, string>[]> = C extends (infer Ci)[]
+  ? /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    Ci extends DataTableColumnConfig<any, infer I extends string>
+    ? I
+    : never
+  : never;
+
 export const convertConfigsToColumns = <
-  D extends DataTableDatum,
-  I extends string,
-  // C extends DataTableColumnConfig<D, I>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  C extends DataTableColumnConfig<any, string>[],
 >(
-  configs: DataTableColumnConfig<D, I>[],
-  properties: ColumnProperties<D, I>,
-): DataTableColumn<D, I>[] =>
+  configs: C,
+  properties: ColumnProperties<InferColumnDatum<C>, InferColumnId<C>>,
+): DataTableColumn<InferColumnDatum<C>, InferColumnId<C>>[] =>
   configs.map(
-    (config): DataTableColumn<D, I> => ({
-      id: config.id,
-      config,
-      cellProps: properties[config.id]?.cellProps,
-      cellRenderer: properties[config.id]?.cellRenderer,
+    (config): DataTableColumn<InferColumnDatum<C>, InferColumnId<C>> => ({
+      id: config.id as InferColumnId<C>,
+      config: config as DataTableColumn<InferColumnDatum<C>, InferColumnId<C>>,
+      cellProps: properties[config.id as InferColumnId<C>]?.cellProps,
+      cellRenderer: properties[config.id as InferColumnId<C>]?.cellRenderer,
     }),
   );
 

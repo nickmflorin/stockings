@@ -14,7 +14,9 @@ import { EnumProductSubCategoryNullableListFilterObjectSchema } from './EnumProd
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 import { ProductRecordListRelationFilterObjectSchema } from './ProductRecordListRelationFilter.schema';
-import { ProductNotificationConfigListRelationFilterObjectSchema } from './ProductNotificationConfigListRelationFilter.schema';
+import { NotificationEventListRelationFilterObjectSchema } from './NotificationEventListRelationFilter.schema';
+import { PriceChangeEventCListRelationFilterObjectSchema } from './PriceChangeEventCListRelationFilter.schema';
+import { StatusChangeEventListRelationFilterObjectSchema } from './StatusChangeEventListRelationFilter.schema';
 
 import type { Prisma } from '../../../../generated/models';
 
@@ -43,5 +45,5 @@ export const ProductWhereUniqueInputObjectSchema: SchemaType = z.object({
     z.null()]).optional().nullable(), category: z.union([z.lazy(() => EnumProductCategoryFilterObjectSchema),
     z.lazy(() => ProductCategorySchema)]).optional(), subCategories: z.lazy(() => EnumProductSubCategoryNullableListFilterObjectSchema).optional(), createdBy: z.union([z.lazy(() => UserRelationFilterObjectSchema),
     z.lazy(() => UserWhereInputObjectSchema)]).optional(), updatedBy: z.union([z.lazy(() => UserRelationFilterObjectSchema),
-    z.lazy(() => UserWhereInputObjectSchema)]).optional(), records: z.lazy(() => ProductRecordListRelationFilterObjectSchema).optional(), notificationConfigs: z.lazy(() => ProductNotificationConfigListRelationFilterObjectSchema).optional()
+    z.lazy(() => UserWhereInputObjectSchema)]).optional(), records: z.lazy(() => ProductRecordListRelationFilterObjectSchema).optional(), notificationEvents: z.lazy(() => NotificationEventListRelationFilterObjectSchema).optional(), delegate_aux_Product_notificationEvents_PriceChange_0: z.lazy(() => PriceChangeEventCListRelationFilterObjectSchema).optional(), delegate_aux_Product_notificationEvents_StatusChang_0: z.lazy(() => StatusChangeEventListRelationFilterObjectSchema).optional()
 }).strict() as SchemaType;

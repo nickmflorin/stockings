@@ -23,7 +23,7 @@ const relationSchema = z.object({
     createdBy: z.record(z.unknown()),
     updatedBy: z.record(z.unknown()),
     records: z.array(z.unknown()).optional(),
-    notificationConfigs: z.array(z.unknown()).optional(),
+    notificationEvents: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

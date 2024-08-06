@@ -15,7 +15,7 @@
   @include typography.with-font-families();
 
   // Allow the text transformations to be defined with a class name.
-  @include typography.with-text-transforms();
+  @include typography.with-font-transforms();
 
   font-weight: partials.mapget(constants.$button-font-weights, $type);
 
@@ -31,7 +31,7 @@
 
   // Allow the font size to be overridden for a Button independently of the Button's size.
   @include typography.use-fonts("body") using ($font-size, $data) {
-    &.font-sz-#{$font-size} {
+    &.#{typography.get-font-size-class($font-size)} {
       font-size: partials.mapget($data, font-size);
     }
   }
@@ -56,7 +56,7 @@
   line-height: partials.mapget($properties, line-height);
 
   @include typography.use-fonts("body") using ($size, $data) {
-    &.font-sz-#{$size} {
+    &.#{typography.get-font-size-class($size)} {
       font-size: partials.mapget($data, font-size);
       line-height: partials.mapget($data, line-height);
     }
@@ -70,7 +70,7 @@
   line-height: inherit;
 
   @include typography.use-fonts("body") using ($size, $data) {
-    &.font-sz-#{$size} {
+    &.#{typography.get-font-size-class($size)} {
       font-size: partials.mapget($data, font-size);
       line-height: partials.mapget($data, line-height);
     }

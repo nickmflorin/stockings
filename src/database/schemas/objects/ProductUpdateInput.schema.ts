@@ -14,7 +14,9 @@ import { ProductSubCategorySchema } from '../enums/ProductSubCategory.schema';
 import { UserUpdateOneRequiredWithoutCreatedProductsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutCreatedProductsNestedInput.schema';
 import { UserUpdateOneRequiredWithoutUpdatedProductsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutUpdatedProductsNestedInput.schema';
 import { ProductRecordUpdateManyWithoutProductNestedInputObjectSchema } from './ProductRecordUpdateManyWithoutProductNestedInput.schema';
-import { ProductNotificationConfigUpdateManyWithoutProductNestedInputObjectSchema } from './ProductNotificationConfigUpdateManyWithoutProductNestedInput.schema';
+import { NotificationEventUpdateManyWithoutProductNestedInputObjectSchema } from './NotificationEventUpdateManyWithoutProductNestedInput.schema';
+import { PriceChangeEventCUpdateManyWithoutProductNestedInputObjectSchema } from './PriceChangeEventCUpdateManyWithoutProductNestedInput.schema';
+import { StatusChangeEventUpdateManyWithoutProductNestedInputObjectSchema } from './StatusChangeEventUpdateManyWithoutProductNestedInput.schema';
 
 import type { Prisma } from '../../../../generated/models';
 
@@ -40,5 +42,5 @@ export const ProductUpdateInputObjectSchema: SchemaType = z.object({
     z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema),
     z.null()]).optional().nullable(), category: z.union([z.lazy(() => ProductCategorySchema),
     z.lazy(() => EnumProductCategoryFieldUpdateOperationsInputObjectSchema)]).optional(), subCategories: z.union([z.lazy(() => ProductUpdatesubCategoriesInputObjectSchema),
-    z.lazy(() => ProductSubCategorySchema).array()]).optional(), createdBy: z.lazy(() => UserUpdateOneRequiredWithoutCreatedProductsNestedInputObjectSchema).optional(), updatedBy: z.lazy(() => UserUpdateOneRequiredWithoutUpdatedProductsNestedInputObjectSchema).optional(), records: z.lazy(() => ProductRecordUpdateManyWithoutProductNestedInputObjectSchema).optional(), notificationConfigs: z.lazy(() => ProductNotificationConfigUpdateManyWithoutProductNestedInputObjectSchema).optional()
+    z.lazy(() => ProductSubCategorySchema).array()]).optional(), createdBy: z.lazy(() => UserUpdateOneRequiredWithoutCreatedProductsNestedInputObjectSchema).optional(), updatedBy: z.lazy(() => UserUpdateOneRequiredWithoutUpdatedProductsNestedInputObjectSchema).optional(), records: z.lazy(() => ProductRecordUpdateManyWithoutProductNestedInputObjectSchema).optional(), notificationEvents: z.lazy(() => NotificationEventUpdateManyWithoutProductNestedInputObjectSchema).optional(), delegate_aux_Product_notificationEvents_PriceChange_0: z.lazy(() => PriceChangeEventCUpdateManyWithoutProductNestedInputObjectSchema).optional(), delegate_aux_Product_notificationEvents_StatusChang_0: z.lazy(() => StatusChangeEventUpdateManyWithoutProductNestedInputObjectSchema).optional()
 }).strict() as SchemaType;

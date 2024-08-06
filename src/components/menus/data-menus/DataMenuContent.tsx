@@ -12,12 +12,12 @@ import React, {
 
 import { type IconProp, type IconName } from "~/components/icons";
 import type * as types from "~/components/menus";
-import { MenuContent, type MenuContentProps } from "~/components/menus/generic/MenuContent";
 import { useKeyboardNavigation } from "~/components/menus/hooks";
+import { MenuContent, type MenuContentProps } from "~/components/menus/MenuContent";
 import { type QuantitativeSize, type ComponentProps } from "~/components/types";
 import { type LabelProps } from "~/components/typography";
 
-import { MenuItemGroup } from "../generic/MenuItemGroup";
+import { MenuItemGroup } from "../MenuItemGroup";
 
 import { DataMenuItem } from "./DataMenuItem";
 

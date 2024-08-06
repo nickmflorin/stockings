@@ -1,1 +1,1 @@
-export * from "./create-product-notification";
+export * from "./create-notification-event";

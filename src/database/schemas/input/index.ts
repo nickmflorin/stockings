@@ -14,7 +14,6 @@ export * from './NonUniqueElementErrorDataInput.schema';
 export * from './ProductRecordErrorInput.schema';
 export * from './ProductRecordInput.schema';
 export * from './ProductInput.schema';
-export * from './NotificationEventConfigInput.schema';
-export * from './PriceChangeEventConfigInput.schema';
-export * from './StatusChangeEventConfigInput.schema';
-export * from './ProductNotificationConfigInput.schema'
+export * from './NotificationEventInput.schema';
+export * from './PriceChangeEventCInput.schema';
+export * from './StatusChangeEventInput.schema'

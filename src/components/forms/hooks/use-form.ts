@@ -12,10 +12,12 @@ import {
   type SubmitHandler,
   type SubmitErrorHandler,
 } from "react-hook-form";
+import { z } from "zod";
 
 import { logger } from "~/internal/logger";
 
 import { humanizeList } from "~/lib/formatters";
+import { flattenObjectPaths, type IterablePathObj } from "~/lib/objects";
 
 import {
   type FormInstance,
@@ -25,23 +27,17 @@ import {
   type ControlledFieldChangeHandler,
   type FieldErrors,
   type SetFormErrors,
-} from "../generic/types";
+} from "../types";
 
-/* TODO: We may have to revisit this.  When determining the string error message from a react hook
-   form field error, the message attribute may either be a string, undefined, or another error
-   object with a nested message attribute (which can recursively be either a string, undefined,
-   or another error object).  The recursions are mostly due to the capability of react hook form
-   to deal with nested fields - which we don't have to currently worry about, but may in the future.
+const ReactHookFormFieldErrorObjectSchema = z.object({
+  type: z.string().optional(),
+  message: z.string(),
+});
 
-   For now, we will just assume the mesage property at the top level is a string, and if it is not,
-   we will return a default error message.
+type FieldErrorObj = z.infer<typeof ReactHookFormFieldErrorObjectSchema>;
 
-   Note: In the future, we may also want to investigate converting the error object's 'type' field
-   into a string error message, because that will always be defined as a string, for each level of
-   the recursion. */
-const getReactHookFormErrorMessage = <I extends BaseFormValues>(
-  errs: NativeFieldErrors[FieldName<I>],
-) => (typeof errs?.message === "string" ? errs.message : "The field is invalid.");
+const isReactHookFormFieldErrorObject = (obj: unknown): obj is FieldErrorObj =>
+  ReactHookFormFieldErrorObjectSchema.safeParse(obj).success;
 
 function mergeIntoFieldErrors<I extends BaseFormValues>(
   a: FieldErrors<I>,
@@ -78,14 +74,30 @@ function mergeIntoFieldErrors<I extends BaseFormValues>(
   } else if (typeof arg1 === "string") {
     throw new TypeError("Invalid method implementation.");
   }
-  return Object.keys(arg1).reduce((prev, key) => {
-    const errs = arg1[key as FieldName<I>];
+  const flattened = flattenObjectPaths<FieldErrorObj | string[]>(
+    arg1 as IterablePathObj<FieldErrorObj | string[]>,
+    {
+      continueOn: (v): v is IterablePathObj<FieldErrorObj | string[]> =>
+        !isReactHookFormFieldErrorObject(v) && !Array.isArray(v),
+      formatter: path => path.join("."),
+    },
+  );
+  return Object.keys(flattened).reduce((prev, key) => {
+    const errs = flattened[key as FieldName<I>];
     if (errs !== undefined) {
+      /* This is a sanity check, to ensure that we are in fact dealing with either an array of
+         string error messages or the React Hook Form error object itself. */
+      if (!z.array(z.string()).safeParse(errs).success && !isReactHookFormFieldErrorObject(errs)) {
+        throw new Error(
+          "Unexpectedly encountered malformed value of errors object!  The value does " +
+            "not conform to either the React Hook Form error object or an array of string " +
+            "error messages.",
+        );
+      }
       return mergeIntoFieldErrors(
         prev,
         key as FieldName<I>,
-        // See docstring above the 'getReactHookFormErrorMessage' function.
-        Array.isArray(errs) ? errs : getReactHookFormErrorMessage(errs),
+        Array.isArray(errs) ? errs : errs.message,
       );
     }
     return prev;

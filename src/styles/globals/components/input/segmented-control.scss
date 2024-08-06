@@ -1,0 +1,16 @@
+$segmented-control-spacing: 4px;
+
+.segmented-control {
+  display: flex;
+  flex-direction: row;
+  gap: $segmented-control-spacing;
+  padding: $segmented-control-spacing;
+  width: 100%;
+  background-color: theme("colors.gray.200");
+  border-radius: theme("borderRadius.sm");
+
+  > .segmented-control__button {
+    flex: 1;
+    border-radius: theme("borderRadius.sm");
+  }
+}

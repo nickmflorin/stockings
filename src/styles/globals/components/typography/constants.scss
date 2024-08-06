@@ -209,6 +209,10 @@ $typography-default-sizes: (
   "description": "sm",
 );
 
+@function get-font-size-class($size) {
+  @return "f-size-#{$size}";
+}
+
 @function get-default-size($type) {
   @return partials.mapget($typography-default-sizes, $type);
 }

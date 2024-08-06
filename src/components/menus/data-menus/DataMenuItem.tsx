@@ -2,7 +2,7 @@ import { forwardRef, type ForwardedRef, type ReactNode, useMemo } from "react";
 
 import { type IconProp, type IconName } from "~/components/icons";
 import * as types from "~/components/menus";
-import { MenuItem } from "~/components/menus/generic/MenuItem";
+import { MenuItem } from "~/components/menus/MenuItem";
 import { classNames, type QuantitativeSize } from "~/components/types";
 
 export type DataMenuItemProps<M extends types.DataMenuModel> = types.MenuItemFlagProps<M> & {

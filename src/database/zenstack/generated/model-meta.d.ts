@@ -105,7 +105,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                productNotificationConfigs: {
+                createdNotificationEvents: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -118,7 +118,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                createdProductNotificationConfigs: {
+                updatedNotificationEvents: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -131,33 +131,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                updatedProductNotificationConfigs: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                };
-                createdNotificationEventConfigs: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                };
-                updatedNotificationEventConfigs: {
+                notificationEvents: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -845,7 +819,7 @@ declare const metadata: {
                     type: string;
                     isArray: boolean;
                 };
-                notificationConfigs: {
+                notificationEvents: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -870,394 +844,7 @@ declare const metadata: {
                 };
             };
         };
-        notificationEventConfig: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                createdById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                updatedById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                createdBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                updatedBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                productNotificationConfig: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                productNotificationConfigId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                contentType: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: {
-                name: string;
-                args: never[];
-            }[];
-            discriminator: string;
-        };
-        priceChangeEventConfig: {
-            name: string;
-            baseTypes: string[];
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    inheritedFrom: string;
-                };
-                createdById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    inheritedFrom: string;
-                };
-                updatedById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                createdBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                updatedBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                productNotificationConfig: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                productNotificationConfigId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                contentType: {
-                    name: string;
-                    type: string;
-                    inheritedFrom: string;
-                };
-                eventTypes: {
-                    name: string;
-                    type: string;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-        };
-        statusChangeEventConfig: {
-            name: string;
-            baseTypes: string[];
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    inheritedFrom: string;
-                };
-                createdById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    inheritedFrom: string;
-                };
-                updatedById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                createdBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                updatedBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                productNotificationConfig: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                productNotificationConfigId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                contentType: {
-                    name: string;
-                    type: string;
-                    inheritedFrom: string;
-                };
-                eventTypes: {
-                    name: string;
-                    type: string;
-                    isArray: boolean;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-        };
-        productNotificationConfig: {
+        notificationEvent: {
             name: string;
             fields: {
                 id: {
@@ -1389,18 +976,332 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                eventConfigs: {
+                contentType: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: never[];
+            }[];
+            discriminator: string;
+        };
+        priceChangeEventC: {
+            name: string;
+            baseTypes: string[];
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    inheritedFrom: string;
+                };
+                createdById: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    inheritedFrom: string;
+                };
+                updatedById: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                createdBy: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
-                    isArray: boolean;
                     attributes: {
                         name: string;
                         args: {
                             value: string;
                         }[];
                     }[];
-                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                updatedBy: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                product: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                productId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                user: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                userId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                contentType: {
+                    name: string;
+                    type: string;
+                    inheritedFrom: string;
+                };
+                eventTypes: {
+                    name: string;
+                    type: string;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+        };
+        statusChangeEvent: {
+            name: string;
+            baseTypes: string[];
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    inheritedFrom: string;
+                };
+                createdById: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    inheritedFrom: string;
+                };
+                updatedById: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                createdBy: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                updatedBy: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                product: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                productId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                user: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                userId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                contentType: {
+                    name: string;
+                    type: string;
+                    inheritedFrom: string;
+                };
+                eventTypes: {
+                    name: string;
+                    type: string;
+                    isArray: boolean;
                 };
             };
             uniqueConstraints: {

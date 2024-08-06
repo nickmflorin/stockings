@@ -27,23 +27,21 @@ plugin enhancer {
 }
 
 model User {
-  id                                String                      @id @default(uuid()) @db.Uuid
-  clerkId                           String                      @unique
-  firstName                         String
-  lastName                          String
-  profileImageUrl                   String?
-  emailAddress                      String
-  createdAt                         DateTime                    @default(now())
-  updatedAt                         DateTime                    @updatedAt
-  createdProducts                   Product[]                   @relation("createdProducts")
-  updatedProducts                   Product[]                   @relation("updatedProducts")
-  createdProductRecords             ProductRecord[]             @relation("createdProductRecords")
-  updatedProductRecords             ProductRecord[]             @relation("updatedProductRecords")
-  productNotificationConfigs        ProductNotificationConfig[] @relation("productNotificationConfigs")
-  createdProductNotificationConfigs ProductNotificationConfig[] @relation("createdProductNotificationConfigs")
-  updatedProductNotificationConfigs ProductNotificationConfig[] @relation("updatedProductNotificationConfigs")
-  createdNotificationEventConfigs   NotificationEventConfig[]   @relation("createdNotificationEventConfigs")
-  updatedNotificationEventConfigs   NotificationEventConfig[]   @relation("updatedNotificationEventConfigs")
+  id                        String              @id @default(uuid()) @db.Uuid
+  clerkId                   String              @unique
+  firstName                 String
+  lastName                  String
+  profileImageUrl           String?
+  emailAddress              String
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
+  createdProducts           Product[]           @relation("createdProducts")
+  updatedProducts           Product[]           @relation("updatedProducts")
+  createdProductRecords     ProductRecord[]     @relation("createdProductRecords")
+  updatedProductRecords     ProductRecord[]     @relation("updatedProductRecords")
+  createdNotificationEvents NotificationEvent[] @relation("createdNotificationEvents")
+  updatedNotificationEvents NotificationEvent[] @relation("updatedNotificationEvents")
+  notificationEvents        NotificationEvent[] @relation("notificationEvents")
 }
 
 abstract model Model {
@@ -174,20 +172,20 @@ enum ProductSubCategory {
 }
 
 model Product extends ModelMeta {
-  createdBy           User                        @relation("createdProducts", fields: [createdById], references: [id])
-  updatedBy           User                        @relation("updatedProducts", fields: [updatedById], references: [id])
-  name                String?
-  slug                String                      @unique
-  code                String?
-  imageSrc            String?
-  records             ProductRecord[]             @relation("records")
-  status              ProductStatus?
-  statusRecordedAt    DateTime?
-  price               Float?
-  priceRecordedAt     DateTime?
-  category            ProductCategory
-  subCategories       ProductSubCategory[]
-  notificationConfigs ProductNotificationConfig[] @relation("notificationConfigs")
+  createdBy          User                 @relation("createdProducts", fields: [createdById], references: [id])
+  updatedBy          User                 @relation("updatedProducts", fields: [updatedById], references: [id])
+  name               String?
+  slug               String               @unique
+  code               String?
+  imageSrc           String?
+  records            ProductRecord[]      @relation("records")
+  status             ProductStatus?
+  statusRecordedAt   DateTime?
+  price              Float?
+  priceRecordedAt    DateTime?
+  category           ProductCategory
+  subCategories      ProductSubCategory[]
+  notificationEvents NotificationEvent[]  @relation("notificationEvents")
 }
 
 enum PriceChangeEventType {
@@ -195,38 +193,30 @@ enum PriceChangeEventType {
   PriceDecrease
 }
 
-enum NotificationEventConfigContentType {
+enum NotificationEventContentType {
   PriceChange
   StatusChange
 }
 
-model NotificationEventConfig extends ModelMeta {
-  createdBy                   User                               @relation("createdNotificationEventConfigs", fields: [createdById], references: [id])
-  updatedBy                   User                               @relation("updatedNotificationEventConfigs", fields: [updatedById], references: [id])
-  productNotificationConfig   ProductNotificationConfig          @relation("eventConfigs", fields: [productNotificationConfigId], references: [id])
-  productNotificationConfigId String                             @db.Uuid
-  contentType                 NotificationEventConfigContentType
+model NotificationEvent extends ModelMeta {
+  createdBy   User                         @relation("createdNotificationEvents", fields: [createdById], references: [id])
+  updatedBy   User                         @relation("updatedNotificationEvents", fields: [updatedById], references: [id])
+  product     Product                      @relation("notificationEvents", fields: [productId], references: [id])
+  productId   String                       @db.Uuid
+  // For now, we will keep the user that should receive the notification separate from the user that
+  // created it - even though, for all intents and purposes, they will be the same.  This is just
+  // to allow some flexibility in the future.
+  user        User                         @relation("notificationEvents", fields: [userId], references: [id])
+  userId      String                       @db.Uuid
+  contentType NotificationEventContentType
 
   @@delegate(contentType)
 }
 
-model PriceChangeEventConfig extends NotificationEventConfig {
+model PriceChangeEventC extends NotificationEvent {
   eventTypes PriceChangeEventType[] @default([PriceIncrease, PriceDecrease])
 }
 
-model StatusChangeEventConfig extends NotificationEventConfig {
+model StatusChangeEvent extends NotificationEvent {
   eventTypes ProductStatus[]
-}
-
-model ProductNotificationConfig extends ModelMeta {
-  createdBy    User                      @relation("createdProductNotificationConfigs", fields: [createdById], references: [id])
-  updatedBy    User                      @relation("updatedProductNotificationConfigs", fields: [updatedById], references: [id])
-  product      Product                   @relation("notificationConfigs", fields: [productId], references: [id])
-  productId    String                    @db.Uuid
-  // For now, we will keep the user that should receive the notification separate from the user that
-  // created it - even though, for all intents and purposes, they will be the same.  This is just
-  // to allow some flexibility in the future.
-  user         User                      @relation("productNotificationConfigs", fields: [userId], references: [id])
-  userId       String                    @db.Uuid
-  eventConfigs NotificationEventConfig[] @relation("eventConfigs")
 }

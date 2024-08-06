@@ -1,7 +1,7 @@
 @forward "./constants";
 @forward "./mixins";
 
+@use "./body";
 @use "./description";
-@use "./text";
 @use "./title";
 @use "./label";

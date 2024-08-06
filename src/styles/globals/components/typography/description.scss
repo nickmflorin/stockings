@@ -18,7 +18,7 @@ p.description.description--inherit {
   @include mixins.inherit-font-properties();
 
   @include mixins.with-font-weights();
-  @include mixins.with-text-transforms();
+  @include mixins.with-font-transforms();
   @include mixins.with-fonts("description");
 }
 
@@ -27,6 +27,6 @@ p.description:not(.description--inherit) {
   @include description-base();
 
   @include mixins.with-font-weights();
-  @include mixins.with-text-transforms();
+  @include mixins.with-font-transforms();
   @include mixins.with-fonts("description");
 }

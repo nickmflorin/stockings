@@ -217,46 +217,39 @@ exports.Prisma.ProductScalarFieldEnum = {
   subCategories: 'subCategories'
 };
 
-exports.Prisma.NotificationEventConfigScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  createdById: 'createdById',
-  updatedAt: 'updatedAt',
-  updatedById: 'updatedById',
-  productNotificationConfigId: 'productNotificationConfigId',
-  contentType: 'contentType'
-};
-
-exports.Prisma.PriceChangeEventConfigScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  createdById: 'createdById',
-  updatedAt: 'updatedAt',
-  updatedById: 'updatedById',
-  productNotificationConfigId: 'productNotificationConfigId',
-  contentType: 'contentType',
-  eventTypes: 'eventTypes'
-};
-
-exports.Prisma.StatusChangeEventConfigScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  createdById: 'createdById',
-  updatedAt: 'updatedAt',
-  updatedById: 'updatedById',
-  productNotificationConfigId: 'productNotificationConfigId',
-  contentType: 'contentType',
-  eventTypes: 'eventTypes'
-};
-
-exports.Prisma.ProductNotificationConfigScalarFieldEnum = {
+exports.Prisma.NotificationEventScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   createdById: 'createdById',
   updatedAt: 'updatedAt',
   updatedById: 'updatedById',
   productId: 'productId',
-  userId: 'userId'
+  userId: 'userId',
+  contentType: 'contentType'
+};
+
+exports.Prisma.PriceChangeEventCScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  createdById: 'createdById',
+  updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  productId: 'productId',
+  userId: 'userId',
+  contentType: 'contentType',
+  eventTypes: 'eventTypes'
+};
+
+exports.Prisma.StatusChangeEventScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  createdById: 'createdById',
+  updatedAt: 'updatedAt',
+  updatedById: 'updatedById',
+  productId: 'productId',
+  userId: 'userId',
+  contentType: 'contentType',
+  eventTypes: 'eventTypes'
 };
 
 exports.Prisma.SortOrder = {
@@ -319,7 +312,7 @@ exports.ProductSubCategory = exports.$Enums.ProductSubCategory = {
   AccessoryTools: 'AccessoryTools'
 };
 
-exports.NotificationEventConfigContentType = exports.$Enums.NotificationEventConfigContentType = {
+exports.NotificationEventContentType = exports.$Enums.NotificationEventContentType = {
   PriceChange: 'PriceChange',
   StatusChange: 'StatusChange'
 };
@@ -344,10 +337,9 @@ exports.Prisma.ModelName = {
   ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
   Product: 'Product',
-  NotificationEventConfig: 'NotificationEventConfig',
-  PriceChangeEventConfig: 'PriceChangeEventConfig',
-  StatusChangeEventConfig: 'StatusChangeEventConfig',
-  ProductNotificationConfig: 'ProductNotificationConfig'
+  NotificationEvent: 'NotificationEvent',
+  PriceChangeEventC: 'PriceChangeEventC',
+  StatusChangeEvent: 'StatusChangeEvent'
 };
 
 /**

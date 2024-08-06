@@ -324,22 +324,22 @@ const policy = {
                 update: {},
             },
         },
-        notificationEventConfig: {
+        notificationEvent: {
             modelLevel: {
                 read: {
-                    guard: NotificationEventConfig_read,
+                    guard: NotificationEvent_read,
                 },
                 create: {
-                    guard: NotificationEventConfig_create, inputChecker: NotificationEventConfig_create_input,
+                    guard: NotificationEvent_create, inputChecker: NotificationEvent_create_input,
                 },
                 update: {
-                    guard: NotificationEventConfig_update,
+                    guard: NotificationEvent_update,
                 },
                 postUpdate: {
-                    guard: NotificationEventConfig_postUpdate,
+                    guard: NotificationEvent_postUpdate,
                 },
                 delete: {
-                    guard: NotificationEventConfig_delete,
+                    guard: NotificationEvent_delete,
                 }
             },
             fieldLevel: {
@@ -347,22 +347,22 @@ const policy = {
                 update: {},
             },
         },
-        priceChangeEventConfig: {
+        priceChangeEventC: {
             modelLevel: {
                 read: {
-                    guard: PriceChangeEventConfig_read,
+                    guard: PriceChangeEventC_read,
                 },
                 create: {
-                    guard: PriceChangeEventConfig_create, inputChecker: PriceChangeEventConfig_create_input,
+                    guard: PriceChangeEventC_create, inputChecker: PriceChangeEventC_create_input,
                 },
                 update: {
-                    guard: PriceChangeEventConfig_update,
+                    guard: PriceChangeEventC_update,
                 },
                 postUpdate: {
-                    guard: PriceChangeEventConfig_postUpdate,
+                    guard: PriceChangeEventC_postUpdate,
                 },
                 delete: {
-                    guard: PriceChangeEventConfig_delete,
+                    guard: PriceChangeEventC_delete,
                 }
             },
             fieldLevel: {
@@ -370,45 +370,22 @@ const policy = {
                 update: {},
             },
         },
-        statusChangeEventConfig: {
+        statusChangeEvent: {
             modelLevel: {
                 read: {
-                    guard: StatusChangeEventConfig_read,
+                    guard: StatusChangeEvent_read,
                 },
                 create: {
-                    guard: StatusChangeEventConfig_create, inputChecker: StatusChangeEventConfig_create_input,
+                    guard: StatusChangeEvent_create, inputChecker: StatusChangeEvent_create_input,
                 },
                 update: {
-                    guard: StatusChangeEventConfig_update,
+                    guard: StatusChangeEvent_update,
                 },
                 postUpdate: {
-                    guard: StatusChangeEventConfig_postUpdate,
+                    guard: StatusChangeEvent_postUpdate,
                 },
                 delete: {
-                    guard: StatusChangeEventConfig_delete,
-                }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        productNotificationConfig: {
-            modelLevel: {
-                read: {
-                    guard: ProductNotificationConfig_read,
-                },
-                create: {
-                    guard: ProductNotificationConfig_create, inputChecker: ProductNotificationConfig_create_input,
-                },
-                update: {
-                    guard: ProductNotificationConfig_update,
-                },
-                postUpdate: {
-                    guard: ProductNotificationConfig_postUpdate,
-                },
-                delete: {
-                    guard: ProductNotificationConfig_delete,
+                    guard: StatusChangeEvent_delete,
                 }
             },
             fieldLevel: {
@@ -460,16 +437,13 @@ const policy = {
         product: {
             hasValidation: false
         },
-        notificationEventConfig: {
+        notificationEvent: {
             hasValidation: false
         },
-        priceChangeEventConfig: {
+        priceChangeEventC: {
             hasValidation: false
         },
-        statusChangeEventConfig: {
-            hasValidation: false
-        },
-        productNotificationConfig: {
+        statusChangeEvent: {
             hasValidation: false
         },
     },
@@ -936,136 +910,103 @@ function Product_delete(context, db) {
 function $check_Product_delete(input, context) {
     return false;
 }
-function NotificationEventConfig_read(context, db) {
+function NotificationEvent_read(context, db) {
     return { OR: [] };
 }
-function $check_NotificationEventConfig_read(input, context) {
+function $check_NotificationEvent_read(input, context) {
     return false;
 }
-function NotificationEventConfig_create(context, db) {
+function NotificationEvent_create(context, db) {
     return { OR: [] };
 }
-function $check_NotificationEventConfig_create(input, context) {
+function $check_NotificationEvent_create(input, context) {
     return false;
 }
-function NotificationEventConfig_create_input(input, context) {
+function NotificationEvent_create_input(input, context) {
     return false;
 }
-function NotificationEventConfig_update(context, db) {
+function NotificationEvent_update(context, db) {
     return { OR: [] };
 }
-function $check_NotificationEventConfig_update(input, context) {
+function $check_NotificationEvent_update(input, context) {
     return false;
 }
-function NotificationEventConfig_postUpdate(context, db) {
+function NotificationEvent_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_NotificationEventConfig_postUpdate(input, context) {
+function $check_NotificationEvent_postUpdate(input, context) {
     return true;
 }
-function NotificationEventConfig_delete(context, db) {
+function NotificationEvent_delete(context, db) {
     return { OR: [] };
 }
-function $check_NotificationEventConfig_delete(input, context) {
+function $check_NotificationEvent_delete(input, context) {
     return false;
 }
-function PriceChangeEventConfig_read(context, db) {
+function PriceChangeEventC_read(context, db) {
     return { OR: [] };
 }
-function $check_PriceChangeEventConfig_read(input, context) {
+function $check_PriceChangeEventC_read(input, context) {
     return false;
 }
-function PriceChangeEventConfig_create(context, db) {
+function PriceChangeEventC_create(context, db) {
     return { OR: [] };
 }
-function $check_PriceChangeEventConfig_create(input, context) {
+function $check_PriceChangeEventC_create(input, context) {
     return false;
 }
-function PriceChangeEventConfig_create_input(input, context) {
+function PriceChangeEventC_create_input(input, context) {
     return false;
 }
-function PriceChangeEventConfig_update(context, db) {
+function PriceChangeEventC_update(context, db) {
     return { OR: [] };
 }
-function $check_PriceChangeEventConfig_update(input, context) {
+function $check_PriceChangeEventC_update(input, context) {
     return false;
 }
-function PriceChangeEventConfig_postUpdate(context, db) {
+function PriceChangeEventC_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_PriceChangeEventConfig_postUpdate(input, context) {
+function $check_PriceChangeEventC_postUpdate(input, context) {
     return true;
 }
-function PriceChangeEventConfig_delete(context, db) {
+function PriceChangeEventC_delete(context, db) {
     return { OR: [] };
 }
-function $check_PriceChangeEventConfig_delete(input, context) {
+function $check_PriceChangeEventC_delete(input, context) {
     return false;
 }
-function StatusChangeEventConfig_read(context, db) {
+function StatusChangeEvent_read(context, db) {
     return { OR: [] };
 }
-function $check_StatusChangeEventConfig_read(input, context) {
+function $check_StatusChangeEvent_read(input, context) {
     return false;
 }
-function StatusChangeEventConfig_create(context, db) {
+function StatusChangeEvent_create(context, db) {
     return { OR: [] };
 }
-function $check_StatusChangeEventConfig_create(input, context) {
+function $check_StatusChangeEvent_create(input, context) {
     return false;
 }
-function StatusChangeEventConfig_create_input(input, context) {
+function StatusChangeEvent_create_input(input, context) {
     return false;
 }
-function StatusChangeEventConfig_update(context, db) {
+function StatusChangeEvent_update(context, db) {
     return { OR: [] };
 }
-function $check_StatusChangeEventConfig_update(input, context) {
+function $check_StatusChangeEvent_update(input, context) {
     return false;
 }
-function StatusChangeEventConfig_postUpdate(context, db) {
+function StatusChangeEvent_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_StatusChangeEventConfig_postUpdate(input, context) {
+function $check_StatusChangeEvent_postUpdate(input, context) {
     return true;
 }
-function StatusChangeEventConfig_delete(context, db) {
+function StatusChangeEvent_delete(context, db) {
     return { OR: [] };
 }
-function $check_StatusChangeEventConfig_delete(input, context) {
-    return false;
-}
-function ProductNotificationConfig_read(context, db) {
-    return { OR: [] };
-}
-function $check_ProductNotificationConfig_read(input, context) {
-    return false;
-}
-function ProductNotificationConfig_create(context, db) {
-    return { OR: [] };
-}
-function $check_ProductNotificationConfig_create(input, context) {
-    return false;
-}
-function ProductNotificationConfig_create_input(input, context) {
-    return false;
-}
-function ProductNotificationConfig_update(context, db) {
-    return { OR: [] };
-}
-function $check_ProductNotificationConfig_update(input, context) {
-    return false;
-}
-function ProductNotificationConfig_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ProductNotificationConfig_postUpdate(input, context) {
-    return true;
-}
-function ProductNotificationConfig_delete(context, db) {
-    return { OR: [] };
-}
-function $check_ProductNotificationConfig_delete(input, context) {
+function $check_StatusChangeEvent_delete(input, context) {
     return false;
 }
 exports.default = policy;

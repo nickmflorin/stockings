@@ -4,3 +4,4 @@ export * from "./generated";
 export * from "./dom";
 export * from "./errors";
 export * from "./inclusion";
+export * from "./product-statuses";

@@ -16,6 +16,12 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           path: "/dashboard",
           activePaths: [{ leadingPath: "/dashboard" }],
         },
+        {
+          tooltipLabel: "Products",
+          icon: { name: "toolbox" },
+          path: "/products",
+          activePaths: [{ leadingPath: "/products" }],
+        },
       ]}
     >
       {children}

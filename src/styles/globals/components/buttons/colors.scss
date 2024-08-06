@@ -33,18 +33,21 @@ $button-solid-colors: (
       background-color: theme("colors.gray.300"),
       outline-color: theme("colors.gray.300"),
       active: (
-        outline-color: theme("colors.gray.500"),
+        background-color: theme("colors.gray.400"),
+        outline-color: theme("colors.gray.400"),
       ),
     ),
     focused: (
       background-color: theme("colors.gray.300"),
       outline-color: theme("colors.gray.300"),
       active: (
-        outline-color: theme("colors.gray.500"),
+        background-color: theme("colors.gray.400"),
+        outline-color: theme("colors.gray.400"),
       ),
     ),
     active: (
-      outline-color: theme("colors.gray.500"),
+      background-color: theme("colors.gray.400"),
+      outline-color: theme("colors.gray.400"),
     ),
     disabled: (
       background-color: theme("colors.disabled-background"),

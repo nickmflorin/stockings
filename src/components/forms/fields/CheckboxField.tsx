@@ -1,7 +1,7 @@
 import { Checkbox, type CheckboxProps } from "~/components/input/Checkbox";
 
-import { type FieldName, type BaseFormValues, type FormInstance } from "../generic";
-import { Form } from "../generic/Form";
+import { type FieldName, type BaseFormValues, type FormInstance } from "..";
+import { Form } from "../Form";
 
 export interface CheckboxFieldProps<I extends BaseFormValues> {
   readonly form: FormInstance<I>;

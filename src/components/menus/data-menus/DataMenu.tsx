@@ -1,9 +1,9 @@
 import { forwardRef, type ForwardedRef } from "react";
 
 import type * as types from "~/components/menus";
-import { Menu } from "~/components/menus/generic/Menu";
-import { MenuFooter } from "~/components/menus/generic/MenuFooter";
-import { MenuHeader } from "~/components/menus/generic/MenuHeader";
+import { Menu } from "~/components/menus/Menu";
+import { MenuFooter } from "~/components/menus/MenuFooter";
+import { MenuHeader } from "~/components/menus/MenuHeader";
 
 import { DataMenuContent, type DataMenuContentProps } from "./DataMenuContent";
 

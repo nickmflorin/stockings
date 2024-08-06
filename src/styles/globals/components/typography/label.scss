@@ -19,7 +19,7 @@ label {
   display: flex;
 
   @include mixins.with-font-weights();
-  @include mixins.with-text-transforms();
+  @include mixins.with-font-transforms();
   @include mixins.with-font-families();
   @include mixins.with-font-sizes("label");
 }

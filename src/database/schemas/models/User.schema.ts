@@ -16,11 +16,9 @@ const relationSchema = z.object({
     updatedProducts: z.array(z.unknown()).optional(),
     createdProductRecords: z.array(z.unknown()).optional(),
     updatedProductRecords: z.array(z.unknown()).optional(),
-    productNotificationConfigs: z.array(z.unknown()).optional(),
-    createdProductNotificationConfigs: z.array(z.unknown()).optional(),
-    updatedProductNotificationConfigs: z.array(z.unknown()).optional(),
-    createdNotificationEventConfigs: z.array(z.unknown()).optional(),
-    updatedNotificationEventConfigs: z.array(z.unknown()).optional(),
+    createdNotificationEvents: z.array(z.unknown()).optional(),
+    updatedNotificationEvents: z.array(z.unknown()).optional(),
+    notificationEvents: z.array(z.unknown()).optional(),
 }
 );
 

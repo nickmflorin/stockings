@@ -148,7 +148,7 @@
 
 @mixin with-font-weights() {
   @each $weight in map.keys(constants.$font-weights) {
-    &.font-weight-#{$weight} {
+    &.f-weight-#{$weight} {
       font-weight: partials.mapget(constants.$font-weights, $weight);
     }
   }
@@ -156,21 +156,21 @@
 
 @mixin with-font-sizes($type) {
   @include use-fonts($type) using ($size, $properties) {
-    &.font-sz-#{$size} {
+    &.f-size-#{$size} {
       font-size: partials.mapget($properties, font-size);
     }
   }
 }
 
 @mixin with-font-families() {
-  &.font-family-inter {
+  &.f-family-inter {
     font-family: theme("fontFamily.inter");
   }
 }
 
-@mixin with-text-transforms() {
+@mixin with-font-transforms() {
   @each $transform in constants.$text-transforms {
-    &.transform-#{$transform} {
+    &.f-transform-#{$transform} {
       text-transform: $transform;
     }
   }
@@ -179,7 +179,7 @@
 @mixin with-fonts($type) {
   @include use-fonts($type) using ($size, $properties) {
     font-family: partials.mapget($properties, font-family);
-    &.font-sz-#{$size} {
+    &.#{constants.get-font-size-class($size)} {
       font-size: partials.mapget($properties, font-size);
       line-height: partials.mapget($properties, line-height);
       font-weight: partials.mapget($properties, font-weight);

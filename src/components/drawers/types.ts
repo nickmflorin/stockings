@@ -1,8 +1,8 @@
 import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
 
-import type { DrawerDynamicProps } from "./provider/drawers";
+import type { DrawerDynamicProps } from "./drawers";
 
-export const DrawerIds = enumeratedLiterals(["modify-product-subscription"] as const, {});
+export const DrawerIds = enumeratedLiterals(["manage-product-notification-events"] as const, {});
 
 export type DrawerId = EnumeratedLiteralsType<typeof DrawerIds>;
 

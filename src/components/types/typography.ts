@@ -84,10 +84,10 @@ export const getTypographyClassName = (props: TypographyCharacteristics): string
     /* Note: The 'fontSize' class name cannot be called 'font-size-<size>' because it can conflict
        with Tailwind class names and confuses the TWMerge package:
        https://github.com/dcastil/tailwind-merge/blob/v2.4.0/docs/limitations.md  */
-    props.fontSize ? `font-sz-${props.fontSize}` : "",
-    props.fontFamily && `font-family-${props.fontFamily}`,
-    props.transform && `text-transform-${props.transform}`,
-    props.fontWeight && `font-weight-${props.fontWeight}`,
+    props.fontSize ? `f-size-${props.fontSize}` : "",
+    props.fontFamily && `f-family-${props.fontFamily}`,
+    props.transform && `f-transform-${props.transform}`,
+    props.fontWeight && `f-weight-${props.fontWeight}`,
     props.align && TextAlignClassNames[props.align],
     props.lineClamp !== undefined ? lineClampClassName(props.lineClamp) : "",
     { truncate: props.truncate },

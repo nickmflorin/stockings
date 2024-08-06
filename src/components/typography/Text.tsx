@@ -14,7 +14,7 @@ export type TextComponent = "span" | "div" | "p";
 
 type PolymorphicTextProps<T extends TextComponent> = Omit<
   HTMLElementProps<T>,
-  keyof ComponentProps
+  keyof ComponentProps | "ref"
 >;
 
 type PolymorphicTextRef<T extends TextComponent> = {
@@ -60,8 +60,8 @@ export const Text = forwardRef<HTMLDivElement, TextProps<TextComponent>>(
     const ps = {
       ...props,
       className: classNames(
-        "text",
-        { "text--inherit": inherit, ["flex flex-row items-center"]: flex },
+        "body",
+        { "body--inherit": inherit, ["flex flex-row items-center"]: flex },
         getTypographyClassName({
           fontSize,
           fontWeight,
