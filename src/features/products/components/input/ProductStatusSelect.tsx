@@ -1,12 +1,34 @@
-import type { ProductStatus } from "~/database/model";
+import { ProductStatuses, type ProductStatus } from "~/database/model";
 
 import type { SelectBehaviorType } from "~/components/input/select";
 import { DataSelect, type DataSelectProps } from "~/components/input/select/DataSelect";
+import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 
-type M = {
-  readonly label: string;
-  readonly value: ProductStatus;
-};
+type M = { readonly value: ProductStatus };
+
+const getItemValue = (m: M) => ProductStatuses.getModel(m.value).value;
 
 export interface ProductStatusSelectProps<B extends SelectBehaviorType>
-  extends DataSelectProps<M, { behavior: B }> {}
+  extends Omit<
+    DataSelectProps<M, { behavior: B; getItemValue: typeof getItemValue }>,
+    "options" | "data" | "itemIsDisabled"
+  > {
+  readonly behavior: B;
+  readonly disabledStatuses?: ProductStatus[];
+}
+
+export const ProductStatusSelect = <B extends SelectBehaviorType>({
+  behavior,
+  disabledStatuses,
+  ...props
+}: ProductStatusSelectProps<B>): JSX.Element => (
+  <DataSelect<M, { behavior: B; getItemValue: typeof getItemValue }>
+    {...props}
+    data={[...ProductStatuses.models]}
+    itemIsDisabled={m => disabledStatuses?.includes(m.value) ?? false}
+    options={{ behavior, getItemValue }}
+    itemRenderer={(m, { isDisabled }) => (
+      <ProductStatusText status={m.value} isDisabled={isDisabled} />
+    )}
+  />
+);

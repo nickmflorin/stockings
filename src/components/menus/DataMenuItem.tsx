@@ -21,13 +21,16 @@ export type DataMenuItemProps<M extends types.DataMenuModel> = types.MenuItemFla
   readonly itemLockedClassName?: types.DataMenuItemClassName<M>;
   readonly itemSelectedClassName?: types.DataMenuItemClassName<M>;
   readonly selectionIndicator?: types.MenuItemSelectionIndicator;
-  readonly getItemLabel?: (datum: M) => ReactNode;
-  readonly getItemIcon?: (datum: M) => IconProp | IconName | JSX.Element | undefined;
+  readonly getItemIcon?: (
+    datum: M,
+    params: types.MenuItemRenderProps,
+  ) => IconProp | IconName | JSX.Element | undefined;
+  readonly getItemDescription?: (datum: M, params: types.MenuItemRenderProps) => ReactNode;
   readonly onClick?: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     instance: types.MenuItemInstance,
   ) => void;
-  readonly children?: (datum: M) => ReactNode;
+  readonly children?: (datum: M, params: types.MenuItemRenderProps) => ReactNode;
 };
 
 export const DataMenuItem = forwardRef(
@@ -53,27 +56,32 @@ export const DataMenuItem = forwardRef(
       itemIsLocked,
       itemIsVisible,
       onClick,
-      getItemLabel,
       getItemIcon,
+      getItemDescription,
       children,
       ...props
     }: DataMenuItemProps<M>,
     ref: ForwardedRef<types.MenuItemInstance>,
   ) => {
-    const label = useMemo(() => {
-      if (getItemLabel) {
-        return getItemLabel(datum);
-      }
-      return datum.label;
-    }, [datum, getItemLabel]);
-
     const icon = useMemo(() => {
-      let icon: JSX.Element | IconProp | IconName | undefined = datum.icon;
       if (getItemIcon) {
-        icon = getItemIcon(datum);
+        return (params: types.MenuItemRenderProps) => {
+          const ic = getItemIcon(datum, params);
+          return ic ?? datum.icon;
+        };
       }
-      return icon ?? datum.icon;
+      return datum.icon;
     }, [datum, getItemIcon]);
+
+    const description = useMemo(() => {
+      if (getItemDescription) {
+        return (params: types.MenuItemRenderProps) => {
+          const desc = getItemDescription(datum, params);
+          return desc ?? datum.description;
+        };
+      }
+      return datum.description;
+    }, [datum, getItemDescription]);
 
     return (
       <MenuItem
@@ -83,6 +91,7 @@ export const DataMenuItem = forwardRef(
         actions={datum.actions}
         height={itemHeight}
         icon={icon}
+        description={description}
         iconSize={datum.iconSize ?? itemIconSize}
         selectionIndicator={selectionIndicator}
         iconProps={{ ...itemIconProps, ...datum.iconProps }}
@@ -144,7 +153,7 @@ export const DataMenuItem = forwardRef(
           datum.onClick?.(e, instance);
         }}
       >
-        {children ? children(datum) : label}
+        {params => (children ? children?.(datum, params) : datum.label)}
       </MenuItem>
     );
   },

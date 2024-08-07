@@ -1,7 +1,5 @@
 import React, { forwardRef, type ForwardedRef } from "react";
 
-import { isFragment } from "react-is";
-
 import { Loading } from "~/components/loading/Loading";
 import { type ComponentProps, type HTMLElementProps, classNames } from "~/components/types";
 
@@ -42,7 +40,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps<MenuConte
   ): JSX.Element => {
     const validChildren = (
       Array.isArray(children) ? children : children !== undefined ? [children] : []
-    ).filter((ch): ch is JSX.Element => !isFragment(ch) && ch !== null);
+    ).filter((ch): ch is JSX.Element => ch !== null);
 
     const primaryClassName = PrimaryClassNames[__private_parent_prop__];
 
@@ -64,7 +62,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps<MenuConte
             props.className,
           )}
         >
-          <Loading isLoading={isLoading}>{validChildren}</Loading>
+          <Loading isLoading={isLoading}>{children}</Loading>
         </div>
       );
     }

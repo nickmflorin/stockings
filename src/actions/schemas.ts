@@ -27,10 +27,11 @@ export const ProductNotificationEventsSchema = z.object({
       enabled: z.boolean(),
       events: z.array(
         z.object({
-          fromStatus: z.array(z.nativeEnum(ProductStatus)).min(1),
-          toStatus: z.array(z.nativeEnum(ProductStatus)).min(1),
+          fromStatus: z.array(z.nativeEnum(ProductStatus)),
+          toStatus: z.array(z.nativeEnum(ProductStatus)),
         }),
       ),
+      // .min(1),
     })
     .optional(),
 });

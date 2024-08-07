@@ -1,5 +1,7 @@
 import { type z } from "zod";
 
+import { ProductStatus } from "~/database/model";
+
 import {
   PriceChangeEventSchema,
   StatusChangeEventSchema,
@@ -24,17 +26,48 @@ export const useStatusChangeEventForm = () =>
     },
   });
 
+/* export const ProductNotificationEventsSchema = z.object({
+     product: z.string(),
+     priceChange: z
+       .object({
+         enabled: z.boolean(),
+         events: z.array(z.nativeEnum(PriceChangeEventType)),
+       })
+       .optional(),
+     statusChange: z
+       .object({
+         enabled: z.boolean(),
+         events: z.array(
+           z.object({
+             fromStatus: z.array(z.nativeEnum(ProductStatus)),
+             toStatus: z.array(z.nativeEnum(ProductStatus)),
+           }),
+         ),
+       })
+       .optional(),
+   }); */
+
 const ProductNotificationEventsFormSchema = ProductNotificationEventsSchema.omit({
   product: true,
-}).refine(
-  data => {
-    if (data.priceChange?.enabled) {
-      return data.priceChange.events.length > 0;
-    }
-    return true;
-  },
-  { message: "blah", path: ["priceChange.events"] },
-);
+})
+  .refine(
+    data => {
+      if (data.priceChange?.enabled) {
+        return data.priceChange.events.length > 0;
+      }
+      return true;
+    },
+    { message: "At least one event must be selected.", path: ["priceChange.events"] },
+  )
+  .refine(
+    data => {
+      if (data.statusChange?.enabled) {
+        return data.statusChange.events.length > 0;
+      }
+      return true;
+    },
+    { message: "At least one event must be selected.", path: ["statusChange.events"] },
+  );
 
 export const useProductNotificationEventsForm = () =>
   useForm({
@@ -46,7 +79,7 @@ export const useProductNotificationEventsForm = () =>
       },
       statusChange: {
         enabled: true,
-        events: [],
+        events: [{ fromStatus: [ProductStatus.OUT_OF_STOCK], toStatus: [ProductStatus.IN_STOCK] }],
       },
     },
   });

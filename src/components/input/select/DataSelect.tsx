@@ -1,22 +1,20 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { forwardRef, type ForwardedRef, type ReactNode, useRef } from "react";
+import React, { forwardRef, type ForwardedRef, type ReactNode, useRef, useCallback } from "react";
 
 import type * as types from "~/components//input/select/types";
-import { type IconProp, type IconName } from "~/components/icons";
-import { useSelectModelAccessors } from "~/components/input/select/hooks";
 import { Loading } from "~/components/loading/Loading";
 import {
   type MenuItemSelectionIndicator,
-  type MenuItemInstance,
   type DataMenuContentInstance,
+  type MenuItemRenderProps,
 } from "~/components/menus";
-import { type DataMenuComponent, type DataMenuProps } from "~/components/menus/data-menus/DataMenu";
+import { type DataMenuComponent, type DataMenuProps } from "~/components/menus/DataMenu";
 import { classNames } from "~/components/types";
 
 import { DataSelectBase, type DataSelectBaseProps } from "./DataSelectBase";
 
-const DataMenu = dynamic(() => import("~/components/menus/data-menus/DataMenu"), {
+const DataMenu = dynamic(() => import("~/components/menus/DataMenu"), {
   loading: () => <Loading isLoading={true} spinnerSize="16px" />,
 }) as DataMenuComponent;
 
@@ -33,16 +31,12 @@ export interface DataSelectProps<
       | "hideEmptyGroups"
       | "hideGrouplessItems"
       | "selectionIndicator"
+      | "getItemIcon"
+      | "onItemClick"
       | (`group${string}` & keyof DataMenuProps<M>)
       | Exclude<`item${string}` & keyof DataMenuProps<M>, "itemIsSelected">
     > {
-  readonly getModelIcon?: (datum: M) => IconProp | IconName | JSX.Element | undefined;
-  readonly onItemClick?: (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent> | KeyboardEvent,
-    datum: M,
-    instance: MenuItemInstance,
-  ) => void;
-  readonly itemRenderer?: (model: M) => ReactNode;
+  readonly itemRenderer?: (model: M, params: MenuItemRenderProps) => ReactNode;
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -72,7 +66,7 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
       groupLabelContainerClassName,
       groupLabelProps,
       groupsAreBordered,
-      getModelIcon,
+      getItemIcon,
       itemIsDisabled,
       itemIsLoading,
       itemIsLocked,
@@ -87,11 +81,20 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
     const innerRef = useRef<types.SelectInstance | null>(null);
     const menuContentRef = useRef<DataMenuContentInstance>(null);
 
-    const { getModelValue, getModelLabel, getModelId } = useSelectModelAccessors({
-      getModelValue: props.options.getModelValue,
-      getModelLabel: props.getModelLabel,
-      getModelId: props.getModelId,
-    });
+    const getItemValue = useCallback(
+      (m: M) => {
+        if (props.options.getItemValue !== undefined) {
+          return props.options.getItemValue(m);
+        } else if ("value" in m && m.value !== undefined) {
+          return m.value;
+        }
+        throw new Error(
+          "If the 'getItemValue' callback prop is not provided, each model must be attributed " +
+            "with a defined 'value' property!",
+        );
+      },
+      [props.options],
+    );
 
     const defaultSelectionIndicator =
       props.options.behavior === "multi"
@@ -117,7 +120,7 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
             hideGrouplessItems={hideGrouplessItems}
             groups={groups}
             contentRef={menuContentRef}
-            className={classNames("z-50 h-full rounded-sm", menuClassName)}
+            className={classNames("z-50 h-full rounded-sm min-h-[120px]", menuClassName)}
             data={props.data}
             enableKeyboardInteractions={enableKeyboardInteractions}
             itemClassName={itemClassName}
@@ -138,19 +141,18 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
             groupLabelContainerClassName={groupLabelContainerClassName}
             groupLabelProps={groupLabelProps}
             groupsAreBordered={groupsAreBordered}
-            getItemLabel={getModelLabel}
-            getItemIcon={getModelIcon}
-            getItemId={getModelId}
+            getItemIcon={getItemIcon}
+            getItemId={props.getItemId}
             itemIsDisabled={itemIsDisabled}
             itemIsLoading={itemIsLoading}
             itemIsLocked={itemIsLocked}
             itemIsVisible={itemIsVisible}
             itemIsSelected={m => {
-              const fn = getModelValue as (m: M) => types.InferredDataSelectV<M, O>;
+              const fn = getItemValue as (m: M) => types.InferredDataSelectV<M, O>;
               return isSelected(fn(m));
             }}
             onItemClick={(e, m: M, instance) => {
-              const fn = getModelValue as (m: M) => types.InferredDataSelectV<M, O>;
+              const fn = getItemValue as (m: M) => types.InferredDataSelectV<M, O>;
               toggle(fn(m));
               onItemClick?.(e, m, instance);
             }}
@@ -158,7 +160,7 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
               innerRef.current?.focusInput();
             }}
           >
-            {itemRenderer ? (m: M) => itemRenderer(m) : undefined}
+            {itemRenderer ? (m, params) => itemRenderer(m, params) : undefined}
           </DataMenu>
         )}
       >

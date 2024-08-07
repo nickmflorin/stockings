@@ -75,14 +75,14 @@ export type DataSelectOptions<
 > = B extends SelectBehaviorType
   ? {
       readonly behavior: SelectBehaviorType;
-      readonly getModelValue?: (model: M) => AllowedSelectValue;
+      readonly getItemValue?: (model: M) => AllowedSelectValue;
     }
   : never;
 
 export type InferredDataSelectV<
   M extends DataSelectModel,
   O extends DataSelectOptions<M>,
-> = O extends { getModelValue: (m: M) => infer V extends AllowedSelectValue }
+> = O extends { getItemValue: (m: M) => infer V extends AllowedSelectValue }
   ? V
   : M extends { value: infer V extends AllowedSelectValue }
     ? V

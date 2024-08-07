@@ -205,7 +205,7 @@ const config: Config = {
       },
       title: "#111827",
       body: "#515151",
-      description: "#868E96", // Gray 600
+      description: "#868e96", // Gray 600
       label: "#6a6a6a",
       appBackground: "#fbfbfb",
       border: "#eeeeee",

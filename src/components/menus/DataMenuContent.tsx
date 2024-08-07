@@ -10,37 +10,41 @@ import React, {
   useCallback,
 } from "react";
 
-import { type IconProp, type IconName } from "~/components/icons";
 import type * as types from "~/components/menus";
 import { useKeyboardNavigation } from "~/components/menus/hooks";
 import { MenuContent, type MenuContentProps } from "~/components/menus/MenuContent";
-import { type QuantitativeSize, type ComponentProps } from "~/components/types";
+import { type ComponentProps } from "~/components/types";
 import { type LabelProps } from "~/components/typography";
 
-import { MenuItemGroup } from "../MenuItemGroup";
-
-import { DataMenuItem } from "./DataMenuItem";
+import { DataMenuItem, type DataMenuItemProps } from "./DataMenuItem";
+import { MenuItemGroup } from "./MenuItemGroup";
 
 type MenuItemRefs = { [key in number]: RefObject<types.MenuItemInstance> };
 
 export interface DataMenuContentProps<M extends types.DataMenuModel>
-  extends Omit<MenuContentProps<"menu">, "children"> {
+  extends Omit<MenuContentProps<"menu">, "children">,
+    Pick<
+      DataMenuItemProps<M>,
+      | "getItemIcon"
+      | "getItemDescription"
+      | "itemSelectedClassName"
+      | "itemNavigatedClassName"
+      | "itemLockedClassName"
+      | "itemLoadingClassName"
+      | "itemDisabledClassName"
+      | "itemIconProps"
+      | "itemIconSize"
+      | "itemSpinnerClassName"
+      | "itemIconClassName"
+      | "selectionIndicator"
+      | "itemHeight"
+      | "itemClassName"
+      | "children"
+    > {
   readonly data: M[];
   readonly groups?: types.DataMenuGroup<M>[];
   readonly hideEmptyGroups?: boolean;
   readonly hideGrouplessItems?: boolean;
-  readonly itemClassName?: types.DataMenuItemClassName<M>;
-  readonly itemHeight?: QuantitativeSize<"px">;
-  readonly itemSpinnerClassName?: ComponentProps["className"];
-  readonly itemIconClassName?: ComponentProps["className"];
-  readonly itemIconProps?: types.MenuItemIconProps;
-  readonly itemIconSize?: QuantitativeSize<"px">;
-  readonly itemDisabledClassName?: types.DataMenuItemClassName<M>;
-  readonly itemLoadingClassName?: types.DataMenuItemClassName<M>;
-  readonly itemLockedClassName?: types.DataMenuItemClassName<M>;
-  readonly itemSelectedClassName?: types.DataMenuItemClassName<M>;
-  readonly itemNavigatedClassName?: types.DataMenuItemClassName<M>;
-  readonly selectionIndicator?: types.MenuItemSelectionIndicator;
   readonly enableKeyboardInteractions?: boolean;
   readonly groupContentClassName?: ComponentProps["className"];
   readonly groupLabelContainerClassName?: ComponentProps["className"];
@@ -51,16 +55,13 @@ export interface DataMenuContentProps<M extends types.DataMenuModel>
   readonly itemIsLoading?: (datum: M) => boolean;
   readonly itemIsVisible?: (datum: M) => boolean;
   readonly itemIsLocked?: (datum: M) => boolean;
-  readonly onItemClick: (
+  readonly onItemClick?: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | KeyboardEvent,
     datum: M,
     instance: types.MenuItemInstance,
   ) => void;
-  readonly getItemId?: (datum: M) => string | number;
-  readonly getItemLabel?: (datum: M) => ReactNode;
-  readonly getItemIcon?: (datum: M) => IconProp | IconName | JSX.Element | undefined;
+  readonly getItemId?: (datum: M) => string | number | undefined;
   readonly onKeyboardNavigationExit?: () => void;
-  readonly children?: (datum: M) => ReactNode;
 }
 
 type ProcessedGroup<M extends types.DataMenuModel> = {
@@ -170,12 +171,8 @@ export const DataMenuContent = forwardRef<
 
     const renderItem = useCallback(
       (model: M, index: number) => {
-        let id: string | number;
-        if (getItemId) {
-          id = getItemId(model);
-        } else {
-          id = model.id ?? `menu-item-${index}`;
-        }
+        const id = getItemId?.(model) ?? model.id ?? `menu-item-${index}`;
+
         let itemRef: RefObject<types.MenuItemInstance>;
         if (menuItemRefs.current[index] === undefined) {
           itemRef = createRef<types.MenuItemInstance>();
@@ -198,7 +195,6 @@ export const DataMenuContent = forwardRef<
       },
       [props, enableKeyboardInteractions, navigatedIndex, onItemClick, children, getItemId],
     );
-
     return (
       <MenuContent
         ref={containerRef}

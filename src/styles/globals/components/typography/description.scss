@@ -5,7 +5,7 @@
 @use "./mixins" as mixins;
 
 @mixin description-base() {
-  @include mixins.font("body", constants.get-default-size("body"));
+  @include mixins.font("description", constants.get-default-size("description"));
 }
 
 .description {

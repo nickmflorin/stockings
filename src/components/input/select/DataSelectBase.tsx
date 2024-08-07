@@ -8,7 +8,6 @@ import React, {
   useImperativeHandle,
 } from "react";
 
-import { type IconProp, type IconName } from "~/components/icons";
 import { useSelectModelValue } from "~/components/input/select/hooks";
 import { type MultiValueRendererProps } from "~/components/input/select/MultiValueRenderer";
 import * as types from "~/components/input/select/types";
@@ -50,12 +49,10 @@ export interface DataSelectBaseProps<
   readonly chipsCanDeselect?: boolean;
   readonly showIconsInChips?: boolean;
   readonly onClear?: types.IfDeselectable<O["behavior"], () => void>;
-  readonly modelValueRenderer?: (m: M) => JSX.Element;
+  readonly itemValueRenderer?: (m: M) => JSX.Element;
   readonly valueRenderer?: types.DataSelectValueRenderer<M, O>;
-  readonly getModelLabel?: (m: M) => ReactNode;
-  readonly getModelId?: (m: M) => string | number | undefined;
-  readonly getModelValueLabel?: (m: M) => ReactNode;
-  readonly getModelIcon?: (datum: M) => IconProp | IconName | JSX.Element | undefined;
+  readonly getItemId?: (m: M) => string | number | undefined;
+  readonly getItemValueLabel?: (m: M) => ReactNode;
   readonly onChange?: types.DataSelectChangeHandler<M, O>;
   readonly content: types.DataSelectManagedCallback<JSX.Element, M, O>;
 }
@@ -88,7 +85,6 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
       onOpen,
       onClose,
       onOpenChange,
-      getModelIcon,
       getBadgeIcon,
       ...props
     }: DataSelectBaseProps<M, O>,
@@ -167,7 +163,8 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
             <DataSelectInput<M, O>
               {...params}
               {...props}
-              getBadgeIcon={showIconsInChips ? (getModelIcon ?? getBadgeIcon) : undefined}
+              getItemLabel={props.getItemValueLabel}
+              getBadgeIcon={showIconsInChips ? getBadgeIcon : undefined}
               isDisabled={props.isDisabled || managed.modelValue === types.NOTSET}
               options={options}
               value={value}

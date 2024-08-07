@@ -70,6 +70,7 @@ export const Badge = ({
       {onClose && (
         <IconButton.Transparent
           className="badge__close-button hover:bg-transparent"
+          scheme="light"
           icon="xmark"
           element="button"
           onClick={e => {

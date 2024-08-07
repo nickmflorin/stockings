@@ -10,6 +10,12 @@ export type MenuItemInstance = {
   readonly setLoading: (value: boolean) => void;
 };
 
+export type MenuItemRenderProps = {
+  readonly isLocked: boolean;
+  readonly isDisabled: boolean;
+  readonly isLoading: boolean;
+};
+
 export type MenuItemSelectionIndicatorType = "checkbox" | "highlight";
 
 export type MenuItemSelectionIndicator =
@@ -45,6 +51,7 @@ type MenuItemFlagName = (typeof MenuItemFlagNames)[number];
 export type DataMenuModel = {
   readonly id?: string | number;
   readonly icon?: IconProp | IconName | JSX.Element;
+  readonly description?: ReactNode;
   readonly iconProps?: MenuItemIconProps;
   readonly iconSize?: QuantitativeSize<"px">;
   readonly iconClassName?: ComponentProps["className"];

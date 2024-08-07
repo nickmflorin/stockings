@@ -11,6 +11,8 @@ import { Form, type FormInstance, type FormProps } from "~/components/forms/Form
 import { MultiCheckbox } from "~/components/input/MultiCheckbox";
 import { ButtonFooter } from "~/components/structural/ButtonFooter";
 import { classNames } from "~/components/types";
+import { Title, Description } from "~/components/typography";
+import { ProductStatusSelect } from "~/features/products/components/input/ProductStatusSelect";
 
 import {
   useProductNotificationEventsForm,
@@ -22,19 +24,69 @@ interface ProductNotificationEventsFormSectionProps {
   readonly form: FormInstance<ProductNotificationEventsFormValues>;
   readonly field: "priceChange.enabled" | "statusChange.enabled";
   readonly children: ReactNode;
+  readonly description: string;
 }
 
 const ProductNotificationEventsFormSection = ({
   form,
   field,
   children,
+  description,
   label,
 }: ProductNotificationEventsFormSectionProps) => {
   const enabled = useWatch({ control: form.control, name: field });
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <CheckboxField form={form} name={field} label={label} />
-      <div className={classNames({ "pointer-events-none opacity-25": !enabled })}>{children}</div>
+      <Description className="ml-[24px]">{description}</Description>
+      <div className={classNames("ml-[24px]", { "pointer-events-none opacity-25": !enabled })}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+interface ProductStatusChangeNotificationEventFieldsProps {
+  readonly form: FormInstance<ProductNotificationEventsFormValues>;
+  readonly index: number;
+}
+
+const ProductStatusChangeNotificationEventFields = ({
+  form,
+  index,
+}: ProductStatusChangeNotificationEventFieldsProps) => {
+  const fromStatuses = useWatch({
+    control: form.control,
+    name: `statusChange.events.${index}.fromStatus`,
+  });
+
+  return (
+    <div className="flex flex-col gap-2">
+      <Form.ControlledField
+        name={`statusChange.events.${index}.fromStatus`}
+        label="From"
+        form={form}
+        helpText="Notify me when the inventory status of the product changes from this state."
+      >
+        {({ value, onChange }) => (
+          <ProductStatusSelect behavior="multi" value={value} onChange={onChange} />
+        )}
+      </Form.ControlledField>
+      <Form.ControlledField
+        name={`statusChange.events.${index}.toStatus`}
+        label="To"
+        form={form}
+        helpText="Notify me when the inventory status of the product changes to this state."
+      >
+        {({ value, onChange }) => (
+          <ProductStatusSelect
+            behavior="multi"
+            value={value}
+            onChange={onChange}
+            disabledStatuses={fromStatuses}
+          />
+        )}
+      </Form.ControlledField>
     </div>
   );
 };
@@ -74,16 +126,18 @@ export const ProductNotificationEventsForm = ({
       }}
     >
       <ProductNotificationEventsFormSection
-        label="Enable Status Change Notifications"
+        label="Inventory Change Notifications"
         form={form}
         field="statusChange.enabled"
+        description="Notify me when the inventory status of a product changes."
       >
-        <div>Test</div>
+        <ProductStatusChangeNotificationEventFields form={form} index={0} />
       </ProductNotificationEventsFormSection>
       <ProductNotificationEventsFormSection
-        label="Enable Price Change Notifications"
+        label="Price Change Notifications"
         form={form}
         field="priceChange.enabled"
+        description="Notify me when the price of a product changes."
       >
         <Form.ControlledField
           name="priceChange.events"

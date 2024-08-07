@@ -190,11 +190,8 @@ $description-properties: ();
 
 @each $size-key in map.keys($body-properties) {
   $size-properties: map.get($body-properties, $size-key);
-  $description-properties: map.set(
-    $description-properties,
-    $size-key,
-    map.set($size-properties, color, theme("colors.description"))
-  );
+  $size-properties: map.set($size-properties, color, theme("colors.description"));
+  $description-properties: map.set($description-properties, $size-key, $size-properties);
 }
 $typography-size-properties: map.set(
   $typography-size-properties,

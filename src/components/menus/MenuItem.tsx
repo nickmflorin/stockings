@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { type ReactNode, useImperativeHandle, forwardRef } from "react";
 
 import { isFragment } from "react-is";
@@ -11,6 +11,7 @@ import { type Action } from "~/components/structural/Actions";
 import { classNames } from "~/components/types";
 import { type ComponentProps, type HTMLElementProps } from "~/components/types";
 import { sizeToString, sizeToNumber, type QuantitativeSize } from "~/components/types/sizes";
+import { Description } from "~/components/typography";
 import { ShowHide } from "~/components/util";
 
 import { MenuItemIcon } from "./MenuItemIcon";
@@ -19,8 +20,13 @@ const Spinner = dynamic(() => import("~/components/icons/Spinner").then(mod => m
 const Checkbox = dynamic(() => import("~/components/input/Checkbox").then(mod => mod.Checkbox));
 const Actions = dynamic(() => import("~/components/structural/Actions").then(mod => mod.Actions));
 
-export interface MenuItemProps extends ComponentProps, Omit<HTMLElementProps<"div">, "onClick"> {
-  readonly icon?: IconProp | IconName | JSX.Element;
+type MenuItemRenderCallback<V> = V | ((params: types.MenuItemRenderProps) => V);
+
+export interface MenuItemProps
+  extends ComponentProps,
+    Omit<HTMLElementProps<"div">, "children" | "onClick"> {
+  readonly icon?: MenuItemRenderCallback<IconProp | IconName | JSX.Element | undefined>;
+  readonly description?: MenuItemRenderCallback<ReactNode>;
   readonly iconClassName?: ComponentProps["className"];
   readonly iconProps?: types.MenuItemIconProps;
   readonly spinnerProps?: Omit<SpinnerProps, "size" | "className" | "isLoading">;
@@ -41,12 +47,142 @@ export interface MenuItemProps extends ComponentProps, Omit<HTMLElementProps<"di
   readonly lockedClassName?: ComponentProps["className"];
   readonly loadingClassName?: ComponentProps["className"];
   readonly selectionIndicator?: types.MenuItemSelectionIndicator;
-  readonly children: ReactNode;
+  readonly children: ReactNode | ((params: types.MenuItemRenderProps) => ReactNode);
   readonly onClick?: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     instance: types.MenuItemInstance,
   ) => void;
 }
+
+interface MenuItemInnerProps
+  extends Pick<
+    MenuItemProps,
+    | "icon"
+    | "iconProps"
+    | "iconSize"
+    | "iconClassName"
+    | "spinnerClassName"
+    | "spinnerProps"
+    | "children"
+    | "actions"
+  > {
+  readonly isLoading: boolean;
+  readonly isDisabled: boolean;
+  readonly isLocked: boolean;
+}
+
+const MenuItemInner = ({
+  isLocked,
+  isLoading,
+  isDisabled,
+  icon: _icon,
+  children: _children,
+  actions = [],
+  ...rest
+}: MenuItemInnerProps) => {
+  const icon = useMemo(() => {
+    const ic = typeof _icon === "function" ? _icon({ isLocked, isLoading, isDisabled }) : _icon;
+    if (typeof ic === "string" || isIconProp(ic)) {
+      return (
+        <MenuItemIcon
+          {...rest}
+          icon={ic as IconProp | IconName | undefined}
+          isLoading={isLoading}
+        />
+      );
+    }
+    return ic;
+  }, [_icon, rest, isLoading, isLocked, isDisabled]);
+
+  const children = useMemo(() => {
+    if (typeof _children === "function") {
+      return _children({ isLocked, isLoading, isDisabled });
+    }
+    return _children;
+  }, [_children, isLocked, isLoading, isDisabled]);
+
+  return (
+    <>
+      {icon}
+      {children !== null && children !== undefined && !isFragment(children) && (
+        <div className="menu__item__inner-content">{children}</div>
+      )}
+      {/* Only show the spinner to the right (instead of over the icon) if the icon is not
+          defined.  This avoids text/content shifting when the Spinner appears and
+          disappears. */}
+      {icon === undefined && (
+        <Spinner
+          {...rest.spinnerProps}
+          className={classNames("text-gray-600", rest.iconClassName, rest.spinnerClassName)}
+          isLoading={isLoading}
+          size={rest.iconSize}
+        />
+      )}
+      <Actions actions={actions} />
+    </>
+  );
+};
+
+interface MenuItemContentProps
+  extends Pick<
+      MenuItemProps,
+      "description" | "contentClassName" | "isSelected" | "selectionIndicator"
+    >,
+    MenuItemInnerProps {}
+
+const MenuItemContent = ({
+  contentClassName,
+  description: _description,
+  isSelected,
+  selectionIndicator,
+  ...rest
+}: MenuItemContentProps) => {
+  const description = useMemo(
+    () =>
+      typeof _description === "function"
+        ? _description({
+            isLocked: rest.isLocked,
+            isLoading: rest.isLoading,
+            isDisabled: rest.isDisabled,
+          })
+        : _description,
+    [_description, rest.isLocked, rest.isLoading, rest.isDisabled],
+  );
+
+  if (description) {
+    return (
+      <div className={classNames("menu__item__content-wrapper", contentClassName)}>
+        <div className="menu__item__content">
+          <ShowHide show={types.menuItemHasSelectionIndicator(selectionIndicator, "checkbox")}>
+            <Checkbox
+              readOnly
+              value={isSelected}
+              isDisabled={rest.isDisabled}
+              isLocked={rest.isLocked}
+            />
+          </ShowHide>
+          <MenuItemInner {...rest} />
+        </div>
+        <Description component="div" className="menu__item__description">
+          {description}
+        </Description>
+      </div>
+    );
+  }
+  return (
+    <div className={classNames("menu__item__content", contentClassName)}>
+      <ShowHide show={types.menuItemHasSelectionIndicator(selectionIndicator, "checkbox")}>
+        <Checkbox
+          readOnly
+          value={isSelected}
+          isDisabled={rest.isDisabled}
+          isLocked={rest.isLocked}
+        />
+      </ShowHide>
+      <MenuItemInner {...rest} />
+    </div>
+  );
+};
 
 export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
   (
@@ -62,16 +198,17 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
       spinnerProps,
       contentClassName,
       children,
-      isDisabled = false,
-      isLocked = false,
       isVisible = true,
       isCurrentNavigation = false,
+      description,
       icon,
       iconClassName,
       navigatedClassName,
       iconSize,
       iconProps,
-      isLoading = false,
+      isLoading: propIsLoading,
+      isLocked: propIsLocked,
+      isDisabled: propIsDisabled,
       selectionIndicator,
       ...props
     }: MenuItemProps,
@@ -82,6 +219,10 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
     const [_isLoading, setLoading] = useState(false);
     const [_isDisabled, setDisabled] = useState(false);
     const [_isLocked, setLocked] = useState(false);
+
+    const isLocked = propIsLocked || _isLocked;
+    const isLoading = propIsLoading || _isLoading;
+    const isDisabled = propIsDisabled || _isDisabled;
 
     useImperativeHandle(ref, () => ({
       setLoading,
@@ -112,9 +253,9 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
                 isSelected && types.menuItemHasSelectionIndicator(selectionIndicator, "highlight"),
               [classNames("menu__item--navigated", navigatedClassName)]: isCurrentNavigation,
               [classNames(selectedClassName)]: isSelected,
-              [classNames("menu__item--loading", loadingClassName)]: isLoading || _isLoading,
-              [classNames("disabled", disabledClassName)]: isDisabled || _isDisabled,
-              [classNames("menu__item--locked", lockedClassName)]: isLocked || _isLocked,
+              [classNames("menu__item--loading", loadingClassName)]: isLoading,
+              [classNames("disabled", disabledClassName)]: isDisabled,
+              [classNames("menu__item--locked", lockedClassName)]: isLocked,
             },
             props.className,
           )}
@@ -128,37 +269,24 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
               : props.style
           }
         >
-          <ShowHide show={types.menuItemHasSelectionIndicator(selectionIndicator, "checkbox")}>
-            <Checkbox readOnly value={isSelected} isDisabled={isDisabled} isLocked={isLocked} />
-          </ShowHide>
-          {typeof icon === "string" || isIconProp(icon) ? (
-            <MenuItemIcon
-              icon={icon as IconProp | IconName | undefined}
-              iconProps={iconProps}
-              iconSize={iconSize}
-              iconClassName={iconClassName}
-              isLoading={isLoading}
-              spinnerClassName={spinnerClassName}
-              spinnerProps={spinnerProps}
-            />
-          ) : (
-            icon
-          )}
-          {children !== null && children !== undefined && !isFragment(children) && (
-            <div className={classNames("menu__item__content", contentClassName)}>{children}</div>
-          )}
-          {/* Only show the spinner to the right (instead of over the icon) if the icon is not
-              defined.  This avoids text/content shifting when the Spinner appears and disappears.
-              */}
-          {icon === undefined && (
-            <Spinner
-              {...spinnerProps}
-              className={classNames("text-gray-600", iconClassName, spinnerClassName)}
-              isLoading={isLoading}
-              size={iconSize}
-            />
-          )}
-          <Actions actions={actions} />
+          <MenuItemContent
+            actions={actions}
+            spinnerClassName={spinnerClassName}
+            spinnerProps={spinnerProps}
+            icon={icon}
+            description={description}
+            iconClassName={iconClassName}
+            iconProps={iconProps}
+            iconSize={iconSize}
+            contentClassName={contentClassName}
+            isLoading={isLoading}
+            isDisabled={isDisabled}
+            isLocked={isLocked}
+            selectionIndicator={selectionIndicator}
+            isSelected={isSelected}
+          >
+            {children}
+          </MenuItemContent>
         </div>
       </ShowHide>
     );

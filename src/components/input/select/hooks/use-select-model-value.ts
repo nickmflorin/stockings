@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 import { isEqual, uniqBy } from "lodash-es";
 
@@ -7,7 +7,6 @@ import { logger } from "~/internal/logger";
 
 import * as types from "~/components/input/select/types";
 
-import { useSelectModelAccessors } from "./use-select-model-accessors";
 import { useSelectValue, type UseSelectValueParams } from "./use-select-value";
 
 export interface UseSelectModelValueParams<
@@ -86,9 +85,9 @@ const getInitialModelValue = <
 
 const getModel = <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
   v: types.InferredDataSelectV<M, O>,
-  { data, getModelValue }: { getModelValue: (m: M) => types.InferredDataSelectV<M, O>; data: M[] },
+  { data, getItemValue }: { getItemValue: (m: M) => types.InferredDataSelectV<M, O>; data: M[] },
 ): M => {
-  const ms = data.filter(m => isEqual(getModelValue(m), v));
+  const ms = data.filter(m => isEqual(getItemValue(m), v));
   if (ms.length === 0) {
     throw new Error(
       `The value, '${v}', does not match any of the models in the data. ` +
@@ -108,10 +107,10 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
   curr: types.DataSelectModelValue<M, O> | types.NotSet,
   value: types.DataSelectValue<M, O>,
   {
-    getModelValue,
+    getItemValue,
     options,
     data,
-  }: { getModelValue: (m: M) => types.InferredDataSelectV<M, O>; options: O; data: M[] },
+  }: { getItemValue: (m: M) => types.InferredDataSelectV<M, O>; options: O; data: M[] },
 ): types.DataSelectModelValue<M, O> | types.NotSet => {
   // Distribute/flatten the conditional type to a union of its potential values.
   const selectValue = value as
@@ -153,7 +152,7 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
 
          See the docstring on the hook for more information. */
       return selectValue.map(vi =>
-        getModel(vi, { data: uniqBy([...data, ...curr], m => getModelValue(m)), getModelValue }),
+        getModel(vi, { data: uniqBy([...data, ...curr], m => getItemValue(m)), getItemValue }),
       ) as types.DataSelectModelValue<M, O>;
     }
     case types.SelectBehaviorTypes.SINGLE: {
@@ -200,8 +199,8 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
 
          See the docstring on the hook for more information. */
       return getModel(selectValue, {
-        data: uniqBy([...data, existing], m => getModelValue(m)),
-        getModelValue,
+        data: uniqBy([...data, existing], m => getItemValue(m)),
+        getItemValue,
       }) as types.DataSelectModelValue<M, O>;
     }
     case types.SelectBehaviorTypes.SINGLE_NULLABLE: {
@@ -236,8 +235,8 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
 
          See the docstring on the hook for more information. */
       return getModel(selectValue, {
-        data: existing ? uniqBy([...data, existing], m => getModelValue(m)) : data,
-        getModelValue,
+        data: existing ? uniqBy([...data, existing], m => getItemValue(m)) : data,
+        getItemValue,
       }) as types.DataSelectModelValue<M, O>;
     }
     default:
@@ -258,7 +257,7 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
  * the Select when the menu items associated with those models are selected, deselected or cleared.
  *
  * The value of each model, or element in the array of data provided to the Select, can be defined
- * by either attributing the model with a `value` attribute or providing a `getModelValue` callback
+ * by either attributing the model with a `value` attribute or providing a `getItemValue` callback
  * prop to the Select.
  *
  * The overall value of the Select is managed by the `use-select-value` hook, which is responsible
@@ -276,7 +275,7 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
  * >>> return (
  * >>>   <DataSelect
  * >>>     data={bills}
- * >>>     getModelValue={(b: Bill) => b.id}
+ * >>>     getItemValue={(b: Bill) => b.id}
  * >>>     onChange={(value, bills) => ...}
  * >>>   />
  * >>> )
@@ -300,7 +299,7 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
  * >>>   <DataSelect
  * >>      value={[1, 2, 4]}
  * >>>     data={bills}
- * >>>     getModelValue={(b: Bill) => b.id}
+ * >>>     getItemValue={(b: Bill) => b.id}
  * >>>     onChange={(value, bills) => ...}
  * >>>   />
  * >>> )
@@ -362,13 +361,19 @@ export const useSelectModelValue = <
      the readiness of the Select's potentially asynchronously loaded data. */
   const wasInitialized = useRef(isReady);
 
-  const { getModelValue: _getModelValue } = useSelectModelAccessors({
-    getModelValue: options.getModelValue,
-  });
-
-  const getModelValue = useMemo(
-    () => _getModelValue as (m: M) => types.InferredDataSelectV<M, O>,
-    [_getModelValue],
+  const getItemValue = useCallback(
+    (m: M) => {
+      if (options.getItemValue !== undefined) {
+        return options.getItemValue(m) as types.InferredDataSelectV<M, O>;
+      } else if ("value" in m && m.value !== undefined) {
+        return m.value as types.InferredDataSelectV<M, O>;
+      }
+      throw new Error(
+        "If the 'getItemValue' callback prop is not provided, each model must be attributed " +
+          "with a defined 'value' property!",
+      );
+    },
+    [options],
   );
 
   /* Manage the Select's model value in state in parallel to the Select's value.  See docstring
@@ -378,7 +383,7 @@ export const useSelectModelValue = <
       getInitialModelValue({
         options,
         isReady,
-        getModel: v => getModel(v, { data, getModelValue }),
+        getModel: v => getModel(v, { data, getItemValue }),
         ...params,
       }),
   );
@@ -390,7 +395,7 @@ export const useSelectModelValue = <
     ...params,
     behavior: options.behavior,
     onChange: v => {
-      const mv = reduceModelValue(modelValue, v, { getModelValue, options, data });
+      const mv = reduceModelValue(modelValue, v, { getItemValue, options, data });
       /* This should only be called if the Select's model value is not "NOTSET" to begin with,
          because the Select will disable selection if it is not in a "ready" state. */
       if (mv !== types.NOTSET) {
@@ -409,9 +414,9 @@ export const useSelectModelValue = <
        should wait until the Select's model value has been initialized, which occurs when it is
        set in a "ready" state. */
     if (wasInitialized.current) {
-      setModelValue(curr => reduceModelValue(curr, value, { getModelValue, options, data }));
+      setModelValue(curr => reduceModelValue(curr, value, { getItemValue, options, data }));
     }
-  }, [value, options, data, getModelValue]);
+  }, [value, options, data, getItemValue]);
 
   useEffect(() => {
     /* If the Select was not initially in a "ready" state, the model value has to be set after it
@@ -421,7 +426,7 @@ export const useSelectModelValue = <
         getInitialModelValue({
           options,
           isReady,
-          getModel: v => getModel(v, { data, getModelValue }),
+          getModel: v => getModel(v, { data, getItemValue }),
           ...params,
         }),
       );
@@ -438,9 +443,9 @@ export const useSelectModelValue = <
     select,
     toggle,
     deselect,
-    isModelSelected: (m: M) => isSelected(getModelValue(m)),
-    toggleModel: (m: M) => toggle(getModelValue(m)),
-    selectModel: (m: M) => select(getModelValue(m)),
-    deselectModel: (m: M) => deselect(getModelValue(m)),
+    isModelSelected: (m: M) => isSelected(getItemValue(m)),
+    toggleModel: (m: M) => toggle(getItemValue(m)),
+    selectModel: (m: M) => select(getItemValue(m)),
+    deselectModel: (m: M) => deselect(getItemValue(m)),
   };
 };

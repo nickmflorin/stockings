@@ -1,6 +1,7 @@
-import React, { type ForwardedRef, forwardRef, useMemo, type ReactNode } from "react";
+import React, { type ForwardedRef, forwardRef, useMemo, type ReactNode, useCallback } from "react";
 
-import { useSelectModelAccessors } from "~/components/input/select/hooks";
+import { v4 as uuid } from "uuid";
+
 import * as types from "~/components/input/select/types";
 
 import { BasicSelectInput, type BasicSelectInputProps } from "./BasicSelectInput";
@@ -23,11 +24,10 @@ export interface DataSelectInputProps<
   readonly value: types.DataSelectValue<M, O>;
   readonly modelValue: types.DataSelectModelValue<M, O> | types.NotSet;
   readonly options: O;
-  readonly modelValueRenderer?: (m: M) => JSX.Element;
+  readonly itemValueRenderer?: (m: M) => JSX.Element;
   readonly valueRenderer?: types.DataSelectValueRenderer<M, O>;
-  readonly getModelLabel?: (m: M) => ReactNode;
-  readonly getModelValueLabel?: (m: M) => ReactNode;
-  readonly getModelId?: (m: M) => string | number | undefined;
+  readonly getItemLabel?: (m: M) => ReactNode;
+  readonly getItemId?: (m: M) => string | number | undefined;
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -44,26 +44,64 @@ export const DataSelectInput = forwardRef<HTMLDivElement, DataSelectInputProps<a
       badgeProps,
       onBadgeClose,
       valueRenderer,
-      modelValueRenderer,
-      getModelLabel: _getModelLabel,
-      getModelValueLabel: _getModelValueLabel,
+      itemValueRenderer,
+      getItemLabel: _getItemLabel,
       getBadgeIcon,
       getBadgeProps,
-      getModelId,
+      getItemId: _getItemId,
       ...props
     }: DataSelectInputProps<M, O>,
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
-    const { getModelValueLabel, getModelKey } = useSelectModelAccessors({
-      getModelLabel: _getModelLabel,
-      getModelId,
-      getModelValue: options.getModelValue,
-      getModelValueLabel: _getModelValueLabel,
-    });
-
     const showPlaceholder = useMemo(
       () => (Array.isArray(modelValue) && modelValue.length === 0) || modelValue === null,
       [modelValue],
+    );
+
+    const getItemId = useCallback(
+      (m: M) => {
+        let id: string | number | undefined = undefined;
+        if (_getItemId !== undefined) {
+          id = _getItemId(m);
+        }
+        if (id === undefined && "id" in m && m.id !== undefined) {
+          id = m.id;
+        }
+        return id === undefined ? `model-${uuid()}` : String(id);
+      },
+      [_getItemId],
+    );
+
+    const getItemLabel = useCallback(
+      (m: M) => {
+        if (_getItemLabel !== undefined) {
+          return _getItemLabel(m);
+        } else if ("valueLabel" in m && m.valueLabel !== undefined) {
+          return m.valueLabel;
+        } else if ("label" in m && m.label !== undefined) {
+          return m.label;
+        }
+      },
+      [_getItemLabel],
+    );
+
+    const getModelKey = useCallback(
+      (m: M, index: number): string => {
+        const id = getItemId(m);
+        if (id !== undefined) {
+          return id;
+        }
+        const value = options.getItemValue?.(m);
+        if (typeof value === "string" || typeof value === "number") {
+          return String(value);
+        }
+        const label = getItemLabel(m);
+        if (typeof label === "string" || typeof label === "number") {
+          return String(label).toLocaleLowerCase();
+        }
+        return `model-${index}`;
+      },
+      [options, getItemLabel, getItemId],
     );
 
     const renderedValue = useMemo(() => {
@@ -90,15 +128,15 @@ export const DataSelectInput = forwardRef<HTMLDivElement, DataSelectInputProps<a
             badgeProps={badgeProps}
             chipSize={chipSize}
             chipClassName={chipClassName}
-            getBadgeLabel={getModelValueLabel}
+            getBadgeLabel={getItemLabel}
             getBadgeIcon={getBadgeIcon}
             getBadgeProps={getBadgeProps}
             onBadgeClose={onBadgeClose}
-            renderer={modelValueRenderer}
+            renderer={itemValueRenderer}
           />
         );
       }
-      return getModelValueLabel(modelValue as M);
+      return getItemLabel(modelValue as M);
     }, [
       value,
       modelValue,
@@ -112,9 +150,9 @@ export const DataSelectInput = forwardRef<HTMLDivElement, DataSelectInputProps<a
       onBadgeClose,
       getModelKey,
       valueRenderer,
-      modelValueRenderer,
+      itemValueRenderer,
       getBadgeIcon,
-      getModelValueLabel,
+      getItemLabel,
     ]);
 
     return (

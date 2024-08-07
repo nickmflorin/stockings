@@ -49,11 +49,34 @@ $menu-item-padding: 6px 10px;
     }
   }
 
+  @mixin menu-item-content() {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: theme("spacing.2");
+
+    > .checkbox {
+      padding: 0;
+    }
+
+    .menu__item__inner-content {
+      text-align: left;
+      line-height: inherit;
+      flex-grow: 100;
+      color: inherit;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: theme("spacing.2");
+      @include typography.truncate();
+    }
+  }
+
   // Note: Sometimes a menu__item element is wrapped in an anchor tag if it represents a link.
   .menu__item {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     padding: $menu-item-padding;
     gap: theme("spacing.2");
     color: theme("colors.body");
@@ -108,22 +131,24 @@ $menu-item-padding: 6px 10px;
       }
     }
 
-    // TODO: Improve the style of the checkbox.
-    > .checkbox {
-      padding: 0;
+    > .menu__item__content {
+      @include menu-item-content();
     }
 
-    > .menu__item__content {
-      height: 100%;
-      text-align: left;
-      line-height: inherit;
-      flex-grow: 100;
-      color: inherit;
+    > .menu__item__content-wrapper {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: theme("spacing.2");
-      @include typography.truncate();
+      flex-direction: column;
+      align-items: flex-start;
+      gap: theme("spacing.1");
+
+      > .menu__item__content {
+        @include menu-item-content();
+      }
+
+      > .menu__item__description {
+        @include typography.font($type: "description", $size: "xs");
+        padding-left: 24px;
+      }
     }
   }
 

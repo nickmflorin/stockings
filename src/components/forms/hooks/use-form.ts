@@ -39,6 +39,9 @@ type FieldErrorObj = z.infer<typeof ReactHookFormFieldErrorObjectSchema>;
 const isReactHookFormFieldErrorObject = (obj: unknown): obj is FieldErrorObj =>
   ReactHookFormFieldErrorObjectSchema.safeParse(obj).success;
 
+const isInternalFieldErrors = (obj: unknown): obj is string[] =>
+  z.array(z.string()).safeParse(obj).success;
+
 function mergeIntoFieldErrors<I extends BaseFormValues>(
   a: FieldErrors<I>,
   b: FieldErrors<I> | NativeFieldErrors,
@@ -78,27 +81,20 @@ function mergeIntoFieldErrors<I extends BaseFormValues>(
     arg1 as IterablePathObj<FieldErrorObj | string[]>,
     {
       continueOn: (v): v is IterablePathObj<FieldErrorObj | string[]> =>
-        !isReactHookFormFieldErrorObject(v) && !Array.isArray(v),
+        !isReactHookFormFieldErrorObject(v) && !isInternalFieldErrors(v),
       formatter: path => path.join("."),
     },
   );
   return Object.keys(flattened).reduce((prev, key) => {
     const errs = flattened[key as FieldName<I>];
     if (errs !== undefined) {
-      /* This is a sanity check, to ensure that we are in fact dealing with either an array of
-         string error messages or the React Hook Form error object itself. */
-      if (!z.array(z.string()).safeParse(errs).success && !isReactHookFormFieldErrorObject(errs)) {
-        throw new Error(
-          "Unexpectedly encountered malformed value of errors object!  The value does " +
-            "not conform to either the React Hook Form error object or an array of string " +
-            "error messages.",
-        );
+      if (isInternalFieldErrors(errs)) {
+        return mergeIntoFieldErrors(prev, key as FieldName<I>, errs);
+      } else if (isReactHookFormFieldErrorObject(errs)) {
+        return mergeIntoFieldErrors(prev, key as FieldName<I>, errs.message);
+      } else {
+        throw new Error("Unexpectedly encountered malformed value in flattened errors object!");
       }
-      return mergeIntoFieldErrors(
-        prev,
-        key as FieldName<I>,
-        Array.isArray(errs) ? errs : errs.message,
-      );
     }
     return prev;
   }, arg0);
