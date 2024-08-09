@@ -57,6 +57,6 @@ if (typeof window === "undefined") {
 }
 
 export type Transaction = Omit<
-  PrismaClient,
+  ReturnType<typeof initializePrismaClient>,
   "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
 >;

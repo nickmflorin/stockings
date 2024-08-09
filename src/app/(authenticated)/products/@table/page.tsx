@@ -13,7 +13,7 @@ const ProductsTableView = dynamic(
 export default function ProductsTablePage() {
   return (
     <ProductsTableView>
-      <Suspense fallback={<Loading isLoading />}>
+      <Suspense fallback={<Loading isLoading component="tbody" />}>
         <ProductsTableBody />
       </Suspense>
     </ProductsTableView>

@@ -14,7 +14,7 @@ export const SubscribeCell = ({ product }: SubscribeCellProps): JSX.Element => {
   return (
     <Button.Solid
       element="button"
-      onClick={() => open(DrawerIds.MANAGE_PRODUCT_NOTIFICATION_EVENTS, { product })}
+      onClick={() => open(DrawerIds.SUBSCRIBE_TO_PRODUCT, { product })}
     >
       Subscribe
     </Button.Solid>

@@ -3,7 +3,9 @@ import { type SubmitErrorHandler } from "react-hook-form";
 import { type ComponentProps, classNames } from "~/components/types";
 
 import { FormField, ControlledField } from "./Field";
-import { FormStructure, type FormStructureProps } from "./FormStructure";
+import { FormBody, type FormBodyProps } from "./FormBody";
+import { FormFooter, type FormFooterProps } from "./FormFooter";
+import { FormHeader, type FormHeaderProps } from "./FormHeader";
 import { NativeForm, type NativeFormProps } from "./NativeForm";
 import { type FormInstance, type BaseFormValues, FieldConditions } from "./types";
 
@@ -18,7 +20,10 @@ export interface FormProps<I extends BaseFormValues>
       NativeFormProps,
       keyof ComponentProps | "action" | "onSubmit" | "submitButtonType" | "children"
     >,
-    FormStructureProps<I> {
+    FormBodyProps,
+    FormFooterProps<I>,
+    FormHeaderProps {
+  readonly footerClassName?: ComponentProps["className"];
   readonly onSubmit?: SubmitAction<I>;
   readonly action?: SubmitAction<I>;
   readonly onError?: SubmitErrorHandler<I>;
@@ -27,8 +32,13 @@ export interface FormProps<I extends BaseFormValues>
 export const Form = <I extends BaseFormValues>({
   form,
   children,
-  className,
-  style,
+  title,
+  footer,
+  footerClassName,
+  isLoading,
+  isScrollable,
+  isDisabled,
+  contentClassName,
   action,
   onSubmit,
   onError,
@@ -39,8 +49,8 @@ export const Form = <I extends BaseFormValues>({
   }
   return (
     <NativeForm
-      style={style}
-      className={classNames("form", className)}
+      {...props}
+      className={classNames("form", props.className)}
       action={
         action !== undefined
           ? () => {
@@ -58,9 +68,21 @@ export const Form = <I extends BaseFormValues>({
           : undefined
       }
     >
-      <FormStructure {...props} form={form}>
+      <FormHeader title={title} />
+      <FormBody
+        isLoading={isLoading}
+        isScrollable={isScrollable}
+        contentClassName={contentClassName}
+        isDisabled={isDisabled}
+      >
         {children}
-      </FormStructure>
+      </FormBody>
+      <FormFooter
+        footer={footer}
+        className={footerClassName}
+        isScrollable={isScrollable}
+        form={form}
+      />
     </NativeForm>
   );
 };

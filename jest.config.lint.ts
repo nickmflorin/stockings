@@ -18,6 +18,8 @@ export const withLintConfig = (__dirname: string, config: ModuleConfig) =>
       `${__dirname}/**/*`,
       "!**/__snapshots__/**",
       `!${__dirname}/src/database/model/generated/**`,
+      `!${__dirname}/src/database/model/zenstack-generated/**`,
+      `!${__dirname}/src/database/prisma/migrations/**`,
       ...(config.testMatch || []),
     ],
   });

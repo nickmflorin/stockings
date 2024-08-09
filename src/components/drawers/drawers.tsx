@@ -14,15 +14,24 @@ export const Drawer = <D extends DrawerId, C extends React.ComponentType<any>>(
   component,
 });
 
-const ProductNotificationEventsDrawer = dynamic(
-  () => import("~/features/notifications/components/drawers/ProductNotificationEventsDrawer"),
+const SubscribeToProductDrawer = dynamic(
+  () => import("~/features/notifications/components/drawers/SubscribeToProductDrawer"),
+  { loading: () => <Loading isLoading={true} /> },
+);
+
+const UpdateProductSubscriptionDrawer = dynamic(
+  () => import("~/features/notifications/components/drawers/UpdateProductSubscriptionDrawer"),
   { loading: () => <Loading isLoading={true} /> },
 );
 
 export const Drawers = {
-  [DrawerIds.MANAGE_PRODUCT_NOTIFICATION_EVENTS]: Drawer(
-    DrawerIds.MANAGE_PRODUCT_NOTIFICATION_EVENTS,
-    ProductNotificationEventsDrawer,
+  [DrawerIds.SUBSCRIBE_TO_PRODUCT]: Drawer(
+    DrawerIds.SUBSCRIBE_TO_PRODUCT,
+    SubscribeToProductDrawer,
+  ),
+  [DrawerIds.UPDATE_PRODUCT_SUBSCRIPTION]: Drawer(
+    DrawerIds.UPDATE_PRODUCT_SUBSCRIPTION,
+    UpdateProductSubscriptionDrawer,
   ),
 } as const satisfies {
   [key in DrawerId]: {

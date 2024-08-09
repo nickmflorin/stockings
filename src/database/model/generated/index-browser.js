@@ -217,7 +217,29 @@ exports.Prisma.ProductScalarFieldEnum = {
   subCategories: 'subCategories'
 };
 
-exports.Prisma.NotificationEventScalarFieldEnum = {
+exports.Prisma.PriceChangeSubscribedEventScalarFieldEnum = {
+  id: 'id',
+  enabled: 'enabled',
+  subscriptionId: 'subscriptionId',
+  conditions: 'conditions'
+};
+
+exports.Prisma.StatusChangeEventConditionScalarFieldEnum = {
+  id: 'id',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  anyFromStatus: 'anyFromStatus',
+  anyToStatus: 'anyToStatus',
+  subscribedEventId: 'subscribedEventId'
+};
+
+exports.Prisma.StatusChangeSubscribedEventScalarFieldEnum = {
+  id: 'id',
+  enabled: 'enabled',
+  subscriptionId: 'subscriptionId'
+};
+
+exports.Prisma.ProductSubscriptionScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   createdById: 'createdById',
@@ -225,17 +247,7 @@ exports.Prisma.NotificationEventScalarFieldEnum = {
   updatedById: 'updatedById',
   productId: 'productId',
   userId: 'userId',
-  contentType: 'contentType'
-};
-
-exports.Prisma.PriceChangeEventCScalarFieldEnum = {
-  id: 'id',
-  eventTypes: 'eventTypes'
-};
-
-exports.Prisma.StatusChangeEventScalarFieldEnum = {
-  id: 'id',
-  eventTypes: 'eventTypes'
+  enabled: 'enabled'
 };
 
 exports.Prisma.SortOrder = {
@@ -279,10 +291,10 @@ exports.ProductRecordDataField = exports.$Enums.ProductRecordDataField = {
 };
 
 exports.ProductStatus = exports.$Enums.ProductStatus = {
-  OUT_OF_STOCK: 'OUT_OF_STOCK',
-  IN_STOCK: 'IN_STOCK',
-  AVAILABLE_FOR_BACKORDER: 'AVAILABLE_FOR_BACKORDER',
-  NOT_LISTED: 'NOT_LISTED'
+  OutOfStock: 'OutOfStock',
+  InStock: 'InStock',
+  AvailableForBackorder: 'AvailableForBackorder',
+  NotListed: 'NotListed'
 };
 
 exports.ProductCategory = exports.$Enums.ProductCategory = {
@@ -298,12 +310,7 @@ exports.ProductSubCategory = exports.$Enums.ProductSubCategory = {
   AccessoryTools: 'AccessoryTools'
 };
 
-exports.NotificationEventContentType = exports.$Enums.NotificationEventContentType = {
-  PriceChange: 'PriceChange',
-  StatusChange: 'StatusChange'
-};
-
-exports.PriceChangeEventType = exports.$Enums.PriceChangeEventType = {
+exports.PriceChangeEventCondition = exports.$Enums.PriceChangeEventCondition = {
   PriceIncrease: 'PriceIncrease',
   PriceDecrease: 'PriceDecrease'
 };
@@ -323,9 +330,10 @@ exports.Prisma.ModelName = {
   ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
   Product: 'Product',
-  NotificationEvent: 'NotificationEvent',
-  PriceChangeEventC: 'PriceChangeEventC',
-  StatusChangeEvent: 'StatusChangeEvent'
+  PriceChangeSubscribedEvent: 'PriceChangeSubscribedEvent',
+  StatusChangeEventCondition: 'StatusChangeEventCondition',
+  StatusChangeSubscribedEvent: 'StatusChangeSubscribedEvent',
+  ProductSubscription: 'ProductSubscription'
 };
 
 /**

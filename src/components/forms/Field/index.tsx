@@ -8,8 +8,7 @@ import {
   classNames,
   sizeToString,
 } from "~/components/types";
-import { Label, type LabelProps } from "~/components/typography/Label";
-import { Text } from "~/components/typography/Text";
+import { Text, Description, Label, type LabelProps } from "~/components/typography";
 import { ShowHide } from "~/components/util";
 
 import {
@@ -48,10 +47,12 @@ type BaseAbstractFieldProps<T> = T &
     readonly label?: string;
     readonly autoRenderErrors?: boolean;
     readonly condition?: FieldCondition;
-    readonly labelBottomMargin?: QuantitativeSize<"px">;
-    readonly helpTextTopMargin?: QuantitativeSize<"px">;
+    readonly labelSeparation?: QuantitativeSize<"px">;
     readonly description?: string;
+    readonly descriptionSeparation?: QuantitativeSize<"px">;
+    readonly descriptionClassName?: ComponentProps["className"];
     readonly helpText?: string;
+    readonly helpTextSeparation?: QuantitativeSize<"px">;
     readonly helpTextClassName?: ComponentProps["className"];
     readonly labelProps?: Omit<LabelProps, "children" | keyof ComponentProps>;
     readonly labelClassName?: ComponentProps["className"];
@@ -83,8 +84,9 @@ export const Field = <N extends FieldName<I>, I extends BaseFormValues>({
   form,
   errors: _errors = [],
   autoRenderErrors = true,
-  labelBottomMargin = "4px",
-  helpTextTopMargin = "4px",
+  labelSeparation = "4px",
+  helpTextSeparation = "4px",
+  descriptionSeparation = "4px",
   labelClassName,
   labelProps,
   condition,
@@ -97,7 +99,7 @@ export const Field = <N extends FieldName<I>, I extends BaseFormValues>({
     {(condition !== undefined || label !== undefined) && (
       <div
         className="w-full flex h-[20px]"
-        style={{ marginBottom: sizeToString(labelBottomMargin, "px") }}
+        style={{ marginBottom: sizeToString(labelSeparation, "px") }}
       >
         {label && (
           <Label fontSize="sm" fontWeight="medium" {...labelProps} className={labelClassName}>
@@ -108,16 +110,20 @@ export const Field = <N extends FieldName<I>, I extends BaseFormValues>({
       </div>
     )}
     {description !== undefined && (
-      <Text fontSize="xs" className="text-gray-500 leading-[16px] mb-[6px]">
+      <Description
+        fontSize="xs"
+        className={classNames("leading-[14px] text-gray-500 pl-[1px]", helpTextClassName)}
+        style={{ marginBottom: sizeToString(descriptionSeparation, "px") }}
+      >
         {description}
-      </Text>
+      </Description>
     )}
     <div className="form-field-content">{children}</div>
     {helpText !== undefined && (
       <Text
         fontSize="xs"
         className={classNames("leading-[14px] text-gray-500 pl-[1px]", helpTextClassName)}
-        style={{ marginTop: sizeToString(helpTextTopMargin, "px") }}
+        style={{ marginTop: sizeToString(helpTextSeparation, "px") }}
       >
         {helpText}
       </Text>

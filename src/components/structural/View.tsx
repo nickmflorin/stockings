@@ -15,10 +15,24 @@ export type ViewComponentRenderProps = {
   readonly className?: string;
 };
 
-const DefaultViewComponent: React.ComponentType<ViewComponentRenderProps> = ({
+type ViewComponentName = "tbody" | "div";
+
+const DivViewComponent: React.ComponentType<ViewComponentRenderProps> = ({
   children,
   ...props
 }) => <div {...props}>{children}</div>;
+
+const TBodyViewComponent: React.ComponentType<ViewComponentRenderProps> = ({
+  children,
+  ...props
+}) => <tbody {...props}>{children}</tbody>;
+
+const ViewComponentMap: {
+  [key in ViewComponentName]: React.ComponentType<ViewComponentRenderProps>;
+} = {
+  tbody: TBodyViewComponent,
+  div: DivViewComponent,
+};
 
 export type ViewProps = ComponentProps & {
   readonly children?: React.ReactNode;
@@ -29,10 +43,12 @@ export type ViewProps = ComponentProps & {
   readonly overflowX?: Overflow;
   readonly overflowY?: Overflow;
   readonly fill?: Fill | null;
+  readonly dim?: boolean;
   readonly fillParent?: boolean;
   readonly fullScreen?: boolean;
   readonly centerChildren?: boolean;
-  readonly component?: React.ComponentType<ViewComponentRenderProps>;
+  readonly isDisabled?: boolean;
+  readonly component?: React.ComponentType<ViewComponentRenderProps> | ViewComponentName;
 };
 
 const parsePosition = ({
@@ -140,6 +156,40 @@ const parseOverflow = ({
   return OverflowClassName("hidden");
 };
 
+/* eslint-disable-next-line no-console */
+const consoleError = console.error;
+
+/* Note:
+   -----
+   When using the <Loading /> component, as a <tr> element, the loading indicator (an <i> element)
+   will be placed inside of the <tr /> element.  This causes React to issue a warning similar to
+   the following:
+
+   Warning: validateDOMNesting(...): <i> cannot appear as a child of <tr>.
+
+   However, there does not seem to e anything crtitically (or even mildly) problematic with the
+   inclusion of an <i> element inside of the <tr> element - everything seems to be working as
+   expected.
+
+   For now, we will assume this is just React being over-sensitive about the structure of the
+   DOM, and will ignore this console warning manually.  If we notice issues with it down the line,
+   we should remove this suppression and investigate further. */
+/* eslint-disable-next-line no-console */
+console.error = (msg, ...args) => {
+  if (
+    typeof msg === "string" &&
+    (msg.includes("validateDOMNesting(...)") || msg.includes("In HTML")) &&
+    args.length >= 2 &&
+    args[0] === "<i>" &&
+    ["tr", "tbody"].includes(args[1])
+  ) {
+    return;
+  } else if (msg.includes("Warning: In HTML, <i> cannot be a child of <tbody>.")) {
+    return;
+  }
+  consoleError(msg, ...args);
+};
+
 export const View = ({
   children,
   absolute,
@@ -154,10 +204,14 @@ export const View = ({
   fullScreen,
   style,
   className,
-  component: Component = DefaultViewComponent,
+  component = DivViewComponent,
+  dim = false,
+  isDisabled = false,
 }: ViewProps) => {
   const _fill = parseFill({ fill, fillParent, fullScreen });
   const _position = parsePosition({ position, absolute, relative });
+
+  const Component = typeof component === "string" ? ViewComponentMap[component] : component;
   return (
     <Component
       style={style}
@@ -169,6 +223,8 @@ export const View = ({
           "h-full w-full": _fill === "parent",
           "flex flex-col items-center justify-center": centerChildren,
           "left-0 top-0": _fill !== null && _position === "absolute",
+          "opacity-30": dim,
+          "pointer-events-none": isDisabled,
         },
         className,
       )}

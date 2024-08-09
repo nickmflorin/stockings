@@ -6,4 +6,4 @@ package.json
 src/database/model/generated/**
 src/database/prisma/migrations/**
 src/database/schemas/**
-src/database/zenstack/generated/**
+src/database/model/zenstack-generated/**

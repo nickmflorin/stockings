@@ -14,34 +14,28 @@ plugin prisma {
   output = "../prisma/schema.prisma"
 }
 
-plugin zod {
-  provider = '@core/zod'
-  output = '../schemas'
-  compile = false
-}
-
 plugin enhancer {
   provider = '@core/enhancer'
-  output = './generated'
+  output = '../model/zenstack-generated'
   compile = false
 }
 
 model User {
-  id                        String              @id @default(uuid()) @db.Uuid
-  clerkId                   String              @unique
-  firstName                 String
-  lastName                  String
-  profileImageUrl           String?
-  emailAddress              String
-  createdAt                 DateTime            @default(now())
-  updatedAt                 DateTime            @updatedAt
-  createdProducts           Product[]           @relation("createdProducts")
-  updatedProducts           Product[]           @relation("updatedProducts")
-  createdProductRecords     ProductRecord[]     @relation("createdProductRecords")
-  updatedProductRecords     ProductRecord[]     @relation("updatedProductRecords")
-  createdNotificationEvents NotificationEvent[] @relation("createdNotificationEvents")
-  updatedNotificationEvents NotificationEvent[] @relation("updatedNotificationEvents")
-  notificationEvents        NotificationEvent[] @relation("notificationEvents")
+  id                    String                @id @default(uuid()) @db.Uuid
+  clerkId               String                @unique
+  firstName             String
+  lastName              String
+  profileImageUrl       String?
+  emailAddress          String
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  createdProducts       Product[]             @relation("createdProducts")
+  updatedProducts       Product[]             @relation("updatedProducts")
+  createdProductRecords ProductRecord[]       @relation("createdProductRecords")
+  updatedProductRecords ProductRecord[]       @relation("updatedProductRecords")
+  createdSubscriptions  ProductSubscription[] @relation("createdSubscriptions")
+  updatedSubscriptions  ProductSubscription[] @relation("updatedSubscriptions")
+  subscriptions         ProductSubscription[] @relation("subscriptions")
 }
 
 abstract model Model {
@@ -138,10 +132,10 @@ model ProductRecordError extends Model {
 }
 
 enum ProductStatus {
-  OUT_OF_STOCK
-  IN_STOCK
-  AVAILABLE_FOR_BACKORDER
-  NOT_LISTED
+  OutOfStock
+  InStock
+  AvailableForBackorder
+  NotListed
 }
 
 model ProductRecord extends ModelMeta {
@@ -172,51 +166,65 @@ enum ProductSubCategory {
 }
 
 model Product extends ModelMeta {
-  createdBy          User                 @relation("createdProducts", fields: [createdById], references: [id])
-  updatedBy          User                 @relation("updatedProducts", fields: [updatedById], references: [id])
-  name               String?
-  slug               String               @unique
-  code               String?
-  imageSrc           String?
-  records            ProductRecord[]      @relation("records")
-  status             ProductStatus?
-  statusRecordedAt   DateTime?
-  price              Float?
-  priceRecordedAt    DateTime?
-  category           ProductCategory
-  subCategories      ProductSubCategory[]
-  notificationEvents NotificationEvent[]  @relation("notificationEvents")
+  createdBy        User                  @relation("createdProducts", fields: [createdById], references: [id])
+  updatedBy        User                  @relation("updatedProducts", fields: [updatedById], references: [id])
+  name             String?
+  slug             String                @unique
+  code             String?
+  imageSrc         String?
+  records          ProductRecord[]       @relation("records")
+  status           ProductStatus?
+  statusRecordedAt DateTime?
+  price            Float?
+  priceRecordedAt  DateTime?
+  category         ProductCategory
+  subCategories    ProductSubCategory[]
+  subscriptions    ProductSubscription[] @relation("subscriptions")
 }
 
-enum PriceChangeEventType {
+enum PriceChangeEventCondition {
   PriceIncrease
   PriceDecrease
 }
 
-enum NotificationEventContentType {
-  PriceChange
-  StatusChange
+abstract model SubscribedEvent extends Model {
+  enabled Boolean @default(true)
 }
 
-model NotificationEvent extends ModelMeta {
-  createdBy   User                         @relation("createdNotificationEvents", fields: [createdById], references: [id])
-  updatedBy   User                         @relation("updatedNotificationEvents", fields: [updatedById], references: [id])
-  product     Product                      @relation("notificationEvents", fields: [productId], references: [id])
-  productId   String                       @db.Uuid
+model PriceChangeSubscribedEvent extends SubscribedEvent {
+  subscriptionId String                      @db.Uuid @unique
+  subscription   ProductSubscription         @relation(fields: [subscriptionId], references: [id])
+  conditions     PriceChangeEventCondition[] @default([PriceIncrease, PriceDecrease])
+}
+
+model StatusChangeEventCondition extends Model {
+  fromStatus        ProductStatus[]
+  toStatus          ProductStatus[]
+  anyFromStatus     Boolean
+  anyToStatus       Boolean
+  subscribedEvent   StatusChangeSubscribedEvent @relation("conditions", fields: [subscribedEventId], references: [id])
+  subscribedEventId String                      @db.Uuid
+}
+
+model StatusChangeSubscribedEvent extends SubscribedEvent {
+  subscriptionId String                       @db.Uuid @unique
+  subscription   ProductSubscription          @relation(fields: [subscriptionId], references: [id])
+  conditions     StatusChangeEventCondition[] @relation("conditions")
+}
+
+model ProductSubscription extends ModelMeta {
+  createdBy    User                         @relation("createdSubscriptions", fields: [createdById], references: [id])
+  updatedBy    User                         @relation("updatedSubscriptions", fields: [updatedById], references: [id])
+  product      Product                      @relation("subscriptions", fields: [productId], references: [id])
+  productId    String                       @db.Uuid
   // For now, we will keep the user that should receive the notification separate from the user that
   // created it - even though, for all intents and purposes, they will be the same.  This is just
   // to allow some flexibility in the future.
-  user        User                         @relation("notificationEvents", fields: [userId], references: [id])
-  userId      String                       @db.Uuid
-  contentType NotificationEventContentType
+  user         User                         @relation("subscriptions", fields: [userId], references: [id])
+  userId       String                       @db.Uuid
+  enabled      Boolean                      @default(true)
+  statusChange StatusChangeSubscribedEvent?
+  priceChange  PriceChangeSubscribedEvent?
 
-  @@delegate(contentType)
-}
-
-model PriceChangeEventC extends NotificationEvent {
-  eventTypes PriceChangeEventType[] @default([PriceIncrease, PriceDecrease])
-}
-
-model StatusChangeEvent extends NotificationEvent {
-  eventTypes ProductStatus[]
+  @@unique([productId, userId])
 }

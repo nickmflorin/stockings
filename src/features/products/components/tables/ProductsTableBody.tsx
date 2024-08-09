@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 
-import { type Product } from "~/database/model";
+import { type ApiProduct } from "~/database/model";
 
 import { ProductCategoryBadge } from "~/components/badges/ProductCategoryBadge";
 import { ProductSubCategoryBadge } from "~/components/badges/ProductSubCategoryBadge";
@@ -15,15 +15,16 @@ import { ProductsTableColumns, type ProductsTableColumnId } from "~/features/pro
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 
 const SubscribeCell = dynamic(() => import("./cells/SubscribeCell"));
+const UpdateSubscriptionCell = dynamic(() => import("./cells/UpdateSubscriptionCell"));
 
 export interface ProductsTableBodyProps {
-  readonly data: Product[];
+  readonly data: ApiProduct[];
 }
 
 export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element => (
   <DataTableBody
     columns={convertConfigsToColumns(
-      [...ProductsTableColumns] as DataTableColumnConfig<Product, ProductsTableColumnId>[],
+      [...ProductsTableColumns] as DataTableColumnConfig<ApiProduct, ProductsTableColumnId>[],
       {
         name: {
           cellRenderer(datum) {
@@ -86,6 +87,9 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
         },
         subscribe: {
           cellRenderer(datum) {
+            if (datum.subscription) {
+              return <UpdateSubscriptionCell product={datum} subscription={datum.subscription} />;
+            }
             return <SubscribeCell product={datum} />;
           },
         },

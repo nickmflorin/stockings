@@ -66,10 +66,10 @@ export const seedRecords = async (tx: Transaction, product: Product, { user }: S
     if (fieldChanges.status) {
       newRunningData.status = selectAtRandomFrequency(
         [
-          { value: ProductStatus.AVAILABLE_FOR_BACKORDER, frequency: 0.05 },
-          { value: ProductStatus.IN_STOCK, frequency: 0.4 },
-          { value: ProductStatus.NOT_LISTED, frequency: 0.05 },
-          { value: ProductStatus.OUT_OF_STOCK, frequency: 0.5 },
+          { value: ProductStatus.AvailableForBackorder, frequency: 0.05 },
+          { value: ProductStatus.InStock, frequency: 0.4 },
+          { value: ProductStatus.NotListed, frequency: 0.05 },
+          { value: ProductStatus.OutOfStock, frequency: 0.5 },
         ].filter(({ value }) => value !== runningData.status),
       );
     } else {

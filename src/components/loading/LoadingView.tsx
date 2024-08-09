@@ -5,7 +5,10 @@ import type { ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
 
 export interface LoadingViewProps
-  extends Pick<ViewProps, "fullScreen" | "fill" | "component" | keyof ComponentProps> {
+  extends Pick<
+    ViewProps,
+    "fullScreen" | "fill" | "component" | "isDisabled" | "dim" | keyof ComponentProps
+  > {
   readonly isLoading?: boolean;
   readonly spinnerSize?: SpinnerProps["size"];
   readonly spinnerProps?: Omit<SpinnerProps, "size" | "isLoading">;

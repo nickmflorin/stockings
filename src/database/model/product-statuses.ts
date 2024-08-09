@@ -4,41 +4,36 @@ import { type TailwindTextColorClassName } from "~/components/types";
 
 import { ProductStatus } from "./generated";
 
-export const ProductStatuses = enumeratedLiterals(
-  [
-    {
-      value: ProductStatus.AVAILABLE_FOR_BACKORDER,
-      label: "Available for Backorder",
-      textColorClassName: "text-yellow-700",
-      description:
-        "The product is listed on the website and not currently in stock, but is " +
-        "available for backorder.",
-    },
-    {
-      value: ProductStatus.IN_STOCK,
-      label: "In Stock",
-      textColorClassName: "text-green-600",
-      description: "The product is listed on the website and is currently in stock.",
-    },
-    {
-      value: ProductStatus.OUT_OF_STOCK,
-      label: "Out of Stock",
-      textColorClassName: "text-amber-600",
-      description: "The product is listed on the website but is currently out of stock.",
-    },
-    {
-      value: ProductStatus.NOT_LISTED,
-      label: "Not Listed",
-      textColorClassName: "text-gray-600",
-      description:
-        "The product was previously listed on the website, but is no longer included in " +
-        "the products the website offers.",
-    },
-  ] as const satisfies {
-    value: ProductStatus;
-    description: string;
-    label: string;
-    textColorClassName: TailwindTextColorClassName;
-  }[],
-  {},
-);
+const CommonStatuses = [
+  {
+    value: ProductStatus.AvailableForBackorder,
+    label: "Available for Backorder",
+    textColorClassName: "text-yellow-700",
+    description: "The product is not currently in stock, but is available for backorder.",
+  },
+  {
+    value: ProductStatus.InStock,
+    label: "In Stock",
+    textColorClassName: "text-green-600",
+    description: "The product is currently in stock.",
+  },
+  {
+    value: ProductStatus.OutOfStock,
+    label: "Out of Stock",
+    textColorClassName: "text-amber-600",
+    description: "The product is currently out of stock.",
+  },
+  {
+    value: ProductStatus.NotListed,
+    label: "Not Listed",
+    textColorClassName: "text-gray-600",
+    description: "The product is not longer listed on the website.",
+  },
+] as const satisfies {
+  value: ProductStatus;
+  description: string;
+  label: string;
+  textColorClassName: TailwindTextColorClassName;
+}[];
+
+export const ProductStatuses = enumeratedLiterals(CommonStatuses, {});

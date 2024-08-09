@@ -1,8 +1,4 @@
-import {
-  type EnumeratedLiteralsType,
-  type EnumeratedLiteralsModel,
-  enumeratedLiterals,
-} from "enumerated-literals";
+import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-literals";
 
 export const ApiClientGlobalErrorCodes = enumeratedLiterals(
   [
@@ -21,6 +17,16 @@ export const ApiClientGlobalErrorCodes = enumeratedLiterals(
       value: "FORBIDDEN",
       status: 401,
       message: "You do not have permission to perform this action.",
+    },
+    {
+      value: "INTERNAL_SERVER",
+      status: 500,
+      message: "There was an internal server error.",
+    },
+    {
+      value: "UNKNOWN",
+      status: null,
+      message: "There was an unknown error.",
     },
   ] as const,
   {},
@@ -52,7 +58,3 @@ export const ApiClientFieldErrorCodes = enumeratedLiterals(
 );
 
 export type ApiClientFieldErrorCode = EnumeratedLiteralsType<typeof ApiClientFieldErrorCodes>;
-
-export type ApiClientGlobalErrorStatusCode<
-  C extends ApiClientGlobalErrorCode = ApiClientGlobalErrorCode,
-> = Extract<EnumeratedLiteralsModel<typeof ApiClientGlobalErrorCodes>, { value: C }>["status"];

@@ -1,4 +1,3 @@
-import { uniqBy } from "lodash-es";
 import { type z } from "zod";
 
 import { logger } from "~/internal/logger";
@@ -13,35 +12,19 @@ import {
   type RawApiClientFieldErrorObj,
 } from "../types";
 
-export type IssueLookup<L extends string> = { [key in L]?: (issue: z.ZodIssue) => boolean };
+import { ApiClientFormError } from "./api-client-form-error";
 
-export const parseZodError = <O extends z.ZodObject<{ [key in string]: z.ZodTypeAny }>>(
-  error: z.ZodError,
-  schema: O,
-  lookup?: IssueLookup<keyof O["shape"] & string>,
-): RawApiClientFieldErrorsObj<keyof O["shape"] & string> => {
-  const errs: RawApiClientFieldErrorsObj<keyof O["shape"] & string> = {};
-
-  const keys = Object.values(schema.keyof().Values);
-  if (keys.length === 0) {
-    throw new Error("Cannot parse zod error for an empty schema!");
-  }
-  for (const field of keys) {
-    errs[field as keyof O["shape"] & string] = uniqBy(
-      error.issues
-        .filter(issue => {
-          const fn = lookup?.[field];
-          return fn !== undefined ? fn(issue) : issue.path[0] === field;
-        })
-        .map(issue => ({
-          code: ApiClientFieldErrorCodes.invalid,
-          internalMessage: issue.message,
-        })),
-      err => err.code,
-    );
-  }
-  return errs;
-};
+export const parseZodError = (error: z.ZodError): RawApiClientFieldErrorsObj =>
+  error.issues.reduce(
+    (acc, issue) => ({
+      ...acc,
+      [issue.path.join(".")]: {
+        code: ApiClientFieldErrorCodes.invalid,
+        internalMessage: issue.message,
+      },
+    }),
+    {} as RawApiClientFieldErrorsObj,
+  );
 
 /* When a single error is added to the set, it cannot be null or undefined.  However, null and/or
    undefined can still be present as an element in teh array, if provided as an array. */
@@ -80,12 +63,8 @@ export class ApiClientFieldErrors<F extends string = string> {
     this._errors = errors ?? {};
   }
 
-  public static fromZodError<O extends z.ZodObject<{ [key in string]: z.ZodTypeAny }>>(
-    error: z.ZodError,
-    schema: O,
-    lookup?: IssueLookup<keyof O["shape"] & string>,
-  ): ApiClientFieldErrors<keyof O["shape"] & string> {
-    return new ApiClientFieldErrors(parseZodError(error, schema, lookup));
+  public static fromZodError(error: z.ZodError): ApiClientFieldErrors {
+    return new ApiClientFieldErrors(parseZodError(error));
   }
 
   public get errors(): ApiClientFieldErrorsObj<F> {
@@ -138,17 +117,9 @@ export class ApiClientFieldErrors<F extends string = string> {
 
   public add<N extends F>(field: N, error: AddError): ApiClientFieldErrors<F>;
 
-  public add<O extends z.ZodObject<{ [key in string]: z.ZodTypeAny }>>(
-    error: z.ZodError,
-    schema: O,
-    lookup?: IssueLookup<keyof O["shape"] & string>,
-  ): ApiClientFieldErrors<F>;
+  public add(error: z.ZodError): ApiClientFieldErrors<F>;
 
-  public add<N extends F, O extends z.ZodObject<{ [key in string]: z.ZodTypeAny }>>(
-    field: N | RawApiClientFieldErrorsObj<F> | z.ZodError,
-    error?: AddError | O,
-    lookup?: IssueLookup<keyof O["shape"] & string>,
-  ) {
+  public add<N extends F>(field: N | RawApiClientFieldErrorsObj<F> | z.ZodError, error?: AddError) {
     if (typeof field === "string") {
       const e = error as AddError;
 
@@ -163,7 +134,7 @@ export class ApiClientFieldErrors<F extends string = string> {
         this._errors[field] = [current, ...data];
       }
     } else if (isZodError(field)) {
-      return this.add(parseZodError(field, error as O, lookup));
+      return this.add(parseZodError(field) as RawApiClientFieldErrorsObj<F>);
     } else {
       /* Here, we have to merge the raw field error objects together, which can be done by calling
          the method for each key-value pair in the provided object. */
@@ -229,5 +200,20 @@ export class ApiClientFieldErrors<F extends string = string> {
 
   public get hasErrors(): boolean {
     return Object.keys(this.errors).length !== 0;
+  }
+
+  public get error(): ApiClientFormError<F> {
+    if (this.isEmpty) {
+      throw new Error("Cannot convert an empty set of field errors to an error.");
+    }
+    return ApiClientFormError.create({ errors: this.errors });
+  }
+
+  public get response() {
+    return this.error.response;
+  }
+
+  public get json() {
+    return this.error.json;
   }
 }

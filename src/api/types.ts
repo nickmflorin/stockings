@@ -4,7 +4,6 @@ import { z } from "zod";
 import {
   type ApiClientGlobalErrorCode,
   ApiClientGlobalErrorCodes,
-  type ApiClientGlobalErrorStatusCode,
   type ApiClientFieldErrorCode,
 } from "./codes";
 
@@ -39,15 +38,12 @@ export const isZodError = (
   data: string | RawApiClientFieldErrorsObj | ApiClientFieldErrorsObj | z.ZodError,
 ): data is z.ZodError => typeof data !== "string" && (data as z.ZodError).issues !== undefined;
 
-export type ApiClientErrorBaseJson<C extends ApiClientGlobalErrorCode = ApiClientGlobalErrorCode> =
-  {
-    readonly code: C;
-    readonly status: ApiClientGlobalErrorStatusCode<C>;
-  };
+export type ApiClientErrorBaseJson = {
+  readonly code: ApiClientGlobalErrorCode;
+  readonly status: number;
+};
 
-export type ApiClientGlobalErrorJson<
-  C extends ApiClientGlobalErrorCode = ApiClientGlobalErrorCode,
-> = ApiClientErrorBaseJson<C> & {
+export type ApiClientGlobalErrorJson = ApiClientErrorBaseJson & {
   readonly message: string;
 };
 
@@ -69,9 +65,7 @@ export const isApiClientGlobalErrorJson = (
 ): response is ApiClientGlobalErrorJson =>
   ApiClientGlobalErrorJsonSchema.safeParse(response).success;
 
-export type ApiClientFormErrorJson<E extends string = string> = ApiClientErrorBaseJson<
-  typeof ApiClientGlobalErrorCodes.BAD_REQUEST
-> & {
+export type ApiClientFormErrorJson<E extends string = string> = ApiClientErrorBaseJson & {
   readonly errors: ApiClientFieldErrorsObj<E>;
 };
 
@@ -83,10 +77,9 @@ const ApiClientFormErrorJsonSchema = z.object({
   extra: z.any().optional(),
 });
 
-export type ApiClientErrorJson<
-  E extends string = string,
-  C extends ApiClientGlobalErrorCode = ApiClientGlobalErrorCode,
-> = ApiClientFormErrorJson<E> | ApiClientGlobalErrorJson<C>;
+export type ApiClientErrorJson<E extends string = string> =
+  | ApiClientFormErrorJson<E>
+  | ApiClientGlobalErrorJson;
 
 export const isApiClientFormErrorJson = <T, E extends string = string>(
   response: T | ApiClientErrorJson<E> | ApiClientGlobalErrorJson,

@@ -1,2 +1,3 @@
-export * from "./ProductNotificationEventsForm";
+export * from "./UpdateProductSubscriptionForm";
+export * from "./SubscribeToProductForm";
 export * from "./hooks";

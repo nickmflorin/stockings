@@ -247,7 +247,6 @@ export class HttpClient<N extends errors.HttpNetworkError, P extends HttpClientR
         returnResponse = response;
       }
     }
-
     if (error) {
       /* If the method was called with the 'strict' flag, the calling logic expects that the method
          returns a Response object if there is a valid response, and throws an Error otherwise. */
@@ -327,7 +326,7 @@ export class HttpClient<N extends errors.HttpNetworkError, P extends HttpClientR
     options?: ClientRequestOptions,
   ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
     path = this.addQueryParamsToUrl(path, query);
-    return this.request(path, types.HttpMethods.GET, options);
+    return await this.request(path, types.HttpMethods.GET, options);
   }
 
   public async post(
@@ -378,7 +377,7 @@ export class HttpClient<N extends errors.HttpNetworkError, P extends HttpClientR
     body?: types.JsonObject,
     options?: ClientRequestOptions,
   ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
-    return this.request(path, types.HttpMethods.POST, {
+    return await this.request(path, types.HttpMethods.POST, {
       ...options,
       body: body === undefined ? undefined : JSON.stringify(body),
     });
@@ -430,7 +429,7 @@ export class HttpClient<N extends errors.HttpNetworkError, P extends HttpClientR
     path: string,
     options?: ClientRequestOptions,
   ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
-    return this.request(path, types.HttpMethods.DELETE, options);
+    return await this.request(path, types.HttpMethods.DELETE, options);
   }
 
   public async patch(
@@ -479,7 +478,7 @@ export class HttpClient<N extends errors.HttpNetworkError, P extends HttpClientR
     body?: types.JsonObject,
     options?: ClientRequestOptions,
   ): Promise<ClientResponse<HttpClientProcessedResponseData<P> | Response, N, P>> {
-    return this.request(path, types.HttpMethods.PATCH, {
+    return await this.request(path, types.HttpMethods.PATCH, {
       ...options,
       body: body === undefined ? undefined : JSON.stringify(body),
     });

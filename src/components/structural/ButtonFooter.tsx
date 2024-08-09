@@ -87,7 +87,7 @@ export const ButtonFooter = ({
     >
       <ShowHide show={visibility.cancel}>
         <Button.Solid
-          scheme="light"
+          scheme="secondary"
           className="button-footer__button"
           size={buttonSize}
           element="button"

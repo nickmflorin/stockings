@@ -48,17 +48,17 @@ import { type ProcessedScrapedThumbnail } from "./scraped-thumbnail";
      }
    }; */
 
-export type ProductScrapedStatus = Exclude<ProductStatus, typeof ProductStatus.NOT_LISTED>;
+export type ProductScrapedStatus = Exclude<ProductStatus, typeof ProductStatus.NotListed>;
 
 export const parseProductScrapedState = (value: string): ProductScrapedStatus | null => {
   const v = value.toLowerCase().replaceAll(" ", "");
   switch (v) {
     case "outofstock":
-      return ProductStatus.OUT_OF_STOCK;
+      return ProductStatus.OutOfStock;
     case "placebackorder":
-      return ProductStatus.AVAILABLE_FOR_BACKORDER;
+      return ProductStatus.AvailableForBackorder;
     case "addtocart":
-      return ProductStatus.IN_STOCK;
+      return ProductStatus.InStock;
     default:
       return null;
   }
