@@ -27,7 +27,10 @@ export const fetchProductSubcription = cache(
 
     const subscription = await enhanced.productSubscription.findUnique({
       where: { id },
-      include: { statusChange: { include: { conditions: true } }, priceChange: true },
+      include: {
+        statusChange: { include: { conditions: { orderBy: [{ createdAt: "desc" }] } } },
+        priceChange: true,
+      },
     });
     if (!subscription) {
       const error = ApiClientGlobalError.NotFound({

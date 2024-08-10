@@ -1,7 +1,5 @@
 import React, { type ForwardedRef, forwardRef, useMemo, type ReactNode, useCallback } from "react";
 
-import { v4 as uuid } from "uuid";
-
 import * as types from "~/components/input/select/types";
 
 import { BasicSelectInput, type BasicSelectInputProps } from "./BasicSelectInput";
@@ -60,14 +58,13 @@ export const DataSelectInput = forwardRef<HTMLDivElement, DataSelectInputProps<a
 
     const getItemId = useCallback(
       (m: M) => {
-        let id: string | number | undefined = undefined;
-        if (_getItemId !== undefined) {
-          id = _getItemId(m);
+        const id = _getItemId?.(m);
+        if (typeof id === "string" || typeof id === "number") {
+          return String(id);
+        } else if ("id" in m && (typeof m.id === "string" || typeof m.id === "number")) {
+          return String(m.id);
         }
-        if (id === undefined && "id" in m && m.id !== undefined) {
-          id = m.id;
-        }
-        return id === undefined ? `model-${uuid()}` : String(id);
+        return undefined;
       },
       [_getItemId],
     );
@@ -94,6 +91,8 @@ export const DataSelectInput = forwardRef<HTMLDivElement, DataSelectInputProps<a
         const value = options.getItemValue?.(m);
         if (typeof value === "string" || typeof value === "number") {
           return String(value);
+        } else if ("value" in m && (typeof m.value === "string" || typeof m.value === "number")) {
+          return String(m.value);
         }
         const label = getItemLabel(m);
         if (typeof label === "string" || typeof label === "number") {
@@ -112,6 +111,8 @@ export const DataSelectInput = forwardRef<HTMLDivElement, DataSelectInputProps<a
         if (valueRenderer) {
           return valueRenderer(value, { modelValue });
         }
+        /* Make sure to sort the models based on a consistent key to prevent reordering of the
+           badges in the MultiValueRenderer when rerenders occur. */
         const sorted = modelValue
           .map((m, i) => ({ model: m, index: i }))
           .sort((a, b) => {

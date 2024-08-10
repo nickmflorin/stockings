@@ -42,11 +42,14 @@ abstract model Model {
   id String @id @default(uuid()) @db.Uuid
 }
 
-abstract model ModelMeta extends Model {
-  createdAt   DateTime @default(now())
-  createdById String   @db.Uuid
-  updatedAt   DateTime @updatedAt
-  updatedById String   @db.Uuid
+abstract model DateTimeModelMeta extends Model {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+abstract model ModelMeta extends DateTimeModelMeta {
+  createdById String @db.Uuid
+  updatedById String @db.Uuid
 }
 
 enum ElementAttribute {
@@ -197,7 +200,7 @@ model PriceChangeSubscribedEvent extends SubscribedEvent {
   conditions     PriceChangeEventCondition[] @default([PriceIncrease, PriceDecrease])
 }
 
-model StatusChangeEventCondition extends Model {
+model StatusChangeEventCondition extends DateTimeModelMeta {
   fromStatus        ProductStatus[]
   toStatus          ProductStatus[]
   subscribedEvent   StatusChangeSubscribedEvent @relation("conditions", fields: [subscribedEventId], references: [id])

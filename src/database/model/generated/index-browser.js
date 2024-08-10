@@ -187,8 +187,8 @@ exports.Prisma.ProductRecordErrorScalarFieldEnum = {
 exports.Prisma.ProductRecordScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
   timestamp: 'timestamp',
   productId: 'productId',
@@ -202,8 +202,8 @@ exports.Prisma.ProductRecordScalarFieldEnum = {
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
   name: 'name',
   slug: 'slug',
@@ -226,6 +226,8 @@ exports.Prisma.PriceChangeSubscribedEventScalarFieldEnum = {
 
 exports.Prisma.StatusChangeEventConditionScalarFieldEnum = {
   id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   fromStatus: 'fromStatus',
   toStatus: 'toStatus',
   subscribedEventId: 'subscribedEventId'
@@ -240,8 +242,8 @@ exports.Prisma.StatusChangeSubscribedEventScalarFieldEnum = {
 exports.Prisma.ProductSubscriptionScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
   productId: 'productId',
   userId: 'userId',

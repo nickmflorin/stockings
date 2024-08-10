@@ -13123,8 +13123,8 @@ export namespace Prisma {
   export type ProductRecordMinAggregateOutputType = {
     id: string | null
     createdAt: Date | null
-    createdById: string | null
     updatedAt: Date | null
+    createdById: string | null
     updatedById: string | null
     timestamp: Date | null
     productId: string | null
@@ -13137,8 +13137,8 @@ export namespace Prisma {
   export type ProductRecordMaxAggregateOutputType = {
     id: string | null
     createdAt: Date | null
-    createdById: string | null
     updatedAt: Date | null
+    createdById: string | null
     updatedById: string | null
     timestamp: Date | null
     productId: string | null
@@ -13151,8 +13151,8 @@ export namespace Prisma {
   export type ProductRecordCountAggregateOutputType = {
     id: number
     createdAt: number
-    createdById: number
     updatedAt: number
+    createdById: number
     updatedById: number
     timestamp: number
     productId: number
@@ -13176,8 +13176,8 @@ export namespace Prisma {
   export type ProductRecordMinAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     timestamp?: true
     productId?: true
@@ -13190,8 +13190,8 @@ export namespace Prisma {
   export type ProductRecordMaxAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     timestamp?: true
     productId?: true
@@ -13204,8 +13204,8 @@ export namespace Prisma {
   export type ProductRecordCountAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     timestamp?: true
     productId?: true
@@ -13306,8 +13306,8 @@ export namespace Prisma {
   export type ProductRecordGroupByOutputType = {
     id: string
     createdAt: Date
-    createdById: string
     updatedAt: Date
+    createdById: string
     updatedById: string
     timestamp: Date
     productId: string
@@ -13340,8 +13340,8 @@ export namespace Prisma {
   export type ProductRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     createdAt?: boolean
-    createdById?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     updatedById?: boolean
     timestamp?: boolean
     productId?: boolean
@@ -13360,8 +13360,8 @@ export namespace Prisma {
   export type ProductRecordSelectScalar = {
     id?: boolean
     createdAt?: boolean
-    createdById?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     updatedById?: boolean
     timestamp?: boolean
     productId?: boolean
@@ -13392,8 +13392,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       createdAt: Date
-      createdById: string
       updatedAt: Date
+      createdById: string
       updatedById: string
       timestamp: Date
       productId: string
@@ -13805,8 +13805,8 @@ export namespace Prisma {
   interface ProductRecordFieldRefs {
     readonly id: FieldRef<"ProductRecord", 'String'>
     readonly createdAt: FieldRef<"ProductRecord", 'DateTime'>
-    readonly createdById: FieldRef<"ProductRecord", 'String'>
     readonly updatedAt: FieldRef<"ProductRecord", 'DateTime'>
+    readonly createdById: FieldRef<"ProductRecord", 'String'>
     readonly updatedById: FieldRef<"ProductRecord", 'String'>
     readonly timestamp: FieldRef<"ProductRecord", 'DateTime'>
     readonly productId: FieldRef<"ProductRecord", 'String'>
@@ -14186,8 +14186,8 @@ export namespace Prisma {
   export type ProductMinAggregateOutputType = {
     id: string | null
     createdAt: Date | null
-    createdById: string | null
     updatedAt: Date | null
+    createdById: string | null
     updatedById: string | null
     name: string | null
     slug: string | null
@@ -14203,8 +14203,8 @@ export namespace Prisma {
   export type ProductMaxAggregateOutputType = {
     id: string | null
     createdAt: Date | null
-    createdById: string | null
     updatedAt: Date | null
+    createdById: string | null
     updatedById: string | null
     name: string | null
     slug: string | null
@@ -14220,8 +14220,8 @@ export namespace Prisma {
   export type ProductCountAggregateOutputType = {
     id: number
     createdAt: number
-    createdById: number
     updatedAt: number
+    createdById: number
     updatedById: number
     name: number
     slug: number
@@ -14248,8 +14248,8 @@ export namespace Prisma {
   export type ProductMinAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     name?: true
     slug?: true
@@ -14265,8 +14265,8 @@ export namespace Prisma {
   export type ProductMaxAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     name?: true
     slug?: true
@@ -14282,8 +14282,8 @@ export namespace Prisma {
   export type ProductCountAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     name?: true
     slug?: true
@@ -14387,8 +14387,8 @@ export namespace Prisma {
   export type ProductGroupByOutputType = {
     id: string
     createdAt: Date
-    createdById: string
     updatedAt: Date
+    createdById: string
     updatedById: string
     name: string | null
     slug: string
@@ -14424,8 +14424,8 @@ export namespace Prisma {
   export type ProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     createdAt?: boolean
-    createdById?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     updatedById?: boolean
     name?: boolean
     slug?: boolean
@@ -14447,8 +14447,8 @@ export namespace Prisma {
   export type ProductSelectScalar = {
     id?: boolean
     createdAt?: boolean
-    createdById?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     updatedById?: boolean
     name?: boolean
     slug?: boolean
@@ -14482,8 +14482,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       createdAt: Date
-      createdById: string
       updatedAt: Date
+      createdById: string
       updatedById: string
       name: string | null
       slug: string
@@ -14898,8 +14898,8 @@ export namespace Prisma {
   interface ProductFieldRefs {
     readonly id: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
-    readonly createdById: FieldRef<"Product", 'String'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
+    readonly createdById: FieldRef<"Product", 'String'>
     readonly updatedById: FieldRef<"Product", 'String'>
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
@@ -16195,16 +16195,22 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionMinAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     subscribedEventId: string | null
   }
 
   export type StatusChangeEventConditionMaxAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     subscribedEventId: string | null
   }
 
   export type StatusChangeEventConditionCountAggregateOutputType = {
     id: number
+    createdAt: number
+    updatedAt: number
     fromStatus: number
     toStatus: number
     subscribedEventId: number
@@ -16214,16 +16220,22 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionMinAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
     subscribedEventId?: true
   }
 
   export type StatusChangeEventConditionMaxAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
     subscribedEventId?: true
   }
 
   export type StatusChangeEventConditionCountAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
     fromStatus?: true
     toStatus?: true
     subscribedEventId?: true
@@ -16304,6 +16316,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionGroupByOutputType = {
     id: string
+    createdAt: Date
+    updatedAt: Date
     fromStatus: $Enums.ProductStatus[]
     toStatus: $Enums.ProductStatus[]
     subscribedEventId: string
@@ -16328,6 +16342,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     fromStatus?: boolean
     toStatus?: boolean
     subscribedEventId?: boolean
@@ -16336,6 +16352,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionSelectScalar = {
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     fromStatus?: boolean
     toStatus?: boolean
     subscribedEventId?: boolean
@@ -16353,6 +16371,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      createdAt: Date
+      updatedAt: Date
       fromStatus: $Enums.ProductStatus[]
       toStatus: $Enums.ProductStatus[]
       subscribedEventId: string
@@ -16752,6 +16772,8 @@ export namespace Prisma {
    */ 
   interface StatusChangeEventConditionFieldRefs {
     readonly id: FieldRef<"StatusChangeEventCondition", 'String'>
+    readonly createdAt: FieldRef<"StatusChangeEventCondition", 'DateTime'>
+    readonly updatedAt: FieldRef<"StatusChangeEventCondition", 'DateTime'>
     readonly fromStatus: FieldRef<"StatusChangeEventCondition", 'ProductStatus[]'>
     readonly toStatus: FieldRef<"StatusChangeEventCondition", 'ProductStatus[]'>
     readonly subscribedEventId: FieldRef<"StatusChangeEventCondition", 'String'>
@@ -18019,8 +18041,8 @@ export namespace Prisma {
   export type ProductSubscriptionMinAggregateOutputType = {
     id: string | null
     createdAt: Date | null
-    createdById: string | null
     updatedAt: Date | null
+    createdById: string | null
     updatedById: string | null
     productId: string | null
     userId: string | null
@@ -18030,8 +18052,8 @@ export namespace Prisma {
   export type ProductSubscriptionMaxAggregateOutputType = {
     id: string | null
     createdAt: Date | null
-    createdById: string | null
     updatedAt: Date | null
+    createdById: string | null
     updatedById: string | null
     productId: string | null
     userId: string | null
@@ -18041,8 +18063,8 @@ export namespace Prisma {
   export type ProductSubscriptionCountAggregateOutputType = {
     id: number
     createdAt: number
-    createdById: number
     updatedAt: number
+    createdById: number
     updatedById: number
     productId: number
     userId: number
@@ -18054,8 +18076,8 @@ export namespace Prisma {
   export type ProductSubscriptionMinAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     productId?: true
     userId?: true
@@ -18065,8 +18087,8 @@ export namespace Prisma {
   export type ProductSubscriptionMaxAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     productId?: true
     userId?: true
@@ -18076,8 +18098,8 @@ export namespace Prisma {
   export type ProductSubscriptionCountAggregateInputType = {
     id?: true
     createdAt?: true
-    createdById?: true
     updatedAt?: true
+    createdById?: true
     updatedById?: true
     productId?: true
     userId?: true
@@ -18160,8 +18182,8 @@ export namespace Prisma {
   export type ProductSubscriptionGroupByOutputType = {
     id: string
     createdAt: Date
-    createdById: string
     updatedAt: Date
+    createdById: string
     updatedById: string
     productId: string
     userId: string
@@ -18188,8 +18210,8 @@ export namespace Prisma {
   export type ProductSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     createdAt?: boolean
-    createdById?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     updatedById?: boolean
     productId?: boolean
     userId?: boolean
@@ -18205,8 +18227,8 @@ export namespace Prisma {
   export type ProductSubscriptionSelectScalar = {
     id?: boolean
     createdAt?: boolean
-    createdById?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     updatedById?: boolean
     productId?: boolean
     userId?: boolean
@@ -18236,8 +18258,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       createdAt: Date
-      createdById: string
       updatedAt: Date
+      createdById: string
       updatedById: string
       productId: string
       userId: string
@@ -18649,8 +18671,8 @@ export namespace Prisma {
   interface ProductSubscriptionFieldRefs {
     readonly id: FieldRef<"ProductSubscription", 'String'>
     readonly createdAt: FieldRef<"ProductSubscription", 'DateTime'>
-    readonly createdById: FieldRef<"ProductSubscription", 'String'>
     readonly updatedAt: FieldRef<"ProductSubscription", 'DateTime'>
+    readonly createdById: FieldRef<"ProductSubscription", 'String'>
     readonly updatedById: FieldRef<"ProductSubscription", 'String'>
     readonly productId: FieldRef<"ProductSubscription", 'String'>
     readonly userId: FieldRef<"ProductSubscription", 'String'>
@@ -19144,8 +19166,8 @@ export namespace Prisma {
   export const ProductRecordScalarFieldEnum: {
     id: 'id',
     createdAt: 'createdAt',
-    createdById: 'createdById',
     updatedAt: 'updatedAt',
+    createdById: 'createdById',
     updatedById: 'updatedById',
     timestamp: 'timestamp',
     productId: 'productId',
@@ -19162,8 +19184,8 @@ export namespace Prisma {
   export const ProductScalarFieldEnum: {
     id: 'id',
     createdAt: 'createdAt',
-    createdById: 'createdById',
     updatedAt: 'updatedAt',
+    createdById: 'createdById',
     updatedById: 'updatedById',
     name: 'name',
     slug: 'slug',
@@ -19192,6 +19214,8 @@ export namespace Prisma {
 
   export const StatusChangeEventConditionScalarFieldEnum: {
     id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     fromStatus: 'fromStatus',
     toStatus: 'toStatus',
     subscribedEventId: 'subscribedEventId'
@@ -19212,8 +19236,8 @@ export namespace Prisma {
   export const ProductSubscriptionScalarFieldEnum: {
     id: 'id',
     createdAt: 'createdAt',
-    createdById: 'createdById',
     updatedAt: 'updatedAt',
+    createdById: 'createdById',
     updatedById: 'updatedById',
     productId: 'productId',
     userId: 'userId',
@@ -19977,8 +20001,8 @@ export namespace Prisma {
     NOT?: ProductRecordWhereInput | ProductRecordWhereInput[]
     id?: UuidFilter<"ProductRecord"> | string
     createdAt?: DateTimeFilter<"ProductRecord"> | Date | string
-    createdById?: UuidFilter<"ProductRecord"> | string
     updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
+    createdById?: UuidFilter<"ProductRecord"> | string
     updatedById?: UuidFilter<"ProductRecord"> | string
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
@@ -19996,8 +20020,8 @@ export namespace Prisma {
   export type ProductRecordOrderByWithRelationInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     timestamp?: SortOrder
     productId?: SortOrder
@@ -20018,8 +20042,8 @@ export namespace Prisma {
     OR?: ProductRecordWhereInput[]
     NOT?: ProductRecordWhereInput | ProductRecordWhereInput[]
     createdAt?: DateTimeFilter<"ProductRecord"> | Date | string
-    createdById?: UuidFilter<"ProductRecord"> | string
     updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
+    createdById?: UuidFilter<"ProductRecord"> | string
     updatedById?: UuidFilter<"ProductRecord"> | string
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
@@ -20037,8 +20061,8 @@ export namespace Prisma {
   export type ProductRecordOrderByWithAggregationInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     timestamp?: SortOrder
     productId?: SortOrder
@@ -20060,8 +20084,8 @@ export namespace Prisma {
     NOT?: ProductRecordScalarWhereWithAggregatesInput | ProductRecordScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ProductRecord"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
-    createdById?: UuidWithAggregatesFilter<"ProductRecord"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
+    createdById?: UuidWithAggregatesFilter<"ProductRecord"> | string
     updatedById?: UuidWithAggregatesFilter<"ProductRecord"> | string
     timestamp?: DateTimeWithAggregatesFilter<"ProductRecord"> | Date | string
     productId?: UuidWithAggregatesFilter<"ProductRecord"> | string
@@ -20078,8 +20102,8 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     id?: UuidFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
-    createdById?: UuidFilter<"Product"> | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
+    createdById?: UuidFilter<"Product"> | string
     updatedById?: UuidFilter<"Product"> | string
     name?: StringNullableFilter<"Product"> | string | null
     slug?: StringFilter<"Product"> | string
@@ -20100,8 +20124,8 @@ export namespace Prisma {
   export type ProductOrderByWithRelationInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     name?: SortOrderInput | SortOrder
     slug?: SortOrder
@@ -20126,8 +20150,8 @@ export namespace Prisma {
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
     createdAt?: DateTimeFilter<"Product"> | Date | string
-    createdById?: UuidFilter<"Product"> | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
+    createdById?: UuidFilter<"Product"> | string
     updatedById?: UuidFilter<"Product"> | string
     name?: StringNullableFilter<"Product"> | string | null
     code?: StringNullableFilter<"Product"> | string | null
@@ -20147,8 +20171,8 @@ export namespace Prisma {
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     name?: SortOrderInput | SortOrder
     slug?: SortOrder
@@ -20173,8 +20197,8 @@ export namespace Prisma {
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Product"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
-    createdById?: UuidWithAggregatesFilter<"Product"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+    createdById?: UuidWithAggregatesFilter<"Product"> | string
     updatedById?: UuidWithAggregatesFilter<"Product"> | string
     name?: StringNullableWithAggregatesFilter<"Product"> | string | null
     slug?: StringWithAggregatesFilter<"Product"> | string
@@ -20243,6 +20267,8 @@ export namespace Prisma {
     OR?: StatusChangeEventConditionWhereInput[]
     NOT?: StatusChangeEventConditionWhereInput | StatusChangeEventConditionWhereInput[]
     id?: UuidFilter<"StatusChangeEventCondition"> | string
+    createdAt?: DateTimeFilter<"StatusChangeEventCondition"> | Date | string
+    updatedAt?: DateTimeFilter<"StatusChangeEventCondition"> | Date | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     subscribedEventId?: UuidFilter<"StatusChangeEventCondition"> | string
@@ -20251,6 +20277,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionOrderByWithRelationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     fromStatus?: SortOrder
     toStatus?: SortOrder
     subscribedEventId?: SortOrder
@@ -20262,6 +20290,8 @@ export namespace Prisma {
     AND?: StatusChangeEventConditionWhereInput | StatusChangeEventConditionWhereInput[]
     OR?: StatusChangeEventConditionWhereInput[]
     NOT?: StatusChangeEventConditionWhereInput | StatusChangeEventConditionWhereInput[]
+    createdAt?: DateTimeFilter<"StatusChangeEventCondition"> | Date | string
+    updatedAt?: DateTimeFilter<"StatusChangeEventCondition"> | Date | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     subscribedEventId?: UuidFilter<"StatusChangeEventCondition"> | string
@@ -20270,6 +20300,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionOrderByWithAggregationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     fromStatus?: SortOrder
     toStatus?: SortOrder
     subscribedEventId?: SortOrder
@@ -20283,6 +20315,8 @@ export namespace Prisma {
     OR?: StatusChangeEventConditionScalarWhereWithAggregatesInput[]
     NOT?: StatusChangeEventConditionScalarWhereWithAggregatesInput | StatusChangeEventConditionScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"StatusChangeEventCondition"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"StatusChangeEventCondition"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StatusChangeEventCondition"> | Date | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     subscribedEventId?: UuidWithAggregatesFilter<"StatusChangeEventCondition"> | string
@@ -20342,8 +20376,8 @@ export namespace Prisma {
     NOT?: ProductSubscriptionWhereInput | ProductSubscriptionWhereInput[]
     id?: UuidFilter<"ProductSubscription"> | string
     createdAt?: DateTimeFilter<"ProductSubscription"> | Date | string
-    createdById?: UuidFilter<"ProductSubscription"> | string
     updatedAt?: DateTimeFilter<"ProductSubscription"> | Date | string
+    createdById?: UuidFilter<"ProductSubscription"> | string
     updatedById?: UuidFilter<"ProductSubscription"> | string
     productId?: UuidFilter<"ProductSubscription"> | string
     userId?: UuidFilter<"ProductSubscription"> | string
@@ -20359,8 +20393,8 @@ export namespace Prisma {
   export type ProductSubscriptionOrderByWithRelationInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     productId?: SortOrder
     userId?: SortOrder
@@ -20380,8 +20414,8 @@ export namespace Prisma {
     OR?: ProductSubscriptionWhereInput[]
     NOT?: ProductSubscriptionWhereInput | ProductSubscriptionWhereInput[]
     createdAt?: DateTimeFilter<"ProductSubscription"> | Date | string
-    createdById?: UuidFilter<"ProductSubscription"> | string
     updatedAt?: DateTimeFilter<"ProductSubscription"> | Date | string
+    createdById?: UuidFilter<"ProductSubscription"> | string
     updatedById?: UuidFilter<"ProductSubscription"> | string
     productId?: UuidFilter<"ProductSubscription"> | string
     userId?: UuidFilter<"ProductSubscription"> | string
@@ -20397,8 +20431,8 @@ export namespace Prisma {
   export type ProductSubscriptionOrderByWithAggregationInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     productId?: SortOrder
     userId?: SortOrder
@@ -20414,8 +20448,8 @@ export namespace Prisma {
     NOT?: ProductSubscriptionScalarWhereWithAggregatesInput | ProductSubscriptionScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ProductSubscription"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProductSubscription"> | Date | string
-    createdById?: UuidWithAggregatesFilter<"ProductSubscription"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProductSubscription"> | Date | string
+    createdById?: UuidWithAggregatesFilter<"ProductSubscription"> | string
     updatedById?: UuidWithAggregatesFilter<"ProductSubscription"> | string
     productId?: UuidWithAggregatesFilter<"ProductSubscription"> | string
     userId?: UuidWithAggregatesFilter<"ProductSubscription"> | string
@@ -21007,8 +21041,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedCreateInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     timestamp?: Date | string
     productId: string
@@ -21039,8 +21073,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -21055,8 +21089,8 @@ export namespace Prisma {
   export type ProductRecordCreateManyInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     timestamp?: Date | string
     productId: string
@@ -21082,8 +21116,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -21117,8 +21151,8 @@ export namespace Prisma {
   export type ProductUncheckedCreateInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     name?: string | null
     slug: string
@@ -21157,8 +21191,8 @@ export namespace Prisma {
   export type ProductUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
@@ -21177,8 +21211,8 @@ export namespace Prisma {
   export type ProductCreateManyInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     name?: string | null
     slug: string
@@ -21211,8 +21245,8 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
@@ -21276,6 +21310,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionCreateInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
     subscribedEvent: StatusChangeSubscribedEventCreateNestedOneWithoutConditionsInput
@@ -21283,6 +21319,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionUncheckedCreateInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
     subscribedEventId: string
@@ -21290,6 +21328,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
     subscribedEvent?: StatusChangeSubscribedEventUpdateOneRequiredWithoutConditionsNestedInput
@@ -21297,6 +21337,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
     subscribedEventId?: StringFieldUpdateOperationsInput | string
@@ -21304,6 +21346,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionCreateManyInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
     subscribedEventId: string
@@ -21311,12 +21355,16 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
   }
 
   export type StatusChangeEventConditionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
     subscribedEventId?: StringFieldUpdateOperationsInput | string
@@ -21383,8 +21431,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedCreateInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     productId: string
     userId: string
@@ -21409,8 +21457,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -21422,8 +21470,8 @@ export namespace Prisma {
   export type ProductSubscriptionCreateManyInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     productId: string
     userId: string
@@ -21440,8 +21488,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -21977,8 +22025,8 @@ export namespace Prisma {
   export type ProductRecordCountOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     timestamp?: SortOrder
     productId?: SortOrder
@@ -21996,8 +22044,8 @@ export namespace Prisma {
   export type ProductRecordMaxOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     timestamp?: SortOrder
     productId?: SortOrder
@@ -22010,8 +22058,8 @@ export namespace Prisma {
   export type ProductRecordMinOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     timestamp?: SortOrder
     productId?: SortOrder
@@ -22088,8 +22136,8 @@ export namespace Prisma {
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     name?: SortOrder
     slug?: SortOrder
@@ -22110,8 +22158,8 @@ export namespace Prisma {
   export type ProductMaxOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     name?: SortOrder
     slug?: SortOrder
@@ -22127,8 +22175,8 @@ export namespace Prisma {
   export type ProductMinOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     name?: SortOrder
     slug?: SortOrder
@@ -22216,6 +22264,8 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionCountOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     fromStatus?: SortOrder
     toStatus?: SortOrder
     subscribedEventId?: SortOrder
@@ -22223,11 +22273,15 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionMaxOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     subscribedEventId?: SortOrder
   }
 
   export type StatusChangeEventConditionMinOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     subscribedEventId?: SortOrder
   }
 
@@ -22277,8 +22331,8 @@ export namespace Prisma {
   export type ProductSubscriptionCountOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     productId?: SortOrder
     userId?: SortOrder
@@ -22288,8 +22342,8 @@ export namespace Prisma {
   export type ProductSubscriptionMaxOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     productId?: SortOrder
     userId?: SortOrder
@@ -22299,8 +22353,8 @@ export namespace Prisma {
   export type ProductSubscriptionMinOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
-    createdById?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     updatedById?: SortOrder
     productId?: SortOrder
     userId?: SortOrder
@@ -23497,8 +23551,8 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutUpdatedByInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     name?: string | null
     slug: string
     code?: string | null
@@ -23581,8 +23635,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedCreateWithoutUpdatedByInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     timestamp?: Date | string
     productId: string
     price?: number | null
@@ -23652,8 +23706,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedCreateWithoutUpdatedByInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     productId: string
     userId: string
     enabled?: boolean
@@ -23686,8 +23740,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedCreateWithoutUserInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     productId: string
     enabled?: boolean
@@ -23727,8 +23781,8 @@ export namespace Prisma {
     NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
     id?: UuidFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
-    createdById?: UuidFilter<"Product"> | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
+    createdById?: UuidFilter<"Product"> | string
     updatedById?: UuidFilter<"Product"> | string
     name?: StringNullableFilter<"Product"> | string | null
     slug?: StringFilter<"Product"> | string
@@ -23780,8 +23834,8 @@ export namespace Prisma {
     NOT?: ProductRecordScalarWhereInput | ProductRecordScalarWhereInput[]
     id?: UuidFilter<"ProductRecord"> | string
     createdAt?: DateTimeFilter<"ProductRecord"> | Date | string
-    createdById?: UuidFilter<"ProductRecord"> | string
     updatedAt?: DateTimeFilter<"ProductRecord"> | Date | string
+    createdById?: UuidFilter<"ProductRecord"> | string
     updatedById?: UuidFilter<"ProductRecord"> | string
     timestamp?: DateTimeFilter<"ProductRecord"> | Date | string
     productId?: UuidFilter<"ProductRecord"> | string
@@ -23830,8 +23884,8 @@ export namespace Prisma {
     NOT?: ProductSubscriptionScalarWhereInput | ProductSubscriptionScalarWhereInput[]
     id?: UuidFilter<"ProductSubscription"> | string
     createdAt?: DateTimeFilter<"ProductSubscription"> | Date | string
-    createdById?: UuidFilter<"ProductSubscription"> | string
     updatedAt?: DateTimeFilter<"ProductSubscription"> | Date | string
+    createdById?: UuidFilter<"ProductSubscription"> | string
     updatedById?: UuidFilter<"ProductSubscription"> | string
     productId?: UuidFilter<"ProductSubscription"> | string
     userId?: UuidFilter<"ProductSubscription"> | string
@@ -23888,8 +23942,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedCreateWithoutErrorsInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     timestamp?: Date | string
     productId: string
@@ -23934,8 +23988,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateWithoutErrorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -24046,8 +24100,8 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutRecordsInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     name?: string | null
     slug: string
@@ -24216,8 +24270,8 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutRecordsInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
@@ -24356,8 +24410,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedCreateWithoutProductInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     timestamp?: Date | string
     price?: number | null
@@ -24393,8 +24447,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedCreateWithoutProductInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     userId: string
     enabled?: boolean
@@ -24549,8 +24603,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedCreateWithoutPriceChangeInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     productId: string
     userId: string
@@ -24589,8 +24643,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateWithoutPriceChangeInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -24653,8 +24707,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedCreateWithoutStatusChangeInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     productId: string
     userId: string
@@ -24669,12 +24723,16 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionCreateWithoutSubscribedEventInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
   }
 
   export type StatusChangeEventConditionUncheckedCreateWithoutSubscribedEventInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
   }
@@ -24715,8 +24773,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateWithoutStatusChangeInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -24745,6 +24803,8 @@ export namespace Prisma {
     OR?: StatusChangeEventConditionScalarWhereInput[]
     NOT?: StatusChangeEventConditionScalarWhereInput | StatusChangeEventConditionScalarWhereInput[]
     id?: UuidFilter<"StatusChangeEventCondition"> | string
+    createdAt?: DateTimeFilter<"StatusChangeEventCondition"> | Date | string
+    updatedAt?: DateTimeFilter<"StatusChangeEventCondition"> | Date | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     subscribedEventId?: UuidFilter<"StatusChangeEventCondition"> | string
@@ -24850,8 +24910,8 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutSubscriptionsInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     name?: string | null
     slug: string
@@ -25067,8 +25127,8 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutSubscriptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
@@ -25194,8 +25254,8 @@ export namespace Prisma {
   export type ProductCreateManyUpdatedByInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     name?: string | null
     slug: string
     code?: string | null
@@ -25225,8 +25285,8 @@ export namespace Prisma {
   export type ProductRecordCreateManyUpdatedByInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     timestamp?: Date | string
     productId: string
     price?: number | null
@@ -25249,8 +25309,8 @@ export namespace Prisma {
   export type ProductSubscriptionCreateManyUpdatedByInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     productId: string
     userId: string
     enabled?: boolean
@@ -25259,8 +25319,8 @@ export namespace Prisma {
   export type ProductSubscriptionCreateManyUserInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     productId: string
     enabled?: boolean
@@ -25343,8 +25403,8 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25362,8 +25422,8 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25438,8 +25498,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -25453,8 +25513,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateManyWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     productId?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -25513,8 +25573,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     enabled?: BoolFieldUpdateOperationsInput | boolean
@@ -25525,8 +25585,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateManyWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     enabled?: BoolFieldUpdateOperationsInput | boolean
@@ -25547,8 +25607,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     enabled?: BoolFieldUpdateOperationsInput | boolean
@@ -25559,8 +25619,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     enabled?: BoolFieldUpdateOperationsInput | boolean
@@ -25601,8 +25661,8 @@ export namespace Prisma {
   export type ProductRecordCreateManyProductInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     timestamp?: Date | string
     price?: number | null
@@ -25615,8 +25675,8 @@ export namespace Prisma {
   export type ProductSubscriptionCreateManyProductInput = {
     id?: string
     createdAt?: Date | string
-    createdById: string
     updatedAt?: Date | string
+    createdById: string
     updatedById: string
     userId: string
     enabled?: boolean
@@ -25640,8 +25700,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -25655,8 +25715,8 @@ export namespace Prisma {
   export type ProductRecordUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -25681,8 +25741,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     enabled?: BoolFieldUpdateOperationsInput | boolean
@@ -25693,8 +25753,8 @@ export namespace Prisma {
   export type ProductSubscriptionUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     enabled?: BoolFieldUpdateOperationsInput | boolean
@@ -25702,24 +25762,32 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionCreateManySubscribedEventInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
   }
 
   export type StatusChangeEventConditionUpdateWithoutSubscribedEventInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
   }
 
   export type StatusChangeEventConditionUncheckedUpdateWithoutSubscribedEventInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
   }
 
   export type StatusChangeEventConditionUncheckedUpdateManyWithoutSubscribedEventInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
   }

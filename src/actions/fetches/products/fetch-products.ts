@@ -53,7 +53,10 @@ export const fetchProducts = cache(
       include: {
         subscriptions: {
           where: { userId: user.id },
-          include: { statusChange: { include: { conditions: true } }, priceChange: true },
+          include: {
+            statusChange: { include: { conditions: { orderBy: [{ createdAt: "asc" }] } } },
+            priceChange: true,
+          },
         },
       },
     });
