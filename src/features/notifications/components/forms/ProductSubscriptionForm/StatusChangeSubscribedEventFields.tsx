@@ -5,6 +5,8 @@ import { useWatch } from "react-hook-form";
 
 import { type ProductStatus } from "~/database/model";
 
+import { withOrdinalIndicator } from "~/lib/formatters";
+
 import { Form, type FormInstance } from "~/components/forms/Form";
 import { CircleNumber } from "~/components/icons/CircleNumber";
 import { Collapse } from "~/components/structural/Collapse";
@@ -58,7 +60,7 @@ export const StatusChangeSubscribedEventFields = ({
           <CircleNumber fontSize="xs" size="24px">
             {index + 1}
           </CircleNumber>
-          <Label>Condition</Label>
+          <Label>{`${withOrdinalIndicator(index + 1)} Condition`}</Label>
         </div>
       }
       onOpenChange={o => setIsOpen(o)}
