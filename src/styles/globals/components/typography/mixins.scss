@@ -191,3 +191,10 @@
     @include with-font-families();
   }
 }
+
+@mixin with-typography-classes($type) {
+  @include with-font-families();
+  @include with-font-transforms();
+  @include with-font-weights();
+  @include with-font-sizes($type);
+}

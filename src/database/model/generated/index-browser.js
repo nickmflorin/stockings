@@ -228,8 +228,6 @@ exports.Prisma.StatusChangeEventConditionScalarFieldEnum = {
   id: 'id',
   fromStatus: 'fromStatus',
   toStatus: 'toStatus',
-  anyFromStatus: 'anyFromStatus',
-  anyToStatus: 'anyToStatus',
   subscribedEventId: 'subscribedEventId'
 };
 

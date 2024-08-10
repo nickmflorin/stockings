@@ -182,15 +182,13 @@ CREATE TABLE "PriceChangeSubscribedEvent" (
 );
 
 -- CreateTable
-CREATE TABLE "StatusChangeSubscribedEventCondition" (
+CREATE TABLE "StatusChangeEventCondition" (
     "id" UUID NOT NULL,
     "fromStatus" "ProductStatus"[],
     "toStatus" "ProductStatus"[],
-    "anyFromStatus" BOOLEAN NOT NULL,
-    "anyToStatus" BOOLEAN NOT NULL,
     "subscribedEventId" UUID NOT NULL,
 
-    CONSTRAINT "StatusChangeSubscribedEventCondition_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "StatusChangeEventCondition_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -259,7 +257,7 @@ ALTER TABLE "Product" ADD CONSTRAINT "Product_updatedById_fkey" FOREIGN KEY ("up
 ALTER TABLE "PriceChangeSubscribedEvent" ADD CONSTRAINT "PriceChangeSubscribedEvent_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "ProductSubscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "StatusChangeSubscribedEventCondition" ADD CONSTRAINT "StatusChangeSubscribedEventCondition_subscribedEventId_fkey" FOREIGN KEY ("subscribedEventId") REFERENCES "StatusChangeSubscribedEvent"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "StatusChangeEventCondition" ADD CONSTRAINT "StatusChangeEventCondition_subscribedEventId_fkey" FOREIGN KEY ("subscribedEventId") REFERENCES "StatusChangeSubscribedEvent"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StatusChangeSubscribedEvent" ADD CONSTRAINT "StatusChangeSubscribedEvent_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "ProductSubscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

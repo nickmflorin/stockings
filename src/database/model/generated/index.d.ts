@@ -16195,15 +16195,11 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionMinAggregateOutputType = {
     id: string | null
-    anyFromStatus: boolean | null
-    anyToStatus: boolean | null
     subscribedEventId: string | null
   }
 
   export type StatusChangeEventConditionMaxAggregateOutputType = {
     id: string | null
-    anyFromStatus: boolean | null
-    anyToStatus: boolean | null
     subscribedEventId: string | null
   }
 
@@ -16211,8 +16207,6 @@ export namespace Prisma {
     id: number
     fromStatus: number
     toStatus: number
-    anyFromStatus: number
-    anyToStatus: number
     subscribedEventId: number
     _all: number
   }
@@ -16220,15 +16214,11 @@ export namespace Prisma {
 
   export type StatusChangeEventConditionMinAggregateInputType = {
     id?: true
-    anyFromStatus?: true
-    anyToStatus?: true
     subscribedEventId?: true
   }
 
   export type StatusChangeEventConditionMaxAggregateInputType = {
     id?: true
-    anyFromStatus?: true
-    anyToStatus?: true
     subscribedEventId?: true
   }
 
@@ -16236,8 +16226,6 @@ export namespace Prisma {
     id?: true
     fromStatus?: true
     toStatus?: true
-    anyFromStatus?: true
-    anyToStatus?: true
     subscribedEventId?: true
     _all?: true
   }
@@ -16318,8 +16306,6 @@ export namespace Prisma {
     id: string
     fromStatus: $Enums.ProductStatus[]
     toStatus: $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
     subscribedEventId: string
     _count: StatusChangeEventConditionCountAggregateOutputType | null
     _min: StatusChangeEventConditionMinAggregateOutputType | null
@@ -16344,8 +16330,6 @@ export namespace Prisma {
     id?: boolean
     fromStatus?: boolean
     toStatus?: boolean
-    anyFromStatus?: boolean
-    anyToStatus?: boolean
     subscribedEventId?: boolean
     subscribedEvent?: boolean | StatusChangeSubscribedEventDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["statusChangeEventCondition"]>
@@ -16354,8 +16338,6 @@ export namespace Prisma {
     id?: boolean
     fromStatus?: boolean
     toStatus?: boolean
-    anyFromStatus?: boolean
-    anyToStatus?: boolean
     subscribedEventId?: boolean
   }
 
@@ -16373,8 +16355,6 @@ export namespace Prisma {
       id: string
       fromStatus: $Enums.ProductStatus[]
       toStatus: $Enums.ProductStatus[]
-      anyFromStatus: boolean
-      anyToStatus: boolean
       subscribedEventId: string
     }, ExtArgs["result"]["statusChangeEventCondition"]>
     composites: {}
@@ -16774,8 +16754,6 @@ export namespace Prisma {
     readonly id: FieldRef<"StatusChangeEventCondition", 'String'>
     readonly fromStatus: FieldRef<"StatusChangeEventCondition", 'ProductStatus[]'>
     readonly toStatus: FieldRef<"StatusChangeEventCondition", 'ProductStatus[]'>
-    readonly anyFromStatus: FieldRef<"StatusChangeEventCondition", 'Boolean'>
-    readonly anyToStatus: FieldRef<"StatusChangeEventCondition", 'Boolean'>
     readonly subscribedEventId: FieldRef<"StatusChangeEventCondition", 'String'>
   }
     
@@ -19216,8 +19194,6 @@ export namespace Prisma {
     id: 'id',
     fromStatus: 'fromStatus',
     toStatus: 'toStatus',
-    anyFromStatus: 'anyFromStatus',
-    anyToStatus: 'anyToStatus',
     subscribedEventId: 'subscribedEventId'
   };
 
@@ -20269,8 +20245,6 @@ export namespace Prisma {
     id?: UuidFilter<"StatusChangeEventCondition"> | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
-    anyFromStatus?: BoolFilter<"StatusChangeEventCondition"> | boolean
-    anyToStatus?: BoolFilter<"StatusChangeEventCondition"> | boolean
     subscribedEventId?: UuidFilter<"StatusChangeEventCondition"> | string
     subscribedEvent?: XOR<StatusChangeSubscribedEventRelationFilter, StatusChangeSubscribedEventWhereInput>
   }
@@ -20279,8 +20253,6 @@ export namespace Prisma {
     id?: SortOrder
     fromStatus?: SortOrder
     toStatus?: SortOrder
-    anyFromStatus?: SortOrder
-    anyToStatus?: SortOrder
     subscribedEventId?: SortOrder
     subscribedEvent?: StatusChangeSubscribedEventOrderByWithRelationInput
   }
@@ -20292,8 +20264,6 @@ export namespace Prisma {
     NOT?: StatusChangeEventConditionWhereInput | StatusChangeEventConditionWhereInput[]
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
-    anyFromStatus?: BoolFilter<"StatusChangeEventCondition"> | boolean
-    anyToStatus?: BoolFilter<"StatusChangeEventCondition"> | boolean
     subscribedEventId?: UuidFilter<"StatusChangeEventCondition"> | string
     subscribedEvent?: XOR<StatusChangeSubscribedEventRelationFilter, StatusChangeSubscribedEventWhereInput>
   }, "id">
@@ -20302,8 +20272,6 @@ export namespace Prisma {
     id?: SortOrder
     fromStatus?: SortOrder
     toStatus?: SortOrder
-    anyFromStatus?: SortOrder
-    anyToStatus?: SortOrder
     subscribedEventId?: SortOrder
     _count?: StatusChangeEventConditionCountOrderByAggregateInput
     _max?: StatusChangeEventConditionMaxOrderByAggregateInput
@@ -20317,8 +20285,6 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"StatusChangeEventCondition"> | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
-    anyFromStatus?: BoolWithAggregatesFilter<"StatusChangeEventCondition"> | boolean
-    anyToStatus?: BoolWithAggregatesFilter<"StatusChangeEventCondition"> | boolean
     subscribedEventId?: UuidWithAggregatesFilter<"StatusChangeEventCondition"> | string
   }
 
@@ -21312,8 +21278,6 @@ export namespace Prisma {
     id?: string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
     subscribedEvent: StatusChangeSubscribedEventCreateNestedOneWithoutConditionsInput
   }
 
@@ -21321,8 +21285,6 @@ export namespace Prisma {
     id?: string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
     subscribedEventId: string
   }
 
@@ -21330,8 +21292,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
     subscribedEvent?: StatusChangeSubscribedEventUpdateOneRequiredWithoutConditionsNestedInput
   }
 
@@ -21339,8 +21299,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
     subscribedEventId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -21348,8 +21306,6 @@ export namespace Prisma {
     id?: string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
     subscribedEventId: string
   }
 
@@ -21357,16 +21313,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StatusChangeEventConditionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
     subscribedEventId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -22266,22 +22218,16 @@ export namespace Prisma {
     id?: SortOrder
     fromStatus?: SortOrder
     toStatus?: SortOrder
-    anyFromStatus?: SortOrder
-    anyToStatus?: SortOrder
     subscribedEventId?: SortOrder
   }
 
   export type StatusChangeEventConditionMaxOrderByAggregateInput = {
     id?: SortOrder
-    anyFromStatus?: SortOrder
-    anyToStatus?: SortOrder
     subscribedEventId?: SortOrder
   }
 
   export type StatusChangeEventConditionMinOrderByAggregateInput = {
     id?: SortOrder
-    anyFromStatus?: SortOrder
-    anyToStatus?: SortOrder
     subscribedEventId?: SortOrder
   }
 
@@ -24725,16 +24671,12 @@ export namespace Prisma {
     id?: string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
   }
 
   export type StatusChangeEventConditionUncheckedCreateWithoutSubscribedEventInput = {
     id?: string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
   }
 
   export type StatusChangeEventConditionCreateOrConnectWithoutSubscribedEventInput = {
@@ -24805,8 +24747,6 @@ export namespace Prisma {
     id?: UuidFilter<"StatusChangeEventCondition"> | string
     fromStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
     toStatus?: EnumProductStatusNullableListFilter<"StatusChangeEventCondition">
-    anyFromStatus?: BoolFilter<"StatusChangeEventCondition"> | boolean
-    anyToStatus?: BoolFilter<"StatusChangeEventCondition"> | boolean
     subscribedEventId?: UuidFilter<"StatusChangeEventCondition"> | string
   }
 
@@ -25764,32 +25704,24 @@ export namespace Prisma {
     id?: string
     fromStatus?: StatusChangeEventConditionCreatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionCreatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus: boolean
-    anyToStatus: boolean
   }
 
   export type StatusChangeEventConditionUpdateWithoutSubscribedEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StatusChangeEventConditionUncheckedUpdateWithoutSubscribedEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StatusChangeEventConditionUncheckedUpdateManyWithoutSubscribedEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     fromStatus?: StatusChangeEventConditionUpdatefromStatusInput | $Enums.ProductStatus[]
     toStatus?: StatusChangeEventConditionUpdatetoStatusInput | $Enums.ProductStatus[]
-    anyFromStatus?: BoolFieldUpdateOperationsInput | boolean
-    anyToStatus?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

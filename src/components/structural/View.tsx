@@ -184,7 +184,10 @@ console.error = (msg, ...args) => {
     ["tr", "tbody"].includes(args[1])
   ) {
     return;
-  } else if (msg.includes("Warning: In HTML, <i> cannot be a child of <tbody>.")) {
+  } else if (
+    typeof msg === "string" &&
+    msg.includes("Warning: In HTML, <i> cannot be a child of <tbody>.")
+  ) {
     return;
   }
   consoleError(msg, ...args);

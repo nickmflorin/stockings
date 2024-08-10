@@ -200,8 +200,6 @@ model PriceChangeSubscribedEvent extends SubscribedEvent {
 model StatusChangeEventCondition extends Model {
   fromStatus        ProductStatus[]
   toStatus          ProductStatus[]
-  anyFromStatus     Boolean
-  anyToStatus       Boolean
   subscribedEvent   StatusChangeSubscribedEvent @relation("conditions", fields: [subscribedEventId], references: [id])
   subscribedEventId String                      @db.Uuid
 }

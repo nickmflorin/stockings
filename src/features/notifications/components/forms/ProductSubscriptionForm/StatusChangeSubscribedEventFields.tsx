@@ -6,6 +6,9 @@ import { useWatch } from "react-hook-form";
 import { type ProductStatus } from "~/database/model";
 
 import { Form, type FormInstance } from "~/components/forms/Form";
+import { CircleNumber } from "~/components/icons/CircleNumber";
+import { Collapse } from "~/components/structural/Collapse";
+import { Label } from "~/components/typography";
 /* eslint-disable-next-line max-len */
 import { ProductTransitionStatusInput } from "~/features/products/components/input/ProductTransitionStatusInput";
 
@@ -20,14 +23,11 @@ export const StatusChangeSubscribedEventFields = ({
   form,
   index,
 }: StatusChangeSubscribedEventFieldsProps) => {
+  const [isOpen, setIsOpen] = useState(true);
+
   const fromStatuses = useWatch({
     control: form.control,
     name: `statusChange.conditions.${index}.fromStatus`,
-  });
-
-  const anyFromStatus = useWatch({
-    control: form.control,
-    name: `statusChange.conditions.${index}.anyFromStatus`,
   });
 
   const toStatuses = useWatch({
@@ -35,88 +35,96 @@ export const StatusChangeSubscribedEventFields = ({
     name: `statusChange.conditions.${index}.toStatus`,
   });
 
-  const anyToStatus = useWatch({
-    control: form.control,
-    name: `statusChange.conditions.${index}.anyToStatus`,
+  const [disabledFromStatuses, setDisabledFromStatuses] = useState<ProductStatus[]>(() => {
+    if (toStatuses.length === 1) {
+      return toStatuses;
+    }
+    return [];
   });
 
-  const [disabledFromStatuses, setDisabledFromStatuses] = useState<ProductStatus[]>(
-    !anyToStatus ? toStatuses : [],
-  );
-  const [disabledToStatuses, setDisabledToStatuses] = useState<ProductStatus[]>(
-    !anyFromStatus ? fromStatuses : [],
-  );
+  const [disabledToStatuses, setDisabledToStatuses] = useState<ProductStatus[]>(() => {
+    if (fromStatuses.length === 1) {
+      return fromStatuses;
+    }
+    return [];
+  });
 
   return (
-    <div className="flex flex-col gap-2">
-      <Form.ControlledField
-        name={`statusChange.conditions.${index}.fromStatus`}
-        label="From"
-        form={form}
-        description="Notify me when the inventory status of the product changes from this state."
-        descriptionSeparation={8}
-      >
-        {({ value, onChange }) => (
-          <ProductTransitionStatusInput
-            inPortal
-            value={{ anyStatus: anyFromStatus, statuses: value }}
-            disabledStatuses={disabledFromStatuses}
-            onChange={({ anyStatus, statuses }) => {
-              if (anyStatus !== undefined) {
-                form.setValue(`statusChange.conditions.${index}.anyFromStatus`, anyStatus);
-                setDisabledToStatuses([]);
-              } else {
-                setDisabledToStatuses(statuses);
-                const currToStatuses = form.getValues(`statusChange.conditions.${index}.toStatus`);
-                const anyToStatus = form.getValues(`statusChange.conditions.${index}.anyToStatus`);
-                if (!anyToStatus) {
+    <Collapse
+      isOpen={isOpen}
+      contentClassName="pl-2 mt-2"
+      title={
+        <div className="flex flex-row items-center gap-2">
+          <CircleNumber fontSize="xs" size="24px">
+            {index + 1}
+          </CircleNumber>
+          <Label>Condition</Label>
+        </div>
+      }
+      onOpenChange={o => setIsOpen(o)}
+    >
+      <div className="flex flex-col gap-2">
+        <Form.ControlledField
+          name={`statusChange.conditions.${index}.fromStatus`}
+          label="From"
+          form={form}
+          description="Notify me when the inventory status of the product changes from this state."
+          descriptionSeparation={8}
+        >
+          {({ value, onChange }) => (
+            <ProductTransitionStatusInput
+              inPortal
+              value={value}
+              disabledStatuses={disabledFromStatuses}
+              onChange={v => {
+                onChange(v);
+                if (v.length === 1) {
+                  const currToStatuses = form.getValues(
+                    `statusChange.conditions.${index}.toStatus`,
+                  );
+                  setDisabledToStatuses(v);
                   form.setValue(
                     `statusChange.conditions.${index}.toStatus`,
-                    currToStatuses.filter(s => !statuses.includes(s)),
+                    currToStatuses.filter(s => !v.includes(s)),
                   );
+                } else {
+                  setDisabledToStatuses([]);
                 }
-                onChange(statuses);
-              }
-            }}
-          />
-        )}
-      </Form.ControlledField>
-      <Form.ControlledField
-        name={`statusChange.conditions.${index}.toStatus`}
-        label="To"
-        form={form}
-        descriptionSeparation={8}
-        description="Notify me when the inventory status of the product changes to this state."
-      >
-        {({ value, onChange }) => (
-          <ProductTransitionStatusInput
-            inPortal
-            value={{ anyStatus: anyToStatus, statuses: value }}
-            disabledStatuses={disabledToStatuses}
-            onChange={({ anyStatus, statuses }) => {
-              if (anyStatus !== undefined) {
-                form.setValue(`statusChange.conditions.${index}.anyToStatus`, anyStatus);
-                setDisabledFromStatuses([]);
-              } else {
-                setDisabledFromStatuses(statuses);
-                const currFromStatuses = form.getValues(
-                  `statusChange.conditions.${index}.fromStatus`,
-                );
-                const anyFromStatus = form.getValues(
-                  `statusChange.conditions.${index}.anyFromStatus`,
-                );
-                if (!anyFromStatus) {
+              }}
+            />
+          )}
+        </Form.ControlledField>
+        <Form.ControlledField
+          name={`statusChange.conditions.${index}.toStatus`}
+          label="To"
+          form={form}
+          descriptionSeparation={8}
+          description="Notify me when the inventory status of the product changes to this state."
+        >
+          {({ value, onChange }) => (
+            <ProductTransitionStatusInput
+              inPortal
+              value={value}
+              disabledStatuses={disabledToStatuses}
+              onChange={v => {
+                onChange(v);
+                if (v.length === 1) {
+                  const currFromStatuses = form.getValues(
+                    `statusChange.conditions.${index}.fromStatus`,
+                  );
+                  setDisabledFromStatuses(v);
                   form.setValue(
                     `statusChange.conditions.${index}.fromStatus`,
-                    currFromStatuses.filter(s => !statuses.includes(s)),
+                    currFromStatuses.filter(s => !v.includes(s)),
                   );
+                } else {
+                  setDisabledFromStatuses([]);
                 }
-                onChange(statuses);
-              }
-            }}
-          />
-        )}
-      </Form.ControlledField>
-    </div>
+              }}
+            />
+          )}
+        </Form.ControlledField>
+      </div>
+    </Collapse>
   );
 };

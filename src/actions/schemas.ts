@@ -1,55 +1,48 @@
 import { intersection, uniq } from "lodash-es";
 import { z } from "zod";
 
-import { ProductStatus, PriceChangeEventCondition } from "~/database/model";
+import { ProductStatus, PriceChangeEventCondition, productStatusesAreAny } from "~/database/model";
 
 const StatusChangeEventConditionSchema = z.object({
   id: z.string().optional(),
   fromStatus: z.array(z.nativeEnum(ProductStatus)),
   toStatus: z.array(z.nativeEnum(ProductStatus)),
-  anyFromStatus: z.boolean(),
-  anyToStatus: z.boolean(),
 });
 
 export const StatusChangeEventConditionRefinement =
   (prefixPath: string[] = []) =>
   (data: z.infer<typeof StatusChangeEventConditionSchema>, ctx: z.RefinementCtx) => {
-    if (!data.anyFromStatus) {
-      if (data.fromStatus.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          minimum: 1,
-          type: "array",
-          inclusive: true,
-          path: [...prefixPath, "fromStatus"],
-          message: "At least one beginning state status must be selected.",
-        });
-      } else if (uniq(data.fromStatus).length !== data.fromStatus.length) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: [...prefixPath, "fromStatus"],
-          message: "The beginning state statuses must be a unique list.",
-        });
-      }
+    if (data.fromStatus.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 1,
+        type: "array",
+        inclusive: true,
+        path: [...prefixPath, "fromStatus"],
+        message: "At least one beginning state status must be selected.",
+      });
+    } else if (uniq(data.fromStatus).length !== data.fromStatus.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [...prefixPath, "fromStatus"],
+        message: "The beginning state statuses must be a unique list.",
+      });
     }
-
-    if (!data.anyToStatus) {
-      if (data.toStatus.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          minimum: 1,
-          type: "array",
-          inclusive: true,
-          path: [...prefixPath, "toStatus"],
-          message: "At least one end state status must be selected.",
-        });
-      } else if (uniq(data.toStatus).length !== data.toStatus.length) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: [...prefixPath, "toStatus"],
-          message: "The ending state statuses must be a unique list.",
-        });
-      }
+    if (data.toStatus.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 1,
+        type: "array",
+        inclusive: true,
+        path: [...prefixPath, "toStatus"],
+        message: "At least one end state status must be selected.",
+      });
+    } else if (uniq(data.toStatus).length !== data.toStatus.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [...prefixPath, "toStatus"],
+        message: "The ending state statuses must be a unique list.",
+      });
     }
   };
 
@@ -57,9 +50,6 @@ const StatusChangeSubscribedEventSchema = z.object({
   enabled: z.boolean(),
   conditions: z.array(StatusChangeEventConditionSchema),
 });
-
-const statusIsConsideredAny = (anyFlag: boolean, statuses: ProductStatus[]) =>
-  anyFlag === true || statuses.length === Object.values(ProductStatus).length;
 
 export const StatusChangeSubscribedEventSchemaRefinement =
   (prefixPath: string[] = []) =>
@@ -83,29 +73,10 @@ export const StatusChangeSubscribedEventSchemaRefinement =
       }
       for (let i = 0; i < conditions.length; i++) {
         const condition = conditions[i];
-        if (!condition.anyFromStatus && condition.fromStatus.length === 0) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            minimum: 1,
-            type: "array",
-            inclusive: true,
-            path: [...prefixPath, "conditions", `${i}`, "fromStatus"],
-            message: "At least one beginning state status must be selected.",
-          });
-        }
-        if (!condition.anyToStatus && condition.toStatus.length === 0) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            minimum: 1,
-            type: "array",
-            inclusive: true,
-            path: [...prefixPath, "conditions", `${i}`, "toStatus"],
-            message: "At least one end state status must be selected.",
-          });
-        }
+        StatusChangeEventConditionRefinement([...prefixPath, "conditions", `${i}`])(condition, ctx);
         if (
-          !statusIsConsideredAny(condition.anyFromStatus, condition.fromStatus) &&
-          !statusIsConsideredAny(condition.anyToStatus, condition.toStatus) &&
+          !productStatusesAreAny(condition.fromStatus) &&
+          !productStatusesAreAny(condition.toStatus) &&
           intersection(condition.fromStatus, condition.toStatus).length !== 0
         ) {
           ctx.addIssue({

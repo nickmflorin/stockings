@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 
 import { fetchProducts } from "~/actions/fetches/products";
 
@@ -26,16 +25,5 @@ export const ProductsTableBody = async (): Promise<JSX.Element> => {
     ordering: { field: "name", order: "asc" },
     page: 1,
   });
-  const subscriptions = await db.productSubscription.findMany({
-    where: { userId: user.id, productId: { in: products.map(p => p.id) } },
-    include: { statusChange: { include: { conditions: true } }, priceChange: true },
-  });
-  return (
-    <ClientProductsTableBody
-      data={products.map(product => ({
-        ...product,
-        subscription: subscriptions.find(subscription => subscription.productId) ?? null,
-      }))}
-    />
-  );
+  return <ClientProductsTableBody data={products} />;
 };

@@ -7,14 +7,13 @@ import { db } from "~/database";
 import {
   type ApiProductSubscription,
   enhance,
-  ProductStatus,
   type StatusChangeEventCondition,
 } from "~/database/model";
 
 import { type MutationActionResponse } from "~/actions";
 import { ProductSubscriptionSchema } from "~/actions/schemas";
 
-import { ApiClientGlobalError, ApiClientFormError } from "~/api";
+import { convertToPlainObject, ApiClientGlobalError, ApiClientFormError } from "~/api";
 
 export const updateProductSubscription = async (
   subscriptionId: string,
@@ -55,17 +54,8 @@ export const updateProductSubscription = async (
   );
 
   const conditionToData = (
-    condition: Pick<
-      StatusChangeEventCondition,
-      "anyFromStatus" | "anyToStatus" | "fromStatus" | "toStatus"
-    >,
+    condition: Pick<StatusChangeEventCondition, "fromStatus" | "toStatus">,
   ) => ({
-    anyFromStatus:
-      condition.anyFromStatus ||
-      Object.values(ProductStatus).length === uniq(condition.fromStatus).length,
-    anyToStatus:
-      condition.anyToStatus ||
-      Object.values(ProductStatus).length === uniq(condition.toStatus).length,
     /* Uniqueness should be guaranteed by the schema, but we still ensure
      uniqueness here just in case. */
     fromStatus: uniq(condition.fromStatus),
@@ -105,5 +95,5 @@ export const updateProductSubscription = async (
         : undefined,
     },
   });
-  return { data: result };
+  return { data: convertToPlainObject(result) };
 };

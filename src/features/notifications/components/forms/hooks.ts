@@ -10,6 +10,7 @@ export const useProductSubscriptionForm = () =>
   useForm({
     schema: ProductSubscriptionSchema,
     defaultValues: {
+      enabled: true,
       priceChange: {
         enabled: false,
         conditions: [
@@ -21,10 +22,8 @@ export const useProductSubscriptionForm = () =>
         enabled: true,
         conditions: [
           {
-            fromStatus: [],
-            anyFromStatus: true,
+            fromStatus: [ProductStatus.OutOfStock],
             toStatus: [ProductStatus.InStock],
-            anyToStatus: false,
           },
         ],
       },

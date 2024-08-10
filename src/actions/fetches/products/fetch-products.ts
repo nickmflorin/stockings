@@ -2,6 +2,7 @@ import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
 import { db } from "~/database";
+import type { ApiProduct } from "~/database/model";
 import { conditionalFilters } from "~/database/util";
 
 import { constructTableSearchClause } from "~/actions";
@@ -43,11 +44,24 @@ export const fetchProductsCount = cache(
   },
 );
 
-export const fetchProducts = cache(async ({ filters, ordering, page }: ProductsTableControls) => {
-  await getAuthedUser({ strict: true });
-  const data = await db.product.findMany({
-    where: whereClause({ filters }),
-    orderBy: [{ [ordering.field]: ordering.order }],
-  });
-  return data.map(convertToPlainObject);
-});
+export const fetchProducts = cache(
+  async ({ filters, ordering, page }: ProductsTableControls): Promise<ApiProduct[]> => {
+    const { user } = await getAuthedUser({ strict: true });
+    const data = await db.product.findMany({
+      where: whereClause({ filters }),
+      orderBy: [{ [ordering.field]: ordering.order }],
+      include: {
+        subscriptions: {
+          where: { userId: user.id },
+          include: { statusChange: { include: { conditions: true } }, priceChange: true },
+        },
+      },
+    });
+    return data.map(datum =>
+      convertToPlainObject({
+        ...datum,
+        subscription: datum.subscriptions.length === 0 ? null : datum.subscriptions[0],
+      }),
+    );
+  },
+);

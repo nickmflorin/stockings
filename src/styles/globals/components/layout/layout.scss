@@ -36,7 +36,7 @@
 
     &.layout__content--with-drawer {
       > .content {
-        max-width: calc(100% - constants.$layout-nav-width - constants.$drawer-width);
+        max-width: calc(100% - constants.$layout-nav-width - constants.$min-drawer-width);
       }
     }
   }

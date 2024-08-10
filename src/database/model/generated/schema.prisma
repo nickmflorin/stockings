@@ -203,8 +203,6 @@ model StatusChangeEventCondition {
   id                String                      @id() @default(uuid()) @db.Uuid()
   fromStatus        ProductStatus[]
   toStatus          ProductStatus[]
-  anyFromStatus     Boolean
-  anyToStatus       Boolean
   subscribedEvent   StatusChangeSubscribedEvent @relation("conditions", fields: [subscribedEventId], references: [id])
   subscribedEventId String                      @db.Uuid()
 }

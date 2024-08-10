@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-import { type ProductStatus } from "~/database/model";
+import { ProductStatus, productStatusesAreAny } from "~/database/model";
 
 import { Checkbox } from "~/components/input/Checkbox";
 import { SelectBehaviorTypes } from "~/components/input/select";
@@ -8,20 +8,11 @@ import { classNames, type ComponentProps } from "~/components/types";
 
 import { ProductStatusSelect } from "./ProductStatusSelect";
 
-type ProductTransitionStatusValue = {
-  readonly statuses: ProductStatus[];
-  readonly anyStatus: boolean;
-};
-
-type OnChangeValue =
-  | { statuses: ProductStatus[]; anyStatus?: never }
-  | { statuses?: never; anyStatus: true };
-
 export interface ProductTransitionStatusInputProps extends ComponentProps {
-  readonly value: ProductTransitionStatusValue;
+  readonly value: ProductStatus[];
   readonly disabledStatuses?: ProductStatus[];
   readonly inPortal?: boolean;
-  readonly onChange: (value: OnChangeValue) => void;
+  readonly onChange: (value: ProductStatus[]) => void;
 }
 
 export const ProductTransitionStatusInput = ({
@@ -34,8 +25,8 @@ export const ProductTransitionStatusInput = ({
   const lastSelectedStatuses = useRef<ProductStatus[]>([]);
 
   useEffect(() => {
-    if (!value.anyStatus) {
-      lastSelectedStatuses.current = value.statuses;
+    if (!productStatusesAreAny(value)) {
+      lastSelectedStatuses.current = value;
     }
   }, [value]);
 
@@ -43,24 +34,25 @@ export const ProductTransitionStatusInput = ({
     <div className={classNames("flex flex-row items-center gap-2", props.className)}>
       <Checkbox
         label="Any"
-        value={value.anyStatus}
+        value={productStatusesAreAny(value)}
         onChange={e => {
           if (e.target.checked) {
-            onChange({ anyStatus: true });
+            onChange(Object.values(ProductStatus));
           } else {
-            onChange({ statuses: lastSelectedStatuses.current });
+            onChange(lastSelectedStatuses.current);
           }
         }}
       />
       <ProductStatusSelect
         inPortal={inPortal}
-        isDisabled={value.anyStatus}
         behavior={SelectBehaviorTypes.MULTI}
-        value={value.statuses}
+        value={value}
         disabledStatuses={disabledStatuses}
         onChange={v => {
-          lastSelectedStatuses.current = v;
-          onChange({ statuses: v });
+          if (!productStatusesAreAny(value)) {
+            lastSelectedStatuses.current = v;
+          }
+          onChange(v);
         }}
       />
     </div>

@@ -654,12 +654,6 @@ const metadata = {
                     name: "toStatus",
                     type: "ProductStatus",
                     isArray: true,
-                }, anyFromStatus: {
-                    name: "anyFromStatus",
-                    type: "Boolean",
-                }, anyToStatus: {
-                    name: "anyToStatus",
-                    type: "Boolean",
                 }, subscribedEvent: {
                     name: "subscribedEvent",
                     type: "StatusChangeSubscribedEvent",

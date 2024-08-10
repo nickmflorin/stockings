@@ -4,12 +4,12 @@ import { type z } from "zod";
 
 import { getAuthedUser } from "~/application/auth/server";
 import { db } from "~/database";
-import { ProductStatus, enhance, type ApiProductSubscription } from "~/database/model";
+import { enhance, type ApiProductSubscription } from "~/database/model";
 
 import { type MutationActionResponse } from "~/actions";
 import { ProductSubscriptionSchema } from "~/actions/schemas";
 
-import { ApiClientGlobalError, ApiClientFormError } from "~/api";
+import { ApiClientGlobalError, ApiClientFormError, convertToPlainObject } from "~/api";
 
 export const subscribeToProduct = async (
   productId: string,
@@ -80,15 +80,12 @@ export const subscribeToProduct = async (
                 createMany: {
                   data: statusChange.conditions.map(condition => {
                     if (condition.id !== undefined) {
-                      throw new Error("");
+                      throw new Error(
+                        "Unexpectedly encountered condition with an ID when the subscription " +
+                          "does not yet exist!",
+                      );
                     }
                     return {
-                      anyFromStatus:
-                        condition.anyFromStatus ||
-                        Object.values(ProductStatus).length === uniq(condition.fromStatus).length,
-                      anyToStatus:
-                        condition.anyToStatus ||
-                        Object.values(ProductStatus).length === uniq(condition.toStatus).length,
                       /* Uniqueness should be guaranteed by the schema, but we still ensure
                        uniqueness here just in case. */
                       fromStatus: uniq(condition.fromStatus),
@@ -114,5 +111,5 @@ export const subscribeToProduct = async (
         : undefined,
     },
   });
-  return { data: result };
+  return { data: convertToPlainObject(result) };
 };

@@ -27,7 +27,7 @@ export const fetchProductSubcription = cache(
 
     const subscription = await enhanced.productSubscription.findUnique({
       where: { id },
-      include: { statusChange: true, priceChange: true },
+      include: { statusChange: { include: { conditions: true } }, priceChange: true },
     });
     if (!subscription) {
       const error = ApiClientGlobalError.NotFound({
@@ -40,8 +40,8 @@ export const fetchProductSubcription = cache(
       });
       return returnErrorInFetchContext<ProductSubscription, C>(error, context);
     }
-    return convertToPlainObject({
-      data: subscription,
-    }) as FetchActionResponse<ProductSubscription, C>;
+    return {
+      data: convertToPlainObject(subscription),
+    } as FetchActionResponse<ProductSubscription, C>;
   },
 );

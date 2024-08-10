@@ -36,7 +36,7 @@ export const UpdateProductSubscriptionForm = ({
 
   const form = useProductSubscriptionForm();
 
-  const { data: subscription, isLoading } = useProductSubscription(productId, { query: {} });
+  const { data: subscription, isLoading } = useProductSubscription(subscriptionId, { query: {} });
 
   useEffect(() => {
     if (subscription) {

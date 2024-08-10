@@ -1,4 +1,5 @@
 import { enumeratedLiterals } from "enumerated-literals";
+import { uniq } from "lodash-es";
 
 import { type TailwindTextColorClassName } from "~/components/types";
 
@@ -37,3 +38,6 @@ const CommonStatuses = [
 }[];
 
 export const ProductStatuses = enumeratedLiterals(CommonStatuses, {});
+
+export const productStatusesAreAny = (status: ProductStatus[]): boolean =>
+  Object.values(ProductStatus).length === uniq(status).length;

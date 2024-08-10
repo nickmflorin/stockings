@@ -9,9 +9,7 @@
 .drawer-wrapper {
   @include drawer-container();
   position: relative;
-  min-width: constants.$drawer-width;
-  max-width: constants.$drawer-width;
-  width: constants.$drawer-width;
+  min-width: constants.$min-drawer-width;
   background-color: theme("colors.white");
   border-left: 1px solid theme("colors.border");
 

@@ -3,5 +3,10 @@
 
 @use "./body";
 @use "./description";
+@use "./mixins" as mixins;
 @use "./title";
 @use "./label";
+
+.typography-component {
+  @include mixins.with-typography-classes("body");
+}

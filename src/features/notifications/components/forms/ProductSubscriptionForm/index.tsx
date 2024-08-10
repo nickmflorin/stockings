@@ -28,6 +28,7 @@ export const ProductSubscriptionForm = ({ onCancel, ...props }: ProductSubscript
   return (
     <Form
       {...props}
+      onError={e => console.error(e)}
       contentClassName="gap-[12px]"
       footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
     >

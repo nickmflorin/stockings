@@ -1,7 +1,7 @@
 import { type DrawerId } from "~/components/drawers/types";
 
 import { DrawerContainer } from "./DrawerContainer";
-import { type DrawerDynamicProps } from "./drawers";
+import { getDrawerWidth, type DrawerDynamicProps } from "./drawers";
 import { getDrawerComponent } from "./drawers";
 
 interface DrawerRendererProps<D extends DrawerId> {
@@ -20,7 +20,7 @@ export const DrawerRenderer = <D extends DrawerId>({
   const ps = { ...props, onClose } as React.ComponentProps<typeof Drawer>;
 
   return (
-    <DrawerContainer>
+    <DrawerContainer width={getDrawerWidth(id)}>
       <Drawer {...ps} />
     </DrawerContainer>
   );
