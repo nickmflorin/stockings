@@ -717,62 +717,87 @@ $ brew services stop postgresql
 
 #### 2.7.a Prisma
 
-This application uses [Prisma][prisma], an ORM that that maps records in the database to typescript
-objects while exposing a database client that can be used to interact with those records. To
-properly use this client, a developer must understand how this ORM works.
+This application uses [Prisma][prisma], an ORM that that maps records in the database to
+[TypeScript][typescript] objects while exposing a database client, `PrismaClient`, that can be used
+to interact with those records. To properly use the `PrismaClient`, a developer must understand how
+this ORM works.
 
-##### 2.7.a.i Schema
+##### 2.7.a.i ZenStack
 
-The database structure for the application is defined in a [prisma] `*.schema` file. This
-application's `*.schema` file is located at
-[`src/prisma/schema.prisma`](./src/prisma/schema.prisma). The [prisma] ORM uses the definitions in
-that file to properly construct, update and manage the [postgres] database.
+This applicaiton uses [ZenStack][zenstack], which is essentially a wrapper around the
+[Prisma][prisma] ORM that provides useful features that [Prisma][prisma] does not directly support.
+Some of the more notable features include:
 
-When updates are made to the [prisma] schema file, migrations must be run such that [prisma] can
-digest those changes and make the appropriate updates to the database structure. This can be done as
-follows:
+1. [Polymorphism](https://zenstack.dev/docs/guides/polymorphism): [ZenStack][zenstack]
+   ["enhances"](https://zenstack.dev/docs/the-complete-guide/part1/enhancement) the `PrismaClient`
+   in order to provide support for polymorphic relations.
+2. [Access Policy Controls](https://zenstack.dev/docs/the-complete-guide/part1/access-policy/):
+   Arguably the most important
+   [enhancement](https://zenstack.dev/docs/the-complete-guide/part1/enhancement) that
+   [ZenStack][zenstack] makes to the `PrismaClient`.
+
+Since [ZenStack][zenstack] wraps [Prisma][prisma], the majority of the interactions with the
+database in this application are done through [ZenStack][zenstack] - not [Prisma][prisma] directly.
+
+##### 2.7.a.i Database Schema
+
+The database structure (models) for the application is defined in a [ZenStack][zenstack] `*.zmodel`
+schema file. This application's `*.zmodel` file is located at
+[`src/database/zenstack/schema.zmodel`](./src/database/zenstack/schema.zmodel). When changes to the
+database structure are made in the `schema.zmodel` file, [ZenStack][zenstack] will then do the
+following:
+
+1. Converts the updated `.zmodel` file into a [Prisma][prisma] schema file,
+   [`src/database/prisma/schema.prisma`](./src/database/prisma/schema.prisma), which the
+   [Prisma][prisma] ORM then uses the definitions in that file, `schema.prisma`, to properly
+   construct, update and manage the [postgres] database.
+2. Updates the types related to the `PrismaClient` to reflect the changes made to the database
+   structure.
+
+**Note**: The [Prisma][prisma] `.schema` file is an _auto-generated file_ - and it should not be
+modified directly. All modifications to the database models and structure should be done from
+[ZenStack][zenstack]-specific `.zmodel` file.
+
+When updates are made to the [ZenStack][zenstack] `.zmodel` schema file, we need to use
+[ZenStack][zenstack] to accomplish the above. This can be done as follows:
 
 ```bash
-$ pnpm db-migrate-dev
+pnpm generate-db
 ```
 
-This command will prompt [prisma] to update the database structure if changes were detected. If
-[prisma] detects changes, it will prompt you for a name that should be assigned to the accompanied
-migration file (stored [here](./src/prisma/migrations/)). The name of the migration file should be a
-snake-cake name that is indicative of the changes that were made (i.e.
-"add_updated_at_field_to_user").
+##### 2.7.a.ii Migrations
 
-If it is desired that just the migration file is created (without actually updating the database),
-the `--create-only` flag can be used:
+When updates are made to the [ZenStack][zenstack] `.zmodel` schema file, these updates will not be
+reflected in the database until migrations are performed. In order to perform migrations, we first
+need to create the migration files:
 
 ```bash
 $ pnpm create-migrations
 ```
 
-This will create the migration file, but will not apply it.
+This command will prompt [Prisma][prisma] to first identify the changes that were made to the
+[Prisma][prisma] `.schema` file that are not currently represented in the [postgres] database, and
+to create migrations files [here](./src/database/prisma/migrations) that contain instructions for
+how to apply those changes once migrations are run.
 
-##### 2.7.a.ii `PrismaClient`
+The name of the migration file should be a snake-cake name that is indicative of the changes that
+were made (i.e. "add_updated_at_field_to_user").
 
-The [`PrismaClient`](./src/server/db/index.ts) is what the application uses to communicate with the
-database. This client ([`prisma`](./src/server/db/index.ts)) relies on type bindings that are
-dynamically generated by [prisma] based on the existing schema file. This means that whenever the
-schema file changes, the types for the [`PrismaClient`](./src/server/db/index.ts) will be incorrect
-until the [`PrismaClient`](./src/server/db/index.ts) is regenerated.
-
-This can be done as follows:
+Then, migrations can be applied as follows:
 
 ```bash
-$ pnpm pushdb
+pnpm migrate-dev
 ```
 
-Note that when running the `reset` command (discussed below), the
-[`PrismaClient`](./src/server/db/index.ts) is automatically updated.
+##### 2.7.a.iii Resetting the Database
 
-##### 2.7.a.iii Seeding
+TODO
 
-The application comes equipped with a databae seed file
-[`./src/prisma/seed.ts](./src/prisma/seed.ts). This file is used to populate the database with dummy
-data/fixtures for development. This script can be run as:
+##### 2.7.a.iv Seeding
+
+The application comes equipped with a database seed file
+[`./src/scripts/seed/index.ts](./src/scripts/seed/index.ts). This file is used to populate the
+database with dummy data/fixtures for development. This script can be run as:
 
 ```bash
 $ pnpm seeddb
@@ -781,7 +806,7 @@ $ pnpm seeddb
 That being said, this seed process _only_ works when the database state is empty - if the database
 state is not empty, unique constraint violations will be triggered when adding data to the database.
 Therefore, in order to run the [`./src/prisma/seed.ts](./src/prisma/seed.ts) script, it must be done
-as a part of [prisma]'s `reset` flow:
+as a part of [Prisma][prisma]'s `reset` flow:
 
 ```bash
 $ pnpm migrate-reset
@@ -859,3 +884,5 @@ $ git push origin master
 [corepack]: https://nodejs.org/api/corepack.html
 [vercel]: https://vercel.com/
 [vercel-cli]: https://vercel.com/docs/cli
+[typescript]: https://www.typescriptlang.org/
+[zenstack]: https://zenstack.dev/
