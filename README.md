@@ -1,4 +1,4 @@
-# nick.florin
+# tooltrack
 
 This repository contains a web application that is used for scraping publically available web data
 from specific e-commerce websites that sell woodworking tools and allowing users to monitor, manage
