@@ -16,6 +16,7 @@ export {
   ElementAttribute,
   ProductRecordDataField,
   Prisma,
+  PrismaClient,
 } from "./generated";
 
 export type {

@@ -555,16 +555,24 @@ const metadata = {
                     name: "status",
                     type: "ProductStatus",
                     isOptional: true,
-                }, statusRecordedAt: {
-                    name: "statusRecordedAt",
+                }, statusLastUpdatedAt: {
+                    name: "statusLastUpdatedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, statusAsOf: {
+                    name: "statusAsOf",
                     type: "DateTime",
                     isOptional: true,
                 }, price: {
                     name: "price",
                     type: "Float",
                     isOptional: true,
-                }, priceRecordedAt: {
-                    name: "priceRecordedAt",
+                }, priceLastUpdatedAt: {
+                    name: "priceLastUpdatedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, priceAsOf: {
+                    name: "priceAsOf",
                     type: "DateTime",
                     isOptional: true,
                 }, category: {

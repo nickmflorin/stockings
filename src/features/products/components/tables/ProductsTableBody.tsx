@@ -37,10 +37,10 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
               return (
                 <div className="flex flex-col">
                   <ProductStatusText fontWeight="medium" fontSize="sm" status={datum.status} />
-                  {datum.statusRecordedAt && (
+                  {datum.statusAsOf && (
                     <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
                       {" "}
-                      as of <DateTimeText component="span" value={datum.statusRecordedAt} />
+                      as of <DateTimeText component="span" value={datum.statusAsOf} />
                     </Text>
                   )}
                 </div>
@@ -57,10 +57,10 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
                   <CurrencyText fontWeight="medium" fontSize="sm">
                     {datum.price}
                   </CurrencyText>
-                  {datum.priceRecordedAt && (
+                  {datum.priceAsOf && (
                     <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
                       {" "}
-                      as of <DateTimeText component="span" value={datum.priceRecordedAt} />
+                      as of <DateTimeText component="span" value={datum.priceAsOf} />
                     </Text>
                   )}
                 </div>

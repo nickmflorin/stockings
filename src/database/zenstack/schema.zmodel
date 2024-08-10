@@ -169,20 +169,22 @@ enum ProductSubCategory {
 }
 
 model Product extends ModelMeta {
-  createdBy        User                  @relation("createdProducts", fields: [createdById], references: [id])
-  updatedBy        User                  @relation("updatedProducts", fields: [updatedById], references: [id])
-  name             String?
-  slug             String                @unique
-  code             String?
-  imageSrc         String?
-  records          ProductRecord[]       @relation("records")
-  status           ProductStatus?
-  statusRecordedAt DateTime?
-  price            Float?
-  priceRecordedAt  DateTime?
-  category         ProductCategory
-  subCategories    ProductSubCategory[]
-  subscriptions    ProductSubscription[] @relation("subscriptions")
+  createdBy           User                  @relation("createdProducts", fields: [createdById], references: [id])
+  updatedBy           User                  @relation("updatedProducts", fields: [updatedById], references: [id])
+  name                String?
+  slug                String                @unique
+  code                String?
+  imageSrc            String?
+  records             ProductRecord[]       @relation("records")
+  status              ProductStatus?
+  statusLastUpdatedAt DateTime?
+  statusAsOf          DateTime?
+  price               Float?
+  priceLastUpdatedAt  DateTime?
+  priceAsOf           DateTime?
+  category            ProductCategory
+  subCategories       ProductSubCategory[]
+  subscriptions       ProductSubscription[] @relation("subscriptions")
 }
 
 enum PriceChangeEventCondition {

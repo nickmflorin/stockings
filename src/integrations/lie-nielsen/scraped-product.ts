@@ -26,6 +26,7 @@ import { humanizeList } from "~/lib/formatters";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
 import { type ProcessedScrapedThumbnail } from "./scraped-thumbnail";
+import { autoCorrectProductStatusDates, autoCorrectProductPriceDates } from "./util";
 
 /* const logExisting = (products: [ProcessedScrapedProduct, ProcessedScrapedProduct]) => {
      const differences = Differences(
@@ -307,8 +308,10 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
         | "price"
         | "subCategories"
         | "category"
-        | "statusRecordedAt"
-        | "priceRecordedAt"
+        | "statusAsOf"
+        | "statusLastUpdatedAt"
+        | "priceAsOf"
+        | "priceLastUpdatedAt"
       >
     > = {};
     /* The 'name' associated with the scraped product might not be present if there was an error
@@ -348,90 +351,62 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
     }
 
     if (this.data.price.value !== undefined) {
-      if (this.data.price.value !== product.price) {
+      updateData = { ...updateData, priceAsOf: new Date() };
+      const productPrice = product.price;
+      if (this.data.price.value !== productPrice) {
         updateData = {
           ...updateData,
           price: this.data.price.value,
-          priceRecordedAt: new Date(),
+          priceLastUpdatedAt: new Date(),
         };
+      } else {
         /* Note: At this point, the product price is guaranteed to be non-null.  This is because
            if it were 'null', the previous condition would have to be true, since
            'this.data.price.value' cannot be null. */
-      } else if (product.priceRecordedAt === null) {
-        /* The logic inside of this check is present to ensure that the data flow is somewhat
-           self-healing.  If the product has a defined price, it *should* have a value for the
-           date/time in which this price was recorded (i.e. 'priceRecordedAt').  If it does not,
-           it means that somehow, the data was corrupted - most likely due to data migrations,
-           seeding, or other database operations that may have inadvertently set the price without
-           setting the price recorded date.  In this case, we want to set the price recorded date
-           to better ensure data integrity, and will log a warning to ensure that we are aware that
-           this had occurred. */
-        logger.warn(
-          `Encountered product with ID '${product.id}' (slug = '${product.slug}') that has ` +
-            "a non-null price, but no price recorded date.  Setting the price recorded " +
-            "date to the current date.",
-          { product },
-        );
         updateData = {
           ...updateData,
-          priceRecordedAt: new Date(),
+          ...autoCorrectProductPriceDates({ ...product, price: productPrice }, [
+            "priceLastUpdatedAt",
+          ]),
         };
       }
-    } else if (product.priceRecordedAt === null && product.price !== null) {
-      // See comment above regarding "self-healing" data flow.
-      logger.warn(
-        `Encountered product with ID '${product.id}' (slug = '${product.slug}') that has ` +
-          "a non-null price, but no price recorded date.  Normally, this would not warrant " +
-          "updating the product, but we need to set the price recorded date to the current date.",
-        { product },
-      );
+    } else if (product.status !== null) {
       updateData = {
         ...updateData,
-        priceRecordedAt: new Date(),
+        ...autoCorrectProductPriceDates(
+          product as Omit<Product, "price"> & { readonly price: number },
+          ["priceAsOf", "priceLastUpdatedAt"],
+        ),
       };
     }
 
     if (this.data.status.value !== undefined) {
-      if (this.data.status.value !== product.status) {
+      updateData = { ...updateData, statusAsOf: new Date() };
+      const productStatus = product.status;
+      if (this.data.status.value !== productStatus) {
         updateData = {
           ...updateData,
           status: this.data.status.value,
-          statusRecordedAt: new Date(),
+          statusLastUpdatedAt: new Date(),
         };
+      } else {
         /* Note: At this point, the product status is guaranteed to be non-null.  This is because
            if it were 'null', the previous condition would have to be true, since
            'this.data.status.value' cannot be null. */
-      } else if (product.statusRecordedAt === null) {
-        /* The logic inside of this check is present to ensure that the data flow is somewhat
-           self-healing.  If the product has a defined status, it *should* have a value for the
-           date/time in which this status was recorded (i.e. 'statusRecordedAt').  If it does not,
-           it means that somehow, the data was corrupted - most likely due to data migrations,
-           seeding, or other database operations that may have inadvertently set the status without
-           setting the status recorded date.  In this case, we want to set the status recorded date
-           to better ensure data integrity, and will log a warning to ensure that we are aware that
-           this had occurred. */
-        logger.warn(
-          `Encountered product with ID '${product.id}' (slug = '${product.slug}') that has ` +
-            "a non-null status, but no status recorded date.  Setting the status recorded " +
-            "date to the current date.",
-          { product },
-        );
         updateData = {
           ...updateData,
-          statusRecordedAt: new Date(),
+          ...autoCorrectProductStatusDates({ ...product, status: productStatus }, [
+            "statusLastUpdatedAt",
+          ]),
         };
       }
-    } else if (product.statusRecordedAt === null && product.status !== null) {
-      // See comment above regarding "self-healing" data flow.
-      logger.warn(
-        `Encountered product with ID '${product.id}' (slug = '${product.slug}') that has ` +
-          "a non-null status, but no status recorded date.  Normally, this would not warrant " +
-          "updating the product, but we need to set the status recorded date to the current date.",
-        { product },
-      );
+    } else if (product.status !== null) {
       updateData = {
         ...updateData,
-        statusRecordedAt: new Date(),
+        ...autoCorrectProductStatusDates(
+          product as Omit<Product, "status"> & { readonly status: ProductStatus },
+          ["statusAsOf", "statusLastUpdatedAt"],
+        ),
       };
     }
 
@@ -451,14 +426,18 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
         code: this.data.code.value ?? null,
         slug: this.slug,
         status: this.data.status.value ?? null,
-        price: this.data.price.value ?? null,
+        price: this.data.price.value !== undefined ? this.data.price.value : null,
         imageSrc: this.data.imageSrc.value ?? null,
         subCategories: this.subCategories,
         category: this.category,
-        // Only set the 'priceRecordedAt' field if the price was in fact successfully scraped.
-        priceRecordedAt: this.data.price.value !== undefined ? new Date() : null,
-        // Only set the 'statusRecordedAt' field if the status was in fact successfully scraped.
-        statusRecordedAt: this.data.status.value !== undefined ? new Date() : null,
+        // Only set the 'priceAsOf' field if the price was in fact successfully scraped.
+        priceAsOf: this.data.price.value !== undefined ? new Date() : null,
+        // Only set the 'priceLastUpdatedAt' field if the price was in fact successfully scraped.
+        priceLastUpdatedAt: this.data.price.value !== undefined ? new Date() : null,
+        // Only set the 'statusAsOf' field if the status was in fact successfully scraped.
+        statusAsOf: this.data.status.value !== undefined ? new Date() : null,
+        // Only set the 'statusLastUpdatedAt' field if the status was in fact successfully scraped.
+        statusLastUpdatedAt: this.data.status.value !== undefined ? new Date() : null,
         createdBy: { connect: { id: ctx.user.id } },
         updatedBy: { connect: { id: ctx.user.id } },
       },

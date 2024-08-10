@@ -10,7 +10,7 @@
     "validate-node-version": "ts-node --project=./tsconfig.json src/support/enforce-node-version.ts",
     "manual-dev-env-setup": "dotenv -e .env -e .env.development -e .env.local -e .env.development.local -o",
     "manual-prod-env-setup": "dotenv -e .env -e .env.production -e .env.local -e .env.production.local -o",
-    "postinstall": "prisma generate",
+    "postinstall": "npx zenstack generate --no-compile",
     "preinstall": "dotenv -e .env -e .env.local -- ts-node --project=./tsconfig.json src/support/enforce-node-version.ts",
     "preadd": "dotenv -e .env -e .env .env.local -- ts-node --project=./tsconfig.json src/support/enforce-node-version.ts",
     "analyze-build": "cross-env ANALYZE_BUNDLE=true pnpm build",
