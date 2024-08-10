@@ -20,6 +20,10 @@ export type PopoverRenderProps = {
 export type FloatingContentRenderProps = {
   readonly params: Record<string, unknown>;
   readonly styles: CSSProperties;
+  readonly setIsOpen: (
+    v: boolean,
+    evt: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>,
+  ) => void;
   readonly ref: (node: HTMLElement | null) => void;
 };
 
@@ -66,9 +70,16 @@ export interface FloatingContext {
   readonly floatingStyles: React.CSSProperties;
   readonly context: RootFloatingContext;
   readonly refs: ExtendedRefs<ReferenceType>;
-  readonly setIsOpen: (v: boolean, evt: Event | React.MouseEvent<HTMLButtonElement>) => void;
+  readonly setIsOpen: (
+    v: boolean,
+    evt: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>,
+  ) => void;
 }
 
 export interface PopoverContext extends FloatingContext {
   readonly arrowRef: RefObject<SVGSVGElement>;
 }
+
+export type PopoverContentRenderFn = (props: FloatingContentRenderProps) => JSX.Element;
+
+export type PopoverContent = JSX.Element | PopoverContentRenderFn;

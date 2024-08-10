@@ -1,7 +1,7 @@
 @use "sass:map";
 
 @use "partials";
-// @use "./typography" as typography;
+@use "./typography" as typography;
 
 $badge-vertical-padding: 2px;
 $badge-horizontal-padding: 6px;
@@ -28,56 +28,12 @@ $badge-sizes: (
   vertical-align: middle;
 }
 
-@mixin badge-and-tag-content($prefix) {
-  @include inherit-font-properties();
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  align-items: center;
-  gap: 6px;
-
-  > .icon {
-    color: inherit;
-  }
-
-  > .#{$prefix}__text {
-    display: block;
-    // @include typography.truncate();
-    @include inherit-font-properties();
-  }
-
-  > .#{$prefix}__close-button {
-    color: inherit;
-    background-color: transparent;
-  }
-}
-
-@mixin badge-and-tag($prefix) {
-  text-decoration: none;
-  display: inline-flex;
-  -webkit-tap-highlight-color: transparent;
-  box-sizing: border-box;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  width: fit-content;
-  cursor: inherit;
-  overflow: hidden;
-  align-items: center;
-
-  > .#{$prefix}__content {
-    @include badge-and-tag-content($prefix);
-  }
-}
-
 $badge-default-radius: theme("borderRadius.md");
 $badge-default-size: "sm";
 
 @mixin badge-size($size) {
-  // font-size: typography.get-font-size("body", $size);
-  // line-height: typography.get-line-height("body", $size);
+  font-size: typography.get-font-size("body", $size);
+  line-height: typography.get-line-height("body", $size);
   $height: partials.mapget($badge-sizes, $size);
   height: $height;
 
@@ -99,16 +55,52 @@ $badge-default-size: "sm";
 
   // Allow the font-size to be overridden directly, independently of the height and line-height,
   // for each badge size.
-  // @include typography.with-font-sizes("body");
+  @include typography.with-font-sizes("body");
 }
 
 .badge {
-  @include badge-and-tag("badge");
   color: theme("colors.body");
   padding: $badge-vertical-padding $badge-horizontal-padding;
   background-color: theme("colors.gray.200");
   letter-spacing: 0.0156em;
   outline: 0.0625rem solid transparent;
+  text-decoration: none;
+  display: inline-flex;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: fit-content;
+  cursor: inherit;
+  overflow: hidden;
+  align-items: center;
+
+  > .badge__content {
+    @include inherit-font-properties();
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    align-items: center;
+    gap: 6px;
+
+    > .icon {
+      color: inherit;
+    }
+
+    > .badge__text {
+      display: block;
+      @include typography.truncate();
+      @include inherit-font-properties();
+    }
+
+    > .badge__close-button {
+      color: inherit;
+      background-color: transparent;
+    }
+  }
 
   @include partials.border-radius($badge-default-radius);
   @include partials.with-radius() using ($radii, $value) {
@@ -119,11 +111,11 @@ $badge-default-size: "sm";
 
   // Allow the font weight to be overridden with a prop.
   font-weight: theme("fontWeight.medium");
-  // @include typography.with-font-weights();
+  @include typography.with-font-weights();
 
   // Allow the font family to be overridden with a prop.
-  // font-family: typography.get-font-family("body");
-  // @include typography.with-font-families();
+  font-family: typography.get-font-family("body");
+  @include typography.with-font-families();
 
   @include badge-size($badge-default-size);
 

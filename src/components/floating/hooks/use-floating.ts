@@ -22,11 +22,15 @@ export interface UseFloatingConfig {
   readonly triggers?: types.FloatingTrigger[];
   readonly placement?: Placement;
   readonly middleware?: Array<Middleware | null | undefined | false>;
-  readonly onOpen?: (e: Event | React.MouseEvent<HTMLButtonElement>) => void;
-  readonly onClose?: (e: Event | React.MouseEvent<HTMLButtonElement>) => void;
+  readonly onOpen?: (
+    e: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void;
+  readonly onClose?: (
+    e: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void;
   readonly onOpenChange?: (
     value: boolean,
-    evt: Event | React.MouseEvent<HTMLButtonElement>,
+    evt: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void;
 }
 
@@ -49,7 +53,13 @@ export const useFloating = ({
   const isOpen = propIsOpen === undefined ? _isOpen : propIsOpen;
 
   const setIsOpen = useCallback(
-    (v: boolean, evt: Event | React.MouseEvent<HTMLButtonElement>) => {
+    (
+      v: boolean,
+      evt:
+        | Event
+        | React.MouseEvent<HTMLButtonElement>
+        | React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => {
       _setIsOpen(v);
       onOpenChange?.(v, evt);
       if (v === true) {

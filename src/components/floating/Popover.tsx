@@ -4,11 +4,7 @@ import { cloneElement, useMemo } from "react";
 import type * as types from "./types";
 
 import { usePopover, type UsePopoverConfig } from "./hooks/use-popover";
-import {
-  PopoverContentWrapper,
-  type PopoverContentWrapperProps,
-  type PopoverContent,
-} from "./PopoverContentWrapper";
+import { PopoverContentWrapper, type PopoverContentWrapperProps } from "./PopoverContentWrapper";
 
 export interface PopoverProps
   extends UsePopoverConfig,
@@ -36,7 +32,7 @@ export interface PopoverProps
    * usage.
    */
   readonly children: JSX.Element | ((params: types.PopoverRenderProps) => JSX.Element);
-  readonly content: PopoverContent;
+  readonly content: types.PopoverContent;
 }
 
 export const Popover = ({

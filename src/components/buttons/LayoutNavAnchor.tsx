@@ -24,7 +24,7 @@ export const LayoutNavAnchor = forwardRef<
   return (
     <Tooltip content={item.tooltipLabel} placement="right" inPortal>
       {({ ref, params }) => (
-        <IconButton<"a", LinkProps>
+        <IconButton.Solid<"a", LinkProps>
           {...props}
           {...params}
           component={Link}

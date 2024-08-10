@@ -1,3 +1,4 @@
+import { type FloatingContentRenderProps } from "~/components/floating";
 import { Popover, type PopoverProps } from "~/components/floating/Popover";
 import { PopoverContent } from "~/components/floating/PopoverContent";
 import type { ComponentProps } from "~/components/types";
@@ -20,7 +21,9 @@ export interface DropdownMenuProps
   > {
   readonly contentClassName?: ComponentProps["className"];
   readonly contentStyle?: ComponentProps["style"];
-  readonly content: JSX.Element;
+  readonly content:
+    | JSX.Element
+    | ((params: Pick<FloatingContentRenderProps, "setIsOpen">) => JSX.Element);
 }
 
 export const DropdownMenu = ({
@@ -38,14 +41,16 @@ export const DropdownMenu = ({
     placement={placement}
     offset={offset}
     triggers={triggers}
-    content={
+    content={({ ref, params, styles, setIsOpen }) => (
       <PopoverContent
-        style={contentStyle}
+        ref={ref}
+        {...params}
+        style={{ ...contentStyle, ...styles }}
         className={classNames("p-[0px] rounded-md overflow-hidden", contentClassName)}
       >
-        {content}
+        {typeof content === "function" ? content({ setIsOpen }) : content}
       </PopoverContent>
-    }
+    )}
   >
     {children}
   </Popover>

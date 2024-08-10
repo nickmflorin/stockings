@@ -26,7 +26,7 @@ export const menuItemHasSelectionIndicator = (
   indicator: MenuItemSelectionIndicator | undefined,
   check: MenuItemSelectionIndicatorType,
 ): boolean => {
-  const ind = indicator ?? ["checkbox", "highlight"];
+  const ind = indicator ?? ["highlight"];
   if (Array.isArray(ind)) {
     return Array.isArray(check) ? check.every(ind.includes) : ind.includes(check);
   }

@@ -14,8 +14,8 @@ import { DateTimeText } from "~/components/typography/DateTimeText";
 import { ProductsTableColumns, type ProductsTableColumnId } from "~/features/products";
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 
-const SubscribeCell = dynamic(() => import("./cells/SubscribeCell"));
-const UpdateSubscriptionCell = dynamic(() => import("./cells/UpdateSubscriptionCell"));
+const SubscriptionCell = dynamic(() => import("./cells/SubscriptionCell"));
+const ActionsCell = dynamic(() => import("./cells/ActionsCell"));
 
 export interface ProductsTableBodyProps {
   readonly data: ApiProduct[];
@@ -85,12 +85,14 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
             );
           },
         },
-        subscribe: {
+        subscription: {
           cellRenderer(datum) {
-            if (datum.subscription) {
-              return <UpdateSubscriptionCell product={datum} subscription={datum.subscription} />;
-            }
-            return <SubscribeCell product={datum} />;
+            return <SubscriptionCell product={datum} />;
+          },
+        },
+        actions: {
+          cellRenderer(datum) {
+            return <ActionsCell product={datum} />;
           },
         },
       },

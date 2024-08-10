@@ -8,15 +8,11 @@ import { type ComponentProps } from "~/components/types";
 import { Arrow } from "./Arrow";
 import { ConditionalPortal } from "./ConditionalPortal";
 
-export type PopoverContentRenderFn = (props: types.FloatingContentRenderProps) => JSX.Element;
-
-export type PopoverContent = JSX.Element | PopoverContentRenderFn;
-
 export interface PopoverContentWrapperProps {
   /**
    * The content that appears inside of the floating element.
    */
-  readonly children: PopoverContent;
+  readonly children: types.PopoverContent;
   readonly inPortal?: boolean;
   readonly isDisabled?: boolean;
   readonly withArrow?: boolean;
@@ -32,7 +28,7 @@ export const PopoverContentWrapper = ({
   isDisabled,
   withArrow = true,
   arrowClassName,
-  context: { floatingProps, floatingStyles, refs, arrowRef, context, isOpen },
+  context: { floatingProps, floatingStyles, refs, arrowRef, context, isOpen, setIsOpen },
 }: PopoverContentWrapperProps) => {
   const cloneAndRender = useCallback(
     (element: JSX.Element) => {
@@ -69,6 +65,7 @@ export const PopoverContentWrapper = ({
       if (typeof _children === "function") {
         return _children({
           ref: refs.setFloating,
+          setIsOpen,
           params: floatingProps,
           styles: floatingStyles,
         });
@@ -76,7 +73,16 @@ export const PopoverContentWrapper = ({
       return cloneAndRender(_children);
     }
     return <></>;
-  }, [_children, isOpen, isDisabled, floatingProps, floatingStyles, refs, cloneAndRender]);
+  }, [
+    _children,
+    isOpen,
+    isDisabled,
+    floatingProps,
+    floatingStyles,
+    refs,
+    setIsOpen,
+    cloneAndRender,
+  ]);
 
   if (isOpen && !isDisabled) {
     return <ConditionalPortal inPortal={inPortal}>{children}</ConditionalPortal>;
