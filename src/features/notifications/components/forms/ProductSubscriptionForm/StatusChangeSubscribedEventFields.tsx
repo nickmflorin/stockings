@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 
 import { useWatch } from "react-hook-form";
@@ -7,6 +6,7 @@ import { type ProductStatus } from "~/database/model";
 
 import { withOrdinalIndicator } from "~/lib/formatters";
 
+import { IconButton } from "~/components/buttons";
 import { Form, type FormInstance } from "~/components/forms/Form";
 import { CircleNumber } from "~/components/icons/CircleNumber";
 import { Collapse } from "~/components/structural/Collapse";
@@ -19,11 +19,13 @@ import { type ProductSubscriptionFormValues } from "../hooks";
 export interface StatusChangeSubscribedEventFieldsProps {
   readonly form: FormInstance<ProductSubscriptionFormValues>;
   readonly index: number;
+  readonly onRemove: () => void;
 }
 
 export const StatusChangeSubscribedEventFields = ({
   form,
   index,
+  onRemove,
 }: StatusChangeSubscribedEventFieldsProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -54,7 +56,19 @@ export const StatusChangeSubscribedEventFields = ({
   return (
     <Collapse
       isOpen={isOpen}
-      contentClassName="pl-2 mt-2"
+      contentClassName="pl-9 mt-2"
+      actions={
+        index !== 0
+          ? [
+              <IconButton.Transparent
+                key="0"
+                icon="trash-alt"
+                className="text-red-600 hover:text-red-700 hover:bg-transparent"
+                onClick={() => onRemove()}
+              />,
+            ]
+          : undefined
+      }
       title={
         <div className="flex flex-row items-center gap-2">
           <CircleNumber fontSize="xs" size="24px">

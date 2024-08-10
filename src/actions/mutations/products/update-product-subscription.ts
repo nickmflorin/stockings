@@ -69,26 +69,44 @@ export const updateProductSubscription = async (
     include: { priceChange: true, statusChange: { include: { conditions: true } } },
     data: {
       enabled,
+      updatedById: user.id,
       priceChange: enabled
-        ? { update: { enabled: priceChange.enabled, conditions: uniq(priceChange.conditions) } }
+        ? {
+            upsert: {
+              update: { enabled: priceChange.enabled, conditions: uniq(priceChange.conditions) },
+              create: { enabled: priceChange.enabled, conditions: uniq(priceChange.conditions) },
+            },
+          }
         : undefined,
       statusChange: enabled
         ? {
-            update: {
-              enabled: statusChange.enabled,
-              conditions: {
-                deleteMany: {
-                  id: { notIn: conditionsToUpdate.map(condition => condition.id) },
+            upsert: {
+              update: {
+                enabled: statusChange.enabled,
+                conditions: {
+                  deleteMany: {
+                    id: { notIn: conditionsToUpdate.map(condition => condition.id) },
+                  },
+                  createMany: {
+                    data: statusChange.conditions
+                      .filter(condition => condition.id === undefined)
+                      .map(conditionToData),
+                  },
+                  updateMany: conditionsToUpdate.map(condition => ({
+                    where: { id: condition.id },
+                    data: conditionToData(condition),
+                  })),
                 },
-                createMany: {
-                  data: statusChange.conditions
-                    .filter(condition => condition.id === undefined)
-                    .map(conditionToData),
+              },
+              create: {
+                enabled: statusChange.enabled,
+                conditions: {
+                  createMany: {
+                    data: statusChange.conditions
+                      .filter(condition => condition.id === undefined)
+                      .map(conditionToData),
+                  },
                 },
-                updateMany: conditionsToUpdate.map(condition => ({
-                  where: { id: condition.id },
-                  data: conditionToData(condition),
-                })),
               },
             },
           }

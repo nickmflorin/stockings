@@ -2,6 +2,7 @@ import { useFieldArray } from "react-hook-form";
 
 import { PriceChangeEventCondition } from "~/database/model";
 
+import { Link } from "~/components/buttons";
 import { Form, type FormProps } from "~/components/forms/Form";
 import { MultiCheckbox } from "~/components/input/MultiCheckbox";
 import { ButtonFooter } from "~/components/structural/ButtonFooter";
@@ -28,7 +29,6 @@ export const ProductSubscriptionForm = ({ onCancel, ...props }: ProductSubscript
   return (
     <Form
       {...props}
-      onError={e => console.error(e)}
       contentClassName="gap-[12px]"
       footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
     >
@@ -38,9 +38,23 @@ export const ProductSubscriptionForm = ({ onCancel, ...props }: ProductSubscript
         field="statusChange.enabled"
         description="Notify me when the inventory status of a product changes."
       >
-        {fields.map((field, index) => (
-          <StatusChangeSubscribedEventFields key={field.id} form={props.form} index={index} />
-        ))}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            {fields.map((field, index) => (
+              <StatusChangeSubscribedEventFields
+                key={field.id}
+                form={props.form}
+                index={index}
+                onRemove={() => remove(index)}
+              />
+            ))}
+          </div>
+          <div className="flex flex-row items-center justify-end">
+            <Link element="button" onClick={() => append({ fromStatus: [], toStatus: [] })}>
+              Add Condition
+            </Link>
+          </div>
+        </div>
       </ProductSubscriptionFormSection>
       <ProductSubscriptionFormSection
         label="Price Change Notifications"
