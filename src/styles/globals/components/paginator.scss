@@ -1,0 +1,38 @@
+@use "./buttons" as buttons;
+
+.paginator {
+  width: 100%;
+
+  .mantine-Group-root {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
+
+    > button {
+      @include buttons.button-base();
+      @include buttons.button-size("button", "small");
+      @include buttons.button-color(
+        (
+          type: "button",
+          variant: "solid",
+          scheme: "secondary",
+        )
+      );
+      // @include buttons.button(
+      //   "button",
+      //   $size: "small",
+      //   $variant: "secondary",
+      //   $active-selector: '[data-active="true"]'
+      // );
+    }
+
+    > button:first-child {
+      margin-right: auto;
+    }
+
+    > button:last-child {
+      margin-left: auto;
+    }
+  }
+}

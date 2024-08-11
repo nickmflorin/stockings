@@ -51,6 +51,8 @@ let nextConfig = {
   },
   reactStrictMode: false,
   experimental: {
+    /* Need to update NextJS
+       ppr: "incremental", */
     optimizePackageImports: [
       "@mantine/core",
       "@mantine/hooks",

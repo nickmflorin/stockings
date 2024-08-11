@@ -2,6 +2,9 @@ import { type ReactNode } from "react";
 
 import { Layout } from "~/components/layout/Layout";
 
+/* Need to update NextJS
+   export const experimental_ppr = true; */
+
 interface AuthenticatedLayoutProps {
   readonly children: ReactNode;
 }

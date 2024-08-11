@@ -12,7 +12,13 @@ const ClientProductsTableBody = dynamic(
   { loading: () => <Loading isLoading component="tbody" /> },
 );
 
-export const ProductsTableBody = async (): Promise<JSX.Element> => {
+export interface ProductsTableBodyProps {
+  readonly search: string;
+}
+
+export const ProductsTableBody = async ({
+  search,
+}: ProductsTableBodyProps): Promise<JSX.Element> => {
   const { user } = await getAuthedUser();
 
   if (!user) {
@@ -21,7 +27,7 @@ export const ProductsTableBody = async (): Promise<JSX.Element> => {
   }
 
   const products = await fetchProducts({
-    filters: { categories: [], subCategories: [], search: "", statuses: [] },
+    filters: { categories: [], subCategories: [], search, statuses: [] },
     ordering: { field: "name", order: "asc" },
     page: 1,
   });
