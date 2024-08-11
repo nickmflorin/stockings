@@ -37,12 +37,15 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
     <ProductsTableView
       searchBar={<ProductsTableSearchBar />}
       pagination={
-        <Suspense key={JSON.stringify(filters)} fallback={<PaginatorPlaceholder />}>
+        <Suspense key={JSON.stringify(filters) + String(page)} fallback={<PaginatorPlaceholder />}>
           <ProductsTablePaginator filters={filters} />
         </Suspense>
       }
     >
-      <Suspense key={JSON.stringify(filters)} fallback={<Loading isLoading component="tbody" />}>
+      <Suspense
+        key={JSON.stringify(filters) + String(page)}
+        fallback={<Loading isLoading component="tbody" />}
+      >
         <ProductsTableBody filters={filters} page={page} />
       </Suspense>
     </ProductsTableView>
