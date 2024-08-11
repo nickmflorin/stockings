@@ -6,6 +6,7 @@ import { getAuthedUser } from "~/application/auth/server";
 import { fetchProducts } from "~/actions/fetches/products";
 
 import { Loading } from "~/components/loading/Loading";
+import { type ProductsTableFilters } from "~/features/products";
 
 const ClientProductsTableBody = dynamic(
   () => import("~/features/products/components/tables/ProductsTableBody"),
@@ -13,11 +14,13 @@ const ClientProductsTableBody = dynamic(
 );
 
 export interface ProductsTableBodyProps {
-  readonly search: string;
+  readonly filters: ProductsTableFilters;
+  readonly page: number;
 }
 
 export const ProductsTableBody = async ({
-  search,
+  filters,
+  page,
 }: ProductsTableBodyProps): Promise<JSX.Element> => {
   const { user } = await getAuthedUser();
 
@@ -27,9 +30,9 @@ export const ProductsTableBody = async ({
   }
 
   const products = await fetchProducts({
-    filters: { categories: [], subCategories: [], search, statuses: [] },
+    filters,
     ordering: { field: "name", order: "asc" },
-    page: 1,
+    page,
   });
   return <ClientProductsTableBody data={products} />;
 };

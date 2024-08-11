@@ -152,9 +152,8 @@ export const useSelectValue = <V extends AllowedSelectValue, B extends SelectBeh
          type Controlled if the Select is being used in a controlled fashion. */
       if (!isControlled) {
         _setValue(updated);
-      } else {
-        onChange?.(updated);
       }
+      onChange?.(updated);
       return onAction(event, updated, params);
     },
     [value, isControlled, _setValue, onAction, onChange],

@@ -5,12 +5,10 @@ import { Text, type TextProps, type TextComponent } from "~/components/typograph
 
 export type ProductStatusTextProps<C extends TextComponent> = Omit<TextProps<C>, "children"> & {
   readonly status: ProductStatus;
-  readonly isDisabled?: boolean;
 };
 
 export const ProductStatusText = <C extends TextComponent>({
   status,
-  isDisabled,
   ...props
 }: ProductStatusTextProps<C>): JSX.Element => (
   <Text
@@ -20,8 +18,7 @@ export const ProductStatusText = <C extends TextComponent>({
     {...props}
     className={classNames(
       {
-        [ProductStatuses.getModel(status).textColorClassName]: !isDisabled,
-        "text-disabled": isDisabled,
+        [ProductStatuses.getModel(status).textColorClassName]: !props.isDisabled,
       },
       props.className,
     )}

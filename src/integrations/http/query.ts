@@ -89,11 +89,11 @@ export const pruneQueryParams = (
   return pruneObj(query);
 };
 
-export const parseQueryParams = (value: string) => qs.parse(value, { parseArrays: true });
+export const parseQueryParams = (value: string) => qs.parse(value, { allowEmptyArrays: true });
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export const stringifyQueryParams = (query: any) =>
-  qs.stringify(query, { arrayFormat: "brackets" });
+  qs.stringify(query, { allowEmptyArrays: true, arrayFormat: "comma" });
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 type QueryParamsObjFieldDefinition<V = any> = { schema?: z.ZodType<V>; defaultValue?: V };

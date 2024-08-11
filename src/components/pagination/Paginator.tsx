@@ -45,8 +45,6 @@ export const Paginator = ({ count, pageSize = 10, ...props }: PaginatorProps) =>
     [pathname, searchParams, replace],
   );
 
-  console.log({ activePage, total: Math.max(1, Math.ceil(count / clamp(pageSize, 1, 100))) });
-
   return (
     <Pagination
       className={classNames("paginator", props.className)}

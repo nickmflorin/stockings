@@ -93,12 +93,6 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
     const innerRef = useRef<Omit<types.SelectInstance, "focusInput"> | null>(null);
     const innerInputRef = useRef<BasicSelectInputInstance | null>(null);
 
-    useImperativeHandle(ref, () => ({
-      focusInput: () => innerInputRef.current?.focus(),
-      setOpen: (v: boolean) => innerRef.current?.setOpen(v),
-      setLoading: (v: boolean) => innerRef.current?.setLoading(v),
-    }));
-
     const { value, clear, ...managed } = useSelectModelValue<M, O>({
       initialValue,
       __private_controlled_value__: _propValue,
@@ -115,6 +109,13 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
         }
       },
     });
+
+    useImperativeHandle(ref, () => ({
+      clear,
+      focusInput: () => innerInputRef.current?.focus(),
+      setOpen: (v: boolean) => innerRef.current?.setOpen(v),
+      setLoading: (v: boolean) => innerRef.current?.setLoading(v),
+    }));
 
     const defaultChipsCanDeselect =
       options.behavior === types.SelectBehaviorTypes.MULTI ? true : false;

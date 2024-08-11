@@ -6,13 +6,14 @@ import { PAGE_SIZES } from "~/actions";
 import { fetchProductsCount } from "~/actions/fetches/products";
 
 import { Paginator } from "~/components/pagination/Paginator";
+import { type ProductsTableFilters } from "~/features/products";
 
 export interface ProductsTablePaginatorProps {
-  readonly search: string;
+  readonly filters: ProductsTableFilters;
 }
 
 export const ProductsTablePaginator = async ({
-  search,
+  filters,
 }: ProductsTablePaginatorProps): Promise<JSX.Element> => {
   const { user } = await getAuthedUser();
 
@@ -21,9 +22,6 @@ export const ProductsTablePaginator = async ({
     return redirect("/sign-in");
   }
 
-  const count = await fetchProductsCount({
-    filters: { categories: [], subCategories: [], search, statuses: [] },
-  });
-  console.log({ count });
+  const count = await fetchProductsCount({ filters });
   return <Paginator count={count} pageSize={PAGE_SIZES.product} />;
 };

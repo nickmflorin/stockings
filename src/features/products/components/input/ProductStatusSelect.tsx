@@ -1,6 +1,8 @@
+import { forwardRef, type ForwardedRef } from "react";
+
 import { ProductStatuses, type ProductStatus } from "~/database/model";
 
-import type { SelectBehaviorType } from "~/components/input/select";
+import type { SelectBehaviorType, SelectInstance } from "~/components/input/select";
 import { DataSelect, type DataSelectProps } from "~/components/input/select/DataSelect";
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 
@@ -17,18 +19,27 @@ export interface ProductStatusSelectProps<B extends SelectBehaviorType>
   readonly disabledStatuses?: ProductStatus[];
 }
 
-export const ProductStatusSelect = <B extends SelectBehaviorType>({
-  behavior,
-  disabledStatuses,
-  ...props
-}: ProductStatusSelectProps<B>): JSX.Element => (
-  <DataSelect<M, { behavior: B; getItemValue: typeof getItemValue }>
-    {...props}
-    data={[...ProductStatuses.models]}
-    itemIsDisabled={m => disabledStatuses?.includes(m.value) ?? false}
-    options={{ behavior, getItemValue }}
-    itemRenderer={(m, { isDisabled }) => (
-      <ProductStatusText status={m.value} isDisabled={isDisabled} />
-    )}
-  />
-);
+export const ProductStatusSelect = forwardRef<
+  SelectInstance,
+  ProductStatusSelectProps<SelectBehaviorType>
+>(
+  <B extends SelectBehaviorType>(
+    { behavior, disabledStatuses, ...props }: ProductStatusSelectProps<B>,
+    ref: ForwardedRef<SelectInstance>,
+  ): JSX.Element => (
+    <DataSelect<M, { behavior: B; getItemValue: typeof getItemValue }>
+      {...props}
+      ref={ref}
+      data={[...ProductStatuses.models]}
+      itemIsDisabled={m => disabledStatuses?.includes(m.value) ?? false}
+      options={{ behavior, getItemValue }}
+      itemRenderer={(m, { isDisabled }) => (
+        <ProductStatusText status={m.value} isDisabled={isDisabled} />
+      )}
+    />
+  ),
+) as {
+  <B extends SelectBehaviorType>(
+    props: ProductStatusSelectProps<B> & { readonly ref?: ForwardedRef<SelectInstance> },
+  ): JSX.Element;
+};

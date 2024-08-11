@@ -1,8 +1,14 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
+import { z } from "zod";
+
+import { parseFilters } from "~/lib/filters";
+
 import { Loading } from "~/components/loading/Loading";
 import { PaginatorPlaceholder } from "~/components/pagination/PaginatorPlaceholder";
+/* eslint-disable-next-line max-len */
+import { ProductsTableFiltersOptions, ProductsTableFiltersSchemas } from "~/features/products";
 /* eslint-disable-next-line max-len */
 import { ProductsTableSearchBar } from "~/features/products/components/tables/ProductsTableSearchBar";
 
@@ -19,19 +25,25 @@ export interface ProductsTablePageProps {
 }
 
 export default function ProductsTablePage({ searchParams }: ProductsTablePageProps) {
-  const search = searchParams?.search || "";
+  const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
+
+  const filters = parseFilters(
+    searchParams,
+    ProductsTableFiltersSchemas,
+    ProductsTableFiltersOptions,
+  );
 
   return (
     <ProductsTableView
       searchBar={<ProductsTableSearchBar />}
       pagination={
-        <Suspense key={search} fallback={<PaginatorPlaceholder />}>
-          <ProductsTablePaginator search={search} />
+        <Suspense key={JSON.stringify(filters)} fallback={<PaginatorPlaceholder />}>
+          <ProductsTablePaginator filters={filters} />
         </Suspense>
       }
     >
-      <Suspense key={search} fallback={<Loading isLoading component="tbody" />}>
-        <ProductsTableBody search={search} />
+      <Suspense key={JSON.stringify(filters)} fallback={<Loading isLoading component="tbody" />}>
+        <ProductsTableBody filters={filters} page={page} />
       </Suspense>
     </ProductsTableView>
   );

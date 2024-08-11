@@ -29,6 +29,7 @@ export type TextProps<C extends TextComponent> = TypographyCharacteristics &
     readonly component?: TextComponent;
     readonly flex?: boolean;
     readonly inherit?: boolean;
+    readonly isDisabled?: boolean;
   };
 
 export const Text = forwardRef<HTMLDivElement, TextProps<TextComponent>>(
@@ -37,6 +38,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps<TextComponent>>(
       component = "div",
       flex = false,
       inherit = false,
+      isDisabled = false,
       fontSize,
       fontWeight,
       transform,
@@ -61,7 +63,11 @@ export const Text = forwardRef<HTMLDivElement, TextProps<TextComponent>>(
       ...props,
       className: classNames(
         "body",
-        { "body--inherit": inherit, ["flex flex-row items-center"]: flex },
+        {
+          "body--inherit": inherit,
+          ["flex flex-row items-center"]: flex,
+          "text-disabled": isDisabled,
+        },
         getTypographyClassName({
           fontSize,
           fontWeight,

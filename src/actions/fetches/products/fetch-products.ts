@@ -5,7 +5,7 @@ import { db } from "~/database";
 import type { ApiProduct } from "~/database/model";
 import { conditionalFilters } from "~/database/util";
 
-import { constructTableSearchClause } from "~/actions";
+import { constructTableSearchClause, PAGE_SIZES } from "~/actions";
 
 import { type ProductsTableControls } from "~/features/products";
 
@@ -13,7 +13,6 @@ import { convertToPlainObject } from "~/api/serialization";
 
 const filtersClause = (filters: Partial<ProductsTableControls["filters"]>) =>
   conditionalFilters([
-    filters.search ? constructTableSearchClause("product", filters.search) : undefined,
     filters.categories && filters.categories.length !== 0
       ? { category: { in: filters.categories } }
       : undefined,
@@ -27,12 +26,18 @@ const filtersClause = (filters: Partial<ProductsTableControls["filters"]>) =>
 
 const whereClause = ({ filters }: Pick<ProductsTableControls, "filters">) => {
   const clause = filtersClause(filters);
-  if (clause.length === 0) {
-    return undefined;
+  if (filters.search && clause.length !== 0) {
+    return {
+      AND: [constructTableSearchClause("product", filters.search), { OR: clause }],
+    };
+  } else if (clause.length === 0 && filters.search) {
+    return constructTableSearchClause("product", filters.search);
+  } else if (clause.length !== 0 && !filters.search) {
+    return {
+      OR: clause,
+    };
   }
-  return {
-    OR: clause,
-  };
+  return undefined;
 };
 
 export const fetchProductsCount = cache(
@@ -50,6 +55,8 @@ export const fetchProducts = cache(
     const data = await db.product.findMany({
       where: whereClause({ filters }),
       orderBy: [{ [ordering.field]: ordering.order }],
+      skip: PAGE_SIZES.product * (Math.max(1, page) - 1),
+      take: PAGE_SIZES.product,
       include: {
         subscriptions: {
           where: { userId: user.id },

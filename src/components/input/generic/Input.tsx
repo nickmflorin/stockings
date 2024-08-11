@@ -97,6 +97,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(
             <IconButton.Transparent
               icon={clearIcon}
               key={actions.length + 1}
+              radius="full"
               isDisabled={isClearDisabled}
               element="button"
               className="text-gray-400 h-full aspect-square w-auto p-[4px] hover:text-gray-500"
