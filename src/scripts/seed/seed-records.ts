@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 
-import { type Transaction } from "~/database";
 import { type Product, type ProductRecord, ProductStatus } from "~/database/model";
 import { logger } from "~/internal/logger";
 
@@ -8,88 +7,114 @@ import { randomInt, randomBoolean, selectAtRandomFrequency } from "~/lib/random"
 
 import { type SeedContext } from "../context";
 
-const MAX_ITERATIONS = 2000;
-const MIN_ITERATIONS = 500;
+const MIN_DAYS_LOOKBACK = 100;
+const MAX_DAYS_LOOKBACK = 200;
 
-const MIN_TIME_DELTA_MINUTES = 1;
-const MAX_TIME_DELTA_MINUTES = 5;
+const MIN_RECORDS_PER_HOUR = 10;
+const MAX_RECORDS_PER_HOUR = 20;
+
+const MINUTES_IN_DAY = 24 * 60;
+
+const getIterations = () => {
+  const recordsPerHour = randomInt(MIN_RECORDS_PER_HOUR, MAX_RECORDS_PER_HOUR);
+  const recordsPerDay = recordsPerHour * 24;
+  const deltaMinutes = Math.floor(MINUTES_IN_DAY / recordsPerDay);
+  if (deltaMinutes < 1) {
+    throw new Error(`Configuration resulted in an invalid minutes delta of '${deltaMinutes}'!`);
+  }
+  const daysLookback = randomInt(MIN_DAYS_LOOKBACK, MAX_DAYS_LOOKBACK);
+  return [daysLookback * recordsPerDay, { minutes: deltaMinutes }] as const;
+};
 
 const MIN_PRICE = 100;
 const MAX_PRICE = 750;
 
-const MIN_PRICE_DELTA_PCT = 0.02;
-const MAX_PRICE_DELTA_PCT = 0.05;
+const MIN_PRICE_DELTA_PCT = 2;
+const MAX_PRICE_DELTA_PCT = 5;
 
-const modifyPrice = (price: number | null) => {
-  const p = price ?? randomInt(MIN_PRICE, MAX_PRICE);
-  const positiveChange = randomBoolean({ positiveFrequency: 0.5 });
-  const pctChange = randomInt(MIN_PRICE_DELTA_PCT, MAX_PRICE_DELTA_PCT) * p;
-  if (positiveChange) {
-    return p + pctChange;
+const modifyPrice = (runningData: RecordDatum): RecordDatum => {
+  const shouldModify = randomBoolean({ positiveFrequency: 0.1 });
+  if (!shouldModify) {
+    return runningData;
   }
-  return p - pctChange;
+  const p = runningData.price ?? randomInt(MIN_PRICE, MAX_PRICE);
+  if (randomBoolean({ positiveFrequency: 0.5 })) {
+    return {
+      ...runningData,
+      price:
+        p +
+        parseInt(((randomInt(MIN_PRICE_DELTA_PCT, MAX_PRICE_DELTA_PCT) / 100.0) * p).toFixed(0)),
+    };
+  }
+  return {
+    ...runningData,
+    price: Math.max(
+      0,
+      p - parseInt(((randomInt(MIN_PRICE_DELTA_PCT, MAX_PRICE_DELTA_PCT) / 100.0) * p).toFixed(0)),
+    ),
+  };
 };
 
-type RunningData = { createdAt: DateTime; price: number | null; status: ProductStatus | null };
+const modifyStatus = (runningData: RecordDatum): RecordDatum => {
+  const shouldModify = randomBoolean({ positiveFrequency: 0.1 });
+  if (!shouldModify) {
+    return runningData;
+  }
+  return {
+    ...runningData,
+    status: selectAtRandomFrequency(
+      [
+        { value: ProductStatus.AvailableForBackorder, frequency: 0.05 },
+        { value: ProductStatus.InStock, frequency: 0.4 },
+        { value: ProductStatus.NotListed, frequency: 0.05 },
+        { value: ProductStatus.OutOfStock, frequency: 0.5 },
+      ].filter(({ value }) => value !== runningData.status),
+    ),
+  };
+};
 
-export const seedRecords = async (tx: Transaction, product: Product, { user }: SeedContext) => {
-  const numIterations = randomInt(MIN_ITERATIONS, MAX_ITERATIONS);
+const modifyDatum = (runningData: RecordDatum, delta: { minutes: number }): RecordDatum => ({
+  ...modifyStatus(modifyPrice(runningData)),
+  createdAt: runningData.createdAt.minus(delta),
+});
 
-  const runningData = {
+export type RecordDatum = Pick<
+  ProductRecord,
+  "status" | "price" | "productId" | "createdById" | "updatedById"
+> & {
+  readonly createdAt: DateTime;
+};
+
+export const seedRecords = (product: Product, { user }: SeedContext): RecordDatum[] => {
+  const initialDatum: RecordDatum = {
     createdAt: DateTime.fromJSDate(product.createdAt),
     price: product.price,
     status: product.status,
+    productId: product.id,
+    createdById: user.id,
+    updatedById: user.id,
   };
 
-  const dataToCreate: Pick<ProductRecord, "status" | "price" | "createdAt">[] = [];
-
+  const [numIterations, delta] = getIterations();
   logger.info(
-    `Iterating '${numIterations}' times for record generation of product '${product.slug}'!`,
+    `Iterating '${numIterations}' times, with a delta of ${delta.minutes} minute(s) for ` +
+      `record generation of product '${product.slug}'!`,
   );
-  for (let i = 0; i < numIterations; i++) {
-    const newRunningData: RunningData = {} as RunningData;
 
-    newRunningData.createdAt = runningData.createdAt.minus({
-      minutes: randomInt(MIN_TIME_DELTA_MINUTES, MAX_TIME_DELTA_MINUTES),
-    });
-    const fieldChanges = {
-      price: randomBoolean({ positiveFrequency: 0.1 }),
-      status: randomBoolean({ positiveFrequency: 0.1 }),
-    };
-
-    if (fieldChanges.price) {
-      newRunningData.price = modifyPrice(runningData.price);
-    } else {
-      newRunningData.price = product.price;
+  return Array.from({
+    length: numIterations,
+  }).reduce((prev: RecordDatum[]) => {
+    const last = prev.length === 0 ? { ...initialDatum } : prev[prev.length - 1];
+    const modified = modifyDatum(last, delta);
+    if (modified.status !== last.status || modified.price !== last.price) {
+      return [
+        ...prev,
+        {
+          ...last,
+          ...modified,
+        },
+      ];
     }
-
-    if (fieldChanges.status) {
-      newRunningData.status = selectAtRandomFrequency(
-        [
-          { value: ProductStatus.AvailableForBackorder, frequency: 0.05 },
-          { value: ProductStatus.InStock, frequency: 0.4 },
-          { value: ProductStatus.NotListed, frequency: 0.05 },
-          { value: ProductStatus.OutOfStock, frequency: 0.5 },
-        ].filter(({ value }) => value !== runningData.status),
-      );
-    } else {
-      newRunningData.status = product.status;
-    }
-
-    if (product.status !== newRunningData.status || product.price !== newRunningData.price) {
-      dataToCreate.push({
-        ...newRunningData,
-        createdAt: newRunningData.createdAt.toJSDate(),
-      });
-    }
-  }
-  logger.info(`Creating '${dataToCreate.length}' records for product '${product.slug}'...`);
-  return await tx.productRecord.createMany({
-    data: dataToCreate.map(data => ({
-      ...data,
-      productId: product.id,
-      createdById: user.id,
-      updatedById: user.id,
-    })),
-  });
+    return prev;
+  }, [] as RecordDatum[]);
 };

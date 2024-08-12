@@ -37,6 +37,7 @@
     "javscriptreact"
   ],
   "eslint.format.enable": true,
+  "eslint.useFlatConfig": false,
   "eslint.execArgv": ["--max-old-space-size=16384"],
   "eslint.debug": false,
   "eslint.codeActionsOnSave.rules": [

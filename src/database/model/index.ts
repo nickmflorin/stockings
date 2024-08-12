@@ -1,5 +1,6 @@
 export * from "./brand";
 export * from "./categories";
+export * from "./charting";
 export * from "./dom";
 export * from "./errors";
 export * from "./inclusion";

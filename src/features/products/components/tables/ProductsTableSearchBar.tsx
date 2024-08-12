@@ -2,9 +2,12 @@
 import { useRef } from "react";
 
 import { useDebouncedCallback } from "use-debounce";
-import { z } from "zod";
 
-import { ProductCategory, ProductSubCategory, ProductStatus } from "~/database/model";
+import {
+  type ProductCategory,
+  type ProductSubCategory,
+  type ProductStatus,
+} from "~/database/model";
 
 import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
@@ -16,8 +19,11 @@ import { ProductCategorySelect } from "~/features/products/components/input/Prod
 import { ProductStatusSelect } from "~/features/products/components/input/ProductStatusSelect";
 /* eslint-disable-next-line max-len */
 import { ProductSubCategorySelect } from "~/features/products/components/input/ProductSubCategorySelect";
+import {
+  ProductsTableFiltersOptions,
+  ProductsTableFiltersSchemas,
+} from "~/features/products/types";
 import { useFilters } from "~/hooks/use-filters";
-import { ProductsTableFiltersOptions, ProductsTableFiltersSchemas } from "~/features/products/types";
 
 export interface ProductsTableSearchBarProps extends ComponentProps {}
 
@@ -29,7 +35,7 @@ export const ProductsTableSearchBar = (props: ProductsTableSearchBarProps): JSX.
 
   const [filters, updateFilters] = useFilters({
     schemas: ProductsTableFiltersSchemas,
-    options: ProductsTableFiltersOptions
+    options: ProductsTableFiltersOptions,
   });
 
   const onSearch = useDebouncedCallback((search: string) => {

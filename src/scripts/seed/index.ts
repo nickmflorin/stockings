@@ -11,12 +11,7 @@ logger.level = LogLevel.INFO;
 async function main() {
   logger.info("Seeding Products...");
   const ctx = await getScriptContext({ upsertUser: true });
-  await db.$transaction(
-    async tx => {
-      await seedProducts(tx, ctx);
-    },
-    { timeout: 50000 },
-  );
+  await seedProducts(ctx);
 }
 
 main()
