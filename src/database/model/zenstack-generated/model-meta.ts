@@ -82,6 +82,27 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "subscriptions" }] }],
                     backLink: 'user',
+                }, createdNotifications: {
+                    name: "createdNotifications",
+                    type: "Notification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdNotifications" }] }],
+                    backLink: 'createdBy',
+                }, updatedNotifications: {
+                    name: "updatedNotifications",
+                    type: "Notification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedNotifications" }] }],
+                    backLink: 'updatedBy',
+                }, notifications: {
+                    name: "notifications",
+                    type: "Notification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'user',
                 },
             }
             , uniqueConstraints: {
@@ -474,6 +495,24 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "errors" }] }],
                     backLink: 'record',
+                }, isProcessed: {
+                    name: "isProcessed",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, statusChangeNotifications: {
+                    name: "statusChangeNotifications",
+                    type: "StatusChangeNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "statusChangeNotifications" }] }],
+                    backLink: 'productRecord',
+                }, priceChangeNotifications: {
+                    name: "priceChangeNotifications",
+                    type: "PriceChangeNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "priceChangeNotifications" }] }],
+                    backLink: 'productRecord',
                 },
             }
             , uniqueConstraints: {
@@ -588,6 +627,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "subscriptions" }] }],
+                    backLink: 'product',
+                }, newProductNotifications: {
+                    name: "newProductNotifications",
+                    type: "NewProductNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "newProductNotifications" }] }],
                     backLink: 'product',
                 },
             }
@@ -841,6 +887,375 @@ const metadata = {
             }
             ,
             attributes: [{ "name": "@@unique", "args": [] }],
+        }
+        ,
+        notification: {
+            name: 'Notification', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdNotifications" }] }],
+                    backLink: 'createdNotifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "createdById" },
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedNotifications" }] }],
+                    backLink: 'updatedNotifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'notifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, notificationType: {
+                    name: "notificationType",
+                    type: "NotificationType",
+                }, state: {
+                    name: "state",
+                    type: "NotificationState",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+            attributes: [{ "name": "@@delegate", "args": [] }], discriminator: "notificationType",
+        }
+        ,
+        priceChangeNotification: {
+            name: 'PriceChangeNotification', baseTypes: ['Notification'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "Notification",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "Notification",
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                    inheritedFrom: "Notification",
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                    inheritedFrom: "Notification",
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdNotifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "createdById" },
+                    inheritedFrom: "Notification",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedNotifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                    inheritedFrom: "Notification",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "Notification",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                    inheritedFrom: "Notification",
+                }, notificationType: {
+                    name: "notificationType",
+                    type: "NotificationType",
+                    inheritedFrom: "Notification",
+                }, state: {
+                    name: "state",
+                    type: "NotificationState",
+                    inheritedFrom: "Notification",
+                }, productRecordId: {
+                    name: "productRecordId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'productRecord',
+                }, productRecord: {
+                    name: "productRecord",
+                    type: "ProductRecord",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "priceChangeNotifications" }] }],
+                    backLink: 'priceChangeNotifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "productRecordId" },
+                }, condition: {
+                    name: "condition",
+                    type: "PriceChangeEventCondition",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        statusChangeNotification: {
+            name: 'StatusChangeNotification', baseTypes: ['Notification'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "Notification",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "Notification",
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                    inheritedFrom: "Notification",
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                    inheritedFrom: "Notification",
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdNotifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "createdById" },
+                    inheritedFrom: "Notification",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedNotifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                    inheritedFrom: "Notification",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "Notification",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                    inheritedFrom: "Notification",
+                }, notificationType: {
+                    name: "notificationType",
+                    type: "NotificationType",
+                    inheritedFrom: "Notification",
+                }, state: {
+                    name: "state",
+                    type: "NotificationState",
+                    inheritedFrom: "Notification",
+                }, productRecordId: {
+                    name: "productRecordId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'productRecord',
+                }, productRecord: {
+                    name: "productRecord",
+                    type: "ProductRecord",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "statusChangeNotifications" }] }],
+                    backLink: 'statusChangeNotifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "productRecordId" },
+                }, fromStatus: {
+                    name: "fromStatus",
+                    type: "ProductStatus",
+                }, toStatus: {
+                    name: "toStatus",
+                    type: "ProductStatus",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        newProductNotification: {
+            name: 'NewProductNotification', baseTypes: ['Notification'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "Notification",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "Notification",
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                    inheritedFrom: "Notification",
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                    inheritedFrom: "Notification",
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdNotifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "createdById" },
+                    inheritedFrom: "Notification",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedNotifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                    inheritedFrom: "Notification",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "Notification",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                    inheritedFrom: "Notification",
+                }, notificationType: {
+                    name: "notificationType",
+                    type: "NotificationType",
+                    inheritedFrom: "Notification",
+                }, state: {
+                    name: "state",
+                    type: "NotificationState",
+                    inheritedFrom: "Notification",
+                }, productId: {
+                    name: "productId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'product',
+                }, product: {
+                    name: "product",
+                    type: "Product",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "newProductNotifications" }] }],
+                    backLink: 'newProductNotifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "productId" },
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
         }
         ,
     }

@@ -5,7 +5,7 @@ import { logger } from "~/internal/logger";
 
 import { randomInt, randomBoolean, selectAtRandomFrequency } from "~/lib/random";
 
-import { type SeedContext } from "../context";
+import { type ScriptContext } from "../context";
 
 const MIN_DAYS_LOOKBACK = 100;
 const MAX_DAYS_LOOKBACK = 200;
@@ -85,7 +85,7 @@ export type RecordDatum = Pick<
   readonly createdAt: DateTime;
 };
 
-export const seedRecords = (product: Product, { user }: SeedContext): RecordDatum[] => {
+export const seedRecords = (product: Product, { user }: ScriptContext): RecordDatum[] => {
   const initialDatum: RecordDatum = {
     createdAt: DateTime.fromJSDate(product.createdAt),
     price: product.price,

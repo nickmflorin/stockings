@@ -6,8 +6,9 @@ import {
   type User,
   ProductRecordDataField,
   type ScrapingErrorData,
+  createScrapingErrorData,
+  type ModelWithNonNullField,
 } from "~/database/model";
-import { createScrapingErrorData } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import {
@@ -20,8 +21,7 @@ import {
   BaseScrapedModel,
   ProcessedScrapedModel,
 } from "~/integrations/scraping";
-import { arraysHaveSameElements } from "~/lib/arrays";
-import { type DifferenceField, Differences } from "~/lib/differences";
+import { arraysHaveSameElements, walkBackwardsUntil } from "~/lib/arrays";
 import { humanizeList } from "~/lib/formatters";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
@@ -226,11 +226,6 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
   ScrapedProductConfig,
   readonly []
 > {
-  protected recordComparisonFields = ["price", "status"] as const satisfies DifferenceField<
-    ProductRecord,
-    IScrapedProductData
-  >[];
-
   public get thumbnail() {
     return this.options.thumbnail;
   }
@@ -280,21 +275,55 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
     checkScrapedProductInconsistencies(this);
   }
 
-  public compareToRecord(record: ProductRecord) {
-    type DiffData = {
-      [key in (typeof this.recordComparisonFields)[number]]: IScrapedProductData[key] | undefined;
-    };
-    const data = this.recordComparisonFields.reduce(
-      (prev: DiffData, curr: (typeof this.recordComparisonFields)[number]) => {
-        const v = this.data[curr];
-        if (v.value !== undefined) {
-          return { ...prev, [curr]: v.value };
-        }
-        return { ...prev, [curr]: undefined };
-      },
-      {} as DiffData,
+  public warrantsNewRecord(product: Product, historicalRecords: ProductRecord[]) {
+    /* A product should always have at least 1 record, but we still have to account for this
+       edge case. */
+    if (historicalRecords.length === 0) {
+      logger.warn(
+        `Creating a new recorded record for product '${product.slug}' because there are recorded ` +
+          "records for the product.",
+      );
+      return true;
+    } else if (!this.isValid) {
+      logger.info(
+        `Creating a new recorded record for product '${product.slug}' because the scraped product ` +
+          "is invalid.",
+      );
+      return true;
+    }
+    /* Note: If the latest record had errors, there will be undefined values for at least one of
+       the fields.  This is okay though - because if a previous value was undefined due to an error,
+       and the error was resolved, we want to add a new record with the resolved value.  Similarly,
+       if the previous value is not undefined, and the new value is undefined - there was an error,
+       and we want to add a new record to indicate that the field is now undefined due to the
+       error. */
+    const latestRecord = historicalRecords[historicalRecords.length - 1];
+
+    // Sort records in ascending order of their timestamp.
+    const sorted = historicalRecords.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    const latestRecordWithPrice = walkBackwardsUntil(
+      sorted,
+      (r): r is ModelWithNonNullField<typeof r, "price"> => r.price !== null,
     );
-    return Differences([record, data], this.recordComparisonFields);
+    if (
+      latestRecord.price === null ||
+      !latestRecordWithPrice ||
+      latestRecordWithPrice.price !== this.validatedData.price
+    ) {
+      return true;
+    }
+    const latestRecordWithStatus = walkBackwardsUntil(
+      sorted,
+      (r): r is ModelWithNonNullField<typeof r, "status"> => r.status !== null,
+    );
+    if (
+      latestRecord.status === null ||
+      !latestRecordWithStatus ||
+      latestRecordWithStatus.status !== this.validatedData.status
+    ) {
+      return true;
+    }
+    return false;
   }
 
   public compareToProduct(product: Product) {

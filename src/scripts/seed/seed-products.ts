@@ -7,7 +7,7 @@ import { type Product } from "~/database/model";
 import type { GetBatchResult } from "~/database/model/generated/runtime/library";
 import { logger } from "~/internal/logger";
 
-import { type SeedContext } from "../context";
+import { type ScriptContext } from "../context";
 
 import { seedRecords, type RecordDatum } from "./seed-records";
 
@@ -15,7 +15,7 @@ const BATCH_SIZE = 20;
 
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
-  ctx: SeedContext,
+  ctx: ScriptContext,
 ): Promise<[Product[], GetBatchResult]> =>
   await db.$transaction(
     async tx => {
@@ -43,7 +43,7 @@ const seedProductBatch = async (
     { timeout: 100000 },
   );
 
-export const seedProducts = async (ctx: SeedContext) => {
+export const seedProducts = async (ctx: ScriptContext) => {
   const batches = chunk(fixtures.products, BATCH_SIZE);
   for (let i = 0; i < batches.length; i++) {
     const [products, records] = await seedProductBatch(batches[i], ctx);

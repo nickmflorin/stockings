@@ -60,14 +60,21 @@ enum ProductSubCategory {
   AccessoryTools
 }
 
-enum PriceChangeEventType {
+enum PriceChangeEventCondition {
   PriceIncrease
   PriceDecrease
 }
 
-enum NotificationContentType {
+enum NotificationType {
+  NewProductNotification
   PriceChangeNotification
   StatusChangeNotification
+}
+
+enum NotificationState {
+  Pending
+  Sent
+  Failed
 }
 
 model User {
@@ -83,15 +90,21 @@ model User {
   updatedProducts                                       Product[]                  @relation("updatedProducts")
   createdProductRecords                                 ProductRecord[]            @relation("createdProductRecords")
   updatedProductRecords                                 ProductRecord[]            @relation("updatedProductRecords")
+  createdSubscriptions                                  ProductSubscription[]      @relation("createdSubscriptions")
+  updatedSubscriptions                                  ProductSubscription[]      @relation("updatedSubscriptions")
+  subscriptions                                         ProductSubscription[]      @relation("subscriptions")
   createdNotifications                                  Notification[]             @relation("createdNotifications")
   updatedNotifications                                  Notification[]             @relation("updatedNotifications")
   notifications                                         Notification[]             @relation("notifications")
   delegate_aux_User_createdNotifications_PriceChangeN_0 PriceChangeNotification[]  @relation("createdNotifications")
   delegate_aux_User_createdNotifications_StatusChange_0 StatusChangeNotification[] @relation("createdNotifications")
+  delegate_aux_User_createdNotifications_NewProductNo_0 NewProductNotification[]   @relation("createdNotifications")
   delegate_aux_User_updatedNotifications_PriceChangeN_0 PriceChangeNotification[]  @relation("updatedNotifications")
   delegate_aux_User_updatedNotifications_StatusChange_0 StatusChangeNotification[] @relation("updatedNotifications")
+  delegate_aux_User_updatedNotifications_NewProductNo_0 NewProductNotification[]   @relation("updatedNotifications")
   delegate_aux_User_notifications_PriceChangeNotifica_0 PriceChangeNotification[]  @relation("notifications")
   delegate_aux_User_notifications_StatusChangeNotific_0 StatusChangeNotification[] @relation("notifications")
+  delegate_aux_User_notifications_NewProductNotificat_0 NewProductNotification[]   @relation("notifications")
 }
 
 model HttpNetworkErrorData {
@@ -162,105 +175,159 @@ model ProductRecordError {
 }
 
 model ProductRecord {
-  id                    String                   @id() @default(uuid()) @db.Uuid()
-  createdAt             DateTime                 @default(now())
-  createdById           String                   @db.Uuid()
-  updatedAt             DateTime                 @updatedAt()
-  updatedById           String                   @db.Uuid()
-  timestamp             DateTime                 @default(now())
-  createdBy             User                     @relation("createdProductRecords", fields: [createdById], references: [id])
-  updatedBy             User                     @relation("updatedProductRecords", fields: [updatedById], references: [id])
-  product               Product                  @relation("records", fields: [productId], references: [id])
-  productId             String                   @db.Uuid()
-  price                 Float?
-  rawPrice              String?
-  status                ProductStatus?
-  wasManuallyCreated    Boolean                  @default(false)
-  manuallyChangedFields ProductRecordDataField[] @default([])
-  errors                ProductRecordError[]     @relation("errors")
+  id                        String                     @id() @default(uuid()) @db.Uuid()
+  createdAt                 DateTime                   @default(now())
+  updatedAt                 DateTime                   @updatedAt()
+  createdById               String                     @db.Uuid()
+  updatedById               String                     @db.Uuid()
+  timestamp                 DateTime                   @default(now())
+  createdBy                 User                       @relation("createdProductRecords", fields: [createdById], references: [id])
+  updatedBy                 User                       @relation("updatedProductRecords", fields: [updatedById], references: [id])
+  product                   Product                    @relation("records", fields: [productId], references: [id])
+  productId                 String                     @db.Uuid()
+  price                     Float?
+  rawPrice                  String?
+  status                    ProductStatus?
+  wasManuallyCreated        Boolean                    @default(false)
+  manuallyChangedFields     ProductRecordDataField[]   @default([])
+  errors                    ProductRecordError[]       @relation("errors")
+  isProcessed               Boolean                    @default(false)
+  statusChangeNotifications StatusChangeNotification[] @relation("statusChangeNotifications")
+  priceChangeNotifications  PriceChangeNotification[]  @relation("priceChangeNotifications")
 }
 
 model Product {
-  id                                                    String                     @id() @default(uuid()) @db.Uuid()
-  createdAt                                             DateTime                   @default(now())
-  createdById                                           String                     @db.Uuid()
-  updatedAt                                             DateTime                   @updatedAt()
-  updatedById                                           String                     @db.Uuid()
-  createdBy                                             User                       @relation("createdProducts", fields: [createdById], references: [id])
-  updatedBy                                             User                       @relation("updatedProducts", fields: [updatedById], references: [id])
-  name                                                  String?
-  slug                                                  String                     @unique()
-  code                                                  String?
-  imageSrc                                              String?
-  records                                               ProductRecord[]            @relation("records")
-  status                                                ProductStatus?
-  statusRecordedAt                                      DateTime?
-  price                                                 Float?
-  priceRecordedAt                                       DateTime?
-  category                                              ProductCategory
-  subCategories                                         ProductSubCategory[]
-  notifications                                         Notification[]             @relation("notifications")
-  delegate_aux_Product_notifications_PriceChangeNotif_0 PriceChangeNotification[]  @relation("notifications")
-  delegate_aux_Product_notifications_StatusChangeNoti_0 StatusChangeNotification[] @relation("notifications")
+  id                      String                   @id() @default(uuid()) @db.Uuid()
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt()
+  createdById             String                   @db.Uuid()
+  updatedById             String                   @db.Uuid()
+  createdBy               User                     @relation("createdProducts", fields: [createdById], references: [id])
+  updatedBy               User                     @relation("updatedProducts", fields: [updatedById], references: [id])
+  name                    String?
+  slug                    String                   @unique()
+  code                    String?
+  imageSrc                String?
+  records                 ProductRecord[]          @relation("records")
+  status                  ProductStatus?
+  statusLastUpdatedAt     DateTime?
+  statusAsOf              DateTime?
+  price                   Float?
+  priceLastUpdatedAt      DateTime?
+  priceAsOf               DateTime?
+  category                ProductCategory
+  subCategories           ProductSubCategory[]
+  subscriptions           ProductSubscription[]    @relation("subscriptions")
+  newProductNotifications NewProductNotification[] @relation("newProductNotifications")
 }
 
-/// @@delegate(contentType)
-model Notification {
-  id          String                  @id() @default(uuid()) @db.Uuid()
-  createdAt   DateTime                @default(now())
-  createdById String                  @db.Uuid()
-  updatedAt   DateTime                @updatedAt()
-  updatedById String                  @db.Uuid()
-  createdBy   User                    @relation("createdNotifications", fields: [createdById], references: [id])
-  updatedBy   User                    @relation("updatedNotifications", fields: [updatedById], references: [id])
-  product     Product                 @relation("notifications", fields: [productId], references: [id])
-  productId   String                  @db.Uuid()
-  user        User                    @relation("notifications", fields: [userId], references: [id])
-  userId      String                  @db.Uuid()
-  contentType NotificationContentType
-  enabled     Boolean                 @default(true)
+model PriceChangeSubscribedEvent {
+  id             String                      @id() @default(uuid()) @db.Uuid()
+  enabled        Boolean                     @default(true)
+  subscriptionId String                      @unique() @db.Uuid()
+  subscription   ProductSubscription         @relation(fields: [subscriptionId], references: [id])
+  conditions     PriceChangeEventCondition[] @default([PriceIncrease, PriceDecrease])
+}
 
-  @@unique([productId, userId, contentType])
+model StatusChangeEventCondition {
+  id                String                      @id() @default(uuid()) @db.Uuid()
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt()
+  fromStatus        ProductStatus[]
+  toStatus          ProductStatus[]
+  subscribedEvent   StatusChangeSubscribedEvent @relation("conditions", fields: [subscribedEventId], references: [id])
+  subscribedEventId String                      @db.Uuid()
+}
+
+model StatusChangeSubscribedEvent {
+  id             String                       @id() @default(uuid()) @db.Uuid()
+  enabled        Boolean                      @default(true)
+  subscriptionId String                       @unique() @db.Uuid()
+  subscription   ProductSubscription          @relation(fields: [subscriptionId], references: [id])
+  conditions     StatusChangeEventCondition[] @relation("conditions")
+}
+
+model ProductSubscription {
+  id           String                       @id() @default(uuid()) @db.Uuid()
+  createdAt    DateTime                     @default(now())
+  updatedAt    DateTime                     @updatedAt()
+  createdById  String                       @db.Uuid()
+  updatedById  String                       @db.Uuid()
+  createdBy    User                         @relation("createdSubscriptions", fields: [createdById], references: [id])
+  updatedBy    User                         @relation("updatedSubscriptions", fields: [updatedById], references: [id])
+  product      Product                      @relation("subscriptions", fields: [productId], references: [id])
+  productId    String                       @db.Uuid()
+  user         User                         @relation("subscriptions", fields: [userId], references: [id])
+  userId       String                       @db.Uuid()
+  enabled      Boolean                      @default(true)
+  statusChange StatusChangeSubscribedEvent?
+  priceChange  PriceChangeSubscribedEvent?
+
+  @@unique([productId, userId])
+}
+
+/// @@delegate(notificationType)
+model Notification {
+  id               String            @id() @default(uuid()) @db.Uuid()
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt()
+  createdById      String            @db.Uuid()
+  updatedById      String            @db.Uuid()
+  createdBy        User              @relation("createdNotifications", fields: [createdById], references: [id])
+  updatedBy        User              @relation("updatedNotifications", fields: [updatedById], references: [id])
+  user             User              @relation("notifications", fields: [userId], references: [id])
+  userId           String            @db.Uuid()
+  notificationType NotificationType
+  state            NotificationState
 }
 
 model PriceChangeNotification {
-  id          String                  @id() @default(uuid()) @db.Uuid()
-  createdAt   DateTime                @default(now())
-  createdById String                  @db.Uuid()
-  updatedAt   DateTime                @updatedAt()
-  updatedById String                  @db.Uuid()
-  createdBy   User                    @relation("createdNotifications", fields: [createdById], references: [id])
-  updatedBy   User                    @relation("updatedNotifications", fields: [updatedById], references: [id])
-  product     Product                 @relation("notifications", fields: [productId], references: [id])
-  productId   String                  @db.Uuid()
-  user        User                    @relation("notifications", fields: [userId], references: [id])
-  userId      String                  @db.Uuid()
-  contentType NotificationContentType
-  enabled     Boolean                 @default(true)
-  events      PriceChangeEventType[]  @default([PriceIncrease, PriceDecrease])
-}
-
-model StatusChangeNotificationEvent {
-  id             String                   @id() @default(uuid()) @db.Uuid()
-  fromStatus     ProductStatus[]
-  toStatus       ProductStatus[]
-  notification   StatusChangeNotification @relation("events", fields: [notificationId], references: [id])
-  notificationId String                   @db.Uuid()
+  id               String                    @id() @default(uuid()) @db.Uuid()
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt()
+  createdById      String                    @db.Uuid()
+  updatedById      String                    @db.Uuid()
+  createdBy        User                      @relation("createdNotifications", fields: [createdById], references: [id])
+  updatedBy        User                      @relation("updatedNotifications", fields: [updatedById], references: [id])
+  user             User                      @relation("notifications", fields: [userId], references: [id])
+  userId           String                    @db.Uuid()
+  notificationType NotificationType
+  state            NotificationState
+  productRecordId  String                    @db.Uuid()
+  productRecord    ProductRecord             @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
+  condition        PriceChangeEventCondition
 }
 
 model StatusChangeNotification {
-  id          String                          @id() @default(uuid()) @db.Uuid()
-  createdAt   DateTime                        @default(now())
-  createdById String                          @db.Uuid()
-  updatedAt   DateTime                        @updatedAt()
-  updatedById String                          @db.Uuid()
-  createdBy   User                            @relation("createdNotifications", fields: [createdById], references: [id])
-  updatedBy   User                            @relation("updatedNotifications", fields: [updatedById], references: [id])
-  product     Product                         @relation("notifications", fields: [productId], references: [id])
-  productId   String                          @db.Uuid()
-  user        User                            @relation("notifications", fields: [userId], references: [id])
-  userId      String                          @db.Uuid()
-  contentType NotificationContentType
-  enabled     Boolean                         @default(true)
-  events      StatusChangeNotificationEvent[] @relation("events")
+  id               String            @id() @default(uuid()) @db.Uuid()
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt()
+  createdById      String            @db.Uuid()
+  updatedById      String            @db.Uuid()
+  createdBy        User              @relation("createdNotifications", fields: [createdById], references: [id])
+  updatedBy        User              @relation("updatedNotifications", fields: [updatedById], references: [id])
+  user             User              @relation("notifications", fields: [userId], references: [id])
+  userId           String            @db.Uuid()
+  notificationType NotificationType
+  state            NotificationState
+  productRecordId  String            @db.Uuid()
+  productRecord    ProductRecord     @relation("statusChangeNotifications", fields: [productRecordId], references: [id])
+  fromStatus       ProductStatus
+  toStatus         ProductStatus
+}
+
+model NewProductNotification {
+  id               String            @id() @default(uuid()) @db.Uuid()
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt()
+  createdById      String            @db.Uuid()
+  updatedById      String            @db.Uuid()
+  createdBy        User              @relation("createdNotifications", fields: [createdById], references: [id])
+  updatedBy        User              @relation("updatedNotifications", fields: [updatedById], references: [id])
+  user             User              @relation("notifications", fields: [userId], references: [id])
+  userId           String            @db.Uuid()
+  notificationType NotificationType
+  state            NotificationState
+  productId        String            @db.Uuid()
+  product          Product           @relation("newProductNotifications", fields: [productId], references: [id])
 }

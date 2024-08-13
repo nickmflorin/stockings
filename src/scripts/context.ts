@@ -6,7 +6,7 @@ import { type PrismaClient, type User } from "~/database/model";
 import { upsertUserFromClerk } from "~/database/model/user";
 import { environment } from "~/environment";
 
-export type SeedContext = {
+export type ScriptContext = {
   readonly clerkUser: ClerkUser;
   readonly user: User;
 };
@@ -18,14 +18,14 @@ type ScriptContextOptions = {
 export async function getScriptContext(
   tx: Transaction,
   opts: ScriptContextOptions,
-): Promise<SeedContext>;
+): Promise<ScriptContext>;
 
-export async function getScriptContext(opts: ScriptContextOptions): Promise<SeedContext>;
+export async function getScriptContext(opts: ScriptContextOptions): Promise<ScriptContext>;
 
 export async function getScriptContext(
   arg0: Transaction | ScriptContextOptions,
   arg1?: ScriptContextOptions,
-): Promise<SeedContext> {
+): Promise<ScriptContext> {
   let tx: Transaction | PrismaClient;
   let upsertUser: boolean;
   if (arg1) {

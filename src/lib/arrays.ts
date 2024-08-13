@@ -1,5 +1,18 @@
 import { isEqual } from "lodash-es";
 
+export const walkBackwardsUntil = <T, S extends T>(
+  data: T[],
+  condition: (d: T) => d is S,
+): S | null => {
+  for (let i = data.length - 1; i >= 0; i--) {
+    const datum = data[i];
+    if (condition(datum)) {
+      return datum;
+    }
+  }
+  return null;
+};
+
 export const uniq = <T>(a: T[], equality?: (a: T, b: T) => boolean): T[] => {
   const eq = equality ?? isEqual;
   return a.reduce((prev: T[], curr: T) => {

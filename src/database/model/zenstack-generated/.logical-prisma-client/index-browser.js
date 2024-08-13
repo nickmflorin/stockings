@@ -17,11 +17,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 5.8.0
- * Query Engine version: 393aa359c9ad4a4bb28630fb5613f9c281cde053
+ * Query Engine version: 4c784e32044a8a016d99474bd02a3b6123742169
  */
 Prisma.prismaVersion = {
   client: "5.8.0",
-  engine: "393aa359c9ad4a4bb28630fb5613f9c281cde053"
+  engine: "4c784e32044a8a016d99474bd02a3b6123742169"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -187,8 +187,8 @@ exports.Prisma.ProductRecordErrorScalarFieldEnum = {
 exports.Prisma.ProductRecordScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
   timestamp: 'timestamp',
   productId: 'productId',
@@ -196,69 +196,111 @@ exports.Prisma.ProductRecordScalarFieldEnum = {
   rawPrice: 'rawPrice',
   status: 'status',
   wasManuallyCreated: 'wasManuallyCreated',
-  manuallyChangedFields: 'manuallyChangedFields'
+  manuallyChangedFields: 'manuallyChangedFields',
+  isProcessed: 'isProcessed'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
   name: 'name',
   slug: 'slug',
   code: 'code',
   imageSrc: 'imageSrc',
   status: 'status',
-  statusRecordedAt: 'statusRecordedAt',
+  statusLastUpdatedAt: 'statusLastUpdatedAt',
+  statusAsOf: 'statusAsOf',
   price: 'price',
-  priceRecordedAt: 'priceRecordedAt',
+  priceLastUpdatedAt: 'priceLastUpdatedAt',
+  priceAsOf: 'priceAsOf',
   category: 'category',
   subCategories: 'subCategories'
+};
+
+exports.Prisma.PriceChangeSubscribedEventScalarFieldEnum = {
+  id: 'id',
+  enabled: 'enabled',
+  subscriptionId: 'subscriptionId',
+  conditions: 'conditions'
+};
+
+exports.Prisma.StatusChangeEventConditionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  subscribedEventId: 'subscribedEventId'
+};
+
+exports.Prisma.StatusChangeSubscribedEventScalarFieldEnum = {
+  id: 'id',
+  enabled: 'enabled',
+  subscriptionId: 'subscriptionId'
+};
+
+exports.Prisma.ProductSubscriptionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  productId: 'productId',
+  userId: 'userId',
+  enabled: 'enabled'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
-  productId: 'productId',
   userId: 'userId',
-  contentType: 'contentType',
-  enabled: 'enabled'
+  notificationType: 'notificationType',
+  state: 'state'
 };
 
 exports.Prisma.PriceChangeNotificationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
-  productId: 'productId',
   userId: 'userId',
-  contentType: 'contentType',
-  enabled: 'enabled',
-  events: 'events'
-};
-
-exports.Prisma.StatusChangeNotificationEventScalarFieldEnum = {
-  id: 'id',
-  fromStatus: 'fromStatus',
-  toStatus: 'toStatus',
-  notificationId: 'notificationId'
+  notificationType: 'notificationType',
+  state: 'state',
+  productRecordId: 'productRecordId',
+  condition: 'condition'
 };
 
 exports.Prisma.StatusChangeNotificationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  createdById: 'createdById',
   updatedAt: 'updatedAt',
+  createdById: 'createdById',
   updatedById: 'updatedById',
-  productId: 'productId',
   userId: 'userId',
-  contentType: 'contentType',
-  enabled: 'enabled'
+  notificationType: 'notificationType',
+  state: 'state',
+  productRecordId: 'productRecordId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus'
+};
+
+exports.Prisma.NewProductNotificationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  userId: 'userId',
+  notificationType: 'notificationType',
+  state: 'state',
+  productId: 'productId'
 };
 
 exports.Prisma.SortOrder = {
@@ -321,14 +363,21 @@ exports.ProductSubCategory = exports.$Enums.ProductSubCategory = {
   AccessoryTools: 'AccessoryTools'
 };
 
-exports.NotificationContentType = exports.$Enums.NotificationContentType = {
+exports.PriceChangeEventCondition = exports.$Enums.PriceChangeEventCondition = {
+  PriceIncrease: 'PriceIncrease',
+  PriceDecrease: 'PriceDecrease'
+};
+
+exports.NotificationType = exports.$Enums.NotificationType = {
+  NewProductNotification: 'NewProductNotification',
   PriceChangeNotification: 'PriceChangeNotification',
   StatusChangeNotification: 'StatusChangeNotification'
 };
 
-exports.PriceChangeEventType = exports.$Enums.PriceChangeEventType = {
-  PriceIncrease: 'PriceIncrease',
-  PriceDecrease: 'PriceDecrease'
+exports.NotificationState = exports.$Enums.NotificationState = {
+  Pending: 'Pending',
+  Sent: 'Sent',
+  Failed: 'Failed'
 };
 
 exports.Prisma.ModelName = {
@@ -346,10 +395,14 @@ exports.Prisma.ModelName = {
   ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
   Product: 'Product',
+  PriceChangeSubscribedEvent: 'PriceChangeSubscribedEvent',
+  StatusChangeEventCondition: 'StatusChangeEventCondition',
+  StatusChangeSubscribedEvent: 'StatusChangeSubscribedEvent',
+  ProductSubscription: 'ProductSubscription',
   Notification: 'Notification',
   PriceChangeNotification: 'PriceChangeNotification',
-  StatusChangeNotificationEvent: 'StatusChangeNotificationEvent',
-  StatusChangeNotification: 'StatusChangeNotification'
+  StatusChangeNotification: 'StatusChangeNotification',
+  NewProductNotification: 'NewProductNotification'
 };
 
 /**

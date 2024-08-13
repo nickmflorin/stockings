@@ -7,6 +7,8 @@ import { ProductStatus } from "../generated";
 import { ProductCategory } from "../generated";
 import { ProductSubCategory } from "../generated";
 import { PriceChangeEventCondition } from "../generated";
+import { NotificationType } from "../generated";
+import { NotificationState } from "../generated";
 
 const policy: PolicyDef = {
     policy: {
@@ -658,6 +660,150 @@ const policy: PolicyDef = {
             ,
         }
         ,
+        notification: {
+            modelLevel: {
+                read: {
+                    guard: Notification_read,
+                }
+                ,
+                create: {
+                    guard: Notification_create, inputChecker: Notification_create_input,
+                }
+                ,
+                update: {
+                    guard: Notification_update,
+                }
+                ,
+                postUpdate: {
+                    guard: Notification_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: Notification_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
+        priceChangeNotification: {
+            modelLevel: {
+                read: {
+                    guard: PriceChangeNotification_read,
+                }
+                ,
+                create: {
+                    guard: PriceChangeNotification_create, inputChecker: PriceChangeNotification_create_input,
+                }
+                ,
+                update: {
+                    guard: PriceChangeNotification_update,
+                }
+                ,
+                postUpdate: {
+                    guard: PriceChangeNotification_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: PriceChangeNotification_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
+        statusChangeNotification: {
+            modelLevel: {
+                read: {
+                    guard: StatusChangeNotification_read,
+                }
+                ,
+                create: {
+                    guard: StatusChangeNotification_create, inputChecker: StatusChangeNotification_create_input,
+                }
+                ,
+                update: {
+                    guard: StatusChangeNotification_update,
+                }
+                ,
+                postUpdate: {
+                    guard: StatusChangeNotification_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: StatusChangeNotification_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
+        newProductNotification: {
+            modelLevel: {
+                read: {
+                    guard: NewProductNotification_read,
+                }
+                ,
+                create: {
+                    guard: NewProductNotification_create, inputChecker: NewProductNotification_create_input,
+                }
+                ,
+                update: {
+                    guard: NewProductNotification_update,
+                }
+                ,
+                postUpdate: {
+                    guard: NewProductNotification_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: NewProductNotification_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
     }
     ,
     validation: {
@@ -730,6 +876,22 @@ const policy: PolicyDef = {
         }
         ,
         productSubscription: {
+            hasValidation: false
+        }
+        ,
+        notification: {
+            hasValidation: false
+        }
+        ,
+        priceChangeNotification: {
+            hasValidation: false
+        }
+        ,
+        statusChangeNotification: {
+            hasValidation: false
+        }
+        ,
+        newProductNotification: {
             hasValidation: false
         }
         ,
@@ -1526,6 +1688,182 @@ function ProductSubscription_delete(context: QueryContext, db: CrudContract): an
 }
 
 function $check_ProductSubscription_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function Notification_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_Notification_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function Notification_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_Notification_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function Notification_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function Notification_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_Notification_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function Notification_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Notification_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Notification_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_Notification_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeNotification_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeNotification_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeNotification_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeNotification_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeNotification_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function PriceChangeNotification_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeNotification_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeNotification_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PriceChangeNotification_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PriceChangeNotification_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeNotification_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeNotification_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeNotification_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeNotification_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeNotification_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeNotification_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function StatusChangeNotification_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeNotification_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeNotification_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StatusChangeNotification_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StatusChangeNotification_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeNotification_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function NewProductNotification_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_NewProductNotification_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function NewProductNotification_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_NewProductNotification_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function NewProductNotification_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function NewProductNotification_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_NewProductNotification_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function NewProductNotification_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_NewProductNotification_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function NewProductNotification_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_NewProductNotification_delete(input: any, context: QueryContext): any {
     return false;
 }
 export default policy

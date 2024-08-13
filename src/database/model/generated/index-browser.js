@@ -196,7 +196,8 @@ exports.Prisma.ProductRecordScalarFieldEnum = {
   rawPrice: 'rawPrice',
   status: 'status',
   wasManuallyCreated: 'wasManuallyCreated',
-  manuallyChangedFields: 'manuallyChangedFields'
+  manuallyChangedFields: 'manuallyChangedFields',
+  isProcessed: 'isProcessed'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -250,6 +251,35 @@ exports.Prisma.ProductSubscriptionScalarFieldEnum = {
   productId: 'productId',
   userId: 'userId',
   enabled: 'enabled'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  userId: 'userId',
+  notificationType: 'notificationType',
+  state: 'state'
+};
+
+exports.Prisma.PriceChangeNotificationScalarFieldEnum = {
+  id: 'id',
+  productRecordId: 'productRecordId',
+  condition: 'condition'
+};
+
+exports.Prisma.StatusChangeNotificationScalarFieldEnum = {
+  id: 'id',
+  productRecordId: 'productRecordId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus'
+};
+
+exports.Prisma.NewProductNotificationScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId'
 };
 
 exports.Prisma.SortOrder = {
@@ -317,6 +347,18 @@ exports.PriceChangeEventCondition = exports.$Enums.PriceChangeEventCondition = {
   PriceDecrease: 'PriceDecrease'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  NewProductNotification: 'NewProductNotification',
+  PriceChangeNotification: 'PriceChangeNotification',
+  StatusChangeNotification: 'StatusChangeNotification'
+};
+
+exports.NotificationState = exports.$Enums.NotificationState = {
+  Pending: 'Pending',
+  Sent: 'Sent',
+  Failed: 'Failed'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   HttpNetworkErrorData: 'HttpNetworkErrorData',
@@ -335,7 +377,11 @@ exports.Prisma.ModelName = {
   PriceChangeSubscribedEvent: 'PriceChangeSubscribedEvent',
   StatusChangeEventCondition: 'StatusChangeEventCondition',
   StatusChangeSubscribedEvent: 'StatusChangeSubscribedEvent',
-  ProductSubscription: 'ProductSubscription'
+  ProductSubscription: 'ProductSubscription',
+  Notification: 'Notification',
+  PriceChangeNotification: 'PriceChangeNotification',
+  StatusChangeNotification: 'StatusChangeNotification',
+  NewProductNotification: 'NewProductNotification'
 };
 
 /**
