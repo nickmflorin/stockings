@@ -53,5 +53,4 @@ export const ProductPriceAreaChart = ({ data, width, height }: ProductPriceAreaC
     scales={scales}
   />
 );
-
 export default ProductPriceAreaChart;

@@ -40,7 +40,7 @@ export const ProductsTableSearchBar = (props: ProductsTableSearchBarProps): JSX.
 
   const onSearch = useDebouncedCallback((search: string) => {
     updateFilters({ search });
-  }, 200);
+  }, 0);
 
   return (
     <div className={classNames("flex flex-row items-center gap-2", props.className)}>

@@ -26,6 +26,7 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
   return (
     <DataTableBody
       onRowClick={productId => {
