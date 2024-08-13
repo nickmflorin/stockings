@@ -153,6 +153,11 @@ model ProductRecord extends ModelMeta {
   wasManuallyCreated    Boolean                  @default(false)
   manuallyChangedFields ProductRecordDataField[] @default([])
   errors                ProductRecordError[]     @relation("errors")
+  // An indicator that conveys whether or not the ProductRecord has been processed by the
+  // notifications system.  Once the ProductRecord is processed, notifications will be created in
+  // "pending" states for each user that is subscribed to the events that are associated with the
+  // changes that the ProductRecord represents relative to the last record that was created.
+  isProcessed           Boolean                  @default(false)
 }
 
 enum ProductCategory {
@@ -230,4 +235,33 @@ model ProductSubscription extends ModelMeta {
   priceChange  PriceChangeSubscribedEvent?
 
   @@unique([productId, userId])
+}
+
+enum NotificationType {
+  NewProduct
+  PriceChange
+  StatusChange
+}
+
+enum NotificationState {
+  Pending
+  Sent
+  Failed
+}
+
+model Notification extends ModelMeta {
+  createdBy        User              @relation("createdNotifications", fields: [createdById], references: [id])
+  updatedBy        User              @relation("updatedNotifications", fields: [updatedById], references: [id])
+  user             User              @relation("notifications", fields: [userId], references: [id])
+  userId           String            @db.Uuid
+  notificationType NotificationType
+  state            NotificationState
+
+  @@delegate(notificationType)
+}
+
+model PriceChangeNotification extends Notification {
+  productRecordId String                      @db.Uuid
+  productRecord   ProductRecord               @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
+  conditions      PriceChangeEventCondition[]
 }
