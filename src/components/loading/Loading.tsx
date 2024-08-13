@@ -4,8 +4,9 @@ import { ShowHide } from "~/components/util";
 
 import { LoadingView, type LoadingViewProps } from "./LoadingView";
 
-export interface LoadingProps extends LoadingViewProps {
+export interface LoadingProps extends Omit<LoadingViewProps, "isDisabled"> {
   readonly children?: ReactNode;
+  readonly isDisabled?: true;
 }
 
 export const Loading = ({ isLoading = false, children, ...props }: LoadingProps): JSX.Element => {

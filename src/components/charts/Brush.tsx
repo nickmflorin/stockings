@@ -1,7 +1,7 @@
 import React, { useId, useRef, useMemo } from "react";
 
 import { Brush as RootBrush } from "@visx/brush";
-import { type MarginShape, type Bounds } from "@visx/brush/lib/types";
+import { type Bounds } from "@visx/brush/lib/types";
 import { Group } from "@visx/group";
 import { PatternLines } from "@visx/pattern";
 
@@ -10,23 +10,36 @@ import type BaseBrush from "@visx/brush/lib/BaseBrush";
 import { BrushHandle } from "./BrushHandle";
 import * as constants from "./constants";
 
-export interface BrushProps<D extends constants.ChartDatum> {
+export interface BrushProps<
+  D extends constants.ChartDatum,
+  S extends constants.ChartRawScales<D>,
+  A extends constants.ChartAccessors<D>,
+> {
   readonly data: D[];
-  readonly scales: constants.ChartScales;
-  readonly accessors: constants.ChartAccessors<D>;
+  readonly accessors: A;
   readonly width: number;
   readonly height: number;
-  readonly margin?: MarginShape;
+  readonly ranges: constants.ChartRanges;
+  readonly left?: number;
+  readonly top?: number;
+  readonly scales: S;
   readonly onClick: () => void;
   readonly onChange: (domain: Bounds | null) => void;
 }
 
-export const Brush = <D extends constants.ChartDatum>({
-  scales,
+export const Brush = <
+  D extends constants.ChartDatum,
+  S extends constants.ChartRawScales<D>,
+  A extends constants.ChartAccessors<D>,
+>({
+  scales: _scales,
   data,
   accessors,
+  ranges,
+  left,
+  top,
   ...props
-}: BrushProps<D>) => {
+}: BrushProps<D, S, A>) => {
   const brushRef = useRef<BaseBrush | null>(null);
   const patternId = useId();
 
@@ -35,20 +48,7 @@ export const Brush = <D extends constants.ChartDatum>({
     stroke: "white",
   };
 
-  /* const scales = useMemo(
-       () => ({
-         y: scaleLinear({
-           range: [yBrushMax, 0],
-           domain: [0, max(data, d => getYValue(d)) || 0],
-           nice: true,
-         }),
-         x: scaleTime<number>({
-           range: [0, xBrushMax],
-           domain: extent(data, d => getXValue(d)) as [Date, Date],
-         }),
-       }),
-       [],
-     ); */
+  const scales = useMemo(() => _scales(data, ranges), [_scales, ranges, data]);
 
   // TODO: We should instead just hide the brush entirely when there is no data.
   const initialBrushPosition = useMemo(
@@ -62,7 +62,7 @@ export const Brush = <D extends constants.ChartDatum>({
   );
 
   return (
-    <Group>
+    <Group top={top} left={left}>
       <PatternLines
         id={patternId}
         height={8}

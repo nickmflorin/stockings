@@ -1,8 +1,11 @@
-import { fetchProduct } from "~/actions/fetches/products";
 import { Suspense } from "react";
-import { ChartContainer } from "~/components/charts/ChartContainer";
 
-import { ProductPriceLineChart } from "./ProductPriceLineChart";
+import { fetchProduct } from "~/actions/fetches/products";
+
+import { Loading } from "~/components/loading/Loading";
+import { Module } from "~/components/structural/Module";
+
+import { ProductPriceAreaChart } from "./ProductPriceAreaChart";
 
 export interface ProductsChartPageProps {
   readonly searchParams: Record<string, string | string[] | undefined>;
@@ -15,10 +18,14 @@ export default async function ProductsChartPage({ searchParams }: ProductsChartP
   }
   const product = await fetchProduct(productId);
   return (
-    <ChartContainer title={product.name} description="Price History">
-      <Suspense key={productId}>
-        <ProductPriceLineChart width={400} height={300} productId={productId} />;
+    <Module
+      title={product.name}
+      description="Price History"
+      contentProps={{ height: 300, minHeight: 300, width: 400, minWidth: 400 }}
+    >
+      <Suspense key={productId} fallback={<Loading isLoading />}>
+        <ProductPriceAreaChart width={400} height={300} productId={productId} />
       </Suspense>
-    </ChartContainer>
+    </Module>
   );
 }

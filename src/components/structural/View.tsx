@@ -2,12 +2,17 @@ import type { ReactNode } from "react";
 
 import { logger } from "~/internal/logger";
 
-import { classNames } from "~/components/types";
-import { type ComponentProps, type Style } from "~/components/types";
+import {
+  classNames,
+  type QuantitativeSize,
+  type ComponentProps,
+  type Style,
+  sizeToString,
+} from "~/components/types";
 
-type Position = "relative" | "absolute";
-type Overflow = "scroll" | "auto" | "hidden" | "visible";
-type Fill = "screen" | "parent";
+export type ViewPosition = "relative" | "absolute";
+export type ViewOverflow = "scroll" | "auto" | "hidden" | "visible";
+export type ViewFill = "screen" | "parent";
 
 export type ViewComponentRenderProps = {
   readonly children: ReactNode;
@@ -34,28 +39,104 @@ const ViewComponentMap: {
   div: DivViewComponent,
 };
 
-export type ViewProps = ComponentProps & {
-  readonly children?: React.ReactNode;
-  readonly absolute?: boolean;
-  readonly relative?: boolean;
-  readonly position?: "relative" | "absolute";
-  readonly overflow?: Overflow;
-  readonly overflowX?: Overflow;
-  readonly overflowY?: Overflow;
-  readonly fill?: Fill | null;
-  readonly dim?: boolean;
-  readonly fillParent?: boolean;
-  readonly fullScreen?: boolean;
-  readonly centerChildren?: boolean;
-  readonly isDisabled?: boolean;
-  readonly component?: React.ComponentType<ViewComponentRenderProps> | ViewComponentName;
+const ViewSizePropNames = [
+  "height",
+  "width",
+  "maxHeight",
+  "maxWidth",
+  "minHeight",
+  "minWidth",
+] as const;
+
+export type ViewSizePropName = (typeof ViewSizePropNames)[number];
+
+export type ViewSizeProps = { [key in ViewSizePropName]?: QuantitativeSize<"px"> | ViewFill };
+
+export type ViewPositionProps = Partial<{
+  readonly absolute: true;
+  readonly relative: true;
+  readonly position: ViewPosition;
+}>;
+
+export type ViewOverflowProps = Partial<{
+  readonly overflow: ViewOverflow;
+  readonly overflowX: ViewOverflow;
+  readonly overflowY: ViewOverflow;
+}>;
+
+export type ViewFillProps = Partial<{
+  readonly fill: ViewFill | null;
+  readonly fillParent: true;
+  readonly fillScreen: true;
+}>;
+
+export type ViewFlexProps = Partial<{
+  readonly flex: true;
+  readonly orientation: "row" | "column";
+  readonly row: true;
+  readonly column: true;
+  readonly centerChildren: true;
+  readonly grow: true;
+}>;
+
+export type ViewProps = ComponentProps &
+  ViewSizeProps &
+  ViewPositionProps &
+  ViewOverflowProps &
+  ViewFillProps &
+  ViewFlexProps & {
+    readonly children?: React.ReactNode;
+    readonly dim?: true;
+    readonly isDisabled?: true;
+    readonly dimIfDisabled?: false;
+    readonly component?: React.ComponentType<ViewComponentRenderProps> | ViewComponentName;
+  };
+
+const parseFlex = ({
+  flex = true,
+  orientation,
+  row,
+  column,
+  centerChildren,
+  grow,
+}: Pick<
+  ViewProps,
+  "flex" | "orientation" | "row" | "column" | "centerChildren" | "grow"
+>): string => {
+  if (centerChildren) {
+    return classNames("flex", "flex-col", "items-center", "justify-center");
+  } else if (flex) {
+    if (orientation) {
+      if (row || column) {
+        logger.warn(
+          "The props 'row' and/or 'column' should not be specified on a view when the " +
+            "'orientation' prop is explicitly defined.",
+          { orientation, row, column },
+        );
+      }
+      return classNames("flex", {
+        grow,
+        "flex-col": orientation === "column",
+        "flex-row": orientation === "row",
+      });
+    } else if (row && column) {
+      logger.warn(
+        "The props 'row' and 'column' should not both be specified on a view at the " +
+          "same time.  The 'column' prop will take precedence.",
+        { orientation, row, column },
+      );
+      return classNames("flex", "flex-col", { grow });
+    }
+    return classNames("flex", { grow, "flex-col": column || row === undefined, "flex-row": row });
+  }
+  return "";
 };
 
 const parsePosition = ({
   position,
   absolute,
   relative,
-}: Pick<ViewProps, "position" | "absolute" | "relative">): Position => {
+}: Pick<ViewProps, "position" | "absolute" | "relative">): ViewPosition => {
   if (position !== undefined) {
     if (absolute !== undefined || relative !== undefined) {
       logger.warn(
@@ -81,23 +162,23 @@ const parsePosition = ({
 const parseFill = ({
   fill,
   fillParent,
-  fullScreen,
-}: Pick<ViewProps, "fill" | "fillParent" | "fullScreen">): Fill | null => {
+  fillScreen,
+}: Pick<ViewProps, "fill" | "fillParent" | "fillScreen">): ViewFill | null => {
   if (fill !== undefined) {
-    if (fillParent !== undefined || fullScreen !== undefined) {
+    if (fillParent !== undefined || fillScreen !== undefined) {
       logger.warn(
-        "The props 'fillParent' and 'fullScreen' should not be specified on a view when the " +
+        "The props 'fillParent' and 'fillScreen' should not be specified on a view when the " +
           "'fill' prop is explicitly defined.",
-        { fill, fillParent, fullScreen },
+        { fill, fillParent, fillScreen },
       );
     }
     return fill;
-  } else if (fullScreen) {
+  } else if (fillScreen) {
     if (fillParent) {
       logger.warn(
-        "The props 'fullScreen' and 'fillParent' should not both be specified on a view at the " +
+        "The props 'fillScreen' and 'fillParent' should not both be specified on a view at the " +
           "same time.  The 'fillParent' prop will take precedence.",
-        { fill, fillParent, fullScreen },
+        { fill, fillParent, fillScreen },
       );
       return "parent";
     }
@@ -108,7 +189,7 @@ const parseFill = ({
   return null;
 };
 
-const OverflowClassName = (overflow: Overflow) =>
+const OverflowClassName = (overflow: ViewOverflow) =>
   classNames({
     "overflow-hidden": overflow === "hidden",
     "overflow-visible": overflow === "visible",
@@ -116,7 +197,7 @@ const OverflowClassName = (overflow: Overflow) =>
     "overflow-auto": overflow === "auto",
   });
 
-const OverflowXClassName = (overflow: Overflow) =>
+const OverflowXClassName = (overflow: ViewOverflow) =>
   classNames({
     "overflow-x-hidden": overflow === "hidden",
     "overflow-x-visible": overflow === "visible",
@@ -124,7 +205,7 @@ const OverflowXClassName = (overflow: Overflow) =>
     "overflow-x-auto": overflow === "auto",
   });
 
-const OverflowYClassName = (overflow: Overflow) =>
+const OverflowYClassName = (overflow: ViewOverflow) =>
   classNames({
     "overflow-y-hidden": overflow === "hidden",
     "overflow-y-visible": overflow === "visible",
@@ -193,43 +274,40 @@ console.error = (msg, ...args) => {
   consoleError(msg, ...args);
 };
 
-export const View = ({
-  children,
-  absolute,
-  position,
-  relative,
-  overflow,
-  overflowX,
-  overflowY,
-  centerChildren,
-  fill,
-  fillParent,
-  fullScreen,
-  style,
-  className,
-  component = DivViewComponent,
-  dim = false,
-  isDisabled = false,
-}: ViewProps) => {
-  const _fill = parseFill({ fill, fillParent, fullScreen });
-  const _position = parsePosition({ position, absolute, relative });
+const getViewStyle = (props: Pick<ViewProps, ViewSizePropName | "style">) =>
+  ViewSizePropNames.reduce((prev: React.CSSProperties, key: ViewSizePropName) => {
+    const size = props[key];
+    if (size !== "parent" && size !== "screen" && size !== undefined) {
+      return { ...prev, [key]: sizeToString(size, "px") };
+    }
+    return prev;
+  }, props.style ?? {});
 
+export const View = ({ children, component = DivViewComponent, ...props }: ViewProps) => {
+  const _fill = parseFill(props);
+  const _position = parsePosition(props);
   const Component = typeof component === "string" ? ViewComponentMap[component] : component;
   return (
     <Component
-      style={style}
+      style={getViewStyle(props)}
       className={classNames(
         _position,
-        parseOverflow({ overflow, overflowX, overflowY }),
+        parseOverflow(props),
+        parseFlex(props),
         {
-          "h-[100vh] w-[100vw]": _fill === "screen",
-          "h-full w-full": _fill === "parent",
-          "flex flex-col items-center justify-center": centerChildren,
+          "w-[100vw]": _fill === "screen" || props.width === "screen",
+          "h-[100vh]": _fill === "screen" || props.height === "screen",
+          "h-full": _fill === "parent" || props.height === "parent",
+          "w-full": _fill === "parent" || props.width === "parent",
+          "max-w-full": props.maxWidth === "parent",
+          "max-h-full": props.maxHeight === "parent",
+          "min-w-full": props.minWidth === "parent",
+          "min-h-full": props.minHeight === "parent",
           "left-0 top-0": _fill !== null && _position === "absolute",
-          "opacity-30": dim,
-          "pointer-events-none": isDisabled,
+          "opacity-30": props.dim || (props.dimIfDisabled !== false && props.isDisabled),
+          "pointer-events-none": props.isDisabled,
         },
-        className,
+        props.className,
       )}
     >
       {children}

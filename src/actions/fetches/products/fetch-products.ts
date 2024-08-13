@@ -13,6 +13,7 @@ import { convertToPlainObject } from "~/api/serialization";
 
 const filtersClause = (filters: Partial<ProductsTableControls["filters"]>) =>
   conditionalFilters([
+    filters.search ? constructTableSearchClause("product", filters.search) : undefined,
     filters.categories && filters.categories.length !== 0
       ? { category: { in: filters.categories } }
       : undefined,
@@ -26,16 +27,8 @@ const filtersClause = (filters: Partial<ProductsTableControls["filters"]>) =>
 
 const whereClause = ({ filters }: Pick<ProductsTableControls, "filters">) => {
   const clause = filtersClause(filters);
-  if (filters.search && clause.length !== 0) {
-    return {
-      AND: [constructTableSearchClause("product", filters.search), { OR: clause }],
-    };
-  } else if (clause.length === 0 && filters.search) {
-    return constructTableSearchClause("product", filters.search);
-  } else if (clause.length !== 0 && !filters.search) {
-    return {
-      OR: clause,
-    };
+  if (clause.length !== 0) {
+    return { AND: clause };
   }
   return undefined;
 };

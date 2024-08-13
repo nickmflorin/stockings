@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
 
@@ -23,5 +24,9 @@ export const ProductsTablePaginator = async ({
   }
 
   const count = await fetchProductsCount({ filters });
-  return <Paginator count={count} pageSize={PAGE_SIZES.product} />;
+  return (
+    <Suspense>
+      <Paginator count={count} pageSize={PAGE_SIZES.product} />
+    </Suspense>
+  );
 };

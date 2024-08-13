@@ -24,6 +24,7 @@ import { useReferentialCallback } from "~/hooks";
 export interface UseFiltersOptions<S extends FiltersSchemas> {
   readonly schemas: S;
   readonly options: ParseFiltersOptions<S>;
+  readonly maintainExisting?: boolean;
 }
 
 export type FiltersUpdate<S extends FiltersSchemas> = Partial<{
@@ -33,6 +34,7 @@ export type FiltersUpdate<S extends FiltersSchemas> = Partial<{
 export const useFilters = <S extends FiltersSchemas>({
   schemas,
   options,
+  maintainExisting = true,
 }: UseFiltersOptions<S>) => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -65,13 +67,23 @@ export const useFilters = <S extends FiltersSchemas>({
     for (const [field, value] of Object.entries(update)) {
       currentFilters = addFilter(currentFilters, field, value);
     }
-    const pruned = pruneFilters(currentFilters);
+    let pruned = pruneFilters(currentFilters);
 
-    if (Object.keys(pruned).length === 0) {
-      replace(`${pathname}`);
-    } else {
-      replace(`${pathname}?${qs.stringify(pruned)}`);
+    if (maintainExisting) {
+      const all = qs.parse(searchParams.toString());
+      for (const [field, value] of Object.entries(all)) {
+        if (!Object.keys(schemas).includes(field)) {
+          pruned = { ...pruned, [field]: value };
+        }
+      }
     }
+    replace(`${pathname}?${qs.stringify(pruned)}`);
+
+    /* if (Object.keys(pruned).length === 0) {
+         replace(`${pathname}`);
+       } else {
+         replace(`${pathname}?${qs.stringify(pruned)}`);
+       } */
   });
 
   return [initialFilters, setFilters] as const;

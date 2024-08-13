@@ -65,12 +65,14 @@
     "@visx/axis": "^3.10.1",
     "@visx/brush": "^3.10.4",
     "@visx/curve": "^3.3.0",
+    "@visx/event": "^3.3.0",
     "@visx/gradient": "^3.3.0",
     "@visx/group": "^3.3.0",
     "@visx/mock-data": "^3.3.0",
     "@visx/pattern": "^3.3.0",
     "@visx/scale": "^3.5.0",
     "@visx/shape": "^3.5.0",
+    "@visx/tooltip": "^3.3.0",
     "@visx/vendor": "^3.5.0",
     "@visx/visx": "^3.11.0",
     "@zenstackhq/runtime": "2.3.3",
@@ -150,5 +152,7 @@
     "schema": "src/database/prisma/schema.prisma",
     "seed": "npx tsx --tsconfig ./tsconfig.json src/scripts/seed/index.ts"
   },
-  "zenstack": { "schema": "./src/database/zenstack/schema.zmodel" }
+  "zenstack": {
+    "schema": "./src/database/zenstack/schema.zmodel"
+  }
 }

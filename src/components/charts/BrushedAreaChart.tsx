@@ -1,117 +1,223 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 
 import { type Bounds } from "@visx/brush/lib/types";
-import { Group } from "@visx/group";
-import { scaleTime, scaleLinear } from "@visx/scale";
-import { max, extent } from "@visx/vendor/d3-array";
+import { localPoint } from "@visx/event";
+import { Line, Bar } from "@visx/shape";
+import { Tooltip, TooltipWithBounds, useTooltip } from "@visx/tooltip";
+import { bisector } from "@visx/vendor/d3-array";
 
 import { AbstractAreaChart } from "./AbstractAreaChart";
 import { AreaChart, type AreaChartProps } from "./AreaChart";
 import { Brush } from "./Brush";
 import * as constants from "./constants";
 
-const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 };
-const chartSeparation = 30;
-
-export interface BrushedAreaChartProps<D extends constants.ChartDatum>
-  extends Omit<AreaChartProps<D>, "scales" | "yMax"> {
+export interface BrushedAreaChartProps<
+  D extends constants.ChartDatum,
+  S extends constants.ChartRawScales<D>,
+  A extends constants.ChartAccessors<D>,
+> extends Omit<AreaChartProps<D, S, A>, "yMax" | "ranges"> {
   readonly height: number;
+  readonly tooltipFormatters?: constants.TooltipFormatters<D, A>;
 }
 
-export const BrushedAreaChart = <D extends constants.ChartDatum>({
-  // margin,
+export const BrushedAreaChart = <
+  D extends constants.ChartDatum,
+  S extends constants.ChartRawScales<D>,
+  A extends constants.ChartAccessors<D>,
+>({
   height,
   data,
   accessors,
+  tooltipFormatters,
+  width,
+  scales,
   ...props
-}: BrushedAreaChartProps<D>) => {
+}: BrushedAreaChartProps<D, S, A>) => {
+  const { tooltipData, tooltipLeft, tooltipTop, showTooltip, hideTooltip } = useTooltip<D>();
+
   const [filteredData, setFilteredData] = useState<D[]>(data);
 
-  const margins = useMemo(() => constants.parseMargin(), []);
+  const innerHeight = height - constants.ChartYAxisVerticalOffset - constants.ChartBottomMargin;
 
-  const innerHeight = height - margins.top - margins.bottom;
-  // const topChartBottomMargin = compact ? chartSeparation / 2 : chartSeparation + 10;
-  const topChartBottomMargin = chartSeparation + 10;
-  const topChartHeight = 0.8 * innerHeight - topChartBottomMargin;
-  const bottomChartHeight = innerHeight - topChartHeight - chartSeparation;
+  const topChartHeight = 0.8 * innerHeight;
+  const bottomChartHeight = innerHeight - topChartHeight - constants.BrushedChartSeparation;
 
-  // bounds
-  const xMax = Math.max(props.width - margins.left - margins.right, 0);
-  const yMax = Math.max(topChartHeight, 0);
-  const xBrushMax = Math.max(props.width - brushMargin.left - brushMargin.right, 0);
-  const yBrushMax = Math.max(bottomChartHeight - brushMargin.top - brushMargin.bottom, 0);
-
-  const brushScales = useMemo(
+  const primaryChartRanges = useMemo<constants.ChartRanges>(
     () => ({
-      y: scaleLinear({
-        range: [yBrushMax, 0],
-        domain: [0, max(data, d => accessors.y(d)) || 0],
-        nice: true,
-      }),
-      x: scaleTime<number>({
-        range: [0, xBrushMax],
-        domain: extent(data, d => accessors.x(d)) as [Date, Date],
-      }),
+      x: [
+        0,
+        Math.max(width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin, 0),
+      ] as const,
+      y: [topChartHeight, 0],
     }),
-    [accessors, data, xBrushMax, yBrushMax],
+    [width, topChartHeight],
+  );
+
+  const secondaryChartRanges = useMemo<constants.ChartRanges>(
+    () => ({
+      x: [
+        0,
+        Math.max(width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin, 0),
+      ],
+      y: [Math.max(bottomChartHeight - constants.ChartBottomMargin, 0), 0],
+    }),
+    [width, bottomChartHeight],
   );
 
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
 
+  const handleTooltip = useCallback(
+    (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
+      const sc = scales(filteredData, primaryChartRanges);
+
+      /* TODO: Cleanup this logic check with the use of a type guard that will only apply the
+         tooltip handling if the x scale is of a certain type that has the inversion. */
+      if ("invert" in sc.x && typeof sc.x.invert === "function") {
+        const xBisector = bisector((d: D) => accessors.x(d)).left;
+        const { x } = localPoint(event) || { x: 0 };
+        const x0 = sc.x.invert(x - constants.ChartYAxisHorizontalOffset);
+
+        const index = xBisector(filteredData, x0);
+
+        const points = [filteredData[index - 1], filteredData[index]];
+
+        /* TODO: In the future, with less granular data, we will need to determine whether or not
+           the hovered event point is closer to the left or right surrounding data points, because
+           it will most likely sit in the middle. */
+        if (points[0]) {
+          showTooltip({
+            tooltipData: points[0],
+            tooltipLeft: x,
+            tooltipTop: (sc.y(accessors.y(points[0])) ?? 0) + constants.ChartYAxisVerticalOffset,
+          });
+        }
+      }
+    },
+    [filteredData, accessors, primaryChartRanges, scales, showTooltip],
+  );
+
   return (
-    <Group top={margins.top} left={margins.left} width={props.width - margins.left - margins.right}>
-      <AreaChart
-        {...props}
-        top={margins.top}
-        left={margins.left}
-        // margin={{ top: 0, left: 0, right: 0, bottom: topChartBottomMargin }}
-        data={data}
-        yMax={yMax}
-        accessors={accessors}
-        scales={{
-          x: scaleTime<number>({
-            range: [0, xMax],
-            domain: extent(filteredData, d => accessors.x(d)) as [Date, Date],
-          }),
-          y: scaleLinear<number>({
-            range: [yMax, 0],
-            domain: [0, max(filteredData, d => accessors.y(d)) || 0],
-            nice: true,
-          }),
-        }}
-      />
-      <AbstractAreaChart
-        data={data}
-        left={margins.left}
-        top={margins.top + topChartHeight + topChartBottomMargin}
-        scales={brushScales}
-        accessors={accessors}
-      >
-        <Brush
-          data={data}
-          width={xBrushMax}
-          height={yBrushMax}
-          scales={brushScales}
+    <div>
+      <svg width={width} height={height}>
+        <AreaChart
+          {...props}
+          left={constants.ChartYAxisHorizontalOffset}
+          width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
+          data={filteredData}
+          yMax={primaryChartRanges.y[0]}
           accessors={accessors}
-          onClick={() => setFilteredData(data)}
-          onChange={(domain: Bounds | null) => {
-            if (!domain) {
-              return;
+          scales={scales}
+          ranges={primaryChartRanges}
+        >
+          <Bar
+            x={constants.ChartYAxisHorizontalOffset}
+            width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
+            height={innerHeight}
+            fill="transparent"
+            rx={14}
+            onTouchStart={handleTooltip}
+            onTouchMove={handleTooltip}
+            onMouseMove={handleTooltip}
+            onMouseLeave={() => hideTooltip()}
+          />
+          {tooltipData && (
+            <>
+              <Line
+                from={{ x: tooltipLeft, y: constants.ChartYAxisVerticalOffset }}
+                to={{ x: tooltipLeft, y: innerHeight + constants.ChartYAxisVerticalOffset }}
+                stroke={constants.CrossHairColor}
+                strokeWidth={2}
+                pointerEvents="none"
+                strokeDasharray="5,2"
+              />
+              <circle
+                cx={tooltipLeft}
+                cy={tooltipTop}
+                r={4}
+                fill={constants.CrossHairColor}
+                stroke="white"
+                strokeWidth={2}
+                pointerEvents="none"
+              />
+            </>
+          )}
+        </AreaChart>
+        <AbstractAreaChart
+          data={data}
+          width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
+          left={constants.ChartYAxisHorizontalOffset}
+          top={
+            constants.ChartYAxisVerticalOffset + topChartHeight + constants.BrushedChartSeparation
+          }
+          scales={scales}
+          ranges={secondaryChartRanges}
+          accessors={accessors}
+        >
+          <Brush
+            data={data}
+            width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
+            left={constants.ChartYAxisHorizontalOffset}
+            top={
+              constants.ChartYAxisVerticalOffset + topChartHeight + constants.BrushedChartSeparation
             }
-            setFilteredData(
-              data.filter(
-                s =>
-                  accessors.x(s).getTime() > domain.x0 &&
-                  accessors.x(s).getTime() < domain.x1 &&
-                  accessors.y(s) > domain.y0 &&
-                  accessors.y(s) < domain.y1,
-              ),
-            );
-          }}
-        />
-      </AbstractAreaChart>
-    </Group>
+            height={secondaryChartRanges.y[0]}
+            scales={scales}
+            ranges={secondaryChartRanges}
+            accessors={accessors}
+            onClick={() => setFilteredData(data)}
+            onChange={(domain: Bounds | null) => {
+              if (!domain) {
+                return;
+              }
+              setFilteredData(
+                data.filter(
+                  s =>
+                    accessors.x(s) > domain.x0 &&
+                    accessors.x(s) < domain.x1 &&
+                    accessors.y(s) > domain.y0 &&
+                    accessors.y(s) < domain.y1,
+                ),
+              );
+            }}
+          />
+        </AbstractAreaChart>
+      </svg>
+      {tooltipData && (
+        <div>
+          <TooltipWithBounds
+            key={Math.random()}
+            top={(tooltipTop ?? 0) - 12}
+            left={(tooltipLeft ?? 0) + 12}
+            style={constants.TooltipStyles}
+          >
+            {tooltipFormatters?.y
+              ? tooltipFormatters.y(accessors.y(tooltipData) as constants.InferY<D, A>)
+              : accessors.y(tooltipData)}
+          </TooltipWithBounds>
+          <Tooltip
+            top={
+              Math.abs(
+                (tooltipTop ?? 0) - (topChartHeight + constants.ChartYAxisVerticalOffset - 14),
+              ) <= 10
+                ? constants.ChartYAxisVerticalOffset + 14
+                : topChartHeight + constants.ChartYAxisVerticalOffset - 14
+            }
+            left={(tooltipLeft ?? 0) + constants.ChartYAxisHorizontalOffset}
+            style={{
+              ...constants.TooltipStyles,
+              minWidth: 72,
+              textAlign: "center",
+              transform: "translateX(-50%)",
+            }}
+          >
+            {tooltipFormatters?.x
+              ? tooltipFormatters.x(accessors.x(tooltipData) as constants.InferX<D, A>)
+              : accessors.x(tooltipData)}
+          </Tooltip>
+        </div>
+      )}
+    </div>
   );
 };

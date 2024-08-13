@@ -18,7 +18,7 @@ export interface AppConfigProps {
 export const AppConfig = ({ children }: AppConfigProps): JSX.Element => (
   <ClerkProvider>
     <ClerkLoading>
-      <Loading fullScreen isLoading />
+      <Loading fillScreen isLoading />
     </ClerkLoading>
     <ClerkLoaded>
       <CookiesProvider>

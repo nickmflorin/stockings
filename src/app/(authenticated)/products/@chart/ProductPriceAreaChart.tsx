@@ -4,22 +4,22 @@ import { fetchProductPriceData } from "~/actions/fetches/products";
 
 import { Loading } from "~/components/loading/Loading";
 
-const ClientProductPriceLineChart = dynamic(
-  () => import("~/features/products/components/charts/PriceLineChart"),
+const ClientProductPriceAreaChart = dynamic(
+  () => import("~/features/products/components/charts/ProductPriceAreaChart"),
   { loading: () => <Loading isLoading /> },
 );
 
-export interface ProductPriceLineChartProps {
+export interface ProductPriceAreaChartProps {
   readonly productId: string;
   readonly width: number;
   readonly height: number;
 }
 
-export const ProductPriceLineChart = async ({
+export const ProductPriceAreaChart = async ({
   productId,
   height,
   width,
-}: ProductPriceLineChartProps): Promise<JSX.Element> => {
+}: ProductPriceAreaChartProps): Promise<JSX.Element> => {
   const records = await fetchProductPriceData(productId);
-  return <ClientProductPriceLineChart height={height} width={width} data={records} />;
+  return <ClientProductPriceAreaChart height={height} width={width} data={records} />;
 };

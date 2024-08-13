@@ -7,7 +7,7 @@ import { classNames } from "~/components/types";
 export interface LoadingViewProps
   extends Pick<
     ViewProps,
-    "fullScreen" | "fill" | "component" | "isDisabled" | "dim" | keyof ComponentProps
+    "fillScreen" | "fill" | "component" | "isDisabled" | "dim" | keyof ComponentProps
   > {
   readonly isLoading?: boolean;
   readonly spinnerSize?: SpinnerProps["size"];
@@ -19,12 +19,12 @@ export const LoadingView = ({
   spinnerProps,
   isLoading,
   fill = "parent",
-  fullScreen = false,
+  fillScreen,
   ...props
 }: LoadingViewProps) => (
   <View
     {...props}
-    fill={fullScreen ? "screen" : fill}
+    fill={fillScreen ? "screen" : fill}
     overflow="hidden"
     absolute
     centerChildren

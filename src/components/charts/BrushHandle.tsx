@@ -7,15 +7,15 @@ import * as constants from "./constants";
 
 export interface BrushHandleProps extends BrushHandleRenderProps {}
 
-// We need to manually offset the handles for them to be rendered at the right position
 export const BrushHandle = ({ x, height, isBrushActive }: BrushHandleProps) => {
-  const pathWidth = 8;
-  const pathHeight = 15;
   if (!isBrushActive) {
     return null;
   }
   return (
-    <Group left={x + pathWidth / 2} top={(height - pathHeight) / 2}>
+    <Group
+      left={x + constants.BrushHandleWidth / 2}
+      top={(height - constants.BrushHandleHeight) / 2}
+    >
       <path
         fill={constants.BrushHandleFillColor}
         /* eslint-disable-next-line max-len */
