@@ -1,11 +1,40 @@
-# tooltrack
+# ToolTrack
 
-This repository contains a web application that is used for scraping publically available web data
-from specific e-commerce websites that sell woodworking tools and allowing users to monitor, manage
-and configure notifications and alerts for events that occur in relation to products that the
-specific e-commerce sites offer.
+ToolTrack is a web application build with [NextJS][nextjs] that allows users to monitor, manage and
+configure notifications and alerts that they will receive as it relates to inventory & price changes
+that occur for products offered by the woodworking hand tool manufacturer, [Lie
+Nielsen][lie-nielsen].
+
+The application relies on web scraping publically available data from [Lie Nielsen][lie-nielsen]'s
+website.
 
 &copy; Nick Florin, 2024
+
+### Background
+
+Since the 1980's, [Lie Nielsen][lie-nielsen] has been widely considered to be the best manufacturer
+of North American-style woodworking hand tools, particularly hand planes. For woodworkers - like
+myself - their beautiful, heirloom tools have become a staple in the workshop.
+
+[Lie Nielsen][lie-nielsen] is a rather small company, and only keeps certain tools in stock with any
+degree of reliability. This is undedrstandable - many of their tools are produced in smaller
+batches, or released as limited run tools that will not be made again. When these tools become
+available for purchase, they are often sold out within hours of being released to the public.
+
+These considerations have warranted the need for a tool that allows users to receive notifications,
+either via SMS, email or both, when the availability or price of a tool changes, for both new and
+existing tools, as quickly as possible. This helps to ensure that they have an opportunity to
+purchase the tool while it is still available.
+
+The application is able to meet these needs by scraping data from [Lie Nielsen][lie-nielsen]'s
+website at regular, short intervals - detecting when changes in stock and/or prices occur and
+dispatching notifications to users who have subscribed to receive them as soon as they occur.
+
+## 1. Getting Started
+
+This section of the documentation outlines - at a high level - how to setup your machine for local
+development for the first time. For more detailed explanations related to local development or
+production deployments, see the Section 2: Development.
 
 ### System Requirements
 
@@ -20,12 +49,6 @@ same.
 - [pnpm]: A [node] package manager.
 - [vercel-cli]: The [homebrew] package that exposes [Vercel][vercel]'s command line utility. This is
   used locally for purposes of environment variable management and deployments.
-
-## 1. Getting Started
-
-This section of the documentation outlines - at a high level - how to setup your machine for local
-development for the first time. For more detailed explanations related to local development or
-production deployments, see the Section 2: Development.
 
 **Note**: _This documentation describes how to setup and configure the application for local
 development on MacOSX. Many of the steps outlined in this section may also be applicable for a
@@ -46,10 +69,14 @@ this project.
 
 #### 1.2.a [Node][node]
 
-[Node][node] is the engine that supports the application. This project uses [node] v20.0.0. Your
-machine will most likely already have a system installation of [node], but even if it does not -
-that is okay, we will not be using the system installation of [node] but will rather isolate the
-version of [node] being used for this project to this repository using [nvm].
+[Node][node] is the engine that supports the application. This project uses [node] v20.0.0, and many
+of the scripts in the `package.json` file will ensure that this version is met before allowing the
+script to proceed executing.
+
+Your machine will most likely already have a system installation of [node], but even if it does
+not - that is okay, we will not be using the system installation of [node] (and you should not use a
+system installation of [node]) but will rather isolate the version of [node] being used for this
+project to this repository using [nvm].
 
 **Important**: _Do not use a system installation of [node]. It will complicate your development
 environment. Instead, see the next section for details about usage of [nvm]._
@@ -83,13 +110,16 @@ $ export NVM_DIR="$HOME/.nvm"
 ```
 
 **Note**: _This installation will automatically make changes to your shell profile script. The exact
-file will depend on the type of machine you are running as well as the period of time in which the
-machine was created. Most likely, your shell profile script will be `~/.zshrc` - which is the shell
-profile used for Mac's created since the introduction of the M1 processor._
+file that is used for your shell profile will depend on the type of machine you are using, the the
+period of time in which the machine was created, and other considerations. Most likely, your shell
+profile script will be `~/.zshrc` - which is the shell profile used for Mac's created since the
+introduction of the M1 processor._
 
-Since the [nvm] installation involved making changes to your shell profile script behind the scenes,
-in order for those changes to take effect, you need to subsequently source your shell profile script
-(`~/.zshrc` in this example):
+Since the [nvm] installation involves making changes to your machine's shell profile script, you
+need to source your shell profile script after the installation completes. If this is not done, the
+changes that were made by [nvm] will not take effect until you restart your Terminal application.
+
+Assuming your shell profile script is `~/.zshrc`, you can source it as follows:
 
 ```bash
 $ . ~/.zshrc`
@@ -103,13 +133,13 @@ $ nvm
 
 ##### 1.2.a.ii Node Version
 
-Now that [nvm] is installed, we need to use it to establish the correct version of [node], 20, that
-is suitable for this project. This project's repository comes equipped with a `.nvmrc` file that
-automatically tells [nvm] what version of [node] to use - but that version may still need to be
-installed.
+Now that [nvm] is installed, you need to use it to establish the correct version of [node], 20, that
+is required for this application. This project's repository comes equipped with a `.nvmrc` file in
+the root folder - which is responsible for communicating to [nvm] which version of [node] to use for
+the project. However, that specific version of [node] may still need to be installed via [nvm].
 
-First, instruct [nvm] to use the [node] version specified by the `.nvmrc` file with the following
-command:
+First, instruct [nvm] to use the [node] version specified by the `.nvmrc` file by executing the
+following command from the root of the repository:
 
 ```bash
 $ nvm use
@@ -118,26 +148,27 @@ $ nvm use
 If you see an output similar to the following:
 
 ```bash
-Found '/<path-to-repository>/nick.florin/.nvmrc' with version <v20.0.0>
+Found '/<path-to-repository>/tooltrack/.nvmrc' with version <v20.0.0>
 Now using node v20.0.0 (npm v8.6.0)
 ```
 
 It means that the correct version of [node] that is required for this project is already installed
-with [nvm] and that version of [node] is active for this project's directory. The rest of this step
-can be skipped and you can proceed to the next step, "1.2.a.iii: Homebrew".
+and available via [nvm] and that version of [node] is now active for this project's repository. The
+rest of this step can be skipped and you can proceed to the next step,
+[1.2.b Homebrew](#12b-homebrew).
 
-On the other hand, if you see an error similar to the following:
+On the other handss, if you see an error similar to the following:
 
 ```bash
-Found '/<path-to-repository>/nick.florin/.nvmrc' with version <v20.0.0>
+Found '/<path-to-repository>/tooltrack/.nvmrc' with version <v20.0.0>
 N/A: version "v20.0.0 -> N/A" is not yet installed.
 
 You need to run "nvm install v20.0.0" to install it before using it.
 ```
 
-It means that the correct version of [node] that is required for this project is not already
-installed with [nvm], and must be installed before using it. To do this, simply run the following
-command from the root of the project repository:
+It means that the version of [node] that is required for this project is not already installed with
+[nvm], and must be installed before it can be used. To do this, simply run the following command
+from the root of the project repository:
 
 ```bash
 $ nvm install
@@ -162,30 +193,31 @@ $ nvm current
 
 The output of this command should be similar to the following:
 
-```bash
+```bashsssssssss
 $ v20.x.x
 ```
 
 At this point, if [nvm] is not pointing at the correct version of [node] or is pointing at a system
 installation of [node], something went awry - consult a team member before proceeding.
 
-### 1.2.b: Homebrew
+### 1.2.b Homebrew
 
 If on MacOSX, you will need to install [homebrew], which is a MacOSX package manager. Installation
 instructions can be found on [homebrew]'s website.
 
-### 1.2.c: pnpm
+### 1.2.c pnpm
 
-This application uses [`pnpm`][pnpm] to manage dependencies. Before installing the project's
-dependencies, [pnpm] must be downloaded and setup on your machine. To download [`pnpm`][pnpm],
-simply execute the following `curl` command:
+This application uses [pnpm] to manage dependencies. Before installing the project's dependencies,
+[pnpm] must be downloaded and setup on your machine. To download [pnpm], simply execute the
+following `curl` command:
 
 ```bash
 $ curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-After downloading [`pnpm`][pnpm], make sure to source your machine's shell profile script (here, we
-assume that is `~/.zshrc`):
+Similarly to the installation of [nvm], the installation of [pnpm] involves making changes to your
+machine's shell profile script. As such, after [pnpm] is installed, make sure to source your
+machine's shell profile script (here, we assume that is `~/.zshrc`):
 
 ```bash
 $ . ~/.zshrc
@@ -197,13 +229,13 @@ Finally, ensure that the `pnpm` command is recognized by your machine:
 $ pnpm -v
 ```
 
-The [`pnpm`][pnpm] version should be 8.x.x. If it is not, refer to the next section, "Managing PNPM
-Version".
+The [pnpm] version should be 8.x.x. If it is not, refer to the next section,
+[1.2.c.i Managing PNPM Version](#12ci-Managing-PNPM-Version).
 
-###### Managing PNPM Version
+#### 1.2.c.i Managing PNPM Version
 
-[`pnpm`][pnpm] uses [corepack] to manage versions on your local machine. [corepack] can be installed
-on your machine via [homebrew]:
+[pnpm] uses [corepack] to manage versions on your local machine. To install [corepack], use
+[homebrew] as folllows:
 
 ```bash
 $ brew install corepack
@@ -215,8 +247,8 @@ Once [corepack] is installed, activate it as follows:
 $ corepack enable
 ```
 
-Now you should be able to manage your [`pnpm`][pnpm] version for this project independently of the
-system installation:
+Now you should be able to manage your [pnpm] version for this project independently of the system
+installation:
 
 ```bash
 $ corepack prepare pnpm@<version> --activate
@@ -228,13 +260,13 @@ or
 $ corepack prepare pnpm@latest --activate
 ```
 
-### 1.2.d: Vercel CLI
+### 1.2.d Vercel CLI
 
-Once [`pnpm`][pnpm] is installed, [Vercel]'s [CLI][vercel-cli] needs to be installed. This
-application uses [Vercel]'s [CLI][vercel-cli] to manage environment variables in both production and
-development environments, particularly environment variables that represent sensitive information.
+Once [pnpm] is installed, [Vercel]'s [CLI][vercel-cli] needs to be installed. This application uses
+[Vercel]'s [CLI][vercel-cli] to manage environment variables in both production and development
+environments, particularly environment variables that represent sensitive information.
 
-To install [Vercel]'s [CLI][vercel-cli], simply use [`pnpm`][pnpm] to install the package globally:
+To install [Vercel]'s [CLI][vercel-cli], simply use [pnpm] to install the package globally:
 
 ```bash
 $ pnpm i -g vercel
@@ -311,7 +343,7 @@ related to this topic, see Section 1.4.a._
 
 For more information regarding the environment variables, refer to Section 2.5.
 
-#### 1.3.b: Dependencies
+#### 1.3.b Dependencies
 
 When setting up the environment for the first time, you must do a fresh install of the dependencies.
 
@@ -343,7 +375,7 @@ This will install the project dependencies in the `package.json` file.
 Currently, this application uses a "pro" license for [FontAwesome][fontawesome] to support the icons
 in the application. There
 
-### 1.4: Database
+### 1.4 Database
 
 This project uses a [postgres] database for both production and local development. First, check to
 see if your machine already has [postgres] installed:
@@ -791,7 +823,9 @@ pnpm migrate-dev
 
 ##### 2.7.a.iii Resetting the Database
 
-TODO
+```bash
+pnpm migrate-reset
+```
 
 ##### 2.7.a.iv Seeding
 
@@ -886,3 +920,4 @@ $ git push origin master
 [vercel-cli]: https://vercel.com/docs/cli
 [typescript]: https://www.typescriptlang.org/
 [zenstack]: https://zenstack.dev/
+[lie-nielsen]: https://www.lie-nielsen.com/
