@@ -88,6 +88,7 @@ export type ViewProps = ComponentProps &
   ViewOverflowProps &
   ViewFillProps &
   ViewFlexProps & {
+    readonly __default_position__?: ViewPosition;
     readonly children?: React.ReactNode;
     readonly dim?: true;
     readonly isDisabled?: true;
@@ -139,7 +140,11 @@ const parsePosition = ({
   position,
   absolute,
   relative,
-}: Pick<ViewProps, "position" | "absolute" | "relative">): ViewPosition => {
+  __default_position__,
+}: Pick<
+  ViewProps,
+  "position" | "absolute" | "relative" | "__default_position__"
+>): ViewPosition => {
   if (position !== undefined) {
     if (absolute !== undefined || relative !== undefined) {
       logger.warn(
@@ -149,7 +154,7 @@ const parsePosition = ({
       );
     }
     return position;
-  } else if (absolute) {
+  } else if (absolute !== undefined) {
     if (relative) {
       logger.warn(
         "The props 'absolute' and 'relative' should not both be specified on a view at the " +
@@ -158,8 +163,10 @@ const parsePosition = ({
       );
     }
     return "absolute";
+  } else if (relative !== undefined) {
+    return "relative";
   }
-  return "relative";
+  return __default_position__ ?? "relative";
 };
 
 const parseFill = ({

@@ -4,25 +4,24 @@ import { Loading } from "~/components/loading/Loading";
 import { View, type ViewSizeProps, type ViewProps } from "~/components/structural/View";
 import { classNames, type ComponentProps } from "~/components/types";
 
-import { ModuleContent } from "./ModuleContent";
-import { ModuleHeader } from "./ModuleHeader";
-
-export interface ModuleProps extends ViewSizeProps, ComponentProps, Pick<ViewProps, "component"> {
+export interface ModuleContentProps
+  extends ViewSizeProps,
+    ComponentProps,
+    Pick<ViewProps, "component" | "centerChildren"> {
   readonly children: ReactNode;
   readonly isLoading?: boolean;
   readonly isDisabled?: true;
 }
 
-const LocalModule = ({ children, isDisabled, isLoading, ...props }: ModuleProps) => (
+export const ModuleContent = ({
+  children,
+  isDisabled,
+  isLoading,
+  ...props
+}: ModuleContentProps) => (
   <View flex column {...props} className={classNames("gap-2", props.className)}>
     <Loading isLoading={isLoading} isDisabled={isDisabled}>
       {children}
     </Loading>
   </View>
 );
-
-export const Module = Object.assign(LocalModule, {
-  displayName: "Module",
-  Header: ModuleHeader,
-  Content: ModuleContent,
-});

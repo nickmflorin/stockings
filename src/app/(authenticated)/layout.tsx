@@ -2,9 +2,6 @@ import { type ReactNode } from "react";
 
 import { Layout } from "~/components/layout/Layout";
 
-/* Need to update NextJS
-   export const experimental_ppr = true; */
-
 interface AuthenticatedLayoutProps {
   readonly children: ReactNode;
 }
@@ -15,15 +12,21 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
       nav={[
         {
           tooltipLabel: "Dashboard",
-          icon: { name: "grid" },
+          icon: "grid",
           path: "/dashboard",
           activePaths: [{ leadingPath: "/dashboard" }],
         },
         {
           tooltipLabel: "Products",
-          icon: { name: "toolbox" },
+          icon: "toolbox",
           path: "/products",
-          activePaths: [{ leadingPath: "/products" }],
+          activePaths: [{ leadingPath: "/products" }, { leadingPath: "/product/:id" }],
+        },
+        {
+          tooltipLabel: "Notifications",
+          icon: "envelope",
+          path: "/notifications",
+          activePaths: [{ leadingPath: "/notifications" }],
         },
       ]}
     >

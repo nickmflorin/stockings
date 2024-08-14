@@ -23,16 +23,14 @@ export interface ProductsTableBodyProps {
 }
 
 export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element => {
-  const { replace } = useRouter();
-  const pathname = usePathname();
+  const { push } = useRouter();
   const searchParams = useSearchParams();
 
   return (
     <DataTableBody
       onRowClick={productId => {
         const params = new URLSearchParams(searchParams);
-        params.set("productId", productId);
-        replace(`${pathname}?${params.toString()}`);
+        push(`product/${productId}?${params.toString()}`);
       }}
       columns={convertConfigsToColumns(
         [...ProductsTableColumns] as DataTableColumnConfig<ApiProduct, ProductsTableColumnId>[],

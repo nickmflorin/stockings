@@ -32,11 +32,12 @@
   > .avatar__image {
     height: 100%;
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   @include partials.with-radius using ($size, $value) {
     &--radius-#{$size} {
+      @include avatar-radius($value);
       > .avatar__image {
         @include avatar-radius($value);
       }
@@ -51,6 +52,7 @@
     padding: 6px;
 
     @include partials.with-radius using ($size, $value) {
+      @include avatar-radius($value);
       &.avatar--radius-#{$size} {
         @include avatar-radius($value);
       }
