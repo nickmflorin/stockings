@@ -10,6 +10,8 @@ import {
   sizeToString,
 } from "~/components/types";
 
+import { Paper } from "./Paper";
+
 export type ViewPosition = "relative" | "absolute";
 export type ViewOverflow = "scroll" | "auto" | "hidden" | "visible";
 export type ViewFill = "screen" | "parent";
@@ -20,7 +22,7 @@ export type ViewComponentRenderProps = {
   readonly className?: string;
 };
 
-type ViewComponentName = "tbody" | "div";
+type ViewComponentName = "tbody" | "div" | "paper";
 
 const DivViewComponent: React.ComponentType<ViewComponentRenderProps> = ({
   children,
@@ -37,6 +39,7 @@ const ViewComponentMap: {
 } = {
   tbody: TBodyViewComponent,
   div: DivViewComponent,
+  paper: Paper,
 };
 
 const ViewSizePropNames = [
