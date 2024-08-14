@@ -148,6 +148,14 @@ export abstract class ProcessedScrapedModel<
     return Object.keys(this.errors).length === 0;
   }
 
+  public get hasErrors() {
+    return !this.isValid;
+  }
+
+  public hasErrorsForAny(fields: types.ScrapedModelField<D>[]): boolean {
+    return fields.some(f => this.errors[f] !== undefined);
+  }
+
   public get isPartiallyValid() {
     return this.strictFields.every(f => this.data[f].value !== undefined);
   }

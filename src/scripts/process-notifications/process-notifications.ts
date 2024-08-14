@@ -1,24 +1,15 @@
 import type { ScriptContext } from "~/scripts/context";
 
 import { db } from "~/database";
-import { PriceChangeEventCondition, enhance, NotificationState } from "~/database/model";
+import {
+  PriceChangeEventCondition,
+  enhance,
+  NotificationState,
+  type ModelWithNonNullField,
+} from "~/database/model";
 import { logger } from "~/internal/logger";
 
-import { type Equals } from "~/lib/types";
-
-type NonNullField<T extends Record<string, unknown>, K extends keyof T> = {
-  [key in keyof T]: Equals<key, K, Exclude<T[key], null>, T[key]>;
-};
-
-const walkBackwardsUntil = <T, S extends T>(data: T[], condition: (d: T) => d is S): S | null => {
-  for (let i = data.length - 1; i >= 0; i--) {
-    const datum = data[i];
-    if (condition(datum)) {
-      return datum;
-    }
-  }
-  return null;
-};
+import { walkBackwardsUntil } from "~/lib/arrays";
 
 export const processNotifications = async (ctx: ScriptContext) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
@@ -40,10 +31,10 @@ export const processNotifications = async (ctx: ScriptContext) => {
           if (record.price) {
             const previousRecordWithPrice = walkBackwardsUntil(
               previousRecords,
-              (r): r is NonNullField<typeof record, "price"> => r.price !== null,
+              (r): r is ModelWithNonNullField<typeof record, "price"> => r.price !== null,
             );
             /* If there is not a previous record with a price, we treat it the same way as if the
-             record is the first in the product's history - we do not issue notifications. */
+               record is the first in the product's history - we do not issue notifications. */
             if (previousRecordWithPrice) {
               if (previousRecordWithPrice.price > record.price) {
                 const subscriptions = await enhanced.productSubscription.findMany({
@@ -99,23 +90,30 @@ export const processNotifications = async (ctx: ScriptContext) => {
                 "Price notifications will not be issued for this record.",
             );
           }
-          if (record.status) {
+          const status = record.status;
+          if (status) {
             const previousRecordWithStatus = walkBackwardsUntil(
               previousRecords,
-              (r): r is NonNullField<typeof record, "status"> => r.status !== null,
+              (r): r is ModelWithNonNullField<typeof record, "status"> => r.status !== null,
             );
-            /* If there is not a previous record with a price, we treat it the same way as if the
-             record is the first in the product's history - we do not issue notifications. */
+            /* If there is not a previous record with a status, we treat it the same way as if the
+               record is the first in the product's history - we do not issue notifications. */
             if (previousRecordWithStatus) {
-              if (previousRecordWithStatus.status != record.price) {
+              if (previousRecordWithStatus.status != status) {
                 const subscriptions = await enhanced.productSubscription.findMany({
                   where: {
                     productId: product.id,
-                    priceChange: { conditions: { has: PriceChangeEventCondition.PriceDecrease } },
+                    statusChange: {
+                      conditions: {
+                        some: {
+                          fromStatus: { has: previousRecordWithStatus.status },
+                          toStatus: { has: status },
+                        },
+                      },
+                    },
                   },
                 });
-                // TODO: We have to wrap this stuff in a transaction
-                await tx.priceChangeNotification.createMany({
+                await tx.statusChangeNotification.createMany({
                   data: subscriptions.map(subscription => ({
                     subscriptionId: subscription.id,
                     productRecordId: record.id,
@@ -123,7 +121,8 @@ export const processNotifications = async (ctx: ScriptContext) => {
                     updatedById: ctx.user.id,
                     userId: subscription.userId,
                     state: NotificationState.Pending,
-                    condition: PriceChangeEventCondition.PriceDecrease,
+                    fromStatus: previousRecordWithStatus.status,
+                    toStatus: status,
                   })),
                 });
               }
@@ -139,18 +138,9 @@ export const processNotifications = async (ctx: ScriptContext) => {
                 "Status notifications will not be issued for this record.",
             );
           }
+          await tx.productRecord.update({ where: { id: record.id }, data: { isProcessed: true } });
         });
       }
     }
-
-    /* const subscriptions = await enhanced.productSubscription.findMany({
-         where: { productId: product.id },
-         include: {
-           statusChange: { include: { conditions: { orderBy: [{ createdAt: "desc" }] } } },
-           priceChange: true,
-         },
-       });
-       for (const subscription of subscriptions) {
-       } */
   }
 };

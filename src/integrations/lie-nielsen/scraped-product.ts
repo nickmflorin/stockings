@@ -284,46 +284,61 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
           "records for the product.",
       );
       return true;
-    } else if (!this.isValid) {
-      logger.info(
-        `Creating a new recorded record for product '${product.slug}' because the scraped product ` +
-          "is invalid.",
-      );
+    }
+
+    if (this.hasErrorsForAny(["price", "status"])) {
       return true;
     }
-    /* Note: If the latest record had errors, there will be undefined values for at least one of
-       the fields.  This is okay though - because if a previous value was undefined due to an error,
-       and the error was resolved, we want to add a new record with the resolved value.  Similarly,
-       if the previous value is not undefined, and the new value is undefined - there was an error,
-       and we want to add a new record to indicate that the field is now undefined due to the
-       error. */
-    const latestRecord = historicalRecords[historicalRecords.length - 1];
+    const price = this.data.price.value;
+    const status = this.data.status.value;
+    if (price === undefined || status === undefined) {
+      throw new Error(
+        "Encountered undefined values for 'price' and/or 'status' fields, when it was previously " +
+          "validated that there were no errors associated with those fields!",
+      );
+    }
 
     // Sort records in ascending order of their timestamp.
     const sorted = historicalRecords.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+    /* Note: If the last saved record had errors, there will be undefined values for at least one of
+       the fields (e.g. 'price' or 'status').  This is okay though - because if a previous value
+       was undefined - due to an error - and the error was resolved, we want to add a new record
+       with the resolved value, even if the resolved value does not differ from the last
+       record that exists with that value successfully scraped. */
+    const latestRecord = historicalRecords[historicalRecords.length - 1];
+    // The last record with a successfully scraped price.
     const latestRecordWithPrice = walkBackwardsUntil(
       sorted,
       (r): r is ModelWithNonNullField<typeof r, "price"> => r.price !== null,
     );
-    if (
-      latestRecord.price === null ||
-      !latestRecordWithPrice ||
-      latestRecordWithPrice.price !== this.validatedData.price
-    ) {
-      return true;
-    }
+    // The last record with a successfully scraped status.
     const latestRecordWithStatus = walkBackwardsUntil(
       sorted,
       (r): r is ModelWithNonNullField<typeof r, "status"> => r.status !== null,
     );
-    if (
+    return (
+      /* If the last saved record did not have a successfully scraped price or status, then we need
+         to save the successfully scraped price and status on this scraped product instance as
+         a new historical product record. */
+      latestRecord.price === null ||
       latestRecord.status === null ||
-      !latestRecordWithStatus ||
-      latestRecordWithStatus.status !== this.validatedData.status
-    ) {
-      return true;
-    }
-    return false;
+      /* At this point, we know that the price was successfully scraped and stored on this
+         instance - but it is not yet saved.  If there has not yet been a saved record with a
+         successfully scraped price, then the scraped information needs to be saved in a record
+         such that the successfully scraped price is present in the record history. */
+      latestRecordWithPrice === null ||
+      /* At this point, we know that the status was successfully scraped and stored on this
+         instance - but it is not yet saved.  If there has not yet been a saved record with a
+         successfully scraped status, then the scraped information needs to be saved in a record
+         such that the successfully scraped status is present in the record history. */
+      latestRecordWithStatus === null ||
+      /* If there is a concrete price and/or status history on previously stored product records,
+         we only want to create a new product record with a new price and/or status if the price
+         and/or status are different from the last stored record. */
+      latestRecordWithPrice.price !== price ||
+      latestRecordWithStatus.status !== status
+    );
   }
 
   public compareToProduct(product: Product) {
@@ -448,8 +463,11 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
     return updateData;
   }
 
-  public async createProduct(tx: Transaction, ctx: { user: User }) {
-    return await tx.product.create({
+  public async createProduct(
+    tx: Transaction,
+    ctx: { user: User },
+  ): Promise<[Product, ProductRecord | null]> {
+    const product = await tx.product.create({
       data: {
         name: this.data.name.value ?? null,
         code: this.data.code.value ?? null,
@@ -471,10 +489,17 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
         updatedBy: { connect: { id: ctx.user.id } },
       },
     });
+    return [product, await this.createProductRecord(tx, product, ctx)];
   }
 
-  public async syncProduct(tx: Transaction, product: Product, ctx: { user: User }) {
+  public async syncProduct(
+    tx: Transaction,
+    product: Product,
+    records: ProductRecord[],
+    ctx: { user: User },
+  ): Promise<[Product, ProductRecord | null]> {
     const updateData = this.compareToProduct(product);
+    let updatedProduct: Product = product;
     if (Object.keys(updateData).length !== 0) {
       const humanized = humanizeList(Object.keys(updateData), { formatter: v => `'${v}'` });
       logger.info(
@@ -485,7 +510,7 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
           updateData,
         },
       );
-      return await tx.product.update({
+      updatedProduct = await tx.product.update({
         where: { id: product.id },
         data: {
           ...updateData,
@@ -493,10 +518,13 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
         },
       });
     }
-    return product;
+    if (this.warrantsNewRecord(updatedProduct, records)) {
+      return [updatedProduct, await this.createProductRecord(tx, product, ctx)];
+    }
+    return [updatedProduct, null];
   }
 
-  public async createProductRecord(
+  private async createProductRecord(
     tx: Transaction,
     product: Product,
     ctx: { user: User },

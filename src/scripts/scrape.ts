@@ -2,7 +2,7 @@ import { db } from "~/database";
 import { logger } from "~/internal/logger";
 import { LogLevel } from "~/internal/loggers/constants";
 
-import { integration } from "~/integrations/lie-nielsen";
+import { client } from "~/integrations/lie-nielsen";
 
 import { getScriptContext } from "~/scripts/context";
 
@@ -10,7 +10,7 @@ logger.level = LogLevel.INFO;
 
 async function main() {
   const { user } = await getScriptContext({ upsertUser: true });
-  await integration.updateProducts({ batchSize: 10, user });
+  await client.updateProducts({ batchSize: 10, user });
 }
 
 main()
