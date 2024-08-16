@@ -98,7 +98,6 @@ export const ProductsTableFiltersSchemas = {
     );
   }),
 } satisfies {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   [key in keyof ProductsTableFilters]: z.ZodType;
 };
 

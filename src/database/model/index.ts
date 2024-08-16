@@ -6,12 +6,13 @@ export * from "./charting";
 export * from "./dom";
 export * from "./errors";
 export * from "./inclusion";
+export * from "./notifications";
 export * from "./product";
 export * from "./product-statuses";
 export * from "./subscription";
 
 export {
-  PriceChangeEventCondition,
+  PriceChangeSubscriptionCondition,
   ProductStatus,
   ProductCategory,
   ProductSubCategory,
@@ -22,13 +23,14 @@ export {
   PrismaClient,
   NotificationState,
   NotificationType,
+  SubscriptionType,
 } from "./generated";
 
 export type {
   ProductSubscription,
-  StatusChangeSubscribedEvent,
-  StatusChangeEventCondition,
-  PriceChangeSubscribedEvent,
+  StatusChangeSubscription,
+  StatusChangeSubscriptionCondition,
+  PriceChangeSubscription,
   User,
   HttpClientErrorData,
   HttpNetworkErrorData,

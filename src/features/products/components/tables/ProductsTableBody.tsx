@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { type ApiProduct } from "~/database/model";
 

@@ -17,25 +17,45 @@ export const Drawer = <D extends DrawerId, C extends React.ComponentType<any>>(
   width,
 });
 
-const SubscribeToProductDrawer = dynamic(
-  () => import("~/features/notifications/components/drawers/SubscribeToProductDrawer"),
+const UpdatePriceChangeSubscriptionDrawer = dynamic(
+  () => import("~/features/subscriptions/components/drawers/UpdatePriceChangeSubscriptionDrawer"),
   { loading: () => <Loading isLoading={true} /> },
 );
 
-const UpdateProductSubscriptionDrawer = dynamic(
-  () => import("~/features/notifications/components/drawers/UpdateProductSubscriptionDrawer"),
+const UpdateStatusChangeSubscriptionDrawer = dynamic(
+  () => import("~/features/subscriptions/components/drawers/UpdateStatusChangeSubscriptionDrawer"),
+  { loading: () => <Loading isLoading={true} /> },
+);
+
+const SubscribeToPriceChangesDrawer = dynamic(
+  () => import("~/features/subscriptions/components/drawers/SubscribeToPriceChangesDrawer"),
+  { loading: () => <Loading isLoading={true} /> },
+);
+
+const SubscribeToStatusChangesDrawer = dynamic(
+  () => import("~/features/subscriptions/components/drawers/SubscribeToStatusChangesDrawer"),
   { loading: () => <Loading isLoading={true} /> },
 );
 
 export const Drawers = {
-  [DrawerIds.SUBSCRIBE_TO_PRODUCT]: Drawer(
-    DrawerIds.SUBSCRIBE_TO_PRODUCT,
-    SubscribeToProductDrawer,
+  [DrawerIds.SUBSCRIBE_TO_PRICE_CHANGES]: Drawer(
+    DrawerIds.SUBSCRIBE_TO_PRICE_CHANGES,
+    SubscribeToPriceChangesDrawer,
     "500px",
   ),
-  [DrawerIds.UPDATE_PRODUCT_SUBSCRIPTION]: Drawer(
-    DrawerIds.UPDATE_PRODUCT_SUBSCRIPTION,
-    UpdateProductSubscriptionDrawer,
+  [DrawerIds.SUBSCRIBE_TO_STATUS_CHANGES]: Drawer(
+    DrawerIds.SUBSCRIBE_TO_STATUS_CHANGES,
+    SubscribeToStatusChangesDrawer,
+    "500px",
+  ),
+  [DrawerIds.UPDATE_PRICE_CHANGE_SUBSCRIPTION]: Drawer(
+    DrawerIds.UPDATE_PRICE_CHANGE_SUBSCRIPTION,
+    UpdatePriceChangeSubscriptionDrawer,
+    "500px",
+  ),
+  [DrawerIds.UPDATE_STATUS_CHANGE_SUBSCRIPTION]: Drawer(
+    DrawerIds.UPDATE_STATUS_CHANGE_SUBSCRIPTION,
+    UpdateStatusChangeSubscriptionDrawer,
     "500px",
   ),
 } as const satisfies {

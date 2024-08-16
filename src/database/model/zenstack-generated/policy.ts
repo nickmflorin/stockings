@@ -6,7 +6,8 @@ import { ProductRecordDataField } from "../generated";
 import { ProductStatus } from "../generated";
 import { ProductCategory } from "../generated";
 import { ProductSubCategory } from "../generated";
-import { PriceChangeEventCondition } from "../generated";
+import { PriceChangeSubscriptionCondition } from "../generated";
+import { SubscriptionType } from "../generated";
 import { NotificationType } from "../generated";
 import { NotificationState } from "../generated";
 
@@ -480,6 +481,42 @@ const policy: PolicyDef = {
             ,
         }
         ,
+        processedProductRecord: {
+            modelLevel: {
+                read: {
+                    guard: ProcessedProductRecord_read,
+                }
+                ,
+                create: {
+                    guard: ProcessedProductRecord_create, inputChecker: ProcessedProductRecord_create_input,
+                }
+                ,
+                update: {
+                    guard: ProcessedProductRecord_update,
+                }
+                ,
+                postUpdate: {
+                    guard: ProcessedProductRecord_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: ProcessedProductRecord_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
         product: {
             modelLevel: {
                 read: {
@@ -516,114 +553,6 @@ const policy: PolicyDef = {
             ,
         }
         ,
-        priceChangeSubscribedEvent: {
-            modelLevel: {
-                read: {
-                    guard: PriceChangeSubscribedEvent_read,
-                }
-                ,
-                create: {
-                    guard: PriceChangeSubscribedEvent_create, inputChecker: PriceChangeSubscribedEvent_create_input,
-                }
-                ,
-                update: {
-                    guard: PriceChangeSubscribedEvent_update,
-                }
-                ,
-                postUpdate: {
-                    guard: PriceChangeSubscribedEvent_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: PriceChangeSubscribedEvent_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        statusChangeEventCondition: {
-            modelLevel: {
-                read: {
-                    guard: StatusChangeEventCondition_read,
-                }
-                ,
-                create: {
-                    guard: StatusChangeEventCondition_create, inputChecker: StatusChangeEventCondition_create_input,
-                }
-                ,
-                update: {
-                    guard: StatusChangeEventCondition_update,
-                }
-                ,
-                postUpdate: {
-                    guard: StatusChangeEventCondition_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: StatusChangeEventCondition_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        statusChangeSubscribedEvent: {
-            modelLevel: {
-                read: {
-                    guard: StatusChangeSubscribedEvent_read,
-                }
-                ,
-                create: {
-                    guard: StatusChangeSubscribedEvent_create, inputChecker: StatusChangeSubscribedEvent_create_input,
-                }
-                ,
-                update: {
-                    guard: StatusChangeSubscribedEvent_update,
-                }
-                ,
-                postUpdate: {
-                    guard: StatusChangeSubscribedEvent_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: StatusChangeSubscribedEvent_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
         productSubscription: {
             modelLevel: {
                 read: {
@@ -644,6 +573,114 @@ const policy: PolicyDef = {
                 ,
                 delete: {
                     guard: ProductSubscription_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
+        statusChangeSubscriptionCondition: {
+            modelLevel: {
+                read: {
+                    guard: StatusChangeSubscriptionCondition_read,
+                }
+                ,
+                create: {
+                    guard: StatusChangeSubscriptionCondition_create, inputChecker: StatusChangeSubscriptionCondition_create_input,
+                }
+                ,
+                update: {
+                    guard: StatusChangeSubscriptionCondition_update,
+                }
+                ,
+                postUpdate: {
+                    guard: StatusChangeSubscriptionCondition_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: StatusChangeSubscriptionCondition_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
+        statusChangeSubscription: {
+            modelLevel: {
+                read: {
+                    guard: StatusChangeSubscription_read,
+                }
+                ,
+                create: {
+                    guard: StatusChangeSubscription_create, inputChecker: StatusChangeSubscription_create_input,
+                }
+                ,
+                update: {
+                    guard: StatusChangeSubscription_update,
+                }
+                ,
+                postUpdate: {
+                    guard: StatusChangeSubscription_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: StatusChangeSubscription_delete,
+                }
+            }
+            ,
+            fieldLevel: {
+                read:
+                {
+                }
+                ,
+                update:
+                {
+                }
+                ,
+            }
+            ,
+        }
+        ,
+        priceChangeSubscription: {
+            modelLevel: {
+                read: {
+                    guard: PriceChangeSubscription_read,
+                }
+                ,
+                create: {
+                    guard: PriceChangeSubscription_create, inputChecker: PriceChangeSubscription_create_input,
+                }
+                ,
+                update: {
+                    guard: PriceChangeSubscription_update,
+                }
+                ,
+                postUpdate: {
+                    guard: PriceChangeSubscription_postUpdate,
+                }
+                ,
+                delete: {
+                    guard: PriceChangeSubscription_delete,
                 }
             }
             ,
@@ -859,23 +896,27 @@ const policy: PolicyDef = {
             hasValidation: false
         }
         ,
+        processedProductRecord: {
+            hasValidation: false
+        }
+        ,
         product: {
             hasValidation: false
         }
         ,
-        priceChangeSubscribedEvent: {
-            hasValidation: false
-        }
-        ,
-        statusChangeEventCondition: {
-            hasValidation: false
-        }
-        ,
-        statusChangeSubscribedEvent: {
-            hasValidation: false
-        }
-        ,
         productSubscription: {
+            hasValidation: false
+        }
+        ,
+        statusChangeSubscriptionCondition: {
+            hasValidation: false
+        }
+        ,
+        statusChangeSubscription: {
+            hasValidation: false
+        }
+        ,
+        priceChangeSubscription: {
             hasValidation: false
         }
         ,
@@ -1471,6 +1512,50 @@ function $check_ProductRecord_delete(input: any, context: QueryContext): any {
     return false;
 }
 
+function ProcessedProductRecord_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_ProcessedProductRecord_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function ProcessedProductRecord_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_ProcessedProductRecord_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function ProcessedProductRecord_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function ProcessedProductRecord_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_ProcessedProductRecord_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function ProcessedProductRecord_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ProcessedProductRecord_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ProcessedProductRecord_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_ProcessedProductRecord_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
 function Product_read(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
 }
@@ -1515,138 +1600,6 @@ function $check_Product_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function PriceChangeSubscribedEvent_read(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_PriceChangeSubscribedEvent_read(input: any, context: QueryContext): any {
-    return false;
-}
-
-function PriceChangeSubscribedEvent_create(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_PriceChangeSubscribedEvent_create(input: any, context: QueryContext): any {
-    return false;
-}
-
-function PriceChangeSubscribedEvent_create_input(input: any, context: QueryContext): boolean {
-    return false;
-}
-
-function PriceChangeSubscribedEvent_update(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_PriceChangeSubscribedEvent_update(input: any, context: QueryContext): any {
-    return false;
-}
-
-function PriceChangeSubscribedEvent_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_PriceChangeSubscribedEvent_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function PriceChangeSubscribedEvent_delete(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_PriceChangeSubscribedEvent_delete(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeEventCondition_read(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeEventCondition_read(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeEventCondition_create(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeEventCondition_create(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeEventCondition_create_input(input: any, context: QueryContext): boolean {
-    return false;
-}
-
-function StatusChangeEventCondition_update(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeEventCondition_update(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeEventCondition_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StatusChangeEventCondition_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StatusChangeEventCondition_delete(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeEventCondition_delete(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeSubscribedEvent_read(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeSubscribedEvent_read(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeSubscribedEvent_create(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeSubscribedEvent_create(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeSubscribedEvent_create_input(input: any, context: QueryContext): boolean {
-    return false;
-}
-
-function StatusChangeSubscribedEvent_update(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeSubscribedEvent_update(input: any, context: QueryContext): any {
-    return false;
-}
-
-function StatusChangeSubscribedEvent_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StatusChangeSubscribedEvent_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StatusChangeSubscribedEvent_delete(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_StatusChangeSubscribedEvent_delete(input: any, context: QueryContext): any {
-    return false;
-}
-
 function ProductSubscription_read(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
 }
@@ -1688,6 +1641,138 @@ function ProductSubscription_delete(context: QueryContext, db: CrudContract): an
 }
 
 function $check_ProductSubscription_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscriptionCondition_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscriptionCondition_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscriptionCondition_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscriptionCondition_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscriptionCondition_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function StatusChangeSubscriptionCondition_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscriptionCondition_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscriptionCondition_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StatusChangeSubscriptionCondition_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StatusChangeSubscriptionCondition_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscriptionCondition_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscription_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscription_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscription_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscription_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscription_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function StatusChangeSubscription_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscription_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function StatusChangeSubscription_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StatusChangeSubscription_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StatusChangeSubscription_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_StatusChangeSubscription_delete(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeSubscription_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeSubscription_read(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeSubscription_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeSubscription_create(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeSubscription_create_input(input: any, context: QueryContext): boolean {
+    return false;
+}
+
+function PriceChangeSubscription_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeSubscription_update(input: any, context: QueryContext): any {
+    return false;
+}
+
+function PriceChangeSubscription_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PriceChangeSubscription_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PriceChangeSubscription_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_PriceChangeSubscription_delete(input: any, context: QueryContext): any {
     return false;
 }
 

@@ -3,7 +3,12 @@ import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-lite
 import type { DrawerDynamicProps } from "./drawers";
 
 export const DrawerIds = enumeratedLiterals(
-  ["subscribe-to-product", "update-product-subscription"] as const,
+  [
+    "subscribe-to-price-changes",
+    "subscribe-to-status-changes",
+    "update-status-change-subscription",
+    "update-price-change-subscription",
+  ] as const,
   {},
 );
 

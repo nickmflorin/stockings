@@ -61,26 +61,26 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "updatedProductRecords" }] }],
                     backLink: 'updatedBy',
-                }, createdSubscriptions: {
-                    name: "createdSubscriptions",
+                }, createdProductSubscriptions: {
+                    name: "createdProductSubscriptions",
                     type: "ProductSubscription",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "createdSubscriptions" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProductSubscriptions" }] }],
                     backLink: 'createdBy',
-                }, updatedSubscriptions: {
-                    name: "updatedSubscriptions",
+                }, updatedProductSubscriptions: {
+                    name: "updatedProductSubscriptions",
                     type: "ProductSubscription",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedSubscriptions" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProductSubscriptions" }] }],
                     backLink: 'updatedBy',
-                }, subscriptions: {
-                    name: "subscriptions",
+                }, productSubscriptions: {
+                    name: "productSubscriptions",
                     type: "ProductSubscription",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "subscriptions" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "value": "productSubscriptions" }] }],
                     backLink: 'user',
                 }, createdNotifications: {
                     name: "createdNotifications",
@@ -102,6 +102,27 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'user',
+                }, createdProcessedProductRecords: {
+                    name: "createdProcessedProductRecords",
+                    type: "ProcessedProductRecord",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProcessedProductRecords" }] }],
+                    backLink: 'createdBy',
+                }, updatedProcessedProductRecords: {
+                    name: "updatedProcessedProductRecords",
+                    type: "ProcessedProductRecord",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProcessedProductRecords" }] }],
+                    backLink: 'updatedBy',
+                }, processedProductRecords: {
+                    name: "processedProductRecords",
+                    type: "ProcessedProductRecord",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "processedProductRecords" }] }],
                     backLink: 'user',
                 },
             }
@@ -495,10 +516,6 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "errors" }] }],
                     backLink: 'record',
-                }, isProcessed: {
-                    name: "isProcessed",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, statusChangeNotifications: {
                     name: "statusChangeNotifications",
                     type: "StatusChangeNotification",
@@ -513,6 +530,13 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "priceChangeNotifications" }] }],
                     backLink: 'productRecord',
+                }, processedRecords: {
+                    name: "processedRecords",
+                    type: "ProcessedProductRecord",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "processedRecords" }] }],
+                    backLink: 'record',
                 },
             }
             , uniqueConstraints: {
@@ -522,6 +546,92 @@ const metadata = {
                 },
             }
             ,
+        }
+        ,
+        processedProductRecord: {
+            name: 'ProcessedProductRecord', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProcessedProductRecords" }] }],
+                    backLink: 'createdProcessedProductRecords',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "createdById" },
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProcessedProductRecords" }] }],
+                    backLink: 'updatedProcessedProductRecords',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                }, recordId: {
+                    name: "recordId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'record',
+                }, record: {
+                    name: "record",
+                    type: "ProductRecord",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "processedRecords" }] }],
+                    backLink: 'processedRecords',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "recordId" },
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "processedProductRecords" }] }],
+                    backLink: 'processedProductRecords',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userId_recordId: {
+                    name: "userId_recordId",
+                    fields: ["userId", "recordId"]
+                },
+            }
+            ,
+            attributes: [{ "name": "@@unique", "args": [] }],
         }
         ,
         product: {
@@ -649,144 +759,6 @@ const metadata = {
             ,
         }
         ,
-        priceChangeSubscribedEvent: {
-            name: 'PriceChangeSubscribedEvent', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
-                }, enabled: {
-                    name: "enabled",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
-                }, subscriptionId: {
-                    name: "subscriptionId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'subscription',
-                }, subscription: {
-                    name: "subscription",
-                    type: "ProductSubscription",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
-                    backLink: 'priceChange',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subscriptionId" },
-                }, conditions: {
-                    name: "conditions",
-                    type: "PriceChangeEventCondition",
-                    isArray: true,
-                    attributes: [{ "name": "@default", "args": [] }],
-                },
-            }
-            , uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, subscriptionId: {
-                    name: "subscriptionId",
-                    fields: ["subscriptionId"]
-                },
-            }
-            ,
-        }
-        ,
-        statusChangeEventCondition: {
-            name: 'StatusChangeEventCondition', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
-                }, fromStatus: {
-                    name: "fromStatus",
-                    type: "ProductStatus",
-                    isArray: true,
-                }, toStatus: {
-                    name: "toStatus",
-                    type: "ProductStatus",
-                    isArray: true,
-                }, subscribedEvent: {
-                    name: "subscribedEvent",
-                    type: "StatusChangeSubscribedEvent",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "conditions" }] }],
-                    backLink: 'conditions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subscribedEventId" },
-                }, subscribedEventId: {
-                    name: "subscribedEventId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'subscribedEvent',
-                },
-            }
-            , uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                },
-            }
-            ,
-        }
-        ,
-        statusChangeSubscribedEvent: {
-            name: 'StatusChangeSubscribedEvent', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
-                }, enabled: {
-                    name: "enabled",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
-                }, subscriptionId: {
-                    name: "subscriptionId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'subscription',
-                }, subscription: {
-                    name: "subscription",
-                    type: "ProductSubscription",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
-                    backLink: 'statusChange',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subscriptionId" },
-                }, conditions: {
-                    name: "conditions",
-                    type: "StatusChangeEventCondition",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "conditions" }] }],
-                    backLink: 'subscribedEvent',
-                },
-            }
-            , uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, subscriptionId: {
-                    name: "subscriptionId",
-                    fields: ["subscriptionId"]
-                },
-            }
-            ,
-        }
-        ,
         productSubscription: {
             name: 'ProductSubscription', fields: {
                 id: {
@@ -818,18 +790,35 @@ const metadata = {
                     name: "createdBy",
                     type: "User",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "createdSubscriptions" }] }],
-                    backLink: 'createdSubscriptions',
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProductSubscriptions" }] }],
+                    backLink: 'createdProductSubscriptions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "createdById" },
                 }, updatedBy: {
                     name: "updatedBy",
                     type: "User",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedSubscriptions" }] }],
-                    backLink: 'updatedSubscriptions',
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProductSubscriptions" }] }],
+                    backLink: 'updatedProductSubscriptions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "updatedById" },
+                }, subscriptionType: {
+                    name: "subscriptionType",
+                    type: "SubscriptionType",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "productSubscriptions" }] }],
+                    backLink: 'productSubscriptions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
                 }, product: {
                     name: "product",
                     type: "Product",
@@ -844,35 +833,165 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'product',
-                }, user: {
-                    name: "user",
+                }, enabled: {
+                    name: "enabled",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userId_productId_subscriptionType: {
+                    name: "userId_productId_subscriptionType",
+                    fields: ["userId", "productId", "subscriptionType"]
+                },
+            }
+            ,
+            attributes: [{ "name": "@@delegate", "args": [] }, { "name": "@@unique", "args": [] }], discriminator: "subscriptionType",
+        }
+        ,
+        statusChangeSubscriptionCondition: {
+            name: 'StatusChangeSubscriptionCondition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, fromStatus: {
+                    name: "fromStatus",
+                    type: "ProductStatus",
+                    isArray: true,
+                }, toStatus: {
+                    name: "toStatus",
+                    type: "ProductStatus",
+                    isArray: true,
+                }, subscription: {
+                    name: "subscription",
+                    type: "StatusChangeSubscription",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "conditions" }] }],
+                    backLink: 'conditions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subscriptionId" },
+                }, subscriptionId: {
+                    name: "subscriptionId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'subscription',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        statusChangeSubscription: {
+            name: 'StatusChangeSubscription', baseTypes: ['ProductSubscription'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "ProductSubscription",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "ProductSubscription",
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                    inheritedFrom: "ProductSubscription",
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                    inheritedFrom: "ProductSubscription",
+                }, createdBy: {
+                    name: "createdBy",
                     type: "User",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "subscriptions" }] }],
-                    backLink: 'subscriptions',
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProductSubscriptions" }] }],
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userId" },
+                    foreignKeyMapping: { "id": "createdById" },
+                    inheritedFrom: "ProductSubscription",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProductSubscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                    inheritedFrom: "ProductSubscription",
+                }, subscriptionType: {
+                    name: "subscriptionType",
+                    type: "SubscriptionType",
+                    inheritedFrom: "ProductSubscription",
                 }, userId: {
                     name: "userId",
                     type: "String",
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'user',
+                    inheritedFrom: "ProductSubscription",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "productSubscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "ProductSubscription",
+                }, product: {
+                    name: "product",
+                    type: "Product",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "subscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "productId" },
+                    inheritedFrom: "ProductSubscription",
+                }, productId: {
+                    name: "productId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'product',
+                    inheritedFrom: "ProductSubscription",
                 }, enabled: {
                     name: "enabled",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "value": true }] }],
-                }, statusChange: {
-                    name: "statusChange",
-                    type: "StatusChangeSubscribedEvent",
+                    inheritedFrom: "ProductSubscription",
+                }, conditions: {
+                    name: "conditions",
+                    type: "StatusChangeSubscriptionCondition",
                     isDataModel: true,
-                    isOptional: true,
-                    backLink: 'subscription',
-                }, priceChange: {
-                    name: "priceChange",
-                    type: "PriceChangeSubscribedEvent",
-                    isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "conditions" }] }],
                     backLink: 'subscription',
                 },
             }
@@ -880,13 +999,111 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, productId_userId: {
-                    name: "productId_userId",
-                    fields: ["productId", "userId"]
                 },
             }
             ,
-            attributes: [{ "name": "@@unique", "args": [] }],
+        }
+        ,
+        priceChangeSubscription: {
+            name: 'PriceChangeSubscription', baseTypes: ['ProductSubscription'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "ProductSubscription",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "ProductSubscription",
+                }, createdById: {
+                    name: "createdById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'createdBy',
+                    inheritedFrom: "ProductSubscription",
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                    inheritedFrom: "ProductSubscription",
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProductSubscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "createdById" },
+                    inheritedFrom: "ProductSubscription",
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProductSubscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                    inheritedFrom: "ProductSubscription",
+                }, subscriptionType: {
+                    name: "subscriptionType",
+                    type: "SubscriptionType",
+                    inheritedFrom: "ProductSubscription",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                    inheritedFrom: "ProductSubscription",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "productSubscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "ProductSubscription",
+                }, product: {
+                    name: "product",
+                    type: "Product",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "subscriptions" }] }],
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "productId" },
+                    inheritedFrom: "ProductSubscription",
+                }, productId: {
+                    name: "productId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'product',
+                    inheritedFrom: "ProductSubscription",
+                }, enabled: {
+                    name: "enabled",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    inheritedFrom: "ProductSubscription",
+                }, conditions: {
+                    name: "conditions",
+                    type: "PriceChangeSubscriptionCondition",
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
         }
         ,
         notification: {
@@ -952,6 +1169,17 @@ const metadata = {
                 }, state: {
                     name: "state",
                     type: "NotificationState",
+                }, stateAsOf: {
+                    name: "stateAsOf",
+                    type: "DateTime",
+                }, failedAt: {
+                    name: "failedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, sentAt: {
+                    name: "sentAt",
+                    type: "DateTime",
+                    isOptional: true,
                 },
             }
             , uniqueConstraints: {
@@ -1034,6 +1262,20 @@ const metadata = {
                     name: "state",
                     type: "NotificationState",
                     inheritedFrom: "Notification",
+                }, stateAsOf: {
+                    name: "stateAsOf",
+                    type: "DateTime",
+                    inheritedFrom: "Notification",
+                }, failedAt: {
+                    name: "failedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "Notification",
+                }, sentAt: {
+                    name: "sentAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "Notification",
                 }, productRecordId: {
                     name: "productRecordId",
                     type: "String",
@@ -1050,7 +1292,13 @@ const metadata = {
                     foreignKeyMapping: { "id": "productRecordId" },
                 }, condition: {
                     name: "condition",
-                    type: "PriceChangeEventCondition",
+                    type: "PriceChangeSubscriptionCondition",
+                }, previousPrice: {
+                    name: "previousPrice",
+                    type: "Float",
+                }, newPrice: {
+                    name: "newPrice",
+                    type: "Float",
                 },
             }
             , uniqueConstraints: {
@@ -1132,6 +1380,20 @@ const metadata = {
                     name: "state",
                     type: "NotificationState",
                     inheritedFrom: "Notification",
+                }, stateAsOf: {
+                    name: "stateAsOf",
+                    type: "DateTime",
+                    inheritedFrom: "Notification",
+                }, failedAt: {
+                    name: "failedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "Notification",
+                }, sentAt: {
+                    name: "sentAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "Notification",
                 }, productRecordId: {
                     name: "productRecordId",
                     type: "String",
@@ -1146,11 +1408,11 @@ const metadata = {
                     backLink: 'statusChangeNotifications',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "productRecordId" },
-                }, fromStatus: {
-                    name: "fromStatus",
+                }, previousStatus: {
+                    name: "previousStatus",
                     type: "ProductStatus",
-                }, toStatus: {
-                    name: "toStatus",
+                }, newStatus: {
+                    name: "newStatus",
                     type: "ProductStatus",
                 },
             }
@@ -1232,6 +1494,20 @@ const metadata = {
                 }, state: {
                     name: "state",
                     type: "NotificationState",
+                    inheritedFrom: "Notification",
+                }, stateAsOf: {
+                    name: "stateAsOf",
+                    type: "DateTime",
+                    inheritedFrom: "Notification",
+                }, failedAt: {
+                    name: "failedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "Notification",
+                }, sentAt: {
+                    name: "sentAt",
+                    type: "DateTime",
+                    isOptional: true,
                     inheritedFrom: "Notification",
                 }, productId: {
                     name: "productId",

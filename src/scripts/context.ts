@@ -91,13 +91,13 @@ export async function getScriptContext(
         "Clerk data to be used to run this script.",
     );
   }
-  const personalClerkId = process.env.PERSONAL_CLERK_USER_ID;
+  const personalClerkId = process.env.SCRIPT_CONTEXT_CLERK_USER_ID;
   if (personalClerkId === undefined) {
     /* The only reason this value can be undefined is because is for the test environment - so as
        long as we are not running the seed process in a test environment, this check is just to
        satisfy TS. */
     throw new Error(
-      "Cannot seed database without the 'PERSONAL_CLERK_USER_ID' as an environment variable.",
+      "Cannot seed database without the 'SCRIPT_CONTEXT_CLERK_USER_ID' as an environment variable.",
     );
   }
   /* TODO: We have to validate that the clerk user is in fact an admin that is allowed to make these

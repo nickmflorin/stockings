@@ -1,15 +1,8 @@
 import {
-  type ProductSubscription,
-  type StatusChangeSubscribedEvent,
-  type PriceChangeSubscribedEvent,
-  type StatusChangeEventCondition,
+  type StatusChangeSubscription,
+  type StatusChangeSubscriptionCondition,
 } from "./zenstack-generated/models";
 
-export type ApiStatusChangeSubscribedEvent = StatusChangeSubscribedEvent & {
-  readonly conditions: StatusChangeEventCondition[];
-};
-
-export type ApiProductSubscription = ProductSubscription & {
-  readonly statusChange: ApiStatusChangeSubscribedEvent | null;
-  readonly priceChange: PriceChangeSubscribedEvent | null;
+export type ApiStatusChangeSubscription = StatusChangeSubscription & {
+  readonly conditions: StatusChangeSubscriptionCondition[];
 };

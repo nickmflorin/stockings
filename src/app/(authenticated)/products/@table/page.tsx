@@ -7,10 +7,9 @@ import { parseFilters } from "~/lib/filters";
 
 import { Loading } from "~/components/loading/Loading";
 import { PaginatorPlaceholder } from "~/components/pagination/PaginatorPlaceholder";
-/* eslint-disable-next-line max-len */
 import { ProductsTableFiltersOptions, ProductsTableFiltersSchemas } from "~/features/products";
 /* eslint-disable-next-line max-len */
-import { ProductsTableSearchBar } from "~/features/products/components/tables/ProductsTableSearchBar";
+import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
 
 import { ProductsTableBody } from "./ProductsTableBody";
 import { ProductsTablePaginator } from "./ProductsTablePaginator";
@@ -37,7 +36,7 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
     <ProductsTableView
       searchBar={
         <Suspense>
-          <ProductsTableSearchBar />
+          <ProductsTableFilterBar />
         </Suspense>
       }
       pagination={

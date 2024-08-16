@@ -1,17 +1,21 @@
 import { intersection, uniq } from "lodash-es";
 import { z } from "zod";
 
-import { ProductStatus, PriceChangeEventCondition, productStatusesAreAny } from "~/database/model";
+import {
+  ProductStatus,
+  PriceChangeSubscriptionCondition,
+  productStatusesAreAny,
+} from "~/database/model";
 
-const StatusChangeEventConditionSchema = z.object({
+const StatusChangeSubscriptionConditionSchema = z.object({
   id: z.string().optional(),
   fromStatus: z.array(z.nativeEnum(ProductStatus)),
   toStatus: z.array(z.nativeEnum(ProductStatus)),
 });
 
-export const StatusChangeEventConditionRefinement =
+export const StatusChangeSubscriptionConditionRefinement =
   (prefixPath: string[] = []) =>
-  (data: z.infer<typeof StatusChangeEventConditionSchema>, ctx: z.RefinementCtx) => {
+  (data: z.infer<typeof StatusChangeSubscriptionConditionSchema>, ctx: z.RefinementCtx) => {
     if (data.fromStatus.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.too_small,
@@ -46,17 +50,12 @@ export const StatusChangeEventConditionRefinement =
     }
   };
 
-const StatusChangeSubscribedEventSchema = z.object({
-  enabled: z.boolean(),
-  conditions: z.array(StatusChangeEventConditionSchema),
-});
-
-export const StatusChangeSubscribedEventSchemaRefinement =
-  (prefixPath: string[] = []) =>
-  (
-    { enabled, conditions }: z.infer<typeof StatusChangeSubscribedEventSchema>,
-    ctx: z.RefinementCtx,
-  ) => {
+export const StatusChangeSubscriptionSchema = z
+  .object({
+    enabled: z.boolean(),
+    conditions: z.array(StatusChangeSubscriptionConditionSchema),
+  })
+  .superRefine(({ enabled, conditions }, ctx: z.RefinementCtx) => {
     if (enabled) {
       if (conditions.length === 0) {
         /* TODO: We have to revisit this in terms of whether or not including an error at the
@@ -66,14 +65,14 @@ export const StatusChangeSubscribedEventSchemaRefinement =
           minimum: 1,
           type: "array",
           inclusive: true,
-          path: [...prefixPath, "conditions"],
+          path: ["conditions"],
           message:
             "At least one condition must be defined if status change notifications are enabled.",
         });
       }
       for (let i = 0; i < conditions.length; i++) {
         const condition = conditions[i];
-        StatusChangeEventConditionRefinement([...prefixPath, "conditions", `${i}`])(condition, ctx);
+        StatusChangeSubscriptionConditionRefinement(["conditions", `${i}`])(condition, ctx);
         if (
           !productStatusesAreAny(condition.fromStatus) &&
           !productStatusesAreAny(condition.toStatus) &&
@@ -81,25 +80,20 @@ export const StatusChangeSubscribedEventSchemaRefinement =
         ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            path: [...prefixPath, "conditions", `${i}`, "toStatus"],
+            path: ["conditions", `${i}`, "toStatus"],
             message: "A status cannot appear in both the 'from' and 'to' status lists.",
           });
         }
       }
     }
-  };
+  });
 
-const PriceChangeSubscribedEventSchema = z.object({
-  enabled: z.boolean(),
-  conditions: z.array(z.nativeEnum(PriceChangeEventCondition)),
-});
-
-export const PriceChangeSubscribedEventRefinement =
-  (prefixPath: string[] = []) =>
-  (
-    { enabled, conditions }: z.infer<typeof PriceChangeSubscribedEventSchema>,
-    ctx: z.RefinementCtx,
-  ) => {
+export const PriceChangeSubscriptionSchema = z
+  .object({
+    enabled: z.boolean(),
+    conditions: z.array(z.nativeEnum(PriceChangeSubscriptionCondition)),
+  })
+  .superRefine(({ enabled, conditions }, ctx: z.RefinementCtx) => {
     if (enabled) {
       if (conditions.length === 0) {
         ctx.addIssue({
@@ -107,29 +101,15 @@ export const PriceChangeSubscribedEventRefinement =
           minimum: 1,
           type: "array",
           inclusive: true,
-          path: [...prefixPath, "conditions"],
+          path: ["conditions"],
           message: "At least one price change event must selected.",
         });
       } else if (uniq(conditions).length !== conditions.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: [...prefixPath, "conditions"],
+          path: ["conditions"],
           message: "The conditions must be a unique list.",
         });
       }
-    }
-  };
-
-export const ProductSubscriptionSchema = z
-  .object({
-    enabled: z.boolean(),
-    priceChange: PriceChangeSubscribedEventSchema,
-    statusChange: StatusChangeSubscribedEventSchema,
-  })
-  .superRefine((data, ctx) => {
-    const { statusChange, priceChange, enabled } = data;
-    if (enabled) {
-      StatusChangeSubscribedEventSchemaRefinement(["statusChange"])(statusChange, ctx);
-      PriceChangeSubscribedEventRefinement(["priceChange"])(priceChange, ctx);
     }
   });

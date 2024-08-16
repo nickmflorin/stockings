@@ -3,72 +3,80 @@ import { DateTime } from "luxon";
 import { type Product, type ProductRecord, ProductStatus } from "~/database/model";
 import { logger } from "~/internal/logger";
 
-import { randomInt, randomBoolean, selectAtRandomFrequency } from "~/lib/random";
+import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 
 import { type ScriptContext } from "../context";
 
-const MIN_DAYS_LOOKBACK = 100;
-const MAX_DAYS_LOOKBACK = 200;
+/* The minimum/maximum number of days to look backwards when determining the time horizon over which
+   the the records will be generated.  For each product, a lookback horizon will be randomly chosen
+   between these two bounds, and records will be generated for each day in the time horizon dictated
+   by the randomly chosen lookback period. */
+export const TimeHorizon = MinMax(100, 200);
 
-const MIN_RECORDS_PER_HOUR = 10;
-const MAX_RECORDS_PER_HOUR = 20;
+const RecordsPerHour = MinMax(10, 20);
+const Price = MinMax(100, 750);
+/* The minimum/maximum percentage changes that the price can change by when a given record is
+   generated. */
+const PriceDelta = MinMax(0.1, 1.2);
+
+/* The frequency at which the price of a record should change when iterating, expressed as a
+   decimal. */
+const PriceChangeFrequency = 0.1;
+
+/* The frequency at which the status of a record should change when iterating, expressed as a
+   decimal. */
+const StatusChangeFrequency = 0.1;
 
 const MINUTES_IN_DAY = 24 * 60;
 
 const getIterations = () => {
-  const recordsPerHour = randomInt(MIN_RECORDS_PER_HOUR, MAX_RECORDS_PER_HOUR);
-  const recordsPerDay = recordsPerHour * 24;
+  const recordsPerDay = 24 * RecordsPerHour.random();
+  /* The number of minutes that should separate each record that is generated in order to achieve
+     the randomly chosen (but bounded) number of records per day. */
   const deltaMinutes = Math.floor(MINUTES_IN_DAY / recordsPerDay);
   if (deltaMinutes < 1) {
     throw new Error(`Configuration resulted in an invalid minutes delta of '${deltaMinutes}'!`);
   }
-  const daysLookback = randomInt(MIN_DAYS_LOOKBACK, MAX_DAYS_LOOKBACK);
-  return [daysLookback * recordsPerDay, { minutes: deltaMinutes }] as const;
+  const horizon = TimeHorizon.random();
+  return [horizon * recordsPerDay, { minutes: deltaMinutes }] as const;
 };
 
-const MIN_PRICE = 100;
-const MAX_PRICE = 750;
-
-const MIN_PRICE_DELTA_PCT = 2;
-const MAX_PRICE_DELTA_PCT = 5;
-
 const modifyPrice = (runningData: RecordDatum): RecordDatum => {
-  const shouldModify = randomBoolean({ positiveFrequency: 0.1 });
+  // Only modify the price approximately 10% of the time.
+  const shouldModify = randomBoolean({ positiveFrequency: PriceChangeFrequency });
   if (!shouldModify) {
     return runningData;
   }
-  const p = runningData.price ?? randomInt(MIN_PRICE, MAX_PRICE);
+  // There may not have been an established price if there were no previous records with a price.
+  const p = runningData.price ?? Price.random();
   if (randomBoolean({ positiveFrequency: 0.5 })) {
     return {
       ...runningData,
-      price:
-        p +
-        parseInt(((randomInt(MIN_PRICE_DELTA_PCT, MAX_PRICE_DELTA_PCT) / 100.0) * p).toFixed(0)),
+      price: p + parseInt(((PriceDelta.random() / 100.0) * p).toFixed(0)),
     };
   }
   return {
     ...runningData,
-    price: Math.max(
-      0,
-      p - parseInt(((randomInt(MIN_PRICE_DELTA_PCT, MAX_PRICE_DELTA_PCT) / 100.0) * p).toFixed(0)),
-    ),
+    price: Math.max(0, p - parseInt(((PriceDelta.random() / 100.0) * p).toFixed(0))),
   };
 };
 
 const modifyStatus = (runningData: RecordDatum): RecordDatum => {
-  const shouldModify = randomBoolean({ positiveFrequency: 0.1 });
+  // Only modify the status approximately 10% of the time.
+  const shouldModify = randomBoolean({ positiveFrequency: StatusChangeFrequency });
   if (!shouldModify) {
     return runningData;
   }
   return {
     ...runningData,
-    status: selectAtRandomFrequency(
+    status: selectAtRandom(
       [
         { value: ProductStatus.AvailableForBackorder, frequency: 0.05 },
         { value: ProductStatus.InStock, frequency: 0.4 },
         { value: ProductStatus.NotListed, frequency: 0.05 },
         { value: ProductStatus.OutOfStock, frequency: 0.5 },
       ].filter(({ value }) => value !== runningData.status),
+      { withFrequencies: true },
     ),
   };
 };

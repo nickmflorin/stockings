@@ -51,6 +51,7 @@ let nextConfig = {
   },
   reactStrictMode: false,
   experimental: {
+    serverComponentsExternalPackages: ["@zenstackhq/runtime"],
     /* Need to update NextJS
        ppr: "incremental", */
     optimizePackageImports: [

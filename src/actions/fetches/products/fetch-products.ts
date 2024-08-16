@@ -3,6 +3,7 @@ import { cache } from "react";
 import { getAuthedUser } from "~/application/auth/server";
 import { db } from "~/database";
 import type { ApiProduct } from "~/database/model";
+import { enhance } from "~/database/model";
 import { conditionalFilters } from "~/database/util";
 
 import { constructTableSearchClause, PAGE_SIZES } from "~/actions";
@@ -45,7 +46,9 @@ export const fetchProductsCount = cache(
 export const fetchProducts = cache(
   async ({ filters, ordering, page }: ProductsTableControls): Promise<ApiProduct[]> => {
     const { user } = await getAuthedUser({ strict: true });
-    const data = await db.product.findMany({
+    const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
+
+    const products = await enhanced.product.findMany({
       where: whereClause({ filters }),
       orderBy: [{ [ordering.field]: ordering.order }],
       skip: PAGE_SIZES.product * (Math.max(1, page) - 1),
@@ -53,17 +56,30 @@ export const fetchProducts = cache(
       include: {
         subscriptions: {
           where: { userId: user.id },
-          include: {
-            statusChange: { include: { conditions: { orderBy: [{ createdAt: "asc" }] } } },
-            priceChange: true,
-          },
         },
       },
     });
-    return data.map(datum =>
+
+    /* The status change subscription is unique on the user and product, so this should only ever
+       yield at most 1 result per product. */
+    const statusChangeSubscriptions = await enhanced.statusChangeSubscription.findMany({
+      where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
+      include: { conditions: true },
+    });
+
+    /* The status change subscription is unique on the user and product, so this should only ever
+       yield at most 1 result. */
+    const priceChangeSubscriptions = await enhanced.priceChangeSubscription.findMany({
+      where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
+    });
+
+    return products.map(datum =>
       convertToPlainObject({
         ...datum,
-        subscription: datum.subscriptions.length === 0 ? null : datum.subscriptions[0],
+        priceChangeSubscription:
+          priceChangeSubscriptions.find(sub => sub.productId === datum.id) ?? null,
+        statusChangeSubscription:
+          statusChangeSubscriptions.find(sub => sub.productId === datum.id) ?? null,
       }),
     );
   },

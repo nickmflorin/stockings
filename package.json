@@ -38,7 +38,8 @@
     "pullenv-prod": "vercel env pull ./.env --environment=production",
     "jsonify-fixtures": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/jsonify/index.ts --live && pnpm format-json-fixtures",
     "format-json-fixtures": "npx prettier ./src/database/fixtures/json/*.json --write --ignore-path=./.prettierignore",
-    "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape.ts"
+    "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape.ts",
+    "process-subscriptions": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/process-subscriptions/index.ts"
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^4.13.16",

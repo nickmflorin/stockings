@@ -21,24 +21,27 @@ plugin enhancer {
 }
 
 model User {
-  id                    String                @id @default(uuid()) @db.Uuid
-  clerkId               String                @unique
-  firstName             String
-  lastName              String
-  profileImageUrl       String?
-  emailAddress          String
-  createdAt             DateTime              @default(now())
-  updatedAt             DateTime              @updatedAt
-  createdProducts       Product[]             @relation("createdProducts")
-  updatedProducts       Product[]             @relation("updatedProducts")
-  createdProductRecords ProductRecord[]       @relation("createdProductRecords")
-  updatedProductRecords ProductRecord[]       @relation("updatedProductRecords")
-  createdSubscriptions  ProductSubscription[] @relation("createdSubscriptions")
-  updatedSubscriptions  ProductSubscription[] @relation("updatedSubscriptions")
-  subscriptions         ProductSubscription[] @relation("subscriptions")
-  createdNotifications  Notification[]        @relation("createdNotifications")
-  updatedNotifications  Notification[]        @relation("updatedNotifications")
-  notifications         Notification[]        @relation("notifications")
+  id                             String                   @id @default(uuid()) @db.Uuid
+  clerkId                        String                   @unique
+  firstName                      String
+  lastName                       String
+  profileImageUrl                String?
+  emailAddress                   String
+  createdAt                      DateTime                 @default(now())
+  updatedAt                      DateTime                 @updatedAt
+  createdProducts                Product[]                @relation("createdProducts")
+  updatedProducts                Product[]                @relation("updatedProducts")
+  createdProductRecords          ProductRecord[]          @relation("createdProductRecords")
+  updatedProductRecords          ProductRecord[]          @relation("updatedProductRecords")
+  createdProductSubscriptions    ProductSubscription[]    @relation("createdProductSubscriptions")
+  updatedProductSubscriptions    ProductSubscription[]    @relation("updatedProductSubscriptions")
+  productSubscriptions           ProductSubscription[]    @relation("productSubscriptions")
+  createdNotifications           Notification[]           @relation("createdNotifications")
+  updatedNotifications           Notification[]           @relation("updatedNotifications")
+  notifications                  Notification[]           @relation("notifications")
+  createdProcessedProductRecords ProcessedProductRecord[] @relation("createdProcessedProductRecords")
+  updatedProcessedProductRecords ProcessedProductRecord[] @relation("updatedProcessedProductRecords")
+  processedProductRecords        ProcessedProductRecord[] @relation("processedProductRecords")
 }
 
 abstract model Model {
@@ -156,13 +159,26 @@ model ProductRecord extends ModelMeta {
   wasManuallyCreated        Boolean                    @default(false)
   manuallyChangedFields     ProductRecordDataField[]   @default([])
   errors                    ProductRecordError[]       @relation("errors")
-  // An indicator that conveys whether or not the ProductRecord has been processed by the
-  // notifications system.  Once the ProductRecord is processed, notifications will be created in
-  // "pending" states for each user that is subscribed to the events that are associated with the
-  // changes that the ProductRecord represents relative to the last record that was created.
-  isProcessed               Boolean                    @default(false)
   statusChangeNotifications StatusChangeNotification[] @relation("statusChangeNotifications")
   priceChangeNotifications  PriceChangeNotification[]  @relation("priceChangeNotifications")
+  processedRecords          ProcessedProductRecord[]   @relation("processedRecords")
+}
+
+// An model that is used as an indicator to convey whether or not the ProductRecord has been
+// processed by the notifications system for a given user.  Once the ProductRecord is processed,
+// notifications will be created in "pending" states for the user that is subscribed to the events
+// that are associated with the changes that the ProductRecord represents relative to the last
+// record that was recorded.
+model ProcessedProductRecord extends ModelMeta {
+  createdBy User          @relation("createdProcessedProductRecords", fields: [createdById], references: [id])
+  updatedBy User          @relation("updatedProcessedProductRecords", fields: [updatedById], references: [id])
+  recordId  String        @db.Uuid
+  record    ProductRecord @relation("processedRecords", fields: [recordId], references: [id])
+  // The user that the record was processed for.
+  user      User          @relation("processedProductRecords", fields: [userId], references: [id])
+  userId    String        @db.Uuid
+
+  @@unique([userId, recordId])
 }
 
 enum ProductCategory {
@@ -198,49 +214,44 @@ model Product extends ModelMeta {
   newProductNotifications NewProductNotification[] @relation("newProductNotifications")
 }
 
-enum PriceChangeEventCondition {
+enum PriceChangeSubscriptionCondition {
   PriceIncrease
   PriceDecrease
 }
 
-abstract model SubscribedEvent extends Model {
-  enabled Boolean @default(true)
-}
-
-model PriceChangeSubscribedEvent extends SubscribedEvent {
-  subscriptionId String                      @db.Uuid @unique
-  subscription   ProductSubscription         @relation(fields: [subscriptionId], references: [id])
-  conditions     PriceChangeEventCondition[] @default([PriceIncrease, PriceDecrease])
-}
-
-model StatusChangeEventCondition extends DateTimeModelMeta {
-  fromStatus        ProductStatus[]
-  toStatus          ProductStatus[]
-  subscribedEvent   StatusChangeSubscribedEvent @relation("conditions", fields: [subscribedEventId], references: [id])
-  subscribedEventId String                      @db.Uuid
-}
-
-model StatusChangeSubscribedEvent extends SubscribedEvent {
-  subscriptionId String                       @db.Uuid @unique
-  subscription   ProductSubscription          @relation(fields: [subscriptionId], references: [id])
-  conditions     StatusChangeEventCondition[] @relation("conditions")
+enum SubscriptionType {
+  NewProductSubscription
+  PriceChangeSubscription
+  StatusChangeSubscription
 }
 
 model ProductSubscription extends ModelMeta {
-  createdBy    User                         @relation("createdSubscriptions", fields: [createdById], references: [id])
-  updatedBy    User                         @relation("updatedSubscriptions", fields: [updatedById], references: [id])
-  product      Product                      @relation("subscriptions", fields: [productId], references: [id])
-  productId    String                       @db.Uuid
-  // For now, we will keep the user that should receive the notification separate from the user that
-  // created it - even though, for all intents and purposes, they will be the same.  This is just
-  // to allow some flexibility in the future.
-  user         User                         @relation("subscriptions", fields: [userId], references: [id])
-  userId       String                       @db.Uuid
-  enabled      Boolean                      @default(true)
-  statusChange StatusChangeSubscribedEvent?
-  priceChange  PriceChangeSubscribedEvent?
+  createdBy        User             @relation("createdProductSubscriptions", fields: [createdById], references: [id])
+  updatedBy        User             @relation("updatedProductSubscriptions", fields: [updatedById], references: [id])
+  subscriptionType SubscriptionType
+  userId           String           @db.Uuid
+  user             User             @relation("productSubscriptions", fields: [userId], references: [id])
+  product          Product          @relation("subscriptions", fields: [productId], references: [id])
+  productId        String           @db.Uuid
+  enabled          Boolean          @default(true)
 
-  @@unique([productId, userId])
+  @@delegate(subscriptionType)
+  @@unique([userId, productId, subscriptionType])
+}
+
+model StatusChangeSubscriptionCondition extends DateTimeModelMeta {
+  fromStatus     ProductStatus[]
+  toStatus       ProductStatus[]
+  subscription   StatusChangeSubscription @relation("conditions", fields: [subscriptionId], references: [id])
+  subscriptionId String                   @db.Uuid
+}
+
+model StatusChangeSubscription extends ProductSubscription {
+  conditions StatusChangeSubscriptionCondition[] @relation("conditions")
+}
+
+model PriceChangeSubscription extends ProductSubscription {
+  conditions PriceChangeSubscriptionCondition[] @default([PriceIncrease, PriceDecrease])
 }
 
 enum NotificationType {
@@ -262,21 +273,26 @@ model Notification extends ModelMeta {
   userId           String            @db.Uuid
   notificationType NotificationType
   state            NotificationState
+  stateAsOf        DateTime
+  failedAt         DateTime?
+  sentAt           DateTime?
 
   @@delegate(notificationType)
 }
 
 model PriceChangeNotification extends Notification {
-  productRecordId String                    @db.Uuid
-  productRecord   ProductRecord             @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
-  condition       PriceChangeEventCondition
+  productRecordId String                           @db.Uuid
+  productRecord   ProductRecord                    @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
+  condition       PriceChangeSubscriptionCondition
+  previousPrice   Float
+  newPrice        Float
 }
 
 model StatusChangeNotification extends Notification {
   productRecordId String        @db.Uuid
   productRecord   ProductRecord @relation("statusChangeNotifications", fields: [productRecordId], references: [id])
-  fromStatus      ProductStatus
-  toStatus        ProductStatus
+  previousStatus  ProductStatus
+  newStatus       ProductStatus
 }
 
 model NewProductNotification extends Notification {
