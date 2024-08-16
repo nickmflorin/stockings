@@ -1,7 +1,4 @@
 import dynamic from "next/dynamic";
-import { redirect } from "next/navigation";
-
-import { getAuthedUser } from "~/application/auth/server";
 
 import { fetchNotifications } from "~/actions/fetches/notifications";
 
@@ -22,17 +19,13 @@ export const NotificationsTableBody = async ({
   filters,
   page,
 }: NotificationsTableBodyProps): Promise<JSX.Element> => {
-  const { user } = await getAuthedUser();
-
-  if (!user) {
-    // TODO: Revisit this redirect
-    return redirect("/sign-in");
-  }
-
-  const notifications = await fetchNotifications({
-    filters,
-    // ordering: { field: "createdAt", order: "asc" },
-    page,
-  });
+  const { data: notifications } = await fetchNotifications(
+    {
+      filters,
+      // ordering: { field: "createdAt", order: "asc" },
+      page,
+    },
+    { strict: true },
+  );
   return <ClientNotificationsTableBody data={notifications} />;
 };

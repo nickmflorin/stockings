@@ -60,6 +60,7 @@
   "typescript.format.semicolons": "insert",
   "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
   "typescript.preferences.quoteStyle": "double",
+  "typescript.preferences.autoImportFileExcludePatterns": ["@mantine/*", "@mui/*"],
 
   "javascript.format.enable": false,
   "javascript.preferences.importModuleSpecifier": "non-relative"

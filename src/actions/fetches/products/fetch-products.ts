@@ -6,11 +6,18 @@ import type { ApiProduct } from "~/database/model";
 import { enhance } from "~/database/model";
 import { conditionalFilters } from "~/database/util";
 
-import { constructTableSearchClause, PAGE_SIZES } from "~/actions";
+import {
+  constructTableSearchClause,
+  PAGE_SIZES,
+  type FetchActionContext,
+  dataInFetchContext,
+  errorInFetchContext,
+  type FetchActionResponse,
+  type ServerSidePaginationParams,
+  clampPagination,
+} from "~/actions";
 
 import { type ProductsTableControls } from "~/features/products";
-
-import { convertToPlainObject } from "~/api/serialization";
 
 const filtersClause = (filters: Partial<ProductsTableControls["filters"]>) =>
   conditionalFilters([
@@ -34,25 +41,50 @@ const whereClause = ({ filters }: Pick<ProductsTableControls, "filters">) => {
   return undefined;
 };
 
-export const fetchProductsCount = cache(
-  async ({ filters }: Pick<ProductsTableControls, "filters">) => {
-    await getAuthedUser({ strict: true });
-    return await db.product.count({
+export const fetchProductsPagination = cache(
+  async <C extends FetchActionContext>(
+    { filters, page: _page }: Pick<ProductsTableControls, "filters" | "page">,
+    context: C,
+  ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
+    const { error } = await getAuthedUser();
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+    const count = await db.product.count({
       where: whereClause({ filters }),
     });
+    return dataInFetchContext(
+      clampPagination({ count, page: _page, pageSize: PAGE_SIZES.product }),
+      context,
+    );
   },
-);
-
+) as {
+  <C extends FetchActionContext>(
+    params: Pick<ProductsTableControls, "filters" | "page">,
+    context: C,
+  ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
+};
 export const fetchProducts = cache(
-  async ({ filters, ordering, page }: ProductsTableControls): Promise<ApiProduct[]> => {
-    const { user } = await getAuthedUser({ strict: true });
+  async <C extends FetchActionContext>(
+    { filters, ordering, page: _page }: ProductsTableControls,
+    context: C,
+  ): Promise<FetchActionResponse<ApiProduct[], C>> => {
+    const { user, error } = await getAuthedUser();
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
+
+    const {
+      data: { page, pageSize },
+    } = await fetchProductsPagination({ filters, page: _page }, { strict: true });
 
     const products = await enhanced.product.findMany({
       where: whereClause({ filters }),
       orderBy: [{ [ordering.field]: ordering.order }],
-      skip: PAGE_SIZES.product * (Math.max(1, page) - 1),
-      take: PAGE_SIZES.product,
+      skip: pageSize * (page - 1),
+      take: pageSize,
       include: {
         subscriptions: {
           where: { userId: user.id },
@@ -73,14 +105,20 @@ export const fetchProducts = cache(
       where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
     });
 
-    return products.map(datum =>
-      convertToPlainObject({
+    return dataInFetchContext(
+      products.map(datum => ({
         ...datum,
         priceChangeSubscription:
           priceChangeSubscriptions.find(sub => sub.productId === datum.id) ?? null,
         statusChangeSubscription:
           statusChangeSubscriptions.find(sub => sub.productId === datum.id) ?? null,
-      }),
+      })),
+      context,
     );
   },
-);
+) as {
+  <C extends FetchActionContext>(
+    params: ProductsTableControls,
+    context: C,
+  ): Promise<FetchActionResponse<ApiProduct[], C>>;
+};

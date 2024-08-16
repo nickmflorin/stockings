@@ -1,8 +1,6 @@
 "use client";
 import { useRef } from "react";
 
-import { useDebouncedCallback } from "use-debounce";
-
 import {
   type ProductCategory,
   type ProductSubCategory,
@@ -23,6 +21,7 @@ import {
   ProductsTableFiltersOptions,
   ProductsTableFiltersSchemas,
 } from "~/features/products/types";
+import { useDebounceCallback } from "~/hooks";
 import { useFilters } from "~/hooks/use-filters";
 
 export interface ProductsTableFilterBarProps extends ComponentProps {}
@@ -38,7 +37,7 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
     options: ProductsTableFiltersOptions,
   });
 
-  const onSearch = useDebouncedCallback((search: string) => {
+  const onSearch = useDebounceCallback((search: string) => {
     updateFilters({ search });
   }, 0);
 

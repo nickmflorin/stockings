@@ -1,11 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import { type ApiProduct } from "~/database/model";
 
 import { ProductCategoryBadge } from "~/components/badges/ProductCategoryBadge";
 import { ProductSubCategoryBadge } from "~/components/badges/ProductSubCategoryBadge";
+import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
@@ -22,93 +22,89 @@ export interface ProductsTableBodyProps {
   readonly data: ApiProduct[];
 }
 
-export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element => {
-  const { push } = useRouter();
-  const searchParams = useSearchParams();
-
-  return (
-    <DataTableBody
-      onRowClick={productId => {
-        const params = new URLSearchParams(searchParams);
-        push(`product/${productId}?${params.toString()}`);
-      }}
-      columns={convertConfigsToColumns(
-        [...ProductsTableColumns] as DataTableColumnConfig<ApiProduct, ProductsTableColumnId>[],
-        {
-          name: {
-            cellRenderer(datum) {
-              return <ProductLink product={datum} />;
-            },
-          },
-          status: {
-            cellRenderer(datum) {
-              if (datum.status) {
-                return (
-                  <div className="flex flex-col">
-                    <ProductStatusText fontWeight="medium" fontSize="sm" status={datum.status} />
-                    {datum.statusAsOf && (
-                      <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
-                        {" "}
-                        as of <DateTimeText component="span" value={datum.statusAsOf} />
-                      </Text>
-                    )}
-                  </div>
-                );
-              }
-              return <></>;
-            },
-          },
-          price: {
-            cellRenderer(datum) {
-              if (datum.price) {
-                return (
-                  <div className="flex flex-col">
-                    <CurrencyText fontWeight="medium" fontSize="sm">
-                      {datum.price}
-                    </CurrencyText>
-                    {datum.priceAsOf && (
-                      <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
-                        {" "}
-                        as of <DateTimeText component="span" value={datum.priceAsOf} />
-                      </Text>
-                    )}
-                  </div>
-                );
-              }
-              return <></>;
-            },
-          },
-          category: {
-            cellRenderer(datum) {
-              return <ProductCategoryBadge category={datum.category} />;
-            },
-          },
-          subcategories: {
-            cellRenderer(datum) {
-              return (
-                <div className="flex flex-row items-center">
-                  {datum.subCategories.map(subCategory => (
-                    <ProductSubCategoryBadge key={subCategory} category={subCategory} />
-                  ))}
-                </div>
-              );
-            },
-          },
-          subscription: {
-            cellRenderer(datum) {
-              return <SubscriptionCell product={datum} />;
-            },
-          },
-          actions: {
-            cellRenderer(datum) {
-              return <ActionsCell product={datum} />;
-            },
+export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element => (
+  <DataTableBody
+    columns={convertConfigsToColumns(
+      [...ProductsTableColumns] as DataTableColumnConfig<ApiProduct, ProductsTableColumnId>[],
+      {
+        name: {
+          cellRenderer(datum) {
+            return (
+              <div className="flex flex-row items-center gap-2">
+                <ProductLink product={datum} location="internal" />
+                <ExternalProductIconLink product={datum} />
+              </div>
+            );
           },
         },
-      )}
-      data={data}
-    />
-  );
-};
+        status: {
+          cellRenderer(datum) {
+            if (datum.status) {
+              return (
+                <div className="flex flex-col">
+                  <ProductStatusText fontWeight="medium" fontSize="sm" status={datum.status} />
+                  {datum.statusAsOf && (
+                    <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
+                      {" "}
+                      as of <DateTimeText component="span" value={datum.statusAsOf} />
+                    </Text>
+                  )}
+                </div>
+              );
+            }
+            return <></>;
+          },
+        },
+        price: {
+          cellRenderer(datum) {
+            if (datum.price) {
+              return (
+                <div className="flex flex-col">
+                  <CurrencyText fontWeight="medium" fontSize="sm">
+                    {datum.price}
+                  </CurrencyText>
+                  {datum.priceAsOf && (
+                    <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
+                      {" "}
+                      as of <DateTimeText component="span" value={datum.priceAsOf} />
+                    </Text>
+                  )}
+                </div>
+              );
+            }
+            return <></>;
+          },
+        },
+        category: {
+          cellRenderer(datum) {
+            return <ProductCategoryBadge category={datum.category} />;
+          },
+        },
+        subcategories: {
+          cellRenderer(datum) {
+            return (
+              <div className="flex flex-row items-center">
+                {datum.subCategories.map(subCategory => (
+                  <ProductSubCategoryBadge key={subCategory} category={subCategory} />
+                ))}
+              </div>
+            );
+          },
+        },
+        subscription: {
+          cellRenderer(datum) {
+            return <SubscriptionCell product={datum} />;
+          },
+        },
+        actions: {
+          cellRenderer(datum) {
+            return <ActionsCell product={datum} />;
+          },
+        },
+      },
+    )}
+    data={data}
+  />
+);
 
 export default ProductsTableBody;

@@ -6,7 +6,6 @@ import { z } from "zod";
 import { parseFilters } from "~/lib/filters";
 
 import { Loading } from "~/components/loading/Loading";
-import { PaginatorPlaceholder } from "~/components/pagination/PaginatorPlaceholder";
 import {
   NotificationsTableFiltersOptions,
   NotificationsTableFiltersSchemas,
@@ -43,16 +42,13 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
         </Suspense>
       }
       pagination={
-        <Suspense
-          key={JSON.stringify(filters) + String(page) + "_pagination"}
-          fallback={<PaginatorPlaceholder />}
-        >
-          <NotificationsTablePaginator filters={filters} />
+        <Suspense key={JSON.stringify(filters) + String(page)}>
+          <NotificationsTablePaginator filters={filters} page={page} />
         </Suspense>
       }
     >
       <Suspense
-        key={JSON.stringify(filters) + String(page) + "_body"}
+        key={JSON.stringify(filters) + String(page)}
         fallback={<Loading isLoading component="tbody" />}
       >
         <NotificationsTableBody filters={filters} page={page} />

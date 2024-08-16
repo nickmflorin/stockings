@@ -44,17 +44,27 @@ $button-icon-sizes: (
   }
 }
 
-@mixin button-size($type, $size) {
+@mixin button-size($type, $size, $tight-fit: false) {
   @if $type == "icon-button" or $type == "button" {
-    $height: partials.mapget(constants.$button-sizes, $size);
+    // If the 'no-padding' flag is set, the size of the icon button should be the same as the size
+    // of the icon it contains.
+    @if $type == "icon-button" and $tight-fit {
+      $height: partials.mapget($button-icon-sizes, $type, $size);
 
-    height: $height;
-    min-height: $height;
-
-    @if $type == "icon-button" {
+      height: $height;
+      min-height: $height;
       width: $height;
     } @else {
-      padding: partials.mapget(constants.$button-padding, $size);
+      $height: partials.mapget(constants.$button-sizes, $size);
+
+      height: $height;
+      min-height: $height;
+
+      @if $type == "icon-button" {
+        width: $height;
+      } @else {
+        padding: partials.mapget(constants.$button-padding, $size);
+      }
     }
   }
   @if $type != "inline-link" {
@@ -70,11 +80,11 @@ $button-icon-sizes: (
   }
 }
 
-@mixin button-sizes($type) {
+@mixin button-sizes($type, $tight-fit: false) {
   @if $type != "link" and $type != "inline-link" {
     @each $size in map.keys(constants.$button-sizes) {
       &.button--size-#{$size} {
-        @include button-size($type, $size);
+        @include button-size($type, $size, $tight-fit: $tight-fit);
         /* Allow the icon size in the button to be controlled independently of the button's primary
            size if the class name is present. */
         @include button-icon-sizes($type);

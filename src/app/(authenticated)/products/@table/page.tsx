@@ -6,7 +6,6 @@ import { z } from "zod";
 import { parseFilters } from "~/lib/filters";
 
 import { Loading } from "~/components/loading/Loading";
-import { PaginatorPlaceholder } from "~/components/pagination/PaginatorPlaceholder";
 import { ProductsTableFiltersOptions, ProductsTableFiltersSchemas } from "~/features/products";
 /* eslint-disable-next-line max-len */
 import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
@@ -40,16 +39,13 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
         </Suspense>
       }
       pagination={
-        <Suspense
-          key={JSON.stringify(filters) + String(page) + "_pagination"}
-          fallback={<PaginatorPlaceholder />}
-        >
-          <ProductsTablePaginator filters={filters} />
+        <Suspense key={JSON.stringify(filters) + String(page)}>
+          <ProductsTablePaginator filters={filters} page={page} />
         </Suspense>
       }
     >
       <Suspense
-        key={JSON.stringify(filters) + String(page) + "_body"}
+        key={JSON.stringify(filters) + String(page)}
         fallback={<Loading isLoading component="tbody" />}
       >
         <ProductsTableBody filters={filters} page={page} />

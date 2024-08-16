@@ -1,32 +1,25 @@
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { getAuthedUser } from "~/application/auth/server";
-
-import { PAGE_SIZES } from "~/actions";
-import { fetchNotificationsCount } from "~/actions/fetches/notifications";
+import { fetchNotificationsPagination } from "~/actions/fetches/notifications";
 
 import { Paginator } from "~/components/pagination/Paginator";
 import { type NotificationsTableFilters } from "~/features/notifications";
 
 export interface NotificationsTablePaginatorProps {
   readonly filters: NotificationsTableFilters;
+  readonly page: number;
 }
 
 export const NotificationsTablePaginator = async ({
   filters,
+  page: _page,
 }: NotificationsTablePaginatorProps): Promise<JSX.Element> => {
-  const { user } = await getAuthedUser();
-
-  if (!user) {
-    // TODO: Revisit this redirect
-    return redirect("/sign-in");
-  }
-
-  const count = await fetchNotificationsCount({ filters });
+  const {
+    data: { count, page, pageSize },
+  } = await fetchNotificationsPagination({ filters, page: _page }, { strict: true });
   return (
     <Suspense>
-      <Paginator count={count} pageSize={PAGE_SIZES.notification} />
+      <Paginator count={count} pageSize={pageSize} page={page} />
     </Suspense>
   );
 };

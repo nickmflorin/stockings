@@ -6,7 +6,6 @@ import { z } from "zod";
 import { parseFilters } from "~/lib/filters";
 
 import { Loading } from "~/components/loading/Loading";
-import { PaginatorPlaceholder } from "~/components/pagination/PaginatorPlaceholder";
 import {
   SubscriptionsTableFiltersOptions,
   SubscriptionsTableFiltersSchemas,
@@ -43,16 +42,13 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
         </Suspense>
       }
       pagination={
-        <Suspense
-          key={JSON.stringify(filters) + String(page) + "_pagination"}
-          fallback={<PaginatorPlaceholder />}
-        >
-          <SubscriptionsTablePaginator filters={filters} />
+        <Suspense key={JSON.stringify(filters) + String(page)}>
+          <SubscriptionsTablePaginator filters={filters} page={page} />
         </Suspense>
       }
     >
       <Suspense
-        key={JSON.stringify(filters) + String(page) + "_body"}
+        key={JSON.stringify(filters) + String(page)}
         fallback={<Loading isLoading component="tbody" />}
       >
         <SubscriptionsTableBody filters={filters} page={page} />

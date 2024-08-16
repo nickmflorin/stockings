@@ -6,11 +6,17 @@ import type { Notification, User } from "~/database/model";
 import { enhance } from "~/database/model";
 import { conditionalFilters } from "~/database/util";
 
-import { PAGE_SIZES } from "~/actions";
+import {
+  PAGE_SIZES,
+  type FetchActionContext,
+  type FetchActionResponse,
+  type ServerSidePaginationParams,
+  errorInFetchContext,
+  dataInFetchContext,
+  clampPagination,
+} from "~/actions";
 
 import { type NotificationsTableControls } from "~/features/notifications";
-
-import { convertToPlainObject } from "~/api/serialization";
 
 const filtersClause = (filters: Partial<NotificationsTableControls["filters"]>) =>
   conditionalFilters([
@@ -31,25 +37,58 @@ const whereClause = ({
   return { userId: user.id };
 };
 
-export const fetchNotificationsCount = cache(
-  async ({ filters }: Pick<NotificationsTableControls, "filters">) => {
-    const { user } = await getAuthedUser({ strict: true });
-    return await db.notification.count({
+export const fetchNotificationsPagination = cache(
+  async <C extends FetchActionContext>(
+    { filters, page: _page }: Pick<NotificationsTableControls, "filters" | "page">,
+    context: C,
+  ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
+    const { user, error } = await getAuthedUser();
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+    const count = await db.notification.count({
       where: whereClause({ filters, user }),
     });
+    return dataInFetchContext(
+      clampPagination({ count, page: _page, pageSize: PAGE_SIZES.notification }),
+      context,
+    );
   },
-);
+) as {
+  <C extends FetchActionContext>(
+    params: Pick<NotificationsTableControls, "filters" | "page">,
+    context: C,
+  ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
+};
 
 export const fetchNotifications = cache(
-  async ({ filters, page }: NotificationsTableControls): Promise<Notification[]> => {
-    const { user } = await getAuthedUser({ strict: true });
+  async <C extends FetchActionContext>(
+    { filters, page: _page }: NotificationsTableControls,
+    context: C,
+  ): Promise<FetchActionResponse<Notification[], C>> => {
+    const { user, error } = await getAuthedUser({ strict: true });
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+
+    const {
+      data: { page, pageSize },
+    } = await fetchNotificationsPagination({ filters, page: _page }, { strict: true });
+
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
-    const data = await enhanced.notification.findMany({
+
+    const data: Notification[] = await enhanced.notification.findMany({
       where: whereClause({ filters, user }),
       // orderBy: [{ [ordering.field]: ordering.order }],
-      skip: PAGE_SIZES.notification * (Math.max(1, page) - 1),
-      take: PAGE_SIZES.notification,
+      skip: pageSize * (page - 1),
+      take: pageSize,
     });
-    return data.map(convertToPlainObject);
+
+    return dataInFetchContext(data, context);
   },
-);
+) as {
+  <C extends FetchActionContext>(
+    params: NotificationsTableControls,
+    context: C,
+  ): Promise<FetchActionResponse<Notification[], C>>;
+};

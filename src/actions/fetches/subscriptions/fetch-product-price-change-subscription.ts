@@ -7,11 +7,11 @@ import { type PriceChangeSubscription, enhance } from "~/database/model";
 import {
   type FetchActionResponse,
   type FetchActionContext,
-  returnErrorInFetchContext,
+  errorInFetchContext,
+  dataInFetchContext,
 } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
-import { convertToPlainObject } from "~/api/serialization";
 
 export const fetchProductPriceChangeSubcription = cache(
   async <C extends FetchActionContext>(
@@ -20,7 +20,7 @@ export const fetchProductPriceChangeSubcription = cache(
   ): Promise<FetchActionResponse<PriceChangeSubscription, C>> => {
     const { user, error } = await getAuthedUser();
     if (error) {
-      return returnErrorInFetchContext<PriceChangeSubscription, C>(error, context);
+      return errorInFetchContext(error, context);
     }
 
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
@@ -30,15 +30,18 @@ export const fetchProductPriceChangeSubcription = cache(
       const error = ApiClientGlobalError.NotFound({
         message: "A subscription does not exist for the provided ID.",
       });
-      return returnErrorInFetchContext<PriceChangeSubscription, C>(error, context);
+      return errorInFetchContext(error, context);
     } else if (subscription.userId !== user.id) {
       const error = ApiClientGlobalError.Forbidden({
         message: "You do not have permission to access this subscription.",
       });
-      return returnErrorInFetchContext<PriceChangeSubscription, C>(error, context);
+      return errorInFetchContext(error, context);
     }
-    return {
-      data: convertToPlainObject(subscription),
-    } as FetchActionResponse<PriceChangeSubscription, C>;
+    return dataInFetchContext(subscription, context);
   },
-);
+) as {
+  <C extends FetchActionContext>(
+    id: string,
+    context: C,
+  ): Promise<FetchActionResponse<PriceChangeSubscription, C>>;
+};

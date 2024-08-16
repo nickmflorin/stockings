@@ -12,10 +12,10 @@
 @use "./sizing" as sizing;
 @use "./colors" as colors;
 
-@mixin button-properties($type) {
+@mixin button-properties($type, $tight-fit: false) {
   @include button-base;
   @include colors.button-colors($type);
-  @include sizing.button-sizes($type);
+  @include sizing.button-sizes($type, $tight-fit: $tight-fit);
 
   @if $type != "icon-button" {
     @include fonts.button-fonts($type);
@@ -119,5 +119,10 @@
     text-align: center;
     aspect-ratio: 1;
     padding: 0;
+
+    &.button--tight {
+      overflow: visible;
+      @include button-properties("icon-button", $tight-fit: true);
+    }
   }
 }

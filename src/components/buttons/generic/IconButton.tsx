@@ -19,7 +19,9 @@ import { AbstractButton } from "./AbstractButton";
 export type IconButtonProps<
   E extends types.ButtonElement,
   P extends types.ButtonComponentProps<E> = types.ButtonComponentProps<E>,
-> = Omit<types.AbstractProps<"icon-button", E, P>, "buttonType">;
+> = Omit<types.AbstractProps<"icon-button", E, P>, "buttonType"> & {
+  readonly tight?: boolean;
+};
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const Base = AbstractButton as React.FC<types.AbstractProps<"icon-button", any, any>>;
@@ -61,6 +63,7 @@ const LocalIconButton = forwardRef(
       iconClassName,
       spinnerSize,
       spinnerClassName,
+      tight = false,
       ...props
     }: IconButtonProps<E, P>,
     ref: types.PolymorphicButtonRef<E>,
@@ -75,7 +78,7 @@ const LocalIconButton = forwardRef(
       readonly ref?: types.PolymorphicButtonRef<any>;
     };
     return (
-      <Base {...ps}>
+      <Base {...ps} className={classNames({ "button--tight": tight }, ps.className)}>
         <div className="button__content">
           {children ? (
             <WithLoading

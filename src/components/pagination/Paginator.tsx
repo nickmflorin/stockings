@@ -13,27 +13,31 @@ const Pagination = dynamic(() => import("@mantine/core").then(mod => mod.Paginat
 
 export interface PaginatorProps extends Pick<ComponentProps, "className"> {
   readonly count: number;
+  readonly page?: number;
   readonly pageSize?: number;
 }
 
-/* Note: We will eventually be replacing usage of Mantine's Pagination component here with our own
-   internal Pagination component.  We should also consider incorporating the ability to change
-   page size. */
-export const Paginator = ({ count, pageSize = 10, ...props }: PaginatorProps) => {
+export const Paginator = ({ count, page, pageSize = 10, ...props }: PaginatorProps) => {
   const [activePage, _setPage] = useState(1);
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const page = searchParams?.get("page");
-    if (page) {
-      const parsed = z.coerce.number().int().positive().safeParse(page);
+    const pg = searchParams?.get("page");
+    if (pg) {
+      const parsed = z.coerce.number().int().positive().safeParse(pg);
       if (parsed.success) {
         _setPage(clamp(parsed.data, 1, Math.ceil(count / clamp(pageSize, 1, 100))));
       }
     }
   }, [searchParams, pageSize, count]);
+
+  useEffect(() => {
+    if (page !== undefined) {
+      _setPage(page);
+    }
+  }, [page]);
 
   const setPage = useCallback(
     (page: number) => {

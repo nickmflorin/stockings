@@ -1,32 +1,25 @@
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { getAuthedUser } from "~/application/auth/server";
-
-import { PAGE_SIZES } from "~/actions";
-import { fetchProductsCount } from "~/actions/fetches/products";
+import { fetchProductsPagination } from "~/actions/fetches/products";
 
 import { Paginator } from "~/components/pagination/Paginator";
 import { type ProductsTableFilters } from "~/features/products";
 
 export interface ProductsTablePaginatorProps {
   readonly filters: ProductsTableFilters;
+  readonly page: number;
 }
 
 export const ProductsTablePaginator = async ({
   filters,
+  page: _page,
 }: ProductsTablePaginatorProps): Promise<JSX.Element> => {
-  const { user } = await getAuthedUser();
-
-  if (!user) {
-    // TODO: Revisit this redirect
-    return redirect("/sign-in");
-  }
-
-  const count = await fetchProductsCount({ filters });
+  const {
+    data: { count, page, pageSize },
+  } = await fetchProductsPagination({ filters, page: _page }, { strict: true });
   return (
     <Suspense>
-      <Paginator count={count} pageSize={PAGE_SIZES.product} />
+      <Paginator count={count} pageSize={pageSize} page={page} />
     </Suspense>
   );
 };

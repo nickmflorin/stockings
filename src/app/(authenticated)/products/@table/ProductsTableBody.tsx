@@ -1,7 +1,4 @@
 import dynamic from "next/dynamic";
-import { redirect } from "next/navigation";
-
-import { getAuthedUser } from "~/application/auth/server";
 
 import { fetchProducts } from "~/actions/fetches/products";
 
@@ -22,17 +19,13 @@ export const ProductsTableBody = async ({
   filters,
   page,
 }: ProductsTableBodyProps): Promise<JSX.Element> => {
-  const { user } = await getAuthedUser();
-
-  if (!user) {
-    // TODO: Revisit this redirect
-    return redirect("/sign-in");
-  }
-
-  const products = await fetchProducts({
-    filters,
-    ordering: { field: "name", order: "asc" },
-    page,
-  });
+  const { data: products } = await fetchProducts(
+    {
+      filters,
+      ordering: { field: "name", order: "asc" },
+      page,
+    },
+    { strict: true },
+  );
   return <ClientProductsTableBody data={products} />;
 };
