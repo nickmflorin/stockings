@@ -276,6 +276,7 @@ exports.Prisma.NotificationScalarFieldEnum = {
 exports.Prisma.PriceChangeNotificationScalarFieldEnum = {
   id: 'id',
   productRecordId: 'productRecordId',
+  subscriptionId: 'subscriptionId',
   condition: 'condition',
   previousPrice: 'previousPrice',
   newPrice: 'newPrice'
@@ -284,6 +285,7 @@ exports.Prisma.PriceChangeNotificationScalarFieldEnum = {
 exports.Prisma.StatusChangeNotificationScalarFieldEnum = {
   id: 'id',
   productRecordId: 'productRecordId',
+  subscriptionId: 'subscriptionId',
   previousStatus: 'previousStatus',
   newStatus: 'newStatus'
 };

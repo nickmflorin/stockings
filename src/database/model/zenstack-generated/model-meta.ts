@@ -993,6 +993,13 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "conditions" }] }],
                     backLink: 'subscription',
+                }, notifications: {
+                    name: "notifications",
+                    type: "StatusChangeNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'subscription',
                 },
             }
             , uniqueConstraints: {
@@ -1095,6 +1102,13 @@ const metadata = {
                     type: "PriceChangeSubscriptionCondition",
                     isArray: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, notifications: {
+                    name: "notifications",
+                    type: "PriceChangeNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'subscription',
                 },
             }
             , uniqueConstraints: {
@@ -1290,6 +1304,20 @@ const metadata = {
                     backLink: 'priceChangeNotifications',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "productRecordId" },
+                }, subscriptionId: {
+                    name: "subscriptionId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'subscription',
+                }, subscription: {
+                    name: "subscription",
+                    type: "PriceChangeSubscription",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'notifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subscriptionId" },
                 }, condition: {
                     name: "condition",
                     type: "PriceChangeSubscriptionCondition",
@@ -1408,6 +1436,20 @@ const metadata = {
                     backLink: 'statusChangeNotifications',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "productRecordId" },
+                }, subscriptionId: {
+                    name: "subscriptionId",
+                    type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'subscription',
+                }, subscription: {
+                    name: "subscription",
+                    type: "StatusChangeSubscription",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
+                    backLink: 'notifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subscriptionId" },
                 }, previousStatus: {
                     name: "previousStatus",
                     type: "ProductStatus",

@@ -302,6 +302,7 @@ exports.Prisma.PriceChangeNotificationScalarFieldEnum = {
   failedAt: 'failedAt',
   sentAt: 'sentAt',
   productRecordId: 'productRecordId',
+  subscriptionId: 'subscriptionId',
   condition: 'condition',
   previousPrice: 'previousPrice',
   newPrice: 'newPrice'
@@ -320,6 +321,7 @@ exports.Prisma.StatusChangeNotificationScalarFieldEnum = {
   failedAt: 'failedAt',
   sentAt: 'sentAt',
   productRecordId: 'productRecordId',
+  subscriptionId: 'subscriptionId',
   previousStatus: 'previousStatus',
   newStatus: 'newStatus'
 };

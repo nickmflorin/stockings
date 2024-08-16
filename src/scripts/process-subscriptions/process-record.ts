@@ -33,7 +33,7 @@ export const processRecord = async (
 
   type Transaction = Parameters<Parameters<typeof enhanced.$transaction>[0]>[0];
 
-  const processPriceChange = async (tx: Transaction, event: PriceChangeSubscription) => {
+  const processPriceChange = async (tx: Transaction, sub: PriceChangeSubscription) => {
     if (record.price) {
       const previousRecordWithPrice = walkBackwardsUntil(
         previousRecords,
@@ -48,8 +48,8 @@ export const processRecord = async (
            status, but the price remained the same. */
         if (
           previousRecordWithPrice.price !== record.price &&
-          event.conditions.includes(PriceChangeSubscriptionCondition.PriceDecrease) &&
-          event.enabled
+          sub.conditions.includes(PriceChangeSubscriptionCondition.PriceDecrease) &&
+          sub.enabled
         ) {
           await tx.priceChangeNotification.create({
             data: {
@@ -57,6 +57,7 @@ export const processRecord = async (
               updatedBy: { connect: { id: ctx.user.id } },
               user: { connect: { id: subscription.userId } },
               productRecord: { connect: { id: record.id } },
+              subscription: { connect: { id: sub.id } },
               state: NotificationState.Pending,
               stateAsOf: new Date(),
               condition:
@@ -82,7 +83,7 @@ export const processRecord = async (
     }
   };
 
-  const processStatusChange = async (tx: Transaction, event: ApiStatusChangeSubscription) => {
+  const processStatusChange = async (tx: Transaction, sub: ApiStatusChangeSubscription) => {
     const status = record.status;
     if (status) {
       const previousRecordWithStatus = walkBackwardsUntil(
@@ -98,8 +99,8 @@ export const processRecord = async (
            price, but the status remained the same. */
         if (
           previousRecordWithStatus.status != status &&
-          event.enabled &&
-          event.conditions.some(
+          sub.enabled &&
+          sub.conditions.some(
             condition =>
               condition.fromStatus.includes(previousRecordWithStatus.status) &&
               condition.toStatus.includes(status),
@@ -111,6 +112,7 @@ export const processRecord = async (
               updatedBy: { connect: { id: ctx.user.id } },
               user: { connect: { id: subscription.userId } },
               productRecord: { connect: { id: record.id } },
+              subscription: { connect: { id: sub.id } },
               state: NotificationState.Pending,
               stateAsOf: new Date(),
               previousStatus: previousRecordWithStatus.status,

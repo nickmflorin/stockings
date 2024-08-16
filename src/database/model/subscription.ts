@@ -1,6 +1,6 @@
 import { enumeratedLiterals } from "enumerated-literals";
 
-import { SubscriptionType } from "./generated";
+import { SubscriptionType, type Product } from "./generated";
 import {
   type StatusChangeSubscription,
   type StatusChangeSubscriptionCondition,
@@ -39,3 +39,15 @@ export const SubscriptionTypes = enumeratedLiterals(
   }[],
   {},
 );
+
+export type FullStatusChangeSubscription = ApiStatusChangeSubscription & {
+  readonly product: Product;
+  readonly notificationsCount: number;
+};
+
+export type FullPriceChangeSubscription = PriceChangeSubscription & {
+  readonly product: Product;
+  readonly notificationsCount: number;
+};
+
+export type FullProductSubscription = FullStatusChangeSubscription | FullPriceChangeSubscription;
