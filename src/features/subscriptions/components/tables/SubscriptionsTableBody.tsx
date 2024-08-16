@@ -1,5 +1,5 @@
 "use client";
-import { type ApiProductSubscription } from "~/database/model";
+import { type ApiProductSubscription, type FullProductSubscription } from "~/database/model";
 
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
@@ -10,14 +10,14 @@ import {
 import { SubscriptionTypeText } from "~/features/subscriptions/components/SubscriptionTypeText";
 
 export interface SubscriptionsTableBodyProps {
-  readonly data: ApiProductSubscription[];
+  readonly data: FullProductSubscription[];
 }
 
 export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => (
   <DataTableBody
     columns={convertConfigsToColumns(
       [...SubscriptionsTableColumns] as DataTableColumnConfig<
-        ApiProductSubscription,
+        FullProductSubscription,
         SubscriptionsTableColumnId
       >[],
       {
@@ -30,6 +30,11 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                 subscriptionType={datum.subscriptionType}
               />
             );
+          },
+        },
+        notificationsCount: {
+          cellRenderer(datum) {
+            return datum.notificationsCount;
           },
         },
       },

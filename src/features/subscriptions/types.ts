@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import {
-  type ApiProductSubscription,
+  type FullProductSubscription,
   type SubscriptionType,
   SubscriptionTypes,
 } from "~/database/model";
@@ -17,7 +17,13 @@ export const SubscriptionsTableColumns = [
     minWidth: 240,
     maxWidth: 240,
   },
-] as const satisfies DataTableColumnConfig<ApiProductSubscription, string>[];
+  {
+    id: "notificationsCount",
+    label: "# Notifications",
+    minWidth: 240,
+    maxWidth: 240,
+  },
+] as const satisfies DataTableColumnConfig<FullProductSubscription, string>[];
 
 export type SubscriptionsTableColumnId = (typeof SubscriptionsTableColumns)[number]["id"];
 

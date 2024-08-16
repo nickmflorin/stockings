@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
 import { db } from "~/database";
-import type { ApiProductSubscription, User } from "~/database/model";
+import type { FullProductSubscription, User } from "~/database/model";
 import { enhance, SubscriptionType } from "~/database/model";
 import { conditionalFilters } from "~/database/util";
 
@@ -40,7 +40,7 @@ export const fetchProductSubscriptionsCount = cache(
 );
 
 export const fetchProductSubscriptions = cache(
-  async ({ filters, page }: SubscriptionsTableControls): Promise<ApiProductSubscription[]> => {
+  async ({ filters, page }: SubscriptionsTableControls): Promise<FullProductSubscription[]> => {
     const { user } = await getAuthedUser({ strict: true });
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
     const data = await enhanced.productSubscription.findMany({
@@ -48,6 +48,7 @@ export const fetchProductSubscriptions = cache(
       // orderBy: [{ [ordering.field]: ordering.order }],
       skip: PAGE_SIZES.productSubscription * (Math.max(1, page) - 1),
       take: PAGE_SIZES.productSubscription,
+      include: { product: true },
     });
     const conditions = await enhanced.statusChangeSubscriptionCondition.findMany({
       where: {
@@ -58,16 +59,31 @@ export const fetchProductSubscriptions = cache(
         },
       },
     });
+    const priceChangeCounts = await enhanced.priceChangeNotification.groupBy({
+      by: ["subscriptionId"],
+      _count: { id: true },
+    });
+    const statusChangeCounts = await enhanced.statusChangeNotification.groupBy({
+      by: ["subscriptionId"],
+      _count: { id: true },
+    });
 
-    return data.map(
-      (subscription): ApiProductSubscription =>
-        convertToPlainObject({
+    const getCount = (subscriptionId: string) =>
+      (priceChangeCounts.find(ct => ct.subscriptionId === subscriptionId)?._count.id ?? 0) +
+      (statusChangeCounts.find(ct => ct.subscriptionId === subscriptionId)?._count.id ?? 0);
+
+    return data.map((subscription): FullProductSubscription => {
+      if (subscription.subscriptionType === SubscriptionType.StatusChangeSubscription) {
+        return convertToPlainObject({
           ...subscription,
-          conditions:
-            subscription.subscriptionType === SubscriptionType.StatusChangeSubscription
-              ? conditions.filter(c => c.subscriptionId === subscription.id)
-              : subscription.conditions,
-        } as ApiProductSubscription),
-    );
+          notificationsCount: getCount(subscription.id),
+          conditions: conditions.filter(c => c.subscriptionId === subscription.id),
+        } as FullProductSubscription);
+      }
+      return convertToPlainObject({
+        ...subscription,
+        notificationsCount: getCount(subscription.id),
+      } as FullProductSubscription);
+    });
   },
 );
