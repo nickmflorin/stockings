@@ -6,6 +6,7 @@ import {
   type Product,
   type PriceChangeSubscription,
   type StatusChangeSubscription,
+  type ApiProductSubscription,
 } from "~/database/model";
 /* eslint-disable-next-line no-restricted-imports */
 import type { GetBatchResult } from "~/database/model/generated/runtime/library";
@@ -25,7 +26,7 @@ const SubscriptionFrequency = 0.4;
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
   ctx: ScriptContext,
-): Promise<[Product[], GetBatchResult, (StatusChangeSubscription | PriceChangeSubscription)[]]> => {
+): Promise<[Product[], GetBatchResult, ApiProductSubscription[]]> => {
   const products = await Promise.all(
     jsonProducts.map(jsonProduct =>
       db.product.create({
@@ -63,7 +64,7 @@ const seedProductBatch = async (
       )
     )
       .flat()
-      .filter((sub): sub is StatusChangeSubscription | PriceChangeSubscription => sub !== null),
+      .filter((sub): sub is ApiProductSubscription => sub !== null),
   ];
 };
 

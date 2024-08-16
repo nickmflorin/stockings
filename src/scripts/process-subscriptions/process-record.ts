@@ -9,6 +9,7 @@ import {
   type ApiStatusChangeSubscription,
   NotificationState,
   SubscriptionType,
+  type ApiProductSubscription,
   enhance,
 } from "~/database/model";
 import { logger } from "~/internal/logger";
@@ -16,7 +17,7 @@ import { logger } from "~/internal/logger";
 import { walkBackwardsUntil } from "~/lib/arrays";
 
 interface ProcessRecordParams {
-  readonly subscription: PriceChangeSubscription | ApiStatusChangeSubscription;
+  readonly subscription: ApiProductSubscription;
   readonly previousRecords: ProductRecord[];
   readonly record: ProductRecord;
 }

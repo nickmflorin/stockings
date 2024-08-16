@@ -1,10 +1,14 @@
 import { z } from "zod";
 
-import { type Subscription, type SubscriptionState, type SubscriptionType } from "~/database/model";
+import {
+  type ApiProductSubscription,
+  type SubscriptionType,
+  SubscriptionTypes,
+} from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
 
-import type { TableOrdering, DataTableColumnConfig } from "~/components/tables";
+import type { DataTableColumnConfig } from "~/components/tables";
 
 export const SubscriptionsTableColumns = [
   {
@@ -13,13 +17,7 @@ export const SubscriptionsTableColumns = [
     minWidth: 240,
     maxWidth: 240,
   },
-  {
-    id: "state",
-    label: "State",
-    minWidth: 240,
-    maxWidth: 240,
-  },
-] as const satisfies DataTableColumnConfig<Subscription, string>[];
+] as const satisfies DataTableColumnConfig<ApiProductSubscription, string>[];
 
 export type SubscriptionsTableColumnId = (typeof SubscriptionsTableColumns)[number]["id"];
 
@@ -29,7 +27,6 @@ export type OrderableSubscriptionsTableColumnId = Extract<
 >["id"];
 
 export interface SubscriptionsTableFilters {
-  readonly states: SubscriptionState[];
   readonly types: SubscriptionType[];
 }
 
@@ -40,15 +37,6 @@ export interface SubscriptionsTableControls {
 }
 
 export const SubscriptionsTableFiltersSchemas = {
-  states: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return SubscriptionStates.contains(value) ? [value] : [];
-    }
-    return value.reduce(
-      (prev, curr) => (SubscriptionStates.contains(curr) ? [...prev, curr] : prev),
-      [] as SubscriptionState[],
-    );
-  }),
   types: z.union([z.string(), z.array(z.string())]).transform(value => {
     if (typeof value === "string") {
       return SubscriptionTypes.contains(value) ? [value] : [];
@@ -66,5 +54,4 @@ export const SubscriptionsTableFiltersOptions: ParseFiltersOptions<
   typeof SubscriptionsTableFiltersSchemas
 > = {
   types: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  states: { defaultValue: [], excludeWhen: v => v.length === 0 },
 };

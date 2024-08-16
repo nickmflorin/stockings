@@ -1,52 +1,34 @@
 "use client";
-import { type Notification } from "~/database/model";
+import { type ApiProductSubscription } from "~/database/model";
 
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
-import { Text } from "~/components/typography";
-import { DateTimeText } from "~/components/typography/DateTimeText";
 import {
-  NotificationsTableColumns,
-  type NotificationsTableColumnId,
-} from "~/features/notifications";
-import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
-import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
+  SubscriptionsTableColumns,
+  type SubscriptionsTableColumnId,
+} from "~/features/subscriptions";
+import { SubscriptionTypeText } from "~/features/subscriptions/components/SubscriptionTypeText";
 
-export interface NotificationsTableBodyProps {
-  readonly data: Notification[];
+export interface SubscriptionsTableBodyProps {
+  readonly data: ApiProductSubscription[];
 }
 
-export const NotificationsTableBody = ({ data }: NotificationsTableBodyProps): JSX.Element => (
+export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => (
   <DataTableBody
     columns={convertConfigsToColumns(
-      [...NotificationsTableColumns] as DataTableColumnConfig<
-        Notification,
-        NotificationsTableColumnId
+      [...SubscriptionsTableColumns] as DataTableColumnConfig<
+        ApiProductSubscription,
+        SubscriptionsTableColumnId
       >[],
       {
         type: {
           cellRenderer(datum) {
             return (
-              <NotificationTypeText
+              <SubscriptionTypeText
                 fontWeight="medium"
                 fontSize="sm"
-                notificationType={datum.notificationType}
+                subscriptionType={datum.subscriptionType}
               />
-            );
-          },
-        },
-        state: {
-          cellRenderer(datum) {
-            return (
-              <div className="flex flex-col">
-                <NotificationStateText fontWeight="medium" fontSize="sm" state={datum.state} />
-                {datum.stateAsOf && (
-                  <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
-                    {" "}
-                    as of <DateTimeText component="span" value={datum.stateAsOf} />
-                  </Text>
-                )}
-              </div>
             );
           },
         },
@@ -56,4 +38,4 @@ export const NotificationsTableBody = ({ data }: NotificationsTableBodyProps): J
   />
 );
 
-export default NotificationsTableBody;
+export default SubscriptionsTableBody;

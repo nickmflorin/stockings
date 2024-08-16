@@ -29,10 +29,10 @@ export const NotificationsTableBody = async ({
     return redirect("/sign-in");
   }
 
-  const products = await fetchNotifications({
+  const notifications = await fetchNotifications({
     filters,
     // ordering: { field: "createdAt", order: "asc" },
     page,
   });
-  return <ClientNotificationsTableBody data={products} />;
+  return <ClientNotificationsTableBody data={notifications} />;
 };

@@ -8,7 +8,6 @@ export * from "./errors";
 export * from "./inclusion";
 export * from "./notifications";
 export * from "./product";
-export * from "./product-statuses";
 export * from "./subscription";
 
 export {

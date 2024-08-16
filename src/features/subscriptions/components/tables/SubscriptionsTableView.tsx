@@ -3,28 +3,28 @@ import TableContainer from "@mui/material/TableContainer";
 
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
-import { NotificationsTableColumns } from "~/features/notifications/types";
+import { SubscriptionsTableColumns } from "~/features/subscriptions/types";
 
-export interface NotificationsTableViewProps {
+export interface SubscriptionsTableViewProps {
   readonly children: JSX.Element;
   readonly searchBar?: JSX.Element;
   readonly pagination?: JSX.Element;
 }
 
-export const NotificationsTableView = ({
+export const SubscriptionsTableView = ({
   children,
   searchBar,
   pagination,
-}: NotificationsTableViewProps) => (
+}: SubscriptionsTableViewProps) => (
   <TableView
     header={searchBar}
     footer={pagination}
     contentClassName="max-h-[calc(100%-32px-40px-16px-16px)]"
   >
     <TableContainer sx={{ maxHeight: "100%" }}>
-      <DataTableWrapper columns={NotificationsTableColumns}>{children}</DataTableWrapper>
+      <DataTableWrapper columns={SubscriptionsTableColumns}>{children}</DataTableWrapper>
     </TableContainer>
   </TableView>
 );
 
-export default NotificationsTableView;
+export default SubscriptionsTableView;

@@ -23,6 +23,12 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           activePaths: [{ leadingPath: "/products" }, { leadingPath: "/product/:id" }],
         },
         {
+          tooltipLabel: "Subscriptions",
+          icon: "mailbox",
+          path: "/subscriptions",
+          activePaths: [{ leadingPath: "/subscriptions" }],
+        },
+        {
           tooltipLabel: "Notifications",
           icon: "envelope",
           path: "/notifications",
