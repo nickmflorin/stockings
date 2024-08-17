@@ -94,6 +94,20 @@ const MenuItemInner = ({
     return ic;
   }, [_icon, rest, isLoading, isLocked, isDisabled]);
 
+  const leftIcon = useMemo(() => {
+    if (icon === undefined) {
+      return (
+        <Spinner
+          {...rest.spinnerProps}
+          className={classNames("text-gray-600", rest.iconClassName, rest.spinnerClassName)}
+          isLoading={isLoading}
+          size={rest.iconSize ?? "18px"}
+        />
+      );
+    }
+    return icon;
+  }, [icon, isLoading, rest]);
+
   const children = useMemo(() => {
     if (typeof _children === "function") {
       return _children({ isLocked, isLoading, isDisabled });
@@ -103,20 +117,9 @@ const MenuItemInner = ({
 
   return (
     <>
-      {icon}
+      {leftIcon}
       {children !== null && children !== undefined && !isFragment(children) && (
         <div className="menu__item__inner-content">{children}</div>
-      )}
-      {/* Only show the spinner to the right (instead of over the icon) if the icon is not
-          defined.  This avoids text/content shifting when the Spinner appears and
-          disappears. */}
-      {icon === undefined && (
-        <Spinner
-          {...rest.spinnerProps}
-          className={classNames("text-gray-600", rest.iconClassName, rest.spinnerClassName)}
-          isLoading={isLoading}
-          size={rest.iconSize}
-        />
       )}
       <Actions actions={actions} />
     </>

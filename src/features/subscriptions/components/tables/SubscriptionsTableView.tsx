@@ -22,7 +22,9 @@ export const SubscriptionsTableView = ({
     contentClassName="max-h-[calc(100%-32px-40px-16px-16px)]"
   >
     <TableContainer sx={{ maxHeight: "100%" }}>
-      <DataTableWrapper columns={SubscriptionsTableColumns}>{children}</DataTableWrapper>
+      <DataTableWrapper hasActions columns={SubscriptionsTableColumns}>
+        {children}
+      </DataTableWrapper>
     </TableContainer>
   </TableView>
 );

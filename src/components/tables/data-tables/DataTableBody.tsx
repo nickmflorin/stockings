@@ -5,6 +5,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { logger } from "~/internal/logger";
 
 import { type FloatingContentRenderProps } from "~/components/floating";
+import { type ActionsCellProps } from "~/components/tables/cells/ActionsCell";
 import { Table } from "~/components/tables/generic/Table";
 import type { TableBodyProps } from "~/components/tables/generic/TableBody";
 import type * as types from "~/components/tables/types";
@@ -22,6 +23,7 @@ export interface DataTableBodyProps<D extends types.DataTableDatum, I extends st
   readonly highlightRowOnHover?: boolean;
   readonly scrollable?: boolean;
   readonly rowHeight?: QuantitativeSize<"px">;
+  readonly actionMenuWidth?: ActionsCellProps["menuWidth"];
   readonly getRowId?: (datum: D) => string;
   readonly onRowClick?: (id: string, datum: D) => void;
   readonly getRowActions?: (
@@ -37,6 +39,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
   rowHeight,
   columns,
   ordering,
+  actionMenuWidth,
   getRowId,
   onRowClick,
   getRowActions,
@@ -78,6 +81,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
             height={rowHeight}
             hoveredClassName={rowHoveredClassName}
             highlightOnHover={highlightRowOnHover}
+            actionMenuWidth={actionMenuWidth}
             onClick={() => onRowClick?.(rowId, datum)}
             getRowActions={getRowActions}
           />

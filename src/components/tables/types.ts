@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-literals";
 
 import { type IconProp, type IconName } from "~/components/icons";
+import { type MenuItemInstance } from "~/components/menus";
 import type { QuantitativeSize } from "~/components/types";
 
 import { type TableBodyCellProps } from "./generic/TableBodyCell";
@@ -27,7 +28,11 @@ export interface DataTableDatum {
 export type DataTableRowAction = {
   readonly isVisible?: boolean;
   readonly content: ReactNode;
-  readonly onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  readonly isLoading?: boolean;
+  readonly onClick: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    instance: MenuItemInstance,
+  ) => void;
 };
 
 export interface DataTableColumnConfig<D extends DataTableDatum, I extends string = string> {

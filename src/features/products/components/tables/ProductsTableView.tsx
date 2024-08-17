@@ -18,7 +18,9 @@ export const ProductsTableView = ({ children, searchBar, pagination }: ProductsT
     contentClassName="max-h-[calc(100%-32px-40px-16px-16px)]"
   >
     <TableContainer sx={{ maxHeight: "100%" }}>
-      <DataTableWrapper columns={ProductsTableColumns}>{children}</DataTableWrapper>
+      <DataTableWrapper hasActions columns={ProductsTableColumns}>
+        {children}
+      </DataTableWrapper>
     </TableContainer>
   </TableView>
 );

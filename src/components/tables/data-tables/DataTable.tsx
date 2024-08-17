@@ -1,37 +1,34 @@
-import { type ReactNode } from "react";
-
-import { type FloatingContentRenderProps } from "~/components/floating";
 import { useTableOrdering } from "~/components/tables/hooks/use-table-ordering";
 import type * as types from "~/components/tables/types";
-import { type QuantitativeSize, type ClassName } from "~/components/types";
 
-import { DataTableBody } from "./DataTableBody";
+import { DataTableBody, type DataTableBodyProps } from "./DataTableBody";
 import { type DataTableWrapperProps, DataTableWrapper } from "./DataTableWrapper";
 
 export interface DataTableProps<D extends types.DataTableDatum, I extends string = string>
-  extends Omit<DataTableWrapperProps<D, I>, "children" | "onSort" | "columns" | "hasActions"> {
-  readonly data: D[];
-  readonly loadingIndicator?: types.TableLoadingIndicator;
-  readonly rowHoveredClassName?: ClassName;
-  readonly highlightRowOnHover?: boolean;
-  readonly rowHeight?: QuantitativeSize<"px">;
-  readonly isLoading?: boolean;
-  readonly isEmpty?: boolean;
-  readonly emptyState?: ReactNode;
-  readonly numSkeletonRows?: number;
-  readonly skeletonRowHeight?: QuantitativeSize<"px">;
-  readonly columns: types.DataTableColumn<D, I>[];
-  readonly getRowId?: (datum: D) => string;
-  readonly onRowClick?: (id: string, datum: D) => void;
+  extends Omit<DataTableWrapperProps<D, I>, "children" | "onSort" | "columns" | "hasActions">,
+    Pick<
+      DataTableBodyProps<D, I>,
+      | "getRowActions"
+      | "actionMenuWidth"
+      | "onRowClick"
+      | "getRowId"
+      | "columns"
+      | "skeletonRowHeight"
+      | "numSkeletonRows"
+      | "emptyState"
+      | "isEmpty"
+      | "isLoading"
+      | "rowHeight"
+      | "highlightRowOnHover"
+      | "rowHoveredClassName"
+      | "data"
+      | "loadingIndicator"
+    > {
   readonly onSort?: (
     event: React.MouseEvent<unknown>,
     col: types.DataTableColumnConfig<D, I>,
     ordering: types.TableOrdering<I> | null,
   ) => void;
-  readonly getRowActions?: (
-    datum: D,
-    params: Pick<FloatingContentRenderProps, "setIsOpen">,
-  ) => types.DataTableRowAction[];
 }
 
 export const DataTable = <D extends types.DataTableDatum, I extends string>({
@@ -46,6 +43,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   emptyState,
   isLoading,
   loadingIndicator,
+  actionMenuWidth,
   getRowId,
   onRowClick,
   getRowActions,
@@ -80,6 +78,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
         isLoading={isLoading}
         loadingIndicator={loadingIndicator}
         skeletonRowHeight={skeletonRowHeight ?? rowHeight}
+        actionMenuWidth={actionMenuWidth}
         onRowClick={onRowClick}
         getRowId={getRowId}
         getRowActions={getRowActions}

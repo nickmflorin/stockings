@@ -7,6 +7,10 @@ import {
   productStatusesAreAny,
 } from "~/database/model";
 
+export const BaseSubscriptionSchema = z.object({
+  enabled: z.boolean(),
+});
+
 const StatusChangeSubscriptionConditionSchema = z.object({
   id: z.string().optional(),
   fromStatus: z.array(z.nativeEnum(ProductStatus)),

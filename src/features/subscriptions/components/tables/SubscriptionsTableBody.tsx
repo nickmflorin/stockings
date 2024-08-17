@@ -1,8 +1,17 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+
+import { toast } from "react-toastify";
+
 import { type FullProductSubscription } from "~/database/model";
+import { logger } from "~/internal/logger";
+
+import { updateSubscription } from "~/actions/mutations/subscriptions";
 
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
+import { EnabledIcon } from "~/components/icons/EnabledIcon";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
 import { Text } from "~/components/typography";
@@ -17,74 +26,157 @@ export interface SubscriptionsTableBodyProps {
   readonly data: FullProductSubscription[];
 }
 
-export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => (
-  <DataTableBody
-    columns={convertConfigsToColumns(
-      [...SubscriptionsTableColumns] as DataTableColumnConfig<
-        FullProductSubscription,
-        SubscriptionsTableColumnId
-      >[],
-      {
-        product: {
-          cellRenderer(datum) {
-            return (
-              <div className="flex flex-row items-center gap-2">
-                <ProductLink product={datum.product} location="internal" />
-                <ExternalProductIconLink product={datum.product} />
-              </div>
-            );
+export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => {
+  const { refresh } = useRouter();
+  const [refreshAfterEnablingPending, transitionAfterEnabling] = useTransition();
+  const [refreshAfterDisablingPending, transitionAfterDisabling] = useTransition();
+  return (
+    <DataTableBody
+      actionMenuWidth={140}
+      getRowActions={(subscription, { setIsOpen }) => [
+        {
+          isVisible: !subscription.enabled,
+          content: "Enable",
+          isLoading: refreshAfterEnablingPending,
+          onClick: async (e, instance) => {
+            instance.setLoading(true);
+            let response: Awaited<ReturnType<typeof updateSubscription>> | null = null;
+            try {
+              response = await updateSubscription(subscription.id, { enabled: true });
+            } catch (e) {
+              logger.errorUnsafe(
+                e,
+                `There was an error enabling subscription with ID '${subscription.id}'!`,
+              );
+              toast.error("There was an error enabling the subscription. Please try again later.");
+              return instance.setLoading(false);
+            }
+            const { error } = response;
+            if (error) {
+              logger.errorUnsafe(
+                e,
+                `There was an error enabling subscription with ID '${subscription.id}'!`,
+              );
+              toast.error("There was an error enabling the subscription. Please try again later.");
+              return;
+            }
+            return transitionAfterEnabling(() => {
+              refresh();
+              instance.setLoading(false);
+              setIsOpen(false, e);
+            });
           },
         },
-        type: {
-          cellRenderer(datum) {
-            return (
-              <SubscriptionTypeText
-                fontWeight="medium"
-                fontSize="sm"
-                subscriptionType={datum.subscriptionType}
-              />
-            );
+        {
+          isVisible: subscription.enabled,
+          content: "Disable",
+          isLoading: refreshAfterDisablingPending,
+          onClick: async (e, instance) => {
+            instance.setLoading(true);
+            let response: Awaited<ReturnType<typeof updateSubscription>> | null = null;
+            try {
+              response = await updateSubscription(subscription.id, { enabled: false });
+            } catch (e) {
+              logger.errorUnsafe(
+                e,
+                `There was an error disabling subscription with ID '${subscription.id}'!`,
+              );
+              toast.error("There was an error disabling the subscription. Please try again later.");
+              return instance.setLoading(false);
+            }
+            const { error } = response;
+            if (error) {
+              logger.errorUnsafe(
+                e,
+                `There was an error disabling subscription with ID '${subscription.id}'!`,
+              );
+              toast.error("There was an error disabling the subscription. Please try again later.");
+              return;
+            }
+            return transitionAfterDisabling(() => {
+              refresh();
+              instance.setLoading(false);
+              setIsOpen(false, e);
+            });
           },
         },
-        notificationsCount: {
-          cellRenderer(datum) {
-            return datum.notificationsCount;
+      ]}
+      columns={convertConfigsToColumns(
+        [...SubscriptionsTableColumns] as DataTableColumnConfig<
+          FullProductSubscription,
+          SubscriptionsTableColumnId
+        >[],
+        {
+          product: {
+            cellRenderer(datum) {
+              return (
+                <div className="flex flex-row items-center gap-2">
+                  <ProductLink product={datum.product} location="internal" />
+                  <ExternalProductIconLink product={datum.product} />
+                </div>
+              );
+            },
           },
-        },
-        createdAt: {
-          cellRenderer(datum) {
-            return (
-              <Text fontWeight="regular" fontSize="sm" className="text-description">
-                Created on{" "}
-                <DateTimeText
-                  className="text-body"
+          enabled: {
+            cellRenderer(datum) {
+              return (
+                <div className="flex flex-row items-center justify-center">
+                  <EnabledIcon isEnabled={datum.enabled} size="20px" />
+                </div>
+              );
+            },
+          },
+          type: {
+            cellRenderer(datum) {
+              return (
+                <SubscriptionTypeText
                   fontWeight="medium"
-                  component="span"
-                  value={datum.createdAt}
+                  fontSize="sm"
+                  subscriptionType={datum.subscriptionType}
                 />
-              </Text>
-            );
+              );
+            },
+          },
+          notificationsCount: {
+            cellRenderer(datum) {
+              return datum.notificationsCount;
+            },
+          },
+          createdAt: {
+            cellRenderer(datum) {
+              return (
+                <Text fontWeight="regular" fontSize="sm" className="text-description">
+                  Created on{" "}
+                  <DateTimeText
+                    className="text-body"
+                    fontWeight="medium"
+                    component="span"
+                    value={datum.createdAt}
+                  />
+                </Text>
+              );
+            },
+          },
+          updatedAt: {
+            cellRenderer(datum) {
+              return (
+                <Text fontWeight="regular" fontSize="sm" className="text-description">
+                  Last updated on{" "}
+                  <DateTimeText
+                    className="text-body"
+                    fontWeight="medium"
+                    component="span"
+                    value={datum.updatedAt}
+                  />
+                </Text>
+              );
+            },
           },
         },
-        updatedAt: {
-          cellRenderer(datum) {
-            return (
-              <Text fontWeight="regular" fontSize="sm" className="text-description">
-                Last updated on{" "}
-                <DateTimeText
-                  className="text-body"
-                  fontWeight="medium"
-                  component="span"
-                  value={datum.updatedAt}
-                />
-              </Text>
-            );
-          },
-        },
-      },
-    )}
-    data={data}
-  />
-);
+      )}
+      data={data}
+    />
+  );
+};
 
 export default SubscriptionsTableBody;

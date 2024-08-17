@@ -27,6 +27,7 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
 
   return (
     <DataTableBody
+      actionMenuWidth={200}
       getRowActions={(product, { setIsOpen }) => [
         {
           isVisible: product.statusChangeSubscription !== null,

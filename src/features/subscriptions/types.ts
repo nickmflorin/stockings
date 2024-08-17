@@ -17,18 +17,26 @@ export const SubscriptionsTableColumns = [
     minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
+    align: "left",
   },
   {
     id: "type",
     label: "Type",
-    minWidth: 240,
-    maxWidth: 240,
+    align: "left",
+  },
+  {
+    id: "enabled",
+    label: "Enabled",
+    minWidth: 120,
+    maxWidth: 140,
+    align: "center",
   },
   {
     id: "notificationsCount",
     label: "# Notifications",
-    minWidth: 240,
-    maxWidth: 240,
+    minWidth: 120,
+    maxWidth: 140,
+    align: "center",
   },
   {
     id: "createdAt",
@@ -36,6 +44,7 @@ export const SubscriptionsTableColumns = [
     minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
+    align: "left",
   },
   {
     id: "updatedAt",
@@ -43,6 +52,7 @@ export const SubscriptionsTableColumns = [
     minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
+    align: "left",
   },
 ] as const satisfies DataTableColumnConfig<FullProductSubscription, string>[];
 

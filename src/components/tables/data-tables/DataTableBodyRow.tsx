@@ -3,7 +3,7 @@ import { Table } from "~/components/tables/generic/Table";
 import type { TableBodyRowProps } from "~/components/tables/generic/TableBodyRow";
 import type * as types from "~/components/tables/types";
 
-import { ActionsCell } from "../cells/ActionsCell";
+import { ActionsCell, type ActionsCellProps } from "../cells/ActionsCell";
 import { TableBodyCell } from "../generic/TableBodyCell";
 
 import { DataTableBodyCell } from "./DataTableBodyCell";
@@ -12,6 +12,7 @@ export interface DataTableBodyRowProps<D extends types.DataTableDatum, I extends
   extends Omit<TableBodyRowProps, "children"> {
   readonly datum: D;
   readonly columns: types.DataTableColumn<D, I>[];
+  readonly actionMenuWidth?: ActionsCellProps["menuWidth"];
   readonly getRowActions?: (
     datum: D,
     params: Pick<FloatingContentRenderProps, "setIsOpen">,
@@ -21,6 +22,7 @@ export interface DataTableBodyRowProps<D extends types.DataTableDatum, I extends
 export const DataTableBodyRow = <D extends types.DataTableDatum, I extends string>({
   datum,
   columns,
+  actionMenuWidth,
   getRowActions,
   ...props
 }: DataTableBodyRowProps<D, I>): JSX.Element => (
@@ -30,7 +32,7 @@ export const DataTableBodyRow = <D extends types.DataTableDatum, I extends strin
     ))}
     {getRowActions && (
       <TableBodyCell align="center">
-        <ActionsCell actions={params => getRowActions(datum, params)} />
+        <ActionsCell menuWidth={actionMenuWidth} actions={params => getRowActions(datum, params)} />
       </TableBodyCell>
     )}
   </Table.BodyRow>

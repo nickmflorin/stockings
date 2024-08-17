@@ -3,25 +3,33 @@ import { type FloatingContentRenderProps } from "~/components/floating";
 import { DropdownMenu } from "~/components/menus/DropdownMenu";
 import { Menu } from "~/components/menus/Menu";
 import { type DataTableRowAction } from "~/components/tables/types";
+import { type QuantitativeSize } from "~/components/types";
 
 export interface ActionsCellProps {
   readonly actions:
     | DataTableRowAction[]
     | ((params: Pick<FloatingContentRenderProps, "setIsOpen">) => DataTableRowAction[]);
+  readonly menuWidth?: QuantitativeSize<"px"> | "target" | "available";
 }
 
-export const ActionsCell = ({ actions }: ActionsCellProps): JSX.Element => (
+export const ActionsCell = ({ actions, menuWidth = 120 }: ActionsCellProps): JSX.Element => (
   <div className="flex flex-row items-center justify-center">
     <DropdownMenu
       placement="bottom-end"
-      width={220}
+      width={menuWidth}
       inPortal
       content={({ setIsOpen }) => (
         <Menu>
           <Menu.Content>
             {(typeof actions === "function" ? actions({ setIsOpen }) : actions).map(
-              ({ content, isVisible, onClick }, i) => (
-                <Menu.Item key={i} className="font-medium" isVisible={isVisible} onClick={onClick}>
+              ({ content, isVisible, isLoading, onClick }, i) => (
+                <Menu.Item
+                  key={i}
+                  isLoading={isLoading}
+                  className="font-medium"
+                  isVisible={isVisible}
+                  onClick={onClick}
+                >
                   {content}
                 </Menu.Item>
               ),
