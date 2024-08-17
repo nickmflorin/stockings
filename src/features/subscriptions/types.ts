@@ -34,8 +34,8 @@ export const SubscriptionsTableColumns = [
   {
     id: "conditions",
     label: "Conditions",
-    maxWidth: 300,
-    minWidth: 280,
+    maxWidth: 230,
+    minWidth: 220,
     align: "center",
   },
   {

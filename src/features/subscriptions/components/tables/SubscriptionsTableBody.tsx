@@ -127,9 +127,11 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
             cellRenderer: datum =>
               datum.subscriptionType === SubscriptionType.StatusChangeSubscription &&
               datum.conditions.length !== 0 ? (
-                <StatusChangeConditionTransition
-                  conditions={(datum.conditions as StatusChangeSubscriptionCondition[])[0]}
-                />
+                <div className="flex flex-row items-center justify-center">
+                  <StatusChangeConditionTransition
+                    conditions={datum.conditions as StatusChangeSubscriptionCondition[]}
+                  />
+                </div>
               ) : (
                 <></>
               ),

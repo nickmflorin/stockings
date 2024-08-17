@@ -1,6 +1,6 @@
 import { enumeratedLiterals } from "enumerated-literals";
 
-import { SubscriptionType, type Product } from "./generated";
+import { SubscriptionType, type Product, type ProductStatus } from "./generated";
 import {
   type StatusChangeSubscription,
   type StatusChangeSubscriptionCondition,
@@ -51,3 +51,27 @@ export type FullPriceChangeSubscription = PriceChangeSubscription & {
 };
 
 export type FullProductSubscription = FullStatusChangeSubscription | FullPriceChangeSubscription;
+
+type FlattenedStatusChangeSubscriptionCondition = [ProductStatus, ProductStatus];
+
+export const flattenStatusChangeSubscriptionsConditions = (
+  conditions:
+    | Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">
+    | Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">[],
+): FlattenedStatusChangeSubscriptionCondition[] => {
+  const cs = Array.isArray(conditions) ? conditions : [conditions];
+  const flattened: FlattenedStatusChangeSubscriptionCondition[] = [];
+  for (const condition of cs) {
+    for (const fromStatus of condition.fromStatus) {
+      for (const toStatus of condition.toStatus) {
+        if (
+          !flattened.some(([f, t]) => f === fromStatus && t === toStatus) &&
+          toStatus !== fromStatus
+        ) {
+          flattened.push([fromStatus, toStatus]);
+        }
+      }
+    }
+  }
+  return flattened;
+};
