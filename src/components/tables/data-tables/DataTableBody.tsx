@@ -4,6 +4,7 @@ import Skeleton from "@mui/material/Skeleton";
 
 import { logger } from "~/internal/logger";
 
+import { type FloatingContentRenderProps } from "~/components/floating";
 import { Table } from "~/components/tables/generic/Table";
 import type { TableBodyProps } from "~/components/tables/generic/TableBody";
 import type * as types from "~/components/tables/types";
@@ -23,6 +24,10 @@ export interface DataTableBodyProps<D extends types.DataTableDatum, I extends st
   readonly rowHeight?: QuantitativeSize<"px">;
   readonly getRowId?: (datum: D) => string;
   readonly onRowClick?: (id: string, datum: D) => void;
+  readonly getRowActions?: (
+    datum: D,
+    params: Pick<FloatingContentRenderProps, "setIsOpen">,
+  ) => types.DataTableRowAction[];
 }
 
 export const DataTableBody = <D extends types.DataTableDatum, I extends string>({
@@ -34,6 +39,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
   ordering,
   getRowId,
   onRowClick,
+  getRowActions,
   ...props
 }: DataTableBodyProps<D, I>): JSX.Element => {
   const processedData = useMemo(() => {
@@ -73,6 +79,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
             hoveredClassName={rowHoveredClassName}
             highlightOnHover={highlightRowOnHover}
             onClick={() => onRowClick?.(rowId, datum)}
+            getRowActions={getRowActions}
           />
         );
       })}

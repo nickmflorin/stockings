@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 
+import { type FloatingContentRenderProps } from "~/components/floating";
 import { useTableOrdering } from "~/components/tables/hooks/use-table-ordering";
 import type * as types from "~/components/tables/types";
 import { type QuantitativeSize, type ClassName } from "~/components/types";
@@ -8,7 +9,7 @@ import { DataTableBody } from "./DataTableBody";
 import { type DataTableWrapperProps, DataTableWrapper } from "./DataTableWrapper";
 
 export interface DataTableProps<D extends types.DataTableDatum, I extends string = string>
-  extends Omit<DataTableWrapperProps<D, I>, "children" | "onSort" | "columns"> {
+  extends Omit<DataTableWrapperProps<D, I>, "children" | "onSort" | "columns" | "hasActions"> {
   readonly data: D[];
   readonly loadingIndicator?: types.TableLoadingIndicator;
   readonly rowHoveredClassName?: ClassName;
@@ -27,6 +28,10 @@ export interface DataTableProps<D extends types.DataTableDatum, I extends string
     col: types.DataTableColumnConfig<D, I>,
     ordering: types.TableOrdering<I> | null,
   ) => void;
+  readonly getRowActions?: (
+    datum: D,
+    params: Pick<FloatingContentRenderProps, "setIsOpen">,
+  ) => types.DataTableRowAction[];
 }
 
 export const DataTable = <D extends types.DataTableDatum, I extends string>({
@@ -43,6 +48,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   loadingIndicator,
   getRowId,
   onRowClick,
+  getRowActions,
   ...props
 }: DataTableProps<D, I>): JSX.Element => {
   const [_ordering, setOrdering, applyOrderingUpdate] = useTableOrdering<I>();
@@ -51,6 +57,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   return (
     <DataTableWrapper<D, I>
       {...props}
+      hasActions={getRowActions !== undefined}
       onSort={(e, col) => {
         // Update the internal ordering state.
         setOrdering({ field: col.id });
@@ -75,6 +82,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
         skeletonRowHeight={skeletonRowHeight ?? rowHeight}
         onRowClick={onRowClick}
         getRowId={getRowId}
+        getRowActions={getRowActions}
       />
     </DataTableWrapper>
   );

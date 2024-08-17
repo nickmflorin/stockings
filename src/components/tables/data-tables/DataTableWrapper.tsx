@@ -14,6 +14,7 @@ export type DataTableWrapperProps<D extends types.DataTableDatum, I extends stri
   readonly headerHeight?: QuantitativeSize<"px">;
   readonly columns: types.DataTableColumnConfig<D, I>[];
   readonly children: ReactNode;
+  readonly hasActions?: boolean;
   readonly onSort?: (
     event: React.MouseEvent<unknown>,
     col: types.DataTableColumnConfig<D, I>,
@@ -25,6 +26,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
   headerHeight,
   children,
   columns,
+  hasActions,
   onSort,
   ...props
 }: DataTableWrapperProps<D, I>): JSX.Element => (
@@ -34,6 +36,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
         columns={columns}
         ordering={ordering}
         height={headerHeight}
+        hasActions={hasActions}
         onSort={(e, col) => {
           if (col.isOrderable) {
             onSort?.(e, col);

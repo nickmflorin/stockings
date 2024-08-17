@@ -24,6 +24,12 @@ export interface DataTableDatum {
   [key: string]: unknown;
 }
 
+export type DataTableRowAction = {
+  readonly isVisible?: boolean;
+  readonly content: ReactNode;
+  readonly onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+};
+
 export interface DataTableColumnConfig<D extends DataTableDatum, I extends string = string> {
   readonly id: I;
   readonly icon?: IconProp | IconName;
