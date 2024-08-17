@@ -1099,7 +1099,7 @@ const metadata = {
                     inheritedFrom: "ProductSubscription",
                 }, conditions: {
                     name: "conditions",
-                    type: "PriceChangeSubscriptionCondition",
+                    type: "PriceChangeCondition",
                     isArray: true,
                     attributes: [{ "name": "@default", "args": [] }],
                 }, notifications: {
@@ -1320,7 +1320,7 @@ const metadata = {
                     foreignKeyMapping: { "id": "subscriptionId" },
                 }, condition: {
                     name: "condition",
-                    type: "PriceChangeSubscriptionCondition",
+                    type: "PriceChangeCondition",
                 }, previousPrice: {
                     name: "previousPrice",
                     type: "Float",

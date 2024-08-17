@@ -1,4 +1,4 @@
-import { PriceChangeSubscriptionCondition } from "~/database/model";
+import { PriceChangeCondition } from "~/database/model";
 
 import { Form, type FormProps } from "~/components/forms/Form";
 import { MultiCheckbox } from "~/components/input/MultiCheckbox";
@@ -43,8 +43,8 @@ export const PriceChangeSubscriptionForm = ({
           <MultiCheckbox
             value={value}
             data={[
-              { value: PriceChangeSubscriptionCondition.PriceDecrease, label: "Price Decrease" },
-              { value: PriceChangeSubscriptionCondition.PriceIncrease, label: "Price Increase" },
+              { value: PriceChangeCondition.PriceDecrease, label: "Price Decrease" },
+              { value: PriceChangeCondition.PriceIncrease, label: "Price Increase" },
             ]}
             onChange={onChange}
           />

@@ -60,7 +60,7 @@ enum ProductSubCategory {
   AccessoryTools
 }
 
-enum PriceChangeSubscriptionCondition {
+enum PriceChangeCondition {
   PriceIncrease
   PriceDecrease
 }
@@ -276,10 +276,10 @@ model StatusChangeSubscription {
 }
 
 model PriceChangeSubscription {
-  id                               String                             @id() @default(uuid()) @db.Uuid()
-  conditions                       PriceChangeSubscriptionCondition[] @default([PriceIncrease, PriceDecrease])
-  notifications                    PriceChangeNotification[]          @relation("notifications")
-  delegate_aux_productSubscription ProductSubscription                @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id                               String                    @id() @default(uuid()) @db.Uuid()
+  conditions                       PriceChangeCondition[]    @default([PriceIncrease, PriceDecrease])
+  notifications                    PriceChangeNotification[] @relation("notifications")
+  delegate_aux_productSubscription ProductSubscription       @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 /// @@delegate(notificationType)
@@ -304,15 +304,15 @@ model Notification {
 }
 
 model PriceChangeNotification {
-  id                        String                           @id() @default(uuid()) @db.Uuid()
-  productRecordId           String                           @db.Uuid()
-  productRecord             ProductRecord                    @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
-  subscriptionId            String                           @db.Uuid()
-  subscription              PriceChangeSubscription          @relation("notifications", fields: [subscriptionId], references: [id])
-  condition                 PriceChangeSubscriptionCondition
+  id                        String                  @id() @default(uuid()) @db.Uuid()
+  productRecordId           String                  @db.Uuid()
+  productRecord             ProductRecord           @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
+  subscriptionId            String                  @db.Uuid()
+  subscription              PriceChangeSubscription @relation("notifications", fields: [subscriptionId], references: [id])
+  condition                 PriceChangeCondition
   previousPrice             Float
   newPrice                  Float
-  delegate_aux_notification Notification                     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  delegate_aux_notification Notification            @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model StatusChangeNotification {

@@ -6,7 +6,7 @@ import { ProductRecordDataField } from "../generated";
 import { ProductStatus } from "../generated";
 import { ProductCategory } from "../generated";
 import { ProductSubCategory } from "../generated";
-import { PriceChangeSubscriptionCondition } from "../generated";
+import { PriceChangeCondition } from "../generated";
 import { SubscriptionType } from "../generated";
 import { NotificationType } from "../generated";
 import { NotificationState } from "../generated";

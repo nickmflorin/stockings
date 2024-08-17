@@ -26,6 +26,8 @@ export interface DataTableBodyProps<D extends types.DataTableDatum, I extends st
   readonly actionMenuWidth?: ActionsCellProps["menuWidth"];
   readonly getRowId?: (datum: D) => string;
   readonly onRowClick?: (id: string, datum: D) => void;
+  readonly rowIsSelected?: (datum: D) => boolean;
+  readonly onRowSelected?: (datum: D, isSelected: boolean) => void;
   readonly getRowActions?: (
     datum: D,
     params: Pick<FloatingContentRenderProps, "setIsOpen">,
@@ -40,6 +42,8 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
   columns,
   ordering,
   actionMenuWidth,
+  rowIsSelected,
+  onRowSelected,
   getRowId,
   onRowClick,
   getRowActions,
@@ -84,6 +88,8 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
             actionMenuWidth={actionMenuWidth}
             onClick={() => onRowClick?.(rowId, datum)}
             getRowActions={getRowActions}
+            rowIsSelected={rowIsSelected}
+            onRowSelected={onRowSelected}
           />
         );
       })}

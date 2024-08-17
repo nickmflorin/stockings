@@ -206,12 +206,12 @@ export const SubscriptionType: {
 export type SubscriptionType = (typeof SubscriptionType)[keyof typeof SubscriptionType]
 
 
-export const PriceChangeSubscriptionCondition: {
+export const PriceChangeCondition: {
   PriceIncrease: 'PriceIncrease',
   PriceDecrease: 'PriceDecrease'
 };
 
-export type PriceChangeSubscriptionCondition = (typeof PriceChangeSubscriptionCondition)[keyof typeof PriceChangeSubscriptionCondition]
+export type PriceChangeCondition = (typeof PriceChangeCondition)[keyof typeof PriceChangeCondition]
 
 
 export const NotificationType: {
@@ -261,9 +261,9 @@ export type SubscriptionType = $Enums.SubscriptionType
 
 export const SubscriptionType: typeof $Enums.SubscriptionType
 
-export type PriceChangeSubscriptionCondition = $Enums.PriceChangeSubscriptionCondition
+export type PriceChangeCondition = $Enums.PriceChangeCondition
 
-export const PriceChangeSubscriptionCondition: typeof $Enums.PriceChangeSubscriptionCondition
+export const PriceChangeCondition: typeof $Enums.PriceChangeCondition
 
 export type NotificationType = $Enums.NotificationType
 
@@ -20091,7 +20091,7 @@ export namespace Prisma {
 
   export type PriceChangeSubscriptionGroupByOutputType = {
     id: string
-    conditions: $Enums.PriceChangeSubscriptionCondition[]
+    conditions: $Enums.PriceChangeCondition[]
     _count: PriceChangeSubscriptionCountAggregateOutputType | null
     _min: PriceChangeSubscriptionMinAggregateOutputType | null
     _max: PriceChangeSubscriptionMaxAggregateOutputType | null
@@ -20139,7 +20139,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      conditions: $Enums.PriceChangeSubscriptionCondition[]
+      conditions: $Enums.PriceChangeCondition[]
     }, ExtArgs["result"]["priceChangeSubscription"]>
     composites: {}
   }
@@ -20538,7 +20538,7 @@ export namespace Prisma {
    */ 
   interface PriceChangeSubscriptionFieldRefs {
     readonly id: FieldRef<"PriceChangeSubscription", 'String'>
-    readonly conditions: FieldRef<"PriceChangeSubscription", 'PriceChangeSubscriptionCondition[]'>
+    readonly conditions: FieldRef<"PriceChangeSubscription", 'PriceChangeCondition[]'>
   }
     
 
@@ -21970,7 +21970,7 @@ export namespace Prisma {
     id: string | null
     productRecordId: string | null
     subscriptionId: string | null
-    condition: $Enums.PriceChangeSubscriptionCondition | null
+    condition: $Enums.PriceChangeCondition | null
     previousPrice: number | null
     newPrice: number | null
   }
@@ -21979,7 +21979,7 @@ export namespace Prisma {
     id: string | null
     productRecordId: string | null
     subscriptionId: string | null
-    condition: $Enums.PriceChangeSubscriptionCondition | null
+    condition: $Enums.PriceChangeCondition | null
     previousPrice: number | null
     newPrice: number | null
   }
@@ -22123,7 +22123,7 @@ export namespace Prisma {
     id: string
     productRecordId: string
     subscriptionId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
     _count: PriceChangeNotificationCountAggregateOutputType | null
@@ -22186,7 +22186,7 @@ export namespace Prisma {
       id: string
       productRecordId: string
       subscriptionId: string
-      condition: $Enums.PriceChangeSubscriptionCondition
+      condition: $Enums.PriceChangeCondition
       previousPrice: number
       newPrice: number
     }, ExtArgs["result"]["priceChangeNotification"]>
@@ -22591,7 +22591,7 @@ export namespace Prisma {
     readonly id: FieldRef<"PriceChangeNotification", 'String'>
     readonly productRecordId: FieldRef<"PriceChangeNotification", 'String'>
     readonly subscriptionId: FieldRef<"PriceChangeNotification", 'String'>
-    readonly condition: FieldRef<"PriceChangeNotification", 'PriceChangeSubscriptionCondition'>
+    readonly condition: FieldRef<"PriceChangeNotification", 'PriceChangeCondition'>
     readonly previousPrice: FieldRef<"PriceChangeNotification", 'Float'>
     readonly newPrice: FieldRef<"PriceChangeNotification", 'Float'>
   }
@@ -25201,16 +25201,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'PriceChangeSubscriptionCondition[]'
+   * Reference to a field of type 'PriceChangeCondition[]'
    */
-  export type ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceChangeSubscriptionCondition[]'>
+  export type ListEnumPriceChangeConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceChangeCondition[]'>
     
 
 
   /**
-   * Reference to a field of type 'PriceChangeSubscriptionCondition'
+   * Reference to a field of type 'PriceChangeCondition'
    */
-  export type EnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceChangeSubscriptionCondition'>
+  export type EnumPriceChangeConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceChangeCondition'>
     
 
 
@@ -26329,7 +26329,7 @@ export namespace Prisma {
     OR?: PriceChangeSubscriptionWhereInput[]
     NOT?: PriceChangeSubscriptionWhereInput | PriceChangeSubscriptionWhereInput[]
     id?: UuidFilter<"PriceChangeSubscription"> | string
-    conditions?: EnumPriceChangeSubscriptionConditionNullableListFilter<"PriceChangeSubscription">
+    conditions?: EnumPriceChangeConditionNullableListFilter<"PriceChangeSubscription">
     notifications?: PriceChangeNotificationListRelationFilter
     delegate_aux_productSubscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
   }
@@ -26346,7 +26346,7 @@ export namespace Prisma {
     AND?: PriceChangeSubscriptionWhereInput | PriceChangeSubscriptionWhereInput[]
     OR?: PriceChangeSubscriptionWhereInput[]
     NOT?: PriceChangeSubscriptionWhereInput | PriceChangeSubscriptionWhereInput[]
-    conditions?: EnumPriceChangeSubscriptionConditionNullableListFilter<"PriceChangeSubscription">
+    conditions?: EnumPriceChangeConditionNullableListFilter<"PriceChangeSubscription">
     notifications?: PriceChangeNotificationListRelationFilter
     delegate_aux_productSubscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
   }, "id">
@@ -26364,7 +26364,7 @@ export namespace Prisma {
     OR?: PriceChangeSubscriptionScalarWhereWithAggregatesInput[]
     NOT?: PriceChangeSubscriptionScalarWhereWithAggregatesInput | PriceChangeSubscriptionScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"PriceChangeSubscription"> | string
-    conditions?: EnumPriceChangeSubscriptionConditionNullableListFilter<"PriceChangeSubscription">
+    conditions?: EnumPriceChangeConditionNullableListFilter<"PriceChangeSubscription">
   }
 
   export type NotificationWhereInput = {
@@ -26474,7 +26474,7 @@ export namespace Prisma {
     id?: UuidFilter<"PriceChangeNotification"> | string
     productRecordId?: UuidFilter<"PriceChangeNotification"> | string
     subscriptionId?: UuidFilter<"PriceChangeNotification"> | string
-    condition?: EnumPriceChangeSubscriptionConditionFilter<"PriceChangeNotification"> | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFilter<"PriceChangeNotification"> | $Enums.PriceChangeCondition
     previousPrice?: FloatFilter<"PriceChangeNotification"> | number
     newPrice?: FloatFilter<"PriceChangeNotification"> | number
     productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
@@ -26501,7 +26501,7 @@ export namespace Prisma {
     NOT?: PriceChangeNotificationWhereInput | PriceChangeNotificationWhereInput[]
     productRecordId?: UuidFilter<"PriceChangeNotification"> | string
     subscriptionId?: UuidFilter<"PriceChangeNotification"> | string
-    condition?: EnumPriceChangeSubscriptionConditionFilter<"PriceChangeNotification"> | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFilter<"PriceChangeNotification"> | $Enums.PriceChangeCondition
     previousPrice?: FloatFilter<"PriceChangeNotification"> | number
     newPrice?: FloatFilter<"PriceChangeNotification"> | number
     productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
@@ -26530,7 +26530,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
     productRecordId?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
     subscriptionId?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
-    condition?: EnumPriceChangeSubscriptionConditionWithAggregatesFilter<"PriceChangeNotification"> | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionWithAggregatesFilter<"PriceChangeNotification"> | $Enums.PriceChangeCondition
     previousPrice?: FloatWithAggregatesFilter<"PriceChangeNotification"> | number
     newPrice?: FloatWithAggregatesFilter<"PriceChangeNotification"> | number
   }
@@ -27750,41 +27750,41 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionCreateInput = {
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationCreateNestedManyWithoutSubscriptionInput
     delegate_aux_productSubscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_priceChangeSubscriptionInput
   }
 
   export type PriceChangeSubscriptionUncheckedCreateInput = {
     id?: string
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationUncheckedCreateNestedManyWithoutSubscriptionInput
   }
 
   export type PriceChangeSubscriptionUpdateInput = {
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationUpdateManyWithoutSubscriptionNestedInput
     delegate_aux_productSubscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_priceChangeSubscriptionNestedInput
   }
 
   export type PriceChangeSubscriptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationUncheckedUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type PriceChangeSubscriptionCreateManyInput = {
     id?: string
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
   }
 
   export type PriceChangeSubscriptionUpdateManyMutationInput = {
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
   }
 
   export type PriceChangeSubscriptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
   }
 
   export type NotificationCreateInput = {
@@ -27895,7 +27895,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeNotificationCreateInput = {
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
     productRecord: ProductRecordCreateNestedOneWithoutPriceChangeNotificationsInput
@@ -27907,13 +27907,13 @@ export namespace Prisma {
     id?: string
     productRecordId: string
     subscriptionId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
 
   export type PriceChangeNotificationUpdateInput = {
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
     productRecord?: ProductRecordUpdateOneRequiredWithoutPriceChangeNotificationsNestedInput
@@ -27925,7 +27925,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productRecordId?: StringFieldUpdateOperationsInput | string
     subscriptionId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -27934,13 +27934,13 @@ export namespace Prisma {
     id?: string
     productRecordId: string
     subscriptionId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
 
   export type PriceChangeNotificationUpdateManyMutationInput = {
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -27949,7 +27949,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productRecordId?: StringFieldUpdateOperationsInput | string
     subscriptionId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -28985,11 +28985,11 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type EnumPriceChangeSubscriptionConditionNullableListFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel> | null
-    has?: $Enums.PriceChangeSubscriptionCondition | EnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel> | null
-    hasEvery?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    hasSome?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
+  export type EnumPriceChangeConditionNullableListFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel> | null
+    has?: $Enums.PriceChangeCondition | EnumPriceChangeConditionFieldRefInput<$PrismaModel> | null
+    hasEvery?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    hasSome?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
     isEmpty?: boolean
   }
 
@@ -29097,11 +29097,11 @@ export namespace Prisma {
     _max?: NestedEnumNotificationStateFilter<$PrismaModel>
   }
 
-  export type EnumPriceChangeSubscriptionConditionFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceChangeSubscriptionCondition | EnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    in?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel> | $Enums.PriceChangeSubscriptionCondition
+  export type EnumPriceChangeConditionFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceChangeCondition | EnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriceChangeConditionFilter<$PrismaModel> | $Enums.PriceChangeCondition
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -29162,14 +29162,14 @@ export namespace Prisma {
     newPrice?: SortOrder
   }
 
-  export type EnumPriceChangeSubscriptionConditionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceChangeSubscriptionCondition | EnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    in?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriceChangeSubscriptionConditionWithAggregatesFilter<$PrismaModel> | $Enums.PriceChangeSubscriptionCondition
+  export type EnumPriceChangeConditionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceChangeCondition | EnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriceChangeConditionWithAggregatesFilter<$PrismaModel> | $Enums.PriceChangeCondition
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel>
-    _max?: NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel>
+    _min?: NestedEnumPriceChangeConditionFilter<$PrismaModel>
+    _max?: NestedEnumPriceChangeConditionFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -30553,7 +30553,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionCreateconditionsInput = {
-    set: $Enums.PriceChangeSubscriptionCondition[]
+    set: $Enums.PriceChangeCondition[]
   }
 
   export type PriceChangeNotificationCreateNestedManyWithoutSubscriptionInput = {
@@ -30577,8 +30577,8 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionUpdateconditionsInput = {
-    set?: $Enums.PriceChangeSubscriptionCondition[]
-    push?: $Enums.PriceChangeSubscriptionCondition | $Enums.PriceChangeSubscriptionCondition[]
+    set?: $Enums.PriceChangeCondition[]
+    push?: $Enums.PriceChangeCondition | $Enums.PriceChangeCondition[]
   }
 
   export type PriceChangeNotificationUpdateManyWithoutSubscriptionNestedInput = {
@@ -30781,8 +30781,8 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput
   }
 
-  export type EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput = {
-    set?: $Enums.PriceChangeSubscriptionCondition
+  export type EnumPriceChangeConditionFieldUpdateOperationsInput = {
+    set?: $Enums.PriceChangeCondition
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -31253,21 +31253,21 @@ export namespace Prisma {
     _max?: NestedEnumNotificationStateFilter<$PrismaModel>
   }
 
-  export type NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceChangeSubscriptionCondition | EnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    in?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel> | $Enums.PriceChangeSubscriptionCondition
+  export type NestedEnumPriceChangeConditionFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceChangeCondition | EnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriceChangeConditionFilter<$PrismaModel> | $Enums.PriceChangeCondition
   }
 
-  export type NestedEnumPriceChangeSubscriptionConditionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceChangeSubscriptionCondition | EnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    in?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PriceChangeSubscriptionCondition[] | ListEnumPriceChangeSubscriptionConditionFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriceChangeSubscriptionConditionWithAggregatesFilter<$PrismaModel> | $Enums.PriceChangeSubscriptionCondition
+  export type NestedEnumPriceChangeConditionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceChangeCondition | EnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PriceChangeCondition[] | ListEnumPriceChangeConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriceChangeConditionWithAggregatesFilter<$PrismaModel> | $Enums.PriceChangeCondition
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel>
-    _max?: NestedEnumPriceChangeSubscriptionConditionFilter<$PrismaModel>
+    _min?: NestedEnumPriceChangeConditionFilter<$PrismaModel>
+    _max?: NestedEnumPriceChangeConditionFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -32405,7 +32405,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeNotificationCreateWithoutProductRecordInput = {
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
     subscription: PriceChangeSubscriptionCreateNestedOneWithoutNotificationsInput
@@ -32415,7 +32415,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedCreateWithoutProductRecordInput = {
     id?: string
     subscriptionId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
@@ -32705,7 +32705,7 @@ export namespace Prisma {
     id?: UuidFilter<"PriceChangeNotification"> | string
     productRecordId?: UuidFilter<"PriceChangeNotification"> | string
     subscriptionId?: UuidFilter<"PriceChangeNotification"> | string
-    condition?: EnumPriceChangeSubscriptionConditionFilter<"PriceChangeNotification"> | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFilter<"PriceChangeNotification"> | $Enums.PriceChangeCondition
     previousPrice?: FloatFilter<"PriceChangeNotification"> | number
     newPrice?: FloatFilter<"PriceChangeNotification"> | number
   }
@@ -33728,12 +33728,12 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionCreateWithoutDelegate_aux_productSubscriptionInput = {
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationCreateNestedManyWithoutSubscriptionInput
   }
 
   export type PriceChangeSubscriptionUncheckedCreateWithoutDelegate_aux_productSubscriptionInput = {
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationUncheckedCreateNestedManyWithoutSubscriptionInput
   }
 
@@ -34001,12 +34001,12 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionUpdateWithoutDelegate_aux_productSubscriptionInput = {
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type PriceChangeSubscriptionUncheckedUpdateWithoutDelegate_aux_productSubscriptionInput = {
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
     notifications?: PriceChangeNotificationUncheckedUpdateManyWithoutSubscriptionNestedInput
   }
 
@@ -34209,7 +34209,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeNotificationCreateWithoutSubscriptionInput = {
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
     productRecord: ProductRecordCreateNestedOneWithoutPriceChangeNotificationsInput
@@ -34219,7 +34219,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedCreateWithoutSubscriptionInput = {
     id?: string
     productRecordId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
@@ -34472,7 +34472,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeNotificationCreateWithoutDelegate_aux_notificationInput = {
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
     productRecord: ProductRecordCreateNestedOneWithoutPriceChangeNotificationsInput
@@ -34482,7 +34482,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedCreateWithoutDelegate_aux_notificationInput = {
     productRecordId: string
     subscriptionId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
@@ -34707,7 +34707,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeNotificationUpdateWithoutDelegate_aux_notificationInput = {
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
     productRecord?: ProductRecordUpdateOneRequiredWithoutPriceChangeNotificationsNestedInput
@@ -34717,7 +34717,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedUpdateWithoutDelegate_aux_notificationInput = {
     productRecordId?: StringFieldUpdateOperationsInput | string
     subscriptionId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -34808,13 +34808,13 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionCreateWithoutNotificationsInput = {
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
     delegate_aux_productSubscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_priceChangeSubscriptionInput
   }
 
   export type PriceChangeSubscriptionUncheckedCreateWithoutNotificationsInput = {
     id?: string
-    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionCreateconditionsInput | $Enums.PriceChangeCondition[]
   }
 
   export type PriceChangeSubscriptionCreateOrConnectWithoutNotificationsInput = {
@@ -34918,13 +34918,13 @@ export namespace Prisma {
   }
 
   export type PriceChangeSubscriptionUpdateWithoutNotificationsInput = {
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
     delegate_aux_productSubscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_priceChangeSubscriptionNestedInput
   }
 
   export type PriceChangeSubscriptionUncheckedUpdateWithoutNotificationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeSubscriptionCondition[]
+    conditions?: PriceChangeSubscriptionUpdateconditionsInput | $Enums.PriceChangeCondition[]
   }
 
   export type NotificationUpsertWithoutDelegate_aux_priceChangeNotificationInput = {
@@ -36094,7 +36094,7 @@ export namespace Prisma {
   export type PriceChangeNotificationCreateManyProductRecordInput = {
     id?: string
     subscriptionId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
@@ -36154,7 +36154,7 @@ export namespace Prisma {
   }
 
   export type PriceChangeNotificationUpdateWithoutProductRecordInput = {
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
     subscription?: PriceChangeSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
@@ -36164,7 +36164,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedUpdateWithoutProductRecordInput = {
     id?: StringFieldUpdateOperationsInput | string
     subscriptionId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -36172,7 +36172,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedUpdateManyWithoutProductRecordInput = {
     id?: StringFieldUpdateOperationsInput | string
     subscriptionId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -36395,13 +36395,13 @@ export namespace Prisma {
   export type PriceChangeNotificationCreateManySubscriptionInput = {
     id?: string
     productRecordId: string
-    condition: $Enums.PriceChangeSubscriptionCondition
+    condition: $Enums.PriceChangeCondition
     previousPrice: number
     newPrice: number
   }
 
   export type PriceChangeNotificationUpdateWithoutSubscriptionInput = {
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
     productRecord?: ProductRecordUpdateOneRequiredWithoutPriceChangeNotificationsNestedInput
@@ -36411,7 +36411,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedUpdateWithoutSubscriptionInput = {
     id?: StringFieldUpdateOperationsInput | string
     productRecordId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }
@@ -36419,7 +36419,7 @@ export namespace Prisma {
   export type PriceChangeNotificationUncheckedUpdateManyWithoutSubscriptionInput = {
     id?: StringFieldUpdateOperationsInput | string
     productRecordId?: StringFieldUpdateOperationsInput | string
-    condition?: EnumPriceChangeSubscriptionConditionFieldUpdateOperationsInput | $Enums.PriceChangeSubscriptionCondition
+    condition?: EnumPriceChangeConditionFieldUpdateOperationsInput | $Enums.PriceChangeCondition
     previousPrice?: FloatFieldUpdateOperationsInput | number
     newPrice?: FloatFieldUpdateOperationsInput | number
   }

@@ -60,7 +60,7 @@ enum ProductSubCategory {
   AccessoryTools
 }
 
-enum PriceChangeSubscriptionCondition {
+enum PriceChangeCondition {
   PriceIncrease
   PriceDecrease
 }
@@ -302,21 +302,21 @@ model StatusChangeSubscription {
 }
 
 model PriceChangeSubscription {
-  id               String                             @id() @default(uuid()) @db.Uuid()
-  createdAt        DateTime                           @default(now())
-  updatedAt        DateTime                           @updatedAt()
-  createdById      String                             @db.Uuid()
-  updatedById      String                             @db.Uuid()
-  createdBy        User                               @relation("createdProductSubscriptions", fields: [createdById], references: [id])
-  updatedBy        User                               @relation("updatedProductSubscriptions", fields: [updatedById], references: [id])
+  id               String                    @id() @default(uuid()) @db.Uuid()
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt()
+  createdById      String                    @db.Uuid()
+  updatedById      String                    @db.Uuid()
+  createdBy        User                      @relation("createdProductSubscriptions", fields: [createdById], references: [id])
+  updatedBy        User                      @relation("updatedProductSubscriptions", fields: [updatedById], references: [id])
   subscriptionType SubscriptionType
-  userId           String                             @db.Uuid()
-  user             User                               @relation("productSubscriptions", fields: [userId], references: [id])
-  product          Product                            @relation("subscriptions", fields: [productId], references: [id])
-  productId        String                             @db.Uuid()
-  enabled          Boolean                            @default(true)
-  conditions       PriceChangeSubscriptionCondition[] @default([PriceIncrease, PriceDecrease])
-  notifications    PriceChangeNotification[]          @relation("notifications")
+  userId           String                    @db.Uuid()
+  user             User                      @relation("productSubscriptions", fields: [userId], references: [id])
+  product          Product                   @relation("subscriptions", fields: [productId], references: [id])
+  productId        String                    @db.Uuid()
+  enabled          Boolean                   @default(true)
+  conditions       PriceChangeCondition[]    @default([PriceIncrease, PriceDecrease])
+  notifications    PriceChangeNotification[] @relation("notifications")
 }
 
 /// @@delegate(notificationType)
@@ -338,25 +338,25 @@ model Notification {
 }
 
 model PriceChangeNotification {
-  id               String                           @id() @default(uuid()) @db.Uuid()
-  createdAt        DateTime                         @default(now())
-  updatedAt        DateTime                         @updatedAt()
-  createdById      String                           @db.Uuid()
-  updatedById      String                           @db.Uuid()
-  createdBy        User                             @relation("createdNotifications", fields: [createdById], references: [id])
-  updatedBy        User                             @relation("updatedNotifications", fields: [updatedById], references: [id])
-  user             User                             @relation("notifications", fields: [userId], references: [id])
-  userId           String                           @db.Uuid()
+  id               String                  @id() @default(uuid()) @db.Uuid()
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt()
+  createdById      String                  @db.Uuid()
+  updatedById      String                  @db.Uuid()
+  createdBy        User                    @relation("createdNotifications", fields: [createdById], references: [id])
+  updatedBy        User                    @relation("updatedNotifications", fields: [updatedById], references: [id])
+  user             User                    @relation("notifications", fields: [userId], references: [id])
+  userId           String                  @db.Uuid()
   notificationType NotificationType
   state            NotificationState
   stateAsOf        DateTime
   failedAt         DateTime?
   sentAt           DateTime?
-  productRecordId  String                           @db.Uuid()
-  productRecord    ProductRecord                    @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
-  subscriptionId   String                           @db.Uuid()
-  subscription     PriceChangeSubscription          @relation("notifications", fields: [subscriptionId], references: [id])
-  condition        PriceChangeSubscriptionCondition
+  productRecordId  String                  @db.Uuid()
+  productRecord    ProductRecord           @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
+  subscriptionId   String                  @db.Uuid()
+  subscription     PriceChangeSubscription @relation("notifications", fields: [subscriptionId], references: [id])
+  condition        PriceChangeCondition
   previousPrice    Float
   newPrice         Float
 }

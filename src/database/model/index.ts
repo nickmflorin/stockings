@@ -11,7 +11,7 @@ export * from "./product";
 export * from "./subscription";
 
 export {
-  PriceChangeSubscriptionCondition,
+  PriceChangeCondition,
   ProductStatus,
   ProductCategory,
   ProductSubCategory,

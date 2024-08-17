@@ -214,7 +214,7 @@ model Product extends ModelMeta {
   newProductNotifications NewProductNotification[] @relation("newProductNotifications")
 }
 
-enum PriceChangeSubscriptionCondition {
+enum PriceChangeCondition {
   PriceIncrease
   PriceDecrease
 }
@@ -252,8 +252,8 @@ model StatusChangeSubscription extends ProductSubscription {
 }
 
 model PriceChangeSubscription extends ProductSubscription {
-  conditions    PriceChangeSubscriptionCondition[] @default([PriceIncrease, PriceDecrease])
-  notifications PriceChangeNotification[]          @relation("notifications")
+  conditions    PriceChangeCondition[]    @default([PriceIncrease, PriceDecrease])
+  notifications PriceChangeNotification[] @relation("notifications")
 }
 
 enum NotificationType {
@@ -283,17 +283,17 @@ model Notification extends ModelMeta {
 }
 
 model PriceChangeNotification extends Notification {
-  productRecordId String                           @db.Uuid
-  productRecord   ProductRecord                    @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
-  subscriptionId  String                           @db.Uuid
+  productRecordId String                  @db.Uuid
+  productRecord   ProductRecord           @relation("priceChangeNotifications", fields: [productRecordId], references: [id])
+  subscriptionId  String                  @db.Uuid
   // The original subscription that caused the notification to be created.  It is important to note
   // that the details/fields of the subscription may change, but the conditions on the subscription
   // that caused the notification need to be preserved.  As such, certain fields that are on the
   // subscription are redundantly stored on the notification as well - so we are aware of what the
   // values of those fields were when the notification was created (in other words, what the values
   // were that triggered the notification to begin with).
-  subscription    PriceChangeSubscription          @relation("notifications", fields: [subscriptionId], references: [id])
-  condition       PriceChangeSubscriptionCondition
+  subscription    PriceChangeSubscription @relation("notifications", fields: [subscriptionId], references: [id])
+  condition       PriceChangeCondition
   previousPrice   Float
   newPrice        Float
 }

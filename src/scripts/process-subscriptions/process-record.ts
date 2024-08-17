@@ -4,7 +4,7 @@ import { db } from "~/database";
 import {
   type ProductRecord,
   type ModelWithNonNullField,
-  PriceChangeSubscriptionCondition,
+  PriceChangeCondition,
   type PriceChangeSubscription,
   type ApiStatusChangeSubscription,
   NotificationState,
@@ -48,7 +48,7 @@ export const processRecord = async (
            status, but the price remained the same. */
         if (
           previousRecordWithPrice.price !== record.price &&
-          sub.conditions.includes(PriceChangeSubscriptionCondition.PriceDecrease) &&
+          sub.conditions.includes(PriceChangeCondition.PriceDecrease) &&
           sub.enabled
         ) {
           await tx.priceChangeNotification.create({
@@ -62,8 +62,8 @@ export const processRecord = async (
               stateAsOf: new Date(),
               condition:
                 previousRecordWithPrice.price > record.price
-                  ? PriceChangeSubscriptionCondition.PriceDecrease
-                  : PriceChangeSubscriptionCondition.PriceIncrease,
+                  ? PriceChangeCondition.PriceDecrease
+                  : PriceChangeCondition.PriceIncrease,
               previousPrice: previousRecordWithPrice.price,
               newPrice: record.price,
             },

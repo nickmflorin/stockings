@@ -7,7 +7,7 @@ export const Header = (): JSX.Element => (
   <>
     <div className="header__left">
       <Link href="/">
-        <Image width={36} height={36} src="/contract-logo.svg" alt="Logo" />
+        <Image width={36} height={36} src="/contrast-logo.svg" alt="Logo" />
       </Link>
     </div>
     <div className="header__right">

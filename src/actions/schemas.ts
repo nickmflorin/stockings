@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import {
   ProductStatus,
-  PriceChangeSubscriptionCondition,
+  PriceChangeCondition,
   productStatusesAreAny,
 } from "~/database/model";
 
@@ -95,7 +95,7 @@ export const StatusChangeSubscriptionSchema = z
 export const PriceChangeSubscriptionSchema = z
   .object({
     enabled: z.boolean(),
-    conditions: z.array(z.nativeEnum(PriceChangeSubscriptionCondition)),
+    conditions: z.array(z.nativeEnum(PriceChangeCondition)),
   })
   .superRefine(({ enabled, conditions }, ctx: z.RefinementCtx) => {
     if (enabled) {

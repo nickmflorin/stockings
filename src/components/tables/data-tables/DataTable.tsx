@@ -5,10 +5,15 @@ import { DataTableBody, type DataTableBodyProps } from "./DataTableBody";
 import { type DataTableWrapperProps, DataTableWrapper } from "./DataTableWrapper";
 
 export interface DataTableProps<D extends types.DataTableDatum, I extends string = string>
-  extends Omit<DataTableWrapperProps<D, I>, "children" | "onSort" | "columns" | "hasActions">,
+  extends Omit<
+      DataTableWrapperProps<D, I>,
+      "children" | "onSort" | "columns" | "rowsHaveActions" | "rowsAreSelectable"
+    >,
     Pick<
       DataTableBodyProps<D, I>,
       | "getRowActions"
+      | "rowIsSelected"
+      | "onRowSelected"
       | "actionMenuWidth"
       | "onRowClick"
       | "getRowId"
@@ -46,6 +51,8 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   actionMenuWidth,
   getRowId,
   onRowClick,
+  rowIsSelected,
+  onRowSelected,
   getRowActions,
   ...props
 }: DataTableProps<D, I>): JSX.Element => {
@@ -55,7 +62,8 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   return (
     <DataTableWrapper<D, I>
       {...props}
-      hasActions={getRowActions !== undefined}
+      rowsHaveActions={getRowActions !== undefined}
+      rowsAreSelectable={rowIsSelected !== undefined}
       onSort={(e, col) => {
         // Update the internal ordering state.
         setOrdering({ field: col.id });
@@ -82,6 +90,8 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
         onRowClick={onRowClick}
         getRowId={getRowId}
         getRowActions={getRowActions}
+        onRowSelected={onRowSelected}
+        rowIsSelected={rowIsSelected}
       />
     </DataTableWrapper>
   );

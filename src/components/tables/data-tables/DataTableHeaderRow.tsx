@@ -10,7 +10,8 @@ export interface DataTableHeaderRowProps<D extends types.DataTableDatum, I exten
   extends Omit<TableHeaderRowProps, "children"> {
   readonly columns: types.DataTableColumnConfig<D, I>[];
   readonly ordering?: types.TableOrdering<I> | null;
-  readonly hasActions?: boolean;
+  readonly rowsHaveActions?: boolean;
+  readonly rowsAreSelectable?: boolean;
   readonly onSort?: (
     event: React.MouseEvent<unknown>,
     col: types.DataTableColumnConfig<D, I>,
@@ -20,11 +21,13 @@ export interface DataTableHeaderRowProps<D extends types.DataTableDatum, I exten
 export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends string>({
   columns,
   ordering,
-  hasActions,
+  rowsHaveActions,
+  rowsAreSelectable,
   onSort,
   ...props
 }: DataTableHeaderRowProps<D, I>): JSX.Element => (
   <Table.HeaderRow {...props}>
+    {rowsAreSelectable && <TableHeaderCell align="center" width={80} maxWidth={80} minWidth={80} />}
     {columns.map(column => (
       <DataTableHeaderCell<D, I>
         key={column.id}
@@ -37,6 +40,8 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
         }}
       />
     ))}
-    {hasActions && <TableHeaderCell align="center" width={120} maxWidth={120} minWidth={120} />}
+    {rowsHaveActions && (
+      <TableHeaderCell align="center" width={120} maxWidth={120} minWidth={120} />
+    )}
   </Table.HeaderRow>
 );

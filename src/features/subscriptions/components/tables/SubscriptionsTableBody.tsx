@@ -2,10 +2,12 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
+import { uniq } from "lodash-es";
 import { toast } from "react-toastify";
 
 import {
   type FullProductSubscription,
+  type PriceChangeCondition,
   type StatusChangeSubscriptionCondition,
 } from "~/database/model";
 import { SubscriptionType } from "~/database/model";
@@ -13,6 +15,7 @@ import { logger } from "~/internal/logger";
 
 import { updateSubscription } from "~/actions/mutations/subscriptions";
 
+import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
 import { EnabledIcon } from "~/components/icons/EnabledIcon";
@@ -39,6 +42,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
   return (
     <DataTableBody
       actionMenuWidth={140}
+      rowIsSelected={() => false}
       getRowActions={(subscription, { setIsOpen }) => [
         {
           isVisible: !subscription.enabled,
@@ -131,6 +135,13 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                   <StatusChangeConditionTransition
                     conditions={datum.conditions as StatusChangeSubscriptionCondition[]}
                   />
+                </div>
+              ) : datum.subscriptionType === SubscriptionType.PriceChangeSubscription &&
+                datum.conditions.length !== 0 ? (
+                <div className="flex flex-col items-center gap-2">
+                  {uniq(datum.conditions as PriceChangeCondition[]).map((condition, index) => (
+                    <PriceChangeConditionBadge key={index} condition={condition} />
+                  ))}
                 </div>
               ) : (
                 <></>

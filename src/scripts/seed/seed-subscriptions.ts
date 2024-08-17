@@ -5,7 +5,7 @@ import { enhance } from "~/database/model";
 import {
   type PriceChangeSubscription,
   type StatusChangeSubscription,
-  PriceChangeSubscriptionCondition,
+  PriceChangeCondition,
   type Product,
   ProductStatus,
 } from "~/database/model";
@@ -19,10 +19,7 @@ import { TimeHorizon } from "./seed-records";
 const DisabledFrequency = 0.1;
 const ConditionsPerStatusChangeEvent = MinMax(1, 4);
 const StatusesPerCondition = MinMax(1, Object.values(ProductStatus).length);
-const ConditionsPerPriceChangeEvent = MinMax(
-  1,
-  Object.values(PriceChangeSubscriptionCondition).length,
-);
+const ConditionsPerPriceChangeEvent = MinMax(1, Object.values(PriceChangeCondition).length);
 const PriceChangeEventFrequency = 0.5;
 const StatusChangeEventFrequency = 0.5;
 
@@ -76,7 +73,7 @@ export const seedSubscription = async (
         updatedById: user.id,
         userId: user.id,
         productId: product.id,
-        conditions: selectAtRandom(Object.values(PriceChangeSubscriptionCondition), {
+        conditions: selectAtRandom(Object.values(PriceChangeCondition), {
           unique: true,
           length: ConditionsPerPriceChangeEvent,
         }),

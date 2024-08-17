@@ -1,6 +1,6 @@
 import { type z } from "zod";
 
-import { ProductStatus, PriceChangeSubscriptionCondition } from "~/database/model";
+import { ProductStatus, PriceChangeCondition } from "~/database/model";
 
 import { StatusChangeSubscriptionSchema, PriceChangeSubscriptionSchema } from "~/actions/schemas";
 
@@ -28,8 +28,8 @@ export const usePriceChangeSubscriptionForm = () =>
     defaultValues: {
       enabled: true,
       conditions: [
-        PriceChangeSubscriptionCondition.PriceIncrease,
-        PriceChangeSubscriptionCondition.PriceDecrease,
+        PriceChangeCondition.PriceIncrease,
+        PriceChangeCondition.PriceDecrease,
       ],
     },
   });

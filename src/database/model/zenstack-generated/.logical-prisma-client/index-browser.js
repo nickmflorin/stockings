@@ -407,7 +407,7 @@ exports.SubscriptionType = exports.$Enums.SubscriptionType = {
   StatusChangeSubscription: 'StatusChangeSubscription'
 };
 
-exports.PriceChangeSubscriptionCondition = exports.$Enums.PriceChangeSubscriptionCondition = {
+exports.PriceChangeCondition = exports.$Enums.PriceChangeCondition = {
   PriceIncrease: 'PriceIncrease',
   PriceDecrease: 'PriceDecrease'
 };

@@ -1,11 +1,41 @@
 import { enumeratedLiterals } from "enumerated-literals";
 
-import { SubscriptionType, type Product, type ProductStatus } from "./generated";
+import { type TailwindTextColorClassName, type TailwindBgColorClassName } from "~/components/types";
+
+import {
+  SubscriptionType,
+  type Product,
+  type ProductStatus,
+  PriceChangeCondition,
+} from "./generated";
 import {
   type StatusChangeSubscription,
   type StatusChangeSubscriptionCondition,
   type PriceChangeSubscription,
 } from "./zenstack-generated/models";
+
+export const PriceChangeConditions = enumeratedLiterals(
+  [
+    {
+      value: PriceChangeCondition.PriceDecrease,
+      label: "Price Decrease",
+      badgeBgColorClassName: "bg-gray-200",
+      badgeTextColorClassName: "text-gray-600",
+    },
+    {
+      value: PriceChangeCondition.PriceIncrease,
+      label: "Price Increase",
+      badgeBgColorClassName: "bg-gray-200",
+      badgeTextColorClassName: "text-gray-600",
+    },
+  ] as const satisfies {
+    value: PriceChangeCondition;
+    label: string;
+    badgeBgColorClassName: TailwindBgColorClassName;
+    badgeTextColorClassName: TailwindTextColorClassName;
+  }[],
+  {},
+);
 
 export type ApiStatusChangeSubscription = StatusChangeSubscription & {
   readonly conditions: StatusChangeSubscriptionCondition[];
