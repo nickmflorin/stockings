@@ -5,10 +5,12 @@ import { Text, type TextProps, type TextComponent } from "~/components/typograph
 
 export type ProductStatusTextProps<C extends TextComponent> = Omit<TextProps<C>, "children"> & {
   readonly status: ProductStatus;
+  readonly abbreviated?: boolean;
 };
 
 export const ProductStatusText = <C extends TextComponent>({
   status,
+  abbreviated = false,
   ...props
 }: ProductStatusTextProps<C>): JSX.Element => (
   <Text
@@ -23,6 +25,8 @@ export const ProductStatusText = <C extends TextComponent>({
       props.className,
     )}
   >
-    {ProductStatuses.getModel(status).label}
+    {abbreviated
+      ? ProductStatuses.getModel(status).shortLabel
+      : ProductStatuses.getModel(status).label}
   </Text>
 );

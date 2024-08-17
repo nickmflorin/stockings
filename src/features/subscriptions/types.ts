@@ -32,6 +32,13 @@ export const SubscriptionsTableColumns = [
     align: "center",
   },
   {
+    id: "conditions",
+    label: "Conditions",
+    maxWidth: 300,
+    minWidth: 280,
+    align: "center",
+  },
+  {
     id: "notificationsCount",
     label: "# Notifications",
     minWidth: 120,

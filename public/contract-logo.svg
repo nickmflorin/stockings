@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Logo</title>
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <path d="M354.936709,0 C359.354987,-3.22053779e-14 362.936709,3.581722 362.936709,8 L362.936709,82.7341772 C362.936709,87.1524552 359.354987,90.7341772 354.936709,90.7341772 L226.835,90.734 L226.835443,504 C226.835443,508.418278 223.253721,512 218.835443,512 L144.101266,512 C139.682988,512 136.101266,508.418278 136.101266,504 L136.101,90.734 L8,90.7341772 C3.581722,90.7341772 -5.05852902e-15,87.1524552 0,82.7341772 L0,8 C-5.41083001e-16,3.581722 3.581722,5.41083001e-16 8,0 L354.936709,0 Z" id="Combined-Shape" fill="#4989E4"></path>
+            <rect id="Rectangle" fill="#D89B60" x="239.797468" y="220.35443" width="77.7721519" height="291.64557" rx="8"></rect>
+            <rect id="Rectangle" fill="#D89B60" x="337.012658" y="304.607595" width="77.7721519" height="207.392405" rx="8"></rect>
+            <rect id="Rectangle" fill="#D89B60" x="45.3670886" y="408.303797" width="77.7721519" height="103.696203" rx="8"></rect>
+            <rect id="Rectangle" fill="#D89B60" x="434.227848" y="90.7341772" width="77.7721519" height="421.265823" rx="8"></rect>
+        </g>
+    </g>
+</svg>

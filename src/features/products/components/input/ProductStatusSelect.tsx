@@ -33,6 +33,7 @@ export const ProductStatusSelect = forwardRef<
       data={[...ProductStatuses.models]}
       itemIsDisabled={m => disabledStatuses?.includes(m.value) ?? false}
       options={{ behavior, getItemValue }}
+      getItemValueLabel={m => ProductStatuses.getModel(m.value).shortLabel}
       itemRenderer={(m, { isDisabled }) => (
         <ProductStatusText status={m.value} isDisabled={isDisabled} />
       )}

@@ -4,7 +4,11 @@ import { useTransition } from "react";
 
 import { toast } from "react-toastify";
 
-import { type FullProductSubscription } from "~/database/model";
+import {
+  type FullProductSubscription,
+  type StatusChangeSubscriptionCondition,
+} from "~/database/model";
+import { SubscriptionType } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { updateSubscription } from "~/actions/mutations/subscriptions";
@@ -20,7 +24,9 @@ import {
   SubscriptionsTableColumns,
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
-import { SubscriptionTypeText } from "~/features/subscriptions/components/SubscriptionTypeText";
+
+import { StatusChangeConditionTransition } from "../StatusChangeConditionTransition";
+import { SubscriptionTypeText } from "../SubscriptionTypeText";
 
 export interface SubscriptionsTableBodyProps {
   readonly data: FullProductSubscription[];
@@ -116,6 +122,17 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                 </div>
               );
             },
+          },
+          conditions: {
+            cellRenderer: datum =>
+              datum.subscriptionType === SubscriptionType.StatusChangeSubscription &&
+              datum.conditions.length !== 0 ? (
+                <StatusChangeConditionTransition
+                  conditions={(datum.conditions as StatusChangeSubscriptionCondition[])[0]}
+                />
+              ) : (
+                <></>
+              ),
           },
           enabled: {
             cellRenderer(datum) {
