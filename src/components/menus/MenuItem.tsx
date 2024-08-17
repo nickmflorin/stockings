@@ -6,6 +6,8 @@ import { type ReactNode, useImperativeHandle, forwardRef } from "react";
 import { isFragment } from "react-is";
 
 import { type SpinnerProps, type IconProp, type IconName, isIconProp } from "~/components/icons";
+import { Spinner } from "~/components/icons/Spinner";
+import { LoadingText } from "~/components/loading/LoadingText";
 import * as types from "~/components/menus";
 import { type Action } from "~/components/structural/Actions";
 import { classNames } from "~/components/types";
@@ -16,7 +18,6 @@ import { ShowHide } from "~/components/util";
 
 import { MenuItemIcon } from "./MenuItemIcon";
 
-const Spinner = dynamic(() => import("~/components/icons/Spinner").then(mod => mod.Spinner));
 const Checkbox = dynamic(() => import("~/components/input/Checkbox").then(mod => mod.Checkbox));
 const Actions = dynamic(() => import("~/components/structural/Actions").then(mod => mod.Actions));
 
@@ -38,6 +39,7 @@ export interface MenuItemProps
   readonly isDisabled?: boolean;
   readonly isCurrentNavigation?: boolean;
   readonly isVisible?: boolean;
+  readonly loadingText?: string;
   readonly actions?: Action[];
   readonly height?: QuantitativeSize<"px">;
   readonly contentClassName?: ComponentProps["className"];
@@ -65,6 +67,7 @@ interface MenuItemInnerProps
     | "spinnerProps"
     | "children"
     | "actions"
+    | "loadingText"
   > {
   readonly isLoading: boolean;
   readonly isDisabled: boolean;
@@ -78,6 +81,7 @@ const MenuItemInner = ({
   icon: _icon,
   children: _children,
   actions = [],
+  loadingText,
   ...rest
 }: MenuItemInnerProps) => {
   const icon = useMemo(() => {
@@ -95,13 +99,13 @@ const MenuItemInner = ({
   }, [_icon, rest, isLoading, isLocked, isDisabled]);
 
   const leftIcon = useMemo(() => {
-    if (icon === undefined) {
+    if (icon === undefined || isLoading) {
       return (
         <Spinner
           {...rest.spinnerProps}
           className={classNames("text-gray-600", rest.iconClassName, rest.spinnerClassName)}
           isLoading={isLoading}
-          size={rest.iconSize ?? "18px"}
+          size={rest.iconSize ?? "16px"}
         />
       );
     }
@@ -119,7 +123,9 @@ const MenuItemInner = ({
     <>
       {leftIcon}
       {children !== null && children !== undefined && !isFragment(children) && (
-        <div className="menu__item__inner-content">{children}</div>
+        <div className="menu__item__inner-content">
+          {isLoading && loadingText ? <LoadingText>{loadingText}</LoadingText> : children}
+        </div>
       )}
       <Actions actions={actions} />
     </>
@@ -213,6 +219,7 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
       isLocked: propIsLocked,
       isDisabled: propIsDisabled,
       selectionIndicator,
+      loadingText,
       ...props
     }: MenuItemProps,
     ref,
@@ -287,6 +294,7 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
             isLocked={isLocked}
             selectionIndicator={selectionIndicator}
             isSelected={isSelected}
+            loadingText={loadingText}
           >
             {children}
           </MenuItemContent>

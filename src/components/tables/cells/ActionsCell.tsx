@@ -3,7 +3,7 @@ import { type FloatingContentRenderProps } from "~/components/floating";
 import { DropdownMenu } from "~/components/menus/DropdownMenu";
 import { Menu } from "~/components/menus/Menu";
 import { type DataTableRowAction } from "~/components/tables/types";
-import { type QuantitativeSize } from "~/components/types";
+import { classNames, type QuantitativeSize } from "~/components/types";
 
 export interface ActionsCellProps {
   readonly actions:
@@ -22,14 +22,8 @@ export const ActionsCell = ({ actions, menuWidth = 120 }: ActionsCellProps): JSX
         <Menu>
           <Menu.Content>
             {(typeof actions === "function" ? actions({ setIsOpen }) : actions).map(
-              ({ content, isVisible, isLoading, onClick }, i) => (
-                <Menu.Item
-                  key={i}
-                  isLoading={isLoading}
-                  className="font-medium"
-                  isVisible={isVisible}
-                  onClick={onClick}
-                >
+              ({ content, ...rest }, i) => (
+                <Menu.Item key={i} {...rest} className={classNames("font-medium", rest.className)}>
                   {content}
                 </Menu.Item>
               ),

@@ -4,7 +4,7 @@ import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-lite
 
 import { type IconProp, type IconName } from "~/components/icons";
 import { type MenuItemInstance } from "~/components/menus";
-import type { QuantitativeSize } from "~/components/types";
+import type { QuantitativeSize, ComponentProps } from "~/components/types";
 
 import { type TableBodyCellProps } from "./generic/TableBodyCell";
 import { type TableHeaderCellProps } from "./generic/TableHeaderCell";
@@ -28,6 +28,9 @@ export interface DataTableDatum {
 export type DataTableRowAction = {
   readonly isVisible?: boolean;
   readonly content: ReactNode;
+  readonly loadingText?: string;
+  readonly className?: ComponentProps["className"];
+  readonly icon?: IconProp | IconName | JSX.Element;
   readonly isLoading?: boolean;
   readonly onClick: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,

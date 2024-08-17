@@ -13,12 +13,13 @@ import {
 import { SubscriptionType } from "~/database/model";
 import { logger } from "~/internal/logger";
 
-import { updateSubscription } from "~/actions/mutations/subscriptions";
+import { updateSubscription, deleteSubscription } from "~/actions/mutations/subscriptions";
 
 import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
 import { EnabledIcon } from "~/components/icons/EnabledIcon";
+import Icon from "~/components/icons/Icon";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
 import { Text } from "~/components/typography";
@@ -39,6 +40,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
   const { refresh } = useRouter();
   const [refreshAfterEnablingPending, transitionAfterEnabling] = useTransition();
   const [refreshAfterDisablingPending, transitionAfterDisabling] = useTransition();
+  const [refreshAfterDeletePending, transitionAfterDeleting] = useTransition();
   return (
     <DataTableBody
       actionMenuWidth={140}
@@ -47,6 +49,8 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
         {
           isVisible: !subscription.enabled,
           content: "Enable",
+          loadingText: "Enabling",
+          icon: <Icon icon="volume" size="16px" className="text-gray-600" />,
           isLoading: refreshAfterEnablingPending,
           onClick: async (e, instance) => {
             instance.setLoading(true);
@@ -80,6 +84,8 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
         {
           isVisible: subscription.enabled,
           content: "Disable",
+          loadingText: "Disabling",
+          icon: <Icon icon="volume-off" size="16px" className="text-gray-600" />,
           isLoading: refreshAfterDisablingPending,
           onClick: async (e, instance) => {
             instance.setLoading(true);
@@ -104,6 +110,40 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
               return;
             }
             return transitionAfterDisabling(() => {
+              refresh();
+              instance.setLoading(false);
+              setIsOpen(false, e);
+            });
+          },
+        },
+        {
+          content: "Delete",
+          isLoading: refreshAfterDeletePending,
+          loadingText: "Deleting",
+          icon: <Icon icon="trash-alt" size="16px" className="text-red-600" />,
+          onClick: async (e, instance) => {
+            instance.setLoading(true);
+            let response: Awaited<ReturnType<typeof deleteSubscription>> | null = null;
+            try {
+              response = await deleteSubscription(subscription.id);
+            } catch (e) {
+              logger.errorUnsafe(
+                e,
+                `There was an error deleting the subscription with ID '${subscription.id}'!`,
+              );
+              toast.error("There was an error deleting the subscription. Please try again later.");
+              return instance.setLoading(false);
+            }
+            const { error } = response;
+            if (error) {
+              logger.errorUnsafe(
+                e,
+                `There was an error deleting the subscription with ID '${subscription.id}'!`,
+              );
+              toast.error("There was an error deleting the subscription. Please try again later.");
+              return;
+            }
+            return transitionAfterDeleting(() => {
               refresh();
               instance.setLoading(false);
               setIsOpen(false, e);
