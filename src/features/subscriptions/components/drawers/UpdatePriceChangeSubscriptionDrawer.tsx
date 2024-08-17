@@ -25,11 +25,7 @@ export const UpdatePriceChangeSubscriptionDrawer = ({
   onClose,
 }: UpdatePriceChangeSubscriptionDrawerProps): JSX.Element => (
   <Drawer>
-    <Drawer.Header
-      description={
-        "Update your notification settings for when the price " + "of the product changes."
-      }
-    >
+    <Drawer.Header description="Notification settings for when the price of the product changes.">
       {product.name ?? "Unnamed Product"}
     </Drawer.Header>
     <Drawer.Content className="overflow-y-hidden">

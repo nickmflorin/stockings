@@ -25,18 +25,18 @@ export const PriceChangeSubscriptionForm = ({
     footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
   >
     <ProductSubscriptionFormSection
-      label="Enabled"
+      label="Enable Price Change Notifications"
       form={props.form}
       field="enabled"
-      description="Notify me when the price of a product changes."
     >
       <Form.ControlledField
         name="conditions"
         form={props.form}
-        helpTextSeparation={8}
-        helpText={
-          "Select the specific price change events that you would like to be notified about. " +
-          "At least 1 must be selected."
+        descriptionSeparation={12}
+        label="Conditions"
+        description={
+          "Select the specific price change conditions that you would like to be notified about " +
+          "for this product. At least 1 must be selected."
         }
       >
         {({ value, onChange }) => (

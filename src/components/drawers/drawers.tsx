@@ -41,7 +41,7 @@ export const Drawers = {
   [DrawerIds.SUBSCRIBE_TO_PRICE_CHANGES]: Drawer(
     DrawerIds.SUBSCRIBE_TO_PRICE_CHANGES,
     SubscribeToPriceChangesDrawer,
-    "500px",
+    "400px",
   ),
   [DrawerIds.SUBSCRIBE_TO_STATUS_CHANGES]: Drawer(
     DrawerIds.SUBSCRIBE_TO_STATUS_CHANGES,
@@ -51,7 +51,7 @@ export const Drawers = {
   [DrawerIds.UPDATE_PRICE_CHANGE_SUBSCRIPTION]: Drawer(
     DrawerIds.UPDATE_PRICE_CHANGE_SUBSCRIPTION,
     UpdatePriceChangeSubscriptionDrawer,
-    "500px",
+    "400px",
   ),
   [DrawerIds.UPDATE_STATUS_CHANGE_SUBSCRIPTION]: Drawer(
     DrawerIds.UPDATE_STATUS_CHANGE_SUBSCRIPTION,

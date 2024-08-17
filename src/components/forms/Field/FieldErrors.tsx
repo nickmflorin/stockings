@@ -39,8 +39,8 @@ export const FormFieldErrors = <N extends FieldName<I>, I extends BaseFormValues
   const fieldErrors = useMemo(() => (form ? form.fieldErrors : undefined), [form]);
 
   const errors = useMemo(() => {
-    const _name = ensureItIsDefined(Array.isArray(name) ? name[0] : name);
     if (fieldErrors) {
+      const _name = ensureItIsDefined(Array.isArray(name) ? name[0] : name);
       return fieldErrors?.[_name as keyof FieldErrors<I>] ?? [];
     }
     return _errors;

@@ -19,7 +19,7 @@ export interface ProductSubscriptionFormSectionProps<
   readonly form: FormInstance<V>;
   readonly field: Path<V>;
   readonly children: ReactNode;
-  readonly description: string;
+  readonly description?: string;
 }
 
 export const ProductSubscriptionFormSection = <
@@ -33,14 +33,14 @@ export const ProductSubscriptionFormSection = <
 }: ProductSubscriptionFormSectionProps<V>) => {
   const enabled = useWatch({ control: form.control, name: field });
   return (
-    <div className="flex flex-col gap-2">
-      <CheckboxField form={form} name={field} label={label} />
-      <Description fontSize="xs" className="ml-[24px] text-gray-500">
-        {description}
-      </Description>
-      <Disabled isDisabled={!enabled} className="ml-[24px]">
-        {children}
-      </Disabled>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <CheckboxField form={form} name={field} label={label} />
+        <Description fontSize="xs" className="text-gray-500">
+          {description}
+        </Description>
+      </div>
+      <Disabled isDisabled={!enabled}>{children}</Disabled>
     </div>
   );
 };

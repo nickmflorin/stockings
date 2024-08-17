@@ -84,9 +84,9 @@ export const Field = <N extends FieldName<I>, I extends BaseFormValues>({
   form,
   errors: _errors = [],
   autoRenderErrors = true,
-  labelSeparation = "4px",
+  labelSeparation = "6px",
   helpTextSeparation = "4px",
-  descriptionSeparation = "4px",
+  descriptionSeparation = "8px",
   labelClassName,
   labelProps,
   condition,
@@ -167,3 +167,7 @@ export type FormFieldProps<
 export const FormField = <N extends FieldName<I>, I extends BaseFormValues>(
   props: FormFieldProps<N, I>,
 ): JSX.Element => <Field<N, I> {...props} />;
+
+export type GenericFieldProps = UnconnectedAbstractFieldProps;
+
+export const GenericField = (props: GenericFieldProps): JSX.Element => <Field {...props} />;

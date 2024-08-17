@@ -33,28 +33,36 @@ export const StatusChangeSubscriptionForm = ({
       footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
     >
       <ProductSubscriptionFormSection
-        label="Enabled"
+        label="Enable Status Change Notifications"
         form={props.form}
         field="enabled"
-        description="Notify me when the inventory status of a product changes."
       >
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            {fields.map((field, index) => (
-              <StatusChangeSubscriptionConditionFields
-                key={field.id}
-                form={props.form}
-                index={index}
-                onRemove={() => remove(index)}
-              />
-            ))}
+        <Form.GenericField
+          descriptionSeparation={12}
+          label="Conditions"
+          description={
+            "Select the specific status change conditions that you would like to be " +
+            "notified about for this product. At least 1 must be selected."
+          }
+        >
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              {fields.map((field, index) => (
+                <StatusChangeSubscriptionConditionFields
+                  key={field.id}
+                  form={props.form}
+                  index={index}
+                  onRemove={() => remove(index)}
+                />
+              ))}
+            </div>
+            <div className="flex flex-row items-center justify-end">
+              <Link element="button" onClick={() => append({ fromStatus: [], toStatus: [] })}>
+                Add Condition
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-row items-center justify-end">
-            <Link element="button" onClick={() => append({ fromStatus: [], toStatus: [] })}>
-              Add Condition
-            </Link>
-          </div>
-        </div>
+        </Form.GenericField>
       </ProductSubscriptionFormSection>
     </Form>
   );

@@ -2,7 +2,7 @@ import { type SubmitErrorHandler } from "react-hook-form";
 
 import { type ComponentProps, classNames } from "~/components/types";
 
-import { FormField, ControlledField } from "./Field";
+import { FormField, ControlledField, GenericField } from "./Field";
 import { FormBody, type FormBodyProps } from "./FormBody";
 import { FormFooter, type FormFooterProps } from "./FormFooter";
 import { FormHeader, type FormHeaderProps } from "./FormHeader";
@@ -91,5 +91,6 @@ Form.Native = NativeForm;
 Form.Field = FormField;
 Form.ControlledField = ControlledField;
 Form.FieldCondition = FieldConditions;
+Form.GenericField = GenericField;
 
 export default Form;
