@@ -9,7 +9,8 @@ export const TableViewHeader = ({ children, ...props }: TableViewHeaderProps): J
   children ? (
     <div {...props} className={classNames("table-view__header", props.className)}>
       {children}
+      <div id="table-view-control-bar-portal-target" />
     </div>
   ) : (
-    <></>
+    <div id="table-view-control-bar-portal-target" />
   );

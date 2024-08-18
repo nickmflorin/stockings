@@ -7,18 +7,14 @@ import { ProductsTableColumns } from "~/features/products/types";
 
 export interface ProductsTableViewProps {
   readonly children: JSX.Element;
-  readonly searchBar?: JSX.Element;
+  readonly filterBar?: JSX.Element;
   readonly pagination?: JSX.Element;
 }
 
-export const ProductsTableView = ({ children, searchBar, pagination }: ProductsTableViewProps) => (
-  <TableView
-    header={searchBar}
-    footer={pagination}
-    contentClassName="max-h-[calc(100%-32px-40px-16px-16px)]"
-  >
+export const ProductsTableView = ({ children, filterBar, pagination }: ProductsTableViewProps) => (
+  <TableView header={filterBar} footer={pagination}>
     <TableContainer sx={{ maxHeight: "100%" }}>
-      <DataTableWrapper hasActions columns={ProductsTableColumns}>
+      <DataTableWrapper rowsHaveActions columns={ProductsTableColumns}>
         {children}
       </DataTableWrapper>
     </TableContainer>

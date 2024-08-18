@@ -9,8 +9,9 @@ import {
 } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
+import { Ordering } from "~/lib/ordering";
 
-import type { TableOrdering, DataTableColumnConfig } from "~/components/tables";
+import type { DataTableColumnConfig } from "~/components/tables";
 
 export const NotificationsTableColumns = [
   {

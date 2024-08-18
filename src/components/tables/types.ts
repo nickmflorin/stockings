@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-literals";
 
+import { type Order } from "~/lib/ordering";
+
 import { type IconProp, type IconName } from "~/components/icons";
 import { type MenuItemInstance } from "~/components/menus";
 import type { QuantitativeSize, ComponentProps } from "~/components/types";
@@ -50,7 +52,7 @@ export interface DataTableColumnConfig<D extends DataTableDatum, I extends strin
   readonly minWidth?: QuantitativeSize<"px">;
   readonly maxWidth?: QuantitativeSize<"px">;
   readonly skeleton?: ReactNode;
-  readonly sortMethod?: (order: TableOrder, a: D, b: D) => number;
+  readonly sortMethod?: (order: Order, a: D, b: D) => number;
 }
 
 export interface DataTableColumn<
@@ -103,11 +105,6 @@ export const convertConfigsToColumns = <
       cellRenderer: properties[config.id as InferColumnId<C>]?.cellRenderer,
     }),
   );
-
-export type TableOrder = "asc" | "desc";
-
-// Right now, we are only supporting single column ordering.
-export type TableOrdering<I extends string> = { field: I; order: TableOrder };
 
 export type DataTableOptions<D extends DataTableDatum> = {
   readonly getRowId?: (datum: D) => string | number;

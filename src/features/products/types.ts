@@ -4,8 +4,9 @@ import type { Product, ProductCategory, ProductStatus, ProductSubCategory } from
 import { ProductStatuses, ProductSubCategories, ProductCategories } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
+import { type Ordering } from "~/lib/ordering";
 
-import type { TableOrdering, DataTableColumnConfig } from "~/components/tables";
+import type { DataTableColumnConfig } from "~/components/tables";
 
 export const ProductsTableColumns = [
   {
@@ -64,7 +65,7 @@ export interface ProductsTableFilters {
 
 export interface ProductsTableControls {
   readonly filters: ProductsTableFilters;
-  readonly ordering: TableOrdering<OrderableProductsTableColumnId>;
+  readonly ordering: Ordering<OrderableProductsTableColumnId>;
   readonly page: number;
 }
 

@@ -4,6 +4,8 @@ import Skeleton from "@mui/material/Skeleton";
 
 import { logger } from "~/internal/logger";
 
+import { type Ordering } from "~/lib/ordering";
+
 import { type FloatingContentRenderProps } from "~/components/floating";
 import { type ActionsCellProps } from "~/components/tables/cells/ActionsCell";
 import { Table } from "~/components/tables/generic/Table";
@@ -18,7 +20,7 @@ export interface DataTableBodyProps<D extends types.DataTableDatum, I extends st
   extends Omit<TableBodyProps, "cellSkeletons" | "numSkeletonColumns" | "children"> {
   readonly data: D[];
   readonly columns: types.DataTableColumn<D, I>[];
-  readonly ordering?: types.TableOrdering<I> | null;
+  readonly ordering?: Ordering<I> | null;
   readonly rowHoveredClassName?: ClassName;
   readonly highlightRowOnHover?: boolean;
   readonly scrollable?: boolean;
@@ -51,10 +53,10 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
 }: DataTableBodyProps<D, I>): JSX.Element => {
   const processedData = useMemo(() => {
     if (ordering) {
-      const col = columns.find(c => c.id === ordering.field);
+      const col = columns.find(c => c.id === ordering.orderBy);
       if (col == undefined) {
         logger.error(
-          `Suspicious State: Cannot order data by field '${ordering.field}' because an associated ` +
+          `Suspicious State: Cannot order data by field '${ordering.orderBy}' because an associated ` +
             "column with that id does not exist!",
         );
         return data;

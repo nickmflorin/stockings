@@ -1,3 +1,5 @@
+import { type Ordering } from "~/lib/ordering";
+
 import { Table } from "~/components/tables/generic/Table";
 import type { TableHeaderRowProps } from "~/components/tables/generic/TableHeaderRow";
 import type * as types from "~/components/tables/types";
@@ -9,7 +11,7 @@ import { DataTableHeaderCell } from "./DataTableHeaderCell";
 export interface DataTableHeaderRowProps<D extends types.DataTableDatum, I extends string = string>
   extends Omit<TableHeaderRowProps, "children"> {
   readonly columns: types.DataTableColumnConfig<D, I>[];
-  readonly ordering?: types.TableOrdering<I> | null;
+  readonly ordering?: Ordering<I> | null;
   readonly rowsHaveActions?: boolean;
   readonly rowsAreSelectable?: boolean;
   readonly onSort?: (
@@ -27,12 +29,12 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
   ...props
 }: DataTableHeaderRowProps<D, I>): JSX.Element => (
   <Table.HeaderRow {...props}>
-    {rowsAreSelectable && <TableHeaderCell align="center" width={80} maxWidth={80} minWidth={80} />}
+    {rowsAreSelectable && <TableHeaderCell align="center" width={40} maxWidth={40} minWidth={40} />}
     {columns.map(column => (
       <DataTableHeaderCell<D, I>
         key={column.id}
         column={column}
-        order={ordering?.field === column.id ? ordering.order : null}
+        order={ordering?.orderBy === column.id ? ordering.order : null}
         onSort={e => {
           if (column.isOrderable && onSort) {
             onSort(e, column);

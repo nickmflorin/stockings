@@ -1,8 +1,8 @@
-import qs from "querystring";
-
 import { ReadonlyURLSearchParams } from "next/navigation";
 
 import { type z } from "zod";
+
+import { parseQueryParams } from "~/integrations/http";
 
 export type FiltersSchemas = {
   [key in string]: z.ZodType;
@@ -51,7 +51,8 @@ export const parseFilters = <S extends FiltersSchemas>(
   options: ParseFiltersOptions<S>,
 ) => {
   let f: ParsedFilters<S> = {} as ParsedFilters<S>;
-  const parsed = params instanceof ReadonlyURLSearchParams ? qs.parse(params.toString()) : params;
+  const parsed =
+    params instanceof ReadonlyURLSearchParams ? parseQueryParams(params.toString()) : params;
 
   for (const [field, schema] of Object.entries(schemas)) {
     if (parsed[field] !== undefined) {

@@ -1,9 +1,14 @@
 import dynamic from "next/dynamic";
 
+import { type Ordering } from "~/lib/ordering";
+
 import { fetchProductSubscriptions } from "~/actions/fetches/subscriptions";
 
 import { Loading } from "~/components/loading/Loading";
-import { type SubscriptionsTableFilters } from "~/features/subscriptions";
+import {
+  type OrderableSubscriptionsTableColumnId,
+  type SubscriptionsTableFilters,
+} from "~/features/subscriptions";
 
 const ClientSubscriptionsTableBody = dynamic(
   () => import("~/features/subscriptions/components/tables/SubscriptionsTableBody"),
@@ -13,16 +18,18 @@ const ClientSubscriptionsTableBody = dynamic(
 export interface SubscriptionsTableBodyProps {
   readonly filters: SubscriptionsTableFilters;
   readonly page: number;
+  readonly ordering: Ordering<OrderableSubscriptionsTableColumnId>;
 }
 
 export const SubscriptionsTableBody = async ({
   filters,
   page,
+  ordering,
 }: SubscriptionsTableBodyProps): Promise<JSX.Element> => {
   const { data } = await fetchProductSubscriptions(
     {
       filters,
-      ordering: { field: "createdAt", order: "desc" },
+      ordering,
       page,
     },
     { strict: true },

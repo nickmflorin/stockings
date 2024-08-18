@@ -33,7 +33,7 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
 
   return (
     <ProductsTableView
-      searchBar={
+      filterBar={
         <Suspense>
           <ProductsTableFilterBar />
         </Suspense>

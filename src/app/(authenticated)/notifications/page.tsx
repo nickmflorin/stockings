@@ -36,7 +36,7 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
 
   return (
     <NotificationsTableView
-      searchBar={
+      filterBar={
         <Suspense>
           <NotificationsTableFilterBar />
         </Suspense>

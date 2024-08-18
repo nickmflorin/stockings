@@ -78,12 +78,6 @@ export const useFilters = <S extends FiltersSchemas>({
       }
     }
     replace(`${pathname}?${qs.stringify(pruned)}`);
-
-    /* if (Object.keys(pruned).length === 0) {
-         replace(`${pathname}`);
-       } else {
-         replace(`${pathname}?${qs.stringify(pruned)}`);
-       } */
   });
 
   return [initialFilters, setFilters] as const;

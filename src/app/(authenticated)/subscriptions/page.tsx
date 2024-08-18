@@ -4,10 +4,13 @@ import { Suspense } from "react";
 import { z } from "zod";
 
 import { parseFilters } from "~/lib/filters";
+import { parseOrdering } from "~/lib/ordering";
 
 import { Loading } from "~/components/loading/Loading";
 import {
   SubscriptionsTableFiltersOptions,
+  SubscriptionsTableDefaultOrdering,
+  OrderableSubscriptionsTableColumnIds,
   SubscriptionsTableFiltersSchemas,
 } from "~/features/subscriptions";
 /* eslint-disable-next-line max-len */
@@ -34,9 +37,14 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
     SubscriptionsTableFiltersOptions,
   );
 
+  const ordering = parseOrdering(searchParams, {
+    defaultOrdering: SubscriptionsTableDefaultOrdering,
+    fields: OrderableSubscriptionsTableColumnIds,
+  });
+
   return (
     <SubscriptionsTableView
-      searchBar={
+      filterBar={
         <Suspense>
           <SubscriptionsTableFilterBar />
         </Suspense>
@@ -48,10 +56,10 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
       }
     >
       <Suspense
-        key={JSON.stringify(filters) + String(page)}
+        key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
         fallback={<Loading isLoading component="tbody" />}
       >
-        <SubscriptionsTableBody filters={filters} page={page} />
+        <SubscriptionsTableBody filters={filters} page={page} ordering={ordering} />
       </Suspense>
     </SubscriptionsTableView>
   );

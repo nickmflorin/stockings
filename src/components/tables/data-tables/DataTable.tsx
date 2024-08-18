@@ -1,5 +1,7 @@
-import { useTableOrdering } from "~/components/tables/hooks/use-table-ordering";
+import { type Ordering } from "~/lib/ordering";
+
 import type * as types from "~/components/tables/types";
+import { useOrdering } from "~/hooks/use-ordering";
 
 import { DataTableBody, type DataTableBodyProps } from "./DataTableBody";
 import { type DataTableWrapperProps, DataTableWrapper } from "./DataTableWrapper";
@@ -32,7 +34,7 @@ export interface DataTableProps<D extends types.DataTableDatum, I extends string
   readonly onSort?: (
     event: React.MouseEvent<unknown>,
     col: types.DataTableColumnConfig<D, I>,
-    ordering: types.TableOrdering<I> | null,
+    ordering: Ordering<I> | null,
   ) => void;
 }
 
@@ -56,7 +58,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   getRowActions,
   ...props
 }: DataTableProps<D, I>): JSX.Element => {
-  const [_ordering, setOrdering, applyOrderingUpdate] = useTableOrdering<I>();
+  const [_ordering, setOrdering, applyOrderingUpdate] = useOrdering<I>();
   const ordering = propOrdering === undefined ? _ordering : propOrdering;
 
   return (

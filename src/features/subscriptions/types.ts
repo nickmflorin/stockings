@@ -7,8 +7,9 @@ import {
 } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
+import { type Ordering } from "~/lib/ordering";
 
-import type { DataTableColumnConfig, TableOrdering } from "~/components/tables";
+import type { DataTableColumnConfig } from "~/components/tables";
 
 export const SubscriptionsTableColumns = [
   {
@@ -70,6 +71,15 @@ export type OrderableSubscriptionsTableColumnId = Extract<
   { isOrderable: true }
 >["id"];
 
+export const OrderableSubscriptionsTableColumnIds = [...SubscriptionsTableColumns]
+  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
+  .map(col => col.id) as OrderableSubscriptionsTableColumnId[];
+
+export const SubscriptionsTableDefaultOrdering: Ordering<OrderableSubscriptionsTableColumnId> = {
+  orderBy: "createdAt",
+  order: "desc",
+};
+
 export interface SubscriptionsTableFilters {
   readonly types: SubscriptionType[];
   readonly search: string;
@@ -77,7 +87,7 @@ export interface SubscriptionsTableFilters {
 
 export interface SubscriptionsTableControls {
   readonly filters: SubscriptionsTableFilters;
-  readonly ordering: TableOrdering<OrderableSubscriptionsTableColumnId>;
+  readonly ordering: Ordering<OrderableSubscriptionsTableColumnId>;
   readonly page: number;
 }
 

@@ -78,7 +78,10 @@ const _fetchProductSubscriptions = async <C extends FetchActionContext>(
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
   const data = await enhanced.productSubscription.findMany({
     where: whereClause({ filters, user }),
-    orderBy: [{ [ordering.field]: ordering.order }],
+    orderBy:
+      ordering.orderBy === "product"
+        ? [{ product: { name: ordering.order } }]
+        : [{ [ordering.orderBy]: ordering.order }],
     skip: pageSize * (page - 1),
     take: pageSize,
     include: { product: true },

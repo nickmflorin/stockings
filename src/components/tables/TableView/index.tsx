@@ -1,28 +1,32 @@
+import React from "react";
+
 import { Loading } from "~/components/loading/Loading";
 import type { ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
 
+import { TableControlBar } from "./TableControlBar";
+import { TableFilterBar } from "./TableFilterBar";
 import { TableViewFooter } from "./TableViewFooter";
 import { TableViewHeader } from "./TableViewHeader";
 
 export interface TableViewProps extends ComponentProps {
   readonly children: JSX.Element;
-  readonly header?: JSX.Element;
   readonly headerProps?: ComponentProps;
   readonly isLoading?: boolean;
   readonly contentClassName?: ComponentProps["className"];
   readonly footer?: JSX.Element;
   readonly footerProps?: ComponentProps;
+  readonly header?: JSX.Element;
 }
 
-export const TableView = ({
+const LocalTableView = ({
   children,
   contentClassName,
   isLoading = false,
-  header,
   footer,
   headerProps,
   footerProps,
+  header,
   ...props
 }: TableViewProps): JSX.Element => (
   <div
@@ -36,3 +40,8 @@ export const TableView = ({
     <TableViewFooter {...footerProps}>{footer}</TableViewFooter>
   </div>
 );
+
+export const TableView = Object.assign(React.memo(LocalTableView), {
+  FilterBar: TableFilterBar,
+  ControlBar: TableControlBar,
+});

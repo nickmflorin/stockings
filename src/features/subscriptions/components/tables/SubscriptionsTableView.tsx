@@ -3,30 +3,54 @@ import TableContainer from "@mui/material/TableContainer";
 
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
-import { SubscriptionsTableColumns } from "~/features/subscriptions/types";
+import {
+  SubscriptionsTableColumns,
+  type OrderableSubscriptionsTableColumnId,
+  OrderableSubscriptionsTableColumnIds,
+  SubscriptionsTableDefaultOrdering,
+} from "~/features/subscriptions/types";
+import { useOrdering } from "~/hooks/use-ordering";
 
 export interface SubscriptionsTableViewProps {
   readonly children: JSX.Element;
-  readonly searchBar?: JSX.Element;
+  readonly filterBar?: JSX.Element;
+  readonly controlBar?: JSX.Element;
   readonly pagination?: JSX.Element;
 }
 
 export const SubscriptionsTableView = ({
   children,
-  searchBar,
+  filterBar,
   pagination,
-}: SubscriptionsTableViewProps) => (
-  <TableView
-    header={searchBar}
-    footer={pagination}
-    contentClassName="max-h-[calc(100%-32px-40px-16px-16px)]"
-  >
-    <TableContainer sx={{ maxHeight: "100%" }}>
-      <DataTableWrapper rowsAreSelectable rowsHaveActions columns={SubscriptionsTableColumns}>
-        {children}
-      </DataTableWrapper>
-    </TableContainer>
-  </TableView>
-);
+}: SubscriptionsTableViewProps) => {
+  const [ordering, setOrdering] = useOrdering<OrderableSubscriptionsTableColumnId>({
+    useQueryParams: true,
+    fields: OrderableSubscriptionsTableColumnIds,
+    defaultOrdering: SubscriptionsTableDefaultOrdering,
+  });
+  return (
+    <TableView header={filterBar} footer={pagination}>
+      <TableContainer sx={{ maxHeight: "100%" }}>
+        <DataTableWrapper
+          ordering={ordering}
+          rowsAreSelectable
+          rowsHaveActions
+          columns={SubscriptionsTableColumns}
+          onSort={(e, col) => {
+            if (
+              OrderableSubscriptionsTableColumnIds.includes(
+                col.id as OrderableSubscriptionsTableColumnId,
+              )
+            ) {
+              setOrdering({ field: col.id as OrderableSubscriptionsTableColumnId });
+            }
+          }}
+        >
+          {children}
+        </DataTableWrapper>
+      </TableContainer>
+    </TableView>
+  );
+};
 
 export default SubscriptionsTableView;
