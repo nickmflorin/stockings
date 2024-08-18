@@ -4,6 +4,7 @@
   background: rgba(0, 0, 0, 0.2);
   display: grid;
   place-items: center;
+  z-index: 3;
 
   .dialog {
     display: flex;
@@ -20,6 +21,7 @@
     max-height: 90vh;
     position: relative;
     max-width: 90vw;
+    z-index: 4;
 
     > .dialog__title {
       height: 28px;
