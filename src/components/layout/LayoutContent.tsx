@@ -25,7 +25,7 @@ export const LayoutContent = ({ children, nav }: LayoutContentProps): JSX.Elemen
       })}
     >
       <LayoutNav items={nav} />
-      <main className="content">
+      <main className="content" id="content-root">
         {children}
         <ToastContainer />
       </main>

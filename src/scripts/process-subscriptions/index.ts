@@ -8,8 +8,6 @@ import { processSubscriptions } from "./process-subscriptions";
 
 logger.level = LogLevel.INFO;
 
-const count = 5000;
-
 async function main() {
   const ctx = await getScriptContext({ upsertUser: true });
   await processSubscriptions(ctx);

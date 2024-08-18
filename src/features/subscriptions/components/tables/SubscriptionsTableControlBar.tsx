@@ -1,16 +1,15 @@
 "use client";
 import { type FullProductSubscription } from "~/database/model";
 
-import { DeleteButton } from "~/components/buttons/DeleteButton";
 import { DisableButton } from "~/components/buttons/DisableButton";
 import { EnableButton } from "~/components/buttons/EnableButton";
 import { Tooltip } from "~/components/floating/Tooltip";
 import { TableControlBar, type TableControlBarProps } from "~/components/tables/TableControlBar";
+/* eslint-disable-next-line max-len */
+import { DeleteSubscriptionsConfirmationDialog } from "~/features/subscriptions/components/dialogs/DeleteSubscriptionsConfirmationDialog";
 
 export interface SubscriptionsTableFilterBarProps
-  extends Omit<TableControlBarProps, "children" | "numSelectedRows"> {
-  readonly selectedRows: FullProductSubscription[];
-}
+  extends Omit<TableControlBarProps<FullProductSubscription>, "children"> {}
 
 export const SubscriptionsTableControlBar = ({
   selectedRows,
@@ -19,16 +18,13 @@ export const SubscriptionsTableControlBar = ({
   const numEnabled = selectedRows.filter(row => row.enabled).length;
   const numDisabled = selectedRows.filter(row => !row.enabled).length;
   return (
-    <TableControlBar {...props} numSelectedRows={selectedRows.length}>
-      <Tooltip
-        placement="top-start"
-        offset={{ mainAxis: 6 }}
-        content={`Delete ${selectedRows.length} selected subscriptions.`}
-        className="text-sm"
-        isDisabled={selectedRows.length === 0}
-      >
-        <DeleteButton isDisabled={selectedRows.length === 0} />
-      </Tooltip>
+    <TableControlBar
+      {...props}
+      selectedRows={selectedRows}
+      canDeleteRows
+      deleteTooltipContent={numRows => `Delete ${numRows} selected subscriptions.`}
+      confirmationModal={DeleteSubscriptionsConfirmationDialog}
+    >
       <Tooltip
         placement="top-start"
         offset={{ mainAxis: 6 }}

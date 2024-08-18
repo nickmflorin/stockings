@@ -154,6 +154,7 @@ $table-size-properties: (
         color: inherit;
         font-size: 13px;
         background-color: $table-header-bg-color;
+        z-index: 0;
       }
     }
   }

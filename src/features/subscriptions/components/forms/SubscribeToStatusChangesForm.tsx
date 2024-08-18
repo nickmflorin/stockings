@@ -50,6 +50,10 @@ export const SubscribeToStatusChangesForm = ({
         if (response) {
           const { error } = response;
           if (error) {
+            logger.error(
+              `There was an error subscribing to status changes of product '${productId}'!`,
+              { productId, data, error },
+            );
             // form.handleApiError(response)
             toast.error("There was an error subscribing to the product.");
           } else {

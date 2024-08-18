@@ -14,7 +14,6 @@ export function useDialog(config: DialogConfig): DialogContext {
 
   const floating = useFloating({
     ...config,
-    debug: true,
     triggers: ["click", "role", { type: "dismiss", options: { outsidePressEvent: "mousedown" } }],
   });
 

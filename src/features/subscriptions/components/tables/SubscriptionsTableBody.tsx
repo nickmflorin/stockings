@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 
 import { uniq, uniqBy } from "lodash-es";
 import { toast } from "react-toastify";
@@ -51,6 +51,10 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
   const [disablePending, disableTransition] = useTransition();
   const [deletePending, deleteTransition] = useTransition();
   const [editPending, editTransition] = useTransition();
+
+  useEffect(() => {
+    setSelectedRows(curr => data.filter(d => curr.map(r => r.id).includes(d.id)));
+  }, [data]);
 
   return (
     <>

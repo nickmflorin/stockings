@@ -1,13 +1,11 @@
 "use client";
-import { DeleteButton } from "~/components/buttons/DeleteButton";
 import { DisableButton } from "~/components/buttons/DisableButton";
 import { EnableButton } from "~/components/buttons/EnableButton";
-import { TableControlBar } from "~/components/tables/TableControlBar";
+import { TableControlBarPlaceholder } from "~/components/tables/TableControlBarPlaceholder";
 
 export const SubscriptionsTableControlBarPlaceholder = (): JSX.Element => (
-  <TableControlBar allRowsAreSelected={false} selectionIsDisabled={true}>
-    <DeleteButton isDisabled={true} />
+  <TableControlBarPlaceholder canDeleteRows>
     <EnableButton isDisabled={true} />
     <DisableButton isDisabled={true} />
-  </TableControlBar>
+  </TableControlBarPlaceholder>
 );

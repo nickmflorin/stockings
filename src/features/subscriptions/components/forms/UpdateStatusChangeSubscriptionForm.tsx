@@ -85,6 +85,11 @@ export const UpdateStatusChangeSubscriptionForm = ({
           if (response) {
             const { error } = response;
             if (error) {
+              logger.error(
+                `There was an error updating the status change subscription '${subscriptionId}' ` +
+                  `for product '${productId}'!`,
+                { productId, subscriptionId, data, error },
+              );
               // form.handleApiError(response)
               toast.error("There was an error updating the product subscription.");
             } else {

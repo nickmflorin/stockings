@@ -1,7 +1,7 @@
 @use "partials";
 
 .dialog__overlay {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.2);
   display: grid;
   place-items: center;
 
@@ -20,6 +20,14 @@
     max-height: 90vh;
     position: relative;
     max-width: 90vw;
+
+    > .dialog__title {
+      height: 28px;
+
+      > .title {
+        line-height: 28px;
+      }
+    }
 
     .dialog__close-button {
       position: absolute;
