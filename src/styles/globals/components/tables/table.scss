@@ -1,6 +1,6 @@
 @use "partials";
 
-$table-header-bg-color: theme("colors.gray.100");
+$table-header-bg-color: theme("colors.gray.50");
 $table-row-highlighted-color: theme("colors.gray.50");
 $table-border-color: theme("colors.border");
 $table-border: 1px solid $table-border-color;
@@ -91,15 +91,33 @@ $table-size-properties: (
   }
 }
 
-@mixin table-body-cell($direct: false) {
+@mixin table-body-cell-borders($bordered: false) {
+  @if $bordered {
+    // These important flags are only to work around MUI's default application of bottom
+    // borders.
+    border-bottom: $table-border !important;
+
+    &:first-of-type {
+      border-left: $table-border !important;
+    }
+
+    &:last-of-type {
+      border-right: $table-border !important;
+    }
+  }
+}
+
+@mixin table-body-cell($direct: false, $bordered: false) {
   @if $direct {
     > td.table__body-cell {
       @content;
+      @include table-body-cell-borders($bordered);
     }
   } @else {
     @include table-body-row($direct: false) {
       > td.table__body-cell {
         @content;
+        @include table-body-cell-borders($bordered);
       }
     }
   }
@@ -125,16 +143,17 @@ $table-size-properties: (
   }
 
   @include table-head {
-    background-color: $table-header-bg-color;
     color: $table-color;
 
     @include table-header-row($direct: true) {
       color: inherit;
 
       @include table-header-cell($direct: true) {
-        border-bottom: $table-border;
+        // border-bottom: $table-border;
+        border-bottom: none;
         color: inherit;
         font-size: 13px;
+        background-color: $table-header-bg-color;
       }
     }
   }
@@ -162,11 +181,7 @@ $table-size-properties: (
       }
 
       &--bordered {
-        @include table-body-cell($direct: true) {
-          // These important flags are only to work around MUI's default application of bottom
-          // borders.
-          border-bottom: $table-border !important;
-        }
+        @include table-body-cell($direct: true, $bordered: true);
       }
     }
 
@@ -186,10 +201,6 @@ $table-size-properties: (
   }
 
   &--bordered {
-    @include table-body-cell($direct: false) {
-      // These important flags are only to work around MUI's default application of bottom
-      // borders.
-      border-bottom: $table-border !important;
-    }
+    @include table-body-cell($direct: false, $bordered: true);
   }
 }

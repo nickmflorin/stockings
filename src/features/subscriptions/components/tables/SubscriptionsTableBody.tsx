@@ -1,8 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 
-import { uniq } from "lodash-es";
+import { uniq, uniqBy } from "lodash-es";
 import { toast } from "react-toastify";
 
 import {
@@ -12,6 +12,8 @@ import {
 } from "~/database/model";
 import { SubscriptionType } from "~/database/model";
 import { logger } from "~/internal/logger";
+
+import { arraysHaveSameElements } from "~/lib/arrays";
 
 import { updateSubscription, deleteSubscription } from "~/actions/mutations/subscriptions";
 
@@ -39,23 +41,39 @@ export interface SubscriptionsTableBodyProps {
 }
 
 export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => {
+  const [selectedRows, setSelectedRows] = useState<FullProductSubscription[]>([]);
+
   const { refresh } = useRouter();
-  const [refreshAfterEnablingPending, transitionAfterEnabling] = useTransition();
-  const [refreshAfterDisablingPending, transitionAfterDisabling] = useTransition();
-  const [refreshAfterDeletePending, transitionAfterDeleting] = useTransition();
+
+  const [enablePending, enableTransition] = useTransition();
+  const [disablePending, disableTransition] = useTransition();
+  const [deletePending, deleteTransition] = useTransition();
+
   return (
     <>
-      <SubscriptionsTableControlBar />
+      <SubscriptionsTableControlBar
+        selectedRows={selectedRows}
+        allRowsAreSelected={arraysHaveSameElements(
+          selectedRows.map(r => r.id),
+          data.map(datum => datum.id),
+        )}
+        onSelectAllRows={selected => (selected ? setSelectedRows(data) : setSelectedRows([]))}
+      />
       <DataTableBody
         actionMenuWidth={140}
-        rowIsSelected={() => false}
+        rowIsSelected={datum => selectedRows.map(r => r.id).includes(datum.id)}
+        onRowSelected={(datum, isSelected) =>
+          setSelectedRows(curr =>
+            isSelected ? uniqBy([...curr, datum], d => d.id) : curr.filter(d => d.id !== datum.id),
+          )
+        }
         getRowActions={(subscription, { setIsOpen }) => [
           {
             isVisible: !subscription.enabled,
             content: "Enable",
             loadingText: "Enabling",
-            icon: <Icon icon="volume" size="16px" className="text-gray-600" />,
-            isLoading: refreshAfterEnablingPending,
+            icon: <Icon icon="volume-high" size="16px" className="text-gray-600" />,
+            isLoading: enablePending,
             onClick: async (e, instance) => {
               instance.setLoading(true);
               let response: Awaited<ReturnType<typeof updateSubscription>> | null = null;
@@ -82,7 +100,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                 );
                 return;
               }
-              return transitionAfterEnabling(() => {
+              return enableTransition(() => {
                 refresh();
                 instance.setLoading(false);
                 setIsOpen(false, e);
@@ -93,8 +111,8 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
             isVisible: subscription.enabled,
             content: "Disable",
             loadingText: "Disabling",
-            icon: <Icon icon="volume-off" size="16px" className="text-gray-600" />,
-            isLoading: refreshAfterDisablingPending,
+            icon: <Icon icon="volume-xmark" size="16px" className="text-gray-600" />,
+            isLoading: disablePending,
             onClick: async (e, instance) => {
               instance.setLoading(true);
               let response: Awaited<ReturnType<typeof updateSubscription>> | null = null;
@@ -121,7 +139,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                 );
                 return;
               }
-              return transitionAfterDisabling(() => {
+              return disableTransition(() => {
                 refresh();
                 instance.setLoading(false);
                 setIsOpen(false, e);
@@ -130,7 +148,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
           },
           {
             content: "Delete",
-            isLoading: refreshAfterDeletePending,
+            isLoading: deletePending,
             loadingText: "Deleting",
             icon: <Icon icon="trash-alt" size="16px" className="text-red-600" />,
             onClick: async (e, instance) => {
@@ -159,7 +177,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                 );
                 return;
               }
-              return transitionAfterDeleting(() => {
+              return deleteTransition(() => {
                 refresh();
                 instance.setLoading(false);
                 setIsOpen(false, e);

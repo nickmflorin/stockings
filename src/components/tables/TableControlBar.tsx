@@ -5,17 +5,20 @@ import { Portal } from "@mui/base/Portal";
 import { Checkbox } from "~/components/input/Checkbox";
 import type { ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
+import { Text } from "~/components/typography";
 
 export interface TableControlBarProps extends ComponentProps {
   readonly children: ReactNode;
-  readonly allSelected?: boolean;
-  readonly onSelectAll?: (v: boolean) => void;
+  readonly allRowsAreSelected?: boolean;
+  readonly numSelectedRows?: number;
+  readonly onSelectAllRows?: (v: boolean) => void;
 }
 
 export const TableControlBar = ({
   children,
-  allSelected = false,
-  onSelectAll,
+  allRowsAreSelected = false,
+  numSelectedRows,
+  onSelectAllRows,
   ...props
 }: TableControlBarProps): JSX.Element => {
   const [container, setContainer] = useState<HTMLElement | null>(null);
@@ -27,8 +30,24 @@ export const TableControlBar = ({
   return (
     <Portal container={container}>
       <div {...props} className={classNames("table-view__control-bar", props.className)}>
-        <Checkbox readOnly value={allSelected} onChange={e => onSelectAll?.(e.target.checked)} />
-        <div className="table-view__control-bar-actions">{children}</div>
+        <Checkbox
+          readOnly
+          value={allRowsAreSelected}
+          onChange={e => onSelectAllRows?.(e.target.checked)}
+        />
+        <div className="table-view__control-bar-actions">
+          {children}
+          {numSelectedRows !== undefined && numSelectedRows !== 0 ? (
+            <Text fontWeight="medium">
+              {numSelectedRows}{" "}
+              <Text component="span" fontWeight="regular">
+                Selected Rows
+              </Text>
+            </Text>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </Portal>
   );

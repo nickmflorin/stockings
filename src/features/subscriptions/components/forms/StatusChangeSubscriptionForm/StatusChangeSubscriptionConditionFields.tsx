@@ -6,7 +6,7 @@ import { type ProductStatus } from "~/database/model";
 
 import { withOrdinalIndicator } from "~/lib/formatters";
 
-import { IconButton } from "~/components/buttons";
+import { DeleteButton } from "~/components/buttons/DeleteButton";
 import { Form, type FormInstance } from "~/components/forms/Form";
 import { CircleNumber } from "~/components/icons/CircleNumber";
 import { Collapse } from "~/components/structural/Collapse";
@@ -57,18 +57,7 @@ export const StatusChangeSubscriptionConditionFields = ({
     <Collapse
       isOpen={isOpen}
       contentClassName="pl-9 mt-2"
-      actions={
-        index !== 0
-          ? [
-              <IconButton.Transparent
-                key="0"
-                icon="trash-alt"
-                className="text-red-600 hover:text-red-700 hover:bg-transparent"
-                onClick={() => onRemove()}
-              />,
-            ]
-          : undefined
-      }
+      actions={index !== 0 ? [<DeleteButton key="0" onClick={() => onRemove()} />] : undefined}
       title={
         <div className="flex flex-row items-center gap-2">
           <CircleNumber fontSize="xs" size="24px">
