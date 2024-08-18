@@ -45,7 +45,7 @@ type ColorSchemePartial = {
 
 type WithColorSchemes = { [key in Capitalize<types.ButtonColorScheme>]: ColorSchemePartial };
 
-const withColorSchemes = types.ButtonColorSchemes.values.reduce<WithColorSchemes>(
+const withColorSchemes = types.ButtonColorSchemes.members.reduce<WithColorSchemes>(
   (acc, scheme) => ({
     ...acc,
     [capitalize(scheme)]: forwardRef(

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-literals";
+import { type EnumeratedLiteralsMember, enumeratedLiterals } from "enumerated-literals";
 
 import { type Order } from "~/lib/ordering";
 
@@ -20,7 +20,7 @@ export const tableHasLoadingIndicator = (
 ) => (Array.isArray(indicator) ? indicator.includes(indicatorType) : indicator === indicatorType);
 
 export const TableSizes = enumeratedLiterals(["small", "medium", "large"] as const, {});
-export type TableSize = EnumeratedLiteralsType<typeof TableSizes>;
+export type TableSize = EnumeratedLiteralsMember<typeof TableSizes>;
 
 export interface DataTableDatum {
   readonly id?: string;

@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import { type DataMenuModel } from "~/components/menus";
 
@@ -8,7 +8,7 @@ export const SelectBehaviorTypes = enumeratedLiterals(
   ["multi", "single-nullable", "single"] as const,
   {},
 );
-export type SelectBehaviorType = EnumeratedLiteralsType<typeof SelectBehaviorTypes>;
+export type SelectBehaviorType = EnumeratedLiteralsMember<typeof SelectBehaviorTypes>;
 
 type SelectBehaviorTypeParams =
   | { isMulti: true; isNullable?: never }

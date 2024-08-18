@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 import { z } from "zod";
 
 import { getEnvironmentNameUnsafe, LogLevel, EnvironmentNames } from "./constants";
@@ -27,10 +27,10 @@ const TestOptional = {
 }[environmentName];
 
 export const PrismaLogLevels = enumeratedLiterals(["info", "query", "warn", "error"] as const, {});
-export type PrismaLogLevel = EnumeratedLiteralsType<typeof PrismaLogLevels>;
+export type PrismaLogLevel = EnumeratedLiteralsMember<typeof PrismaLogLevels>;
 
 const PrismaLogLevelSchema = createCommaSeparatedArraySchema({
-  options: PrismaLogLevels.values,
+  options: PrismaLogLevels.members,
   partTransformer: v => v.toLowerCase(),
 });
 

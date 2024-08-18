@@ -3,7 +3,7 @@ import { type UrlObject } from "url";
 import type React from "react";
 import { type ForwardedRef } from "react";
 
-import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-literals";
+import { type EnumeratedLiteralsMember, enumeratedLiterals } from "enumerated-literals";
 
 import { type IconProp, type IconName } from "~/components/icons";
 import { type ComponentProps, type HTMLElementProps } from "~/components/types";
@@ -12,31 +12,31 @@ import { type QuantitativeSize, type Size } from "~/components/types/sizes";
 import { type TypographyCharacteristics } from "~/components/types/typography";
 
 export const ButtonLoadingLocations = enumeratedLiterals(["left", "over", "right"] as const, {});
-export type ButtonLoadingLocation = EnumeratedLiteralsType<typeof ButtonLoadingLocations>;
+export type ButtonLoadingLocation = EnumeratedLiteralsMember<typeof ButtonLoadingLocations>;
 
 export const ButtonTypes = enumeratedLiterals(
   ["button", "icon-button", "link", "inline-link"] as const,
   {},
 );
-export type ButtonType = EnumeratedLiteralsType<typeof ButtonTypes>;
+export type ButtonType = EnumeratedLiteralsMember<typeof ButtonTypes>;
 
 export const ButtonColorSchemes = enumeratedLiterals(
   ["primary", "danger", "light", "success", "secondary"] as const,
   {},
 );
-export type ButtonColorScheme = EnumeratedLiteralsType<typeof ButtonColorSchemes>;
+export type ButtonColorScheme = EnumeratedLiteralsMember<typeof ButtonColorSchemes>;
 
 export const ButtonButtonVariants = enumeratedLiterals(
   ["solid", "outlined", "transparent"] as const,
   {},
 );
-export type ButtonButtonVariant = EnumeratedLiteralsType<typeof ButtonButtonVariants>;
+export type ButtonButtonVariant = EnumeratedLiteralsMember<typeof ButtonButtonVariants>;
 
 export const IconButtonVariants = enumeratedLiterals(
   ["solid", "outlined", "transparent"] as const,
   {},
 );
-export type IconButtonVariant = EnumeratedLiteralsType<typeof IconButtonVariants>;
+export type IconButtonVariant = EnumeratedLiteralsMember<typeof IconButtonVariants>;
 
 export type ButtonVariant<T extends ButtonType = ButtonType> = {
   button: ButtonButtonVariant;
@@ -54,7 +54,7 @@ export const ButtonDiscreteSizes = enumeratedLiterals(
   ["xsmall", "small", "medium", "large", "xlarge"] as const,
   {},
 );
-export type ButtonDiscreteSize = EnumeratedLiteralsType<typeof ButtonDiscreteSizes>;
+export type ButtonDiscreteSize = EnumeratedLiteralsMember<typeof ButtonDiscreteSizes>;
 
 export type ButtonSize<T extends ButtonType = ButtonType> = {
   button: ButtonDiscreteSize | Size;
@@ -67,13 +67,13 @@ export const ButtonDiscreteIconSizes = enumeratedLiterals(
   ["xsmall", "small", "medium", "large", "xlarge", "full"] as const,
   {},
 );
-export type ButtonDiscreteIconSize = EnumeratedLiteralsType<typeof ButtonDiscreteIconSizes>;
+export type ButtonDiscreteIconSize = EnumeratedLiteralsMember<typeof ButtonDiscreteIconSizes>;
 
 // Represents the size of the Icon inside of the Button.
 export type ButtonIconSize = ButtonDiscreteIconSize | QuantitativeSize<"px">;
 
 export const ButtonElements = enumeratedLiterals(["button", "a", "div"] as const, {});
-export type ButtonElement = EnumeratedLiteralsType<typeof ButtonElements>;
+export type ButtonElement = EnumeratedLiteralsMember<typeof ButtonElements>;
 
 type ButtonFontSize<T extends ButtonType> = {
   button: TypographyCharacteristics["fontSize"];

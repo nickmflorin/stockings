@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import { type ElementAttribute } from "~/database/model";
 
@@ -8,7 +8,7 @@ import { type ApiElement } from "./element";
 import { sanitizeString } from "./util";
 
 export const PARSER_NAMES = enumeratedLiterals(["price", "priceRange", "productSlug"] as const, {});
-export type ParserName = EnumeratedLiteralsType<typeof PARSER_NAMES>;
+export type ParserName = EnumeratedLiteralsMember<typeof PARSER_NAMES>;
 
 export type ParserResults = {
   price: number;

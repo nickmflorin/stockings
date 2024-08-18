@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import { classNames } from "./classes";
 
@@ -7,13 +7,13 @@ export const FontSizes = enumeratedLiterals(
   ["xxxs", "xxs", "xs", "sm", "smplus", "md", "lg", "xl"] as const,
   {},
 );
-export type FontSize = EnumeratedLiteralsType<typeof FontSizes>;
+export type FontSize = EnumeratedLiteralsMember<typeof FontSizes>;
 
 export const TextAligns = enumeratedLiterals(
   ["left", "center", "right", "justify", "start", "end"] as const,
   {},
 );
-export type TextAlign = EnumeratedLiteralsType<typeof TextAligns>;
+export type TextAlign = EnumeratedLiteralsMember<typeof TextAligns>;
 
 export const TextAlignClassNames: { [key in TextAlign]: `text-${key}` } = {
   left: "text-left",
@@ -28,7 +28,7 @@ export const FontWeights = enumeratedLiterals(
   ["light", "regular", "medium", "semibold", "bold"] as const,
   {},
 );
-export type FontWeight = EnumeratedLiteralsType<typeof FontWeights>;
+export type FontWeight = EnumeratedLiteralsMember<typeof FontWeights>;
 
 export type TitleOrder = 1 | 2 | 3 | 4 | 5 | 6;
 export type TitleComponent = `h${TitleOrder}`;
@@ -48,10 +48,10 @@ export const TextTransforms = enumeratedLiterals(
   ["uppercase", "lowercase", "capitalize", "underline"] as const,
   {},
 );
-export type TextTransform = EnumeratedLiteralsType<typeof TextTransforms>;
+export type TextTransform = EnumeratedLiteralsMember<typeof TextTransforms>;
 
 export const FontFamilies = enumeratedLiterals(["inter"] as const, {});
-export type FontFamily = EnumeratedLiteralsType<typeof FontFamilies>;
+export type FontFamily = EnumeratedLiteralsMember<typeof FontFamilies>;
 
 export type LineClamp = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 

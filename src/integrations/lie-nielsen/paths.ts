@@ -1,7 +1,7 @@
 import {
   enumeratedLiterals,
   type EnumeratedLiteralsModel,
-  type EnumeratedLiteralsType,
+  type EnumeratedLiteralsMember,
 } from "enumerated-literals";
 
 import { ProductCategory, ProductSubCategory } from "~/database/model";
@@ -34,7 +34,7 @@ export const ProductsPages = enumeratedLiterals(
   {},
 );
 
-export type ProductsPageId = EnumeratedLiteralsType<typeof ProductsPages>;
+export type ProductsPageId = EnumeratedLiteralsMember<typeof ProductsPages>;
 
 export type ProductsPage<P extends ProductsPageId = ProductsPageId> = Extract<
   EnumeratedLiteralsModel<typeof ProductsPages>,
@@ -114,7 +114,7 @@ export const ProductsSubPages = enumeratedLiterals(
   {},
 );
 
-export type ProductsSubPageId = EnumeratedLiteralsType<typeof ProductsSubPages>;
+export type ProductsSubPageId = EnumeratedLiteralsMember<typeof ProductsSubPages>;
 
 export type ProductsSubPage<S extends ProductsSubPageId = ProductsSubPageId> = Extract<
   EnumeratedLiteralsModel<typeof ProductsSubPages>,

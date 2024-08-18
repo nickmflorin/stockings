@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import type { DrawerDynamicProps } from "./drawers";
 
@@ -12,7 +12,7 @@ export const DrawerIds = enumeratedLiterals(
   {},
 );
 
-export type DrawerId = EnumeratedLiteralsType<typeof DrawerIds>;
+export type DrawerId = EnumeratedLiteralsMember<typeof DrawerIds>;
 
 export interface DrawersManager {
   readonly isReady: boolean;

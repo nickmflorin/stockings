@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import { classNames } from "./classes";
 
@@ -6,7 +6,7 @@ export const BorderRadii = enumeratedLiterals(
   ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "full"] as const,
   {},
 );
-export type BorderRadius = EnumeratedLiteralsType<typeof BorderRadii>;
+export type BorderRadius = EnumeratedLiteralsMember<typeof BorderRadii>;
 
 type RadiusClassNameRT<R extends BorderRadius | null | undefined> = R extends BorderRadius
   ? string

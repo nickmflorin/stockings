@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import { classNames } from "~/components/types";
 import { sizeToString, type ComponentProps, type QuantitativeSize } from "~/components/types";
@@ -7,7 +7,7 @@ export const DividerDiscreteThicknesses = enumeratedLiterals(
   ["thin", "medium", "thick"] as const,
   {},
 );
-export type DividerDiscreteThickness = EnumeratedLiteralsType<typeof DividerDiscreteThicknesses>;
+export type DividerDiscreteThickness = EnumeratedLiteralsMember<typeof DividerDiscreteThicknesses>;
 
 const DividerThicknessMap: { [key in DividerDiscreteThickness]: QuantitativeSize<"px"> } = {
   thin: "1px",

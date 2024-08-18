@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 export type JsonValue =
   | JsonObject
@@ -15,7 +15,7 @@ export type JsonObject = Partial<{
 }>;
 
 export const HttpMethods = enumeratedLiterals(["GET", "POST", "PATCH", "DELETE"] as const, {});
-export type HttpMethod = EnumeratedLiteralsType<typeof HttpMethods>;
+export type HttpMethod = EnumeratedLiteralsMember<typeof HttpMethods>;
 
 export enum STATUS_CODES {
   HTTP_200_OK = 200,

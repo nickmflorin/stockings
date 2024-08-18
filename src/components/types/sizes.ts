@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 export type SizeUnit = "px" | "rem";
 
@@ -56,7 +56,7 @@ export const sizeToNumber = <T extends QuantitativeSize>(size: T): SizeToNumberR
 };
 
 export const TailwindBreakpoints = enumeratedLiterals(["sm", "md", "lg", "xl"] as const, {});
-export type TailwindBreakpoint = EnumeratedLiteralsType<typeof TailwindBreakpoints>;
+export type TailwindBreakpoint = EnumeratedLiteralsMember<typeof TailwindBreakpoints>;
 
 export const TailwindBreakpointClassNames: { [key in TailwindBreakpoint]: `max-w-screen-${key}` } =
   {

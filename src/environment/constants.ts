@@ -1,25 +1,25 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 export const NodeEnvironmentNames = enumeratedLiterals(
   ["development", "test", "production"] as const,
   {},
 );
 
-export type NodeEnvironmentName = EnumeratedLiteralsType<typeof NodeEnvironmentNames>;
+export type NodeEnvironmentName = EnumeratedLiteralsMember<typeof NodeEnvironmentNames>;
 
 export const VercelEnvironmentNames = enumeratedLiterals(
   ["development", "preview", "production"] as const,
   {},
 );
 
-export type VercelEnvironmentName = EnumeratedLiteralsType<typeof VercelEnvironmentNames>;
+export type VercelEnvironmentName = EnumeratedLiteralsMember<typeof VercelEnvironmentNames>;
 
 export const EnvironmentNames = enumeratedLiterals(
   ["test", "local", "production", "preview"] as const,
   {},
 );
 
-export type EnvironmentName = EnumeratedLiteralsType<typeof EnvironmentNames>;
+export type EnvironmentName = EnumeratedLiteralsMember<typeof EnvironmentNames>;
 
 export enum LogLevel {
   ERROR = "error",

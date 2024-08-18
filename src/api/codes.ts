@@ -1,4 +1,4 @@
-import { type EnumeratedLiteralsType, enumeratedLiterals } from "enumerated-literals";
+import { type EnumeratedLiteralsMember, enumeratedLiterals } from "enumerated-literals";
 
 export const ApiClientGlobalErrorCodes = enumeratedLiterals(
   [
@@ -32,7 +32,7 @@ export const ApiClientGlobalErrorCodes = enumeratedLiterals(
   {},
 );
 
-export type ApiClientGlobalErrorCode = EnumeratedLiteralsType<typeof ApiClientGlobalErrorCodes>;
+export type ApiClientGlobalErrorCode = EnumeratedLiteralsMember<typeof ApiClientGlobalErrorCodes>;
 
 export const ApiClientFieldErrorCodes = enumeratedLiterals(
   [
@@ -57,4 +57,4 @@ export const ApiClientFieldErrorCodes = enumeratedLiterals(
   {},
 );
 
-export type ApiClientFieldErrorCode = EnumeratedLiteralsType<typeof ApiClientFieldErrorCodes>;
+export type ApiClientFieldErrorCode = EnumeratedLiteralsMember<typeof ApiClientFieldErrorCodes>;

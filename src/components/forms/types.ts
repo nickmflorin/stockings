@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 import {
   type FieldValues,
   type UseFormReturn,
@@ -14,7 +14,7 @@ export type BaseFormValues = FieldValues;
 export type FieldError = string;
 
 export const FieldConditions = enumeratedLiterals(["required", "optional"] as const, {});
-export type FieldCondition = EnumeratedLiteralsType<typeof FieldConditions>;
+export type FieldCondition = EnumeratedLiteralsMember<typeof FieldConditions>;
 
 export type FieldErrorAssertion = (v: unknown) => asserts v is FieldError;
 

@@ -1,4 +1,4 @@
-import { enumeratedLiterals, type EnumeratedLiteralsType } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 export type ProductPriceChartDataPoint = {
   readonly price: number;
@@ -18,7 +18,7 @@ export const TimeGranularities = enumeratedLiterals(
   {},
 );
 
-export type TimeGranularity = EnumeratedLiteralsType<typeof TimeGranularities>;
+export type TimeGranularity = EnumeratedLiteralsMember<typeof TimeGranularities>;
 
 export const TimeHorizon = enumeratedLiterals(
   [
@@ -31,4 +31,4 @@ export const TimeHorizon = enumeratedLiterals(
   {},
 );
 
-export type TimeHorizon = EnumeratedLiteralsType<typeof TimeHorizon>;
+export type TimeHorizon = EnumeratedLiteralsMember<typeof TimeHorizon>;

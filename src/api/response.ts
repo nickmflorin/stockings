@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   enumeratedLiterals,
-  type EnumeratedLiteralsType,
+  type EnumeratedLiteralsMember,
   type EnumeratedLiteralsModel,
 } from "enumerated-literals";
 import superjson from "superjson";
@@ -11,7 +11,7 @@ export const ClientSuccessCodes = enumeratedLiterals(
   [{ value: "HTTP_200_OK", statusCode: 200 }] as const,
   {},
 );
-export type ClientSuccessCode = EnumeratedLiteralsType<typeof ClientSuccessCodes>;
+export type ClientSuccessCode = EnumeratedLiteralsMember<typeof ClientSuccessCodes>;
 
 export type ClientSuccessStatusCode<C extends ClientSuccessCode = ClientSuccessCode> = Extract<
   EnumeratedLiteralsModel<typeof ClientSuccessCodes>,
