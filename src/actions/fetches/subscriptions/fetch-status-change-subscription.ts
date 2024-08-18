@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
 import { db } from "~/database";
-import { type PriceChangeSubscription, enhance } from "~/database/model";
+import { type ApiStatusChangeSubscription, enhance } from "~/database/model";
 
 import {
   type FetchActionResponse,
@@ -13,11 +13,11 @@ import {
 
 import { ApiClientGlobalError } from "~/api";
 
-export const fetchProductPriceChangeSubcription = cache(
+export const fetchStatusChangeSubcription = cache(
   async <C extends FetchActionContext>(
     id: string,
     context: C,
-  ): Promise<FetchActionResponse<PriceChangeSubscription, C>> => {
+  ): Promise<FetchActionResponse<ApiStatusChangeSubscription, C>> => {
     const { user, error } = await getAuthedUser();
     if (error) {
       return errorInFetchContext(error, context);
@@ -25,7 +25,13 @@ export const fetchProductPriceChangeSubcription = cache(
 
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 
-    const subscription = await enhanced.priceChangeSubscription.findUnique({ where: { id } });
+    const subscription: ApiStatusChangeSubscription | null =
+      await enhanced.statusChangeSubscription.findUnique({
+        where: { id },
+        include: {
+          conditions: { orderBy: [{ createdAt: "desc" }] },
+        },
+      });
     if (!subscription) {
       const error = ApiClientGlobalError.NotFound({
         message: "A subscription does not exist for the provided ID.",
@@ -39,9 +45,4 @@ export const fetchProductPriceChangeSubcription = cache(
     }
     return dataInFetchContext(subscription, context);
   },
-) as {
-  <C extends FetchActionContext>(
-    id: string,
-    context: C,
-  ): Promise<FetchActionResponse<PriceChangeSubscription, C>>;
-};
+);

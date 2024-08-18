@@ -14,7 +14,7 @@ export type DescriptionComponent = "span" | "div" | "p";
 
 type PolymorphicDescriptionProps<T extends DescriptionComponent> = Omit<
   HTMLElementProps<T>,
-  keyof ComponentProps
+  keyof ComponentProps | "ref"
 >;
 
 type PolymorphicDescriptionRef<T extends DescriptionComponent> = {

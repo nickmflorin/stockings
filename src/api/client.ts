@@ -38,10 +38,12 @@ const processors: {
     try {
       json = await response.json();
     } catch (e) {
-      /* If the status code is 4xx but we cannot parse the JSON respnose body, it is not from
-           our API routes directly.  We will have to infer the type of error from the status code
-           of the response. */
-      logger.error(
+      /* If the status code is 4xx or 5xx, it is not guaranteed that the response came from us.
+         For instance, NextJS can return a 404 response for an API endpoint if the path has not
+         been included in the statically generated paths on build time.  In this case, we will
+         may not be able to parse the error JSON from the response, because it may not have a JSON
+         body.  */
+      logger.info(
         `Failed to parse JSON response body on response with status '${response.status}'!`,
         { response },
       );

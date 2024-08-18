@@ -1,22 +1,22 @@
 import { type StatusChangeSubscriptionCondition } from "~/database/model";
 import { flattenStatusChangeSubscriptionsConditions } from "~/database/model";
 
+import { type SingleOrArray } from "~/lib/types";
+
 import { ProductStatusBadge } from "~/components/badges/ProductStatusBadge";
 import { Icon } from "~/components/icons/Icon";
 import { classNames, type ComponentProps } from "~/components/types";
 
-type SingleOrArray<T> = T | T[];
-
-export interface StatusChangeConditionTransitionProps extends ComponentProps {
+export interface StatusChangeConditionTransitionsProps extends ComponentProps {
   readonly conditions: SingleOrArray<
     Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">
   >;
 }
 
-export const StatusChangeConditionTransition = ({
+export const StatusChangeConditionTransitions = ({
   conditions,
   ...props
-}: StatusChangeConditionTransitionProps): JSX.Element => {
+}: StatusChangeConditionTransitionsProps): JSX.Element => {
   const flattened = flattenStatusChangeSubscriptionsConditions(conditions);
   if (flattened.length === 0) {
     return <></>;

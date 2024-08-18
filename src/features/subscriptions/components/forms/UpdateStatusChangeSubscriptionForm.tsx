@@ -8,6 +8,7 @@ import { logger } from "~/internal/logger";
 
 import { updateStatusChangeSubscription } from "~/actions/mutations/subscriptions";
 
+import { Error } from "~/components/errors/Error";
 import { useStatusChangeSubscription } from "~/hooks/api";
 
 import { useStatusChangeSubscriptionForm } from "./hooks";
@@ -34,10 +35,24 @@ export const UpdateStatusChangeSubscriptionForm = ({
 
   const form = useStatusChangeSubscriptionForm();
 
-  // TODO: Handle error!
-  const { data: subscription, isLoading } = useStatusChangeSubscription(subscriptionId, {
+  const {
+    data: subscription,
+    isLoading,
+    error,
+  } = useStatusChangeSubscription(subscriptionId, {
     query: {},
   });
+
+  useEffect(() => {
+    if (error) {
+      logger.error(
+        error,
+        `There was an error fetching the status change subscription '${subscriptionId}' ` +
+          `for product '${productId}'!`,
+        { productId, subscriptionId },
+      );
+    }
+  }, [error, productId, subscriptionId]);
 
   useEffect(() => {
     if (subscription) {
@@ -48,38 +63,40 @@ export const UpdateStatusChangeSubscriptionForm = ({
   }, [subscription]);
 
   return (
-    <StatusChangeSubscriptionForm
-      {...props}
-      form={form}
-      isLoading={isLoading || pending}
-      isDisabled={isLoading}
-      action={async data => {
-        let response: Awaited<ReturnType<typeof updateStatusChangeSubscription>> | null = null;
-        try {
-          response = await updateStatusChangeSubscription(subscriptionId, data);
-        } catch (e) {
-          logger.errorUnsafe(
-            e,
-            `There was an error updating the status change subscription '${subscriptionId}' ` +
-              `for product '${productId}'!`,
-            { productId, subscriptionId, data },
-          );
-          toast.error("There was an error updating the product subscription.");
-        }
-        if (response) {
-          const { error } = response;
-          if (error) {
-            // form.handleApiError(response)
+    <Error error={error} message="There was an error loading the subscription.">
+      <StatusChangeSubscriptionForm
+        {...props}
+        form={form}
+        isLoading={isLoading || pending}
+        isDisabled={isLoading}
+        action={async data => {
+          let response: Awaited<ReturnType<typeof updateStatusChangeSubscription>> | null = null;
+          try {
+            response = await updateStatusChangeSubscription(subscriptionId, data);
+          } catch (e) {
+            logger.errorUnsafe(
+              e,
+              `There was an error updating the status change subscription '${subscriptionId}' ` +
+                `for product '${productId}'!`,
+              { productId, subscriptionId, data },
+            );
             toast.error("There was an error updating the product subscription.");
-          } else {
-            transition(() => {
-              refresh();
-            });
-            toast.success("Successfully updated the product subscription.");
-            onSuccess?.();
           }
-        }
-      }}
-    />
+          if (response) {
+            const { error } = response;
+            if (error) {
+              // form.handleApiError(response)
+              toast.error("There was an error updating the product subscription.");
+            } else {
+              transition(() => {
+                refresh();
+              });
+              toast.success("Successfully updated the product subscription.");
+              onSuccess?.();
+            }
+          }
+        }}
+      />
+    </Error>
   );
 };

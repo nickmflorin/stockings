@@ -14,6 +14,8 @@ import {
   SubscriptionsTableFiltersSchemas,
 } from "~/features/subscriptions";
 /* eslint-disable-next-line max-len */
+import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
+/* eslint-disable-next-line max-len */
 import { SubscriptionsTableFilterBar } from "~/features/subscriptions/components/tables/SubscriptionsTableFilterBar";
 
 import { SubscriptionsTableBody } from "./SubscriptionsTableBody";
@@ -57,7 +59,12 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
     >
       <Suspense
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
-        fallback={<Loading isLoading component="tbody" />}
+        fallback={
+          <>
+            <SubscriptionsTableControlBarPlaceholder />
+            <Loading isLoading component="tbody" />
+          </>
+        }
       >
         <SubscriptionsTableBody filters={filters} page={page} ordering={ordering} />
       </Suspense>

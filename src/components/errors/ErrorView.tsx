@@ -15,8 +15,8 @@ export interface ErrorViewProps
     ViewFillProps,
     Omit<ErrorDetailProps, keyof ComponentProps> {}
 
-export const ErrorView = ({ fill = "parent", ...props }: ErrorViewProps) => (
+export const ErrorView = ({ children, fill = "parent", ...props }: ErrorViewProps) => (
   <View {...props} fill={fill} centerChildren overflow="hidden" __default_position__="relative">
-    <ErrorDetail {...props} />
+    <ErrorDetail {...props}>{children}</ErrorDetail>
   </View>
 );

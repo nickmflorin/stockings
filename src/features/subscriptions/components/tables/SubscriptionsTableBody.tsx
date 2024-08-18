@@ -20,6 +20,7 @@ import { updateSubscription, deleteSubscription } from "~/actions/mutations/subs
 import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
+import { useDrawers } from "~/components/drawers/hooks";
 import { EnabledIcon } from "~/components/icons/EnabledIcon";
 import Icon from "~/components/icons/Icon";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
@@ -31,7 +32,7 @@ import {
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
 
-import { StatusChangeConditionTransition } from "../StatusChangeConditionTransition";
+import { StatusChangeConditionsDropdown } from "../StatusChangeConditionsDropdown";
 import { SubscriptionTypeText } from "../SubscriptionTypeText";
 
 import { SubscriptionsTableControlBar } from "./SubscriptionsTableControlBar";
@@ -41,6 +42,7 @@ export interface SubscriptionsTableBodyProps {
 }
 
 export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => {
+  const { ids, open } = useDrawers();
   const [selectedRows, setSelectedRows] = useState<FullProductSubscription[]>([]);
 
   const { refresh } = useRouter();
@@ -48,15 +50,19 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
   const [enablePending, enableTransition] = useTransition();
   const [disablePending, disableTransition] = useTransition();
   const [deletePending, deleteTransition] = useTransition();
+  const [editPending, editTransition] = useTransition();
 
   return (
     <>
       <SubscriptionsTableControlBar
         selectedRows={selectedRows}
-        allRowsAreSelected={arraysHaveSameElements(
-          selectedRows.map(r => r.id),
-          data.map(datum => datum.id),
-        )}
+        allRowsAreSelected={
+          data.length !== 0 &&
+          arraysHaveSameElements(
+            selectedRows.map(r => r.id),
+            data.map(datum => datum.id),
+          )
+        }
         onSelectAllRows={selected => (selected ? setSelectedRows(data) : setSelectedRows([]))}
       />
       <DataTableBody
@@ -68,6 +74,37 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
           )
         }
         getRowActions={(subscription, { setIsOpen }) => [
+          {
+            content: "Edit",
+            isLoading: editPending,
+            isVisible: [
+              SubscriptionType.StatusChangeSubscription,
+              SubscriptionType.PriceChangeSubscription,
+            ].includes(
+              subscription.subscriptionType as
+                | typeof SubscriptionType.StatusChangeSubscription
+                | typeof SubscriptionType.PriceChangeSubscription,
+            ),
+            icon: <Icon icon="pen-to-square" size="16px" className="text-blue-600" />,
+            onClick: async e =>
+              editTransition(() => {
+                if (subscription.subscriptionType === SubscriptionType.StatusChangeSubscription) {
+                  open(ids.UPDATE_STATUS_CHANGE_SUBSCRIPTION, {
+                    subscriptionId: subscription.id,
+                    product: subscription.product,
+                  });
+                  setIsOpen(false, e);
+                } else if (
+                  subscription.subscriptionType === SubscriptionType.PriceChangeSubscription
+                ) {
+                  open(ids.UPDATE_PRICE_CHANGE_SUBSCRIPTION, {
+                    subscriptionId: subscription.id,
+                    product: subscription.product,
+                  });
+                  setIsOpen(false, e);
+                }
+              }),
+          },
           {
             isVisible: !subscription.enabled,
             content: "Enable",
@@ -206,7 +243,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
                 datum.subscriptionType === SubscriptionType.StatusChangeSubscription &&
                 datum.conditions.length !== 0 ? (
                   <div className="flex flex-row items-center justify-center">
-                    <StatusChangeConditionTransition
+                    <StatusChangeConditionsDropdown
                       conditions={datum.conditions as StatusChangeSubscriptionCondition[]}
                     />
                   </div>

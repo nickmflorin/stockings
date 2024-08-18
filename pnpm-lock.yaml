@@ -132,8 +132,8 @@ dependencies:
     specifier: ^7.3.0
     version: 7.4.2
   enumerated-literals:
-    specifier: ^1.1.8
-    version: 1.1.8
+    specifier: ^1.1.9
+    version: 1.1.9
   framer-motion:
     specifier: ^10.18.0
     version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
@@ -5577,8 +5577,8 @@ packages:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
 
-  /enumerated-literals@1.1.8:
-    resolution: {integrity: sha512-Oy3kt2X4IiYMZZMQBoK9+W9QrrvA2PZkrrY3xOKo9hFg9Gp8dnLJT03q0vkr9jeIV48fa7CyWiemLZGsu5F+Jg==}
+  /enumerated-literals@1.1.9:
+    resolution: {integrity: sha512-dSG3nTmSxCJV1pVcQPJ+xBUIMAn2F+BeChMcvMkqGLtJjkyxAvI+OGhwcV0fbH1cA637OQuT1x2lnDGP/DW0mA==}
     dev: false
 
   /error-ex@1.3.2:

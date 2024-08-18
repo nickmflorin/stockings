@@ -29,7 +29,7 @@ export const ErrorContent = ({
   const message =
     children !== undefined
       ? children
-      : isHttpError(error)
+      : error && isHttpError(error)
         ? error.message
         : (error ?? types.DEFAULT_ERROR_MESSAGE);
 

@@ -10,6 +10,7 @@ import { Text } from "~/components/typography";
 export interface TableControlBarProps extends ComponentProps {
   readonly children: ReactNode;
   readonly allRowsAreSelected?: boolean;
+  readonly selectionIsDisabled?: boolean;
   readonly numSelectedRows?: number;
   readonly onSelectAllRows?: (v: boolean) => void;
 }
@@ -18,6 +19,7 @@ export const TableControlBar = ({
   children,
   allRowsAreSelected = false,
   numSelectedRows,
+  selectionIsDisabled = false,
   onSelectAllRows,
   ...props
 }: TableControlBarProps): JSX.Element => {
@@ -33,6 +35,7 @@ export const TableControlBar = ({
         <Checkbox
           readOnly
           value={allRowsAreSelected}
+          isDisabled={selectionIsDisabled}
           onChange={e => onSelectAllRows?.(e.target.checked)}
         />
         <div className="table-view__control-bar-actions">

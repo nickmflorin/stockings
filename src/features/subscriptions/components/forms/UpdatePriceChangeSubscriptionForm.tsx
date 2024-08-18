@@ -8,6 +8,7 @@ import { logger } from "~/internal/logger";
 
 import { updatePriceChangeSubscription } from "~/actions/mutations/subscriptions";
 
+import { Error } from "~/components/errors/Error";
 import { usePriceChangeSubscription } from "~/hooks/api";
 
 import { usePriceChangeSubscriptionForm } from "./hooks";
@@ -34,10 +35,24 @@ export const UpdatePriceChangeSubscriptionForm = ({
 
   const form = usePriceChangeSubscriptionForm();
 
-  // TODO: Handle error!
-  const { data: subscription, isLoading } = usePriceChangeSubscription(subscriptionId, {
+  const {
+    data: subscription,
+    isLoading,
+    error,
+  } = usePriceChangeSubscription(subscriptionId, {
     query: {},
   });
+
+  useEffect(() => {
+    if (error) {
+      logger.error(
+        error,
+        `There was an error fetching the price change subscription '${subscriptionId}' ` +
+          `for product '${productId}'!`,
+        { productId, subscriptionId },
+      );
+    }
+  }, [error, productId, subscriptionId]);
 
   useEffect(() => {
     if (subscription) {
@@ -48,38 +63,40 @@ export const UpdatePriceChangeSubscriptionForm = ({
   }, [subscription]);
 
   return (
-    <PriceChangeSubscriptionForm
-      {...props}
-      form={form}
-      isLoading={isLoading || pending}
-      isDisabled={isLoading}
-      action={async data => {
-        let response: Awaited<ReturnType<typeof updatePriceChangeSubscription>> | null = null;
-        try {
-          response = await updatePriceChangeSubscription(subscriptionId, data);
-        } catch (e) {
-          logger.errorUnsafe(
-            e,
-            `There was an error updating the price change subscription '${subscriptionId}' ` +
-              `for product '${productId}'!`,
-            { productId, subscriptionId, data },
-          );
-          toast.error("There was an error updating the product subscription.");
-        }
-        if (response) {
-          const { error } = response;
-          if (error) {
-            // form.handleApiError(response)
+    <Error error={error} message="There was an error loading the subscription.">
+      <PriceChangeSubscriptionForm
+        {...props}
+        form={form}
+        isLoading={isLoading || pending}
+        isDisabled={isLoading}
+        action={async data => {
+          let response: Awaited<ReturnType<typeof updatePriceChangeSubscription>> | null = null;
+          try {
+            response = await updatePriceChangeSubscription(subscriptionId, data);
+          } catch (e) {
+            logger.errorUnsafe(
+              e,
+              `There was an error updating the price change subscription '${subscriptionId}' ` +
+                `for product '${productId}'!`,
+              { productId, subscriptionId, data },
+            );
             toast.error("There was an error updating the product subscription.");
-          } else {
-            transition(() => {
-              refresh();
-            });
-            toast.success("Successfully updated the product subscription.");
-            onSuccess?.();
           }
-        }
-      }}
-    />
+          if (response) {
+            const { error } = response;
+            if (error) {
+              // form.handleApiError(response)
+              toast.error("There was an error updating the product subscription.");
+            } else {
+              transition(() => {
+                refresh();
+              });
+              toast.success("Successfully updated the product subscription.");
+              onSuccess?.();
+            }
+          }
+        }}
+      />
+    </Error>
   );
 };

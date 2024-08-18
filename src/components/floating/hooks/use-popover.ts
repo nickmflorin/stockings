@@ -9,7 +9,7 @@ import { useFloating, type UseFloatingConfig } from "./use-floating";
 
 export interface UsePopoverConfig extends Omit<UseFloatingConfig, "triggers"> {
   readonly offset?: OffsetOptions;
-  readonly width?: QuantitativeSize<"px"> | "target" | "available";
+  readonly width?: QuantitativeSize<"px"> | "target" | "available" | "fit-content";
   readonly maxHeight?: Size<"px">;
   readonly triggers?: ["click", "hover"] | ["click"] | ["hover"] | ["hover", "click"];
 }
@@ -40,6 +40,8 @@ export const usePopover = ({
                   ? `${rects.reference.width}px`
                   : width === "available"
                   ? sizeToString(availableWidth, "px")
+                  : width === "fit-content"
+                  ? "fit-content"
                   : sizeToString(Math.min(sizeToNumber(width), availableWidth), "px"),
             /* eslint-enable prettier/prettier */
             });
