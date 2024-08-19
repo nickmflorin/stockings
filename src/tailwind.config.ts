@@ -1,6 +1,6 @@
 import { type Config } from "tailwindcss";
 
-const config: Config = {
+const config = {
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -171,7 +171,7 @@ const config: Config = {
         "700": "#495057",
         "800": "#343A40",
         "900": "#212529",
-      },
+      } as const,
       blue: {
         "50": "#e8f1fd",
         "100": "#d1e2fb",
@@ -183,7 +183,7 @@ const config: Config = {
         "700": "#4989e4",
         "800": "#2f79df",
         "900": "#0969da",
-      },
+      } as const,
       indigo: colors.indigo,
       violet: colors.violet,
       purple: colors.purple,
@@ -202,7 +202,7 @@ const config: Config = {
         "800": "#991b1b",
         "900": "#7f1d1d",
         "950": "#450a0a",
-      },
+      } as const,
       title: "#111827",
       body: "#515151",
       description: "#868e96", // Gray 600
@@ -1113,6 +1113,6 @@ const config: Config = {
       50: "50",
     },
   },
-};
+} as const satisfies Config;
 
 export default config;

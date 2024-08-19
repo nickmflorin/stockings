@@ -1,33 +1,39 @@
 import { useRef, useMemo } from "react";
 
-import { arrow, size, offset as offsetMiddleware, type OffsetOptions } from "@floating-ui/react";
+import { arrow, size, offset as offsetMiddleware, type OffsetOptions, Placement, autoPlacement } from "@floating-ui/react";
 
 import type * as types from "~/components/floating/types";
 import { type QuantitativeSize, type Size, sizeToNumber, sizeToString } from "~/components/types";
 
 import { useFloating, type UseFloatingConfig } from "./use-floating";
 
-export interface UsePopoverConfig extends Omit<UseFloatingConfig, "triggers"> {
+export interface UsePopoverConfig extends Omit<UseFloatingConfig, "triggers" | "placement"> {
   readonly offset?: OffsetOptions;
   readonly width?: QuantitativeSize<"px"> | "target" | "available" | "fit-content";
   readonly maxHeight?: Size<"px">;
   readonly triggers?: ["click", "hover"] | ["click"] | ["hover"] | ["hover", "click"];
+  readonly placement?: Placement | "auto";
+  readonly allowedPlacements?: Placement[];
 }
 
 export const usePopover = ({
   maxHeight,
   offset,
   width,
+  placement,
+  allowedPlacements,
   ...config
 }: UsePopoverConfig): types.PopoverContext => {
   const arrowRef = useRef<SVGSVGElement>(null);
 
   const floating = useFloating({
     ...config,
+    placement: placement === "auto" ? undefined : placement,
     middleware: [
       arrow({
         element: arrowRef,
       }),
+      placement === "auto" ? autoPlacement({ allowedPlacements: allowedPlacements }) : undefined,
       offset ? offsetMiddleware(offset) : undefined,
       size({
         apply({ availableHeight, availableWidth, rects, elements }) {

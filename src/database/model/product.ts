@@ -1,10 +1,17 @@
 import { enumeratedLiterals } from "enumerated-literals";
 import { uniq } from "lodash-es";
+import resolveConfig from "tailwindcss/resolveConfig";
 
 import type { ApiStatusChangeSubscription } from "./subscription";
 import type { Product, PriceChangeSubscription } from "./zenstack-generated/models";
 
-import { type TailwindTextColorClassName, type TailwindBgColorClassName } from "~/components/types";
+import {
+  type TailwindTextColorClassName,
+  type TailwindBgColorClassName,
+  type HexColor,
+} from "~/components/types";
+
+import TailwindConfig from "../../tailwind.config";
 
 import { ProductStatus } from "./generated";
 
@@ -12,6 +19,8 @@ export type ApiProduct = Product & {
   readonly statusChangeSubscription: ApiStatusChangeSubscription | null;
   readonly priceChangeSubscription: PriceChangeSubscription | null;
 };
+
+const Theme = resolveConfig(TailwindConfig);
 
 export const ProductStatuses = enumeratedLiterals(
   [
@@ -23,6 +32,8 @@ export const ProductStatuses = enumeratedLiterals(
       badgeTextColorClassName: "text-yellow-700",
       badgeBgColorClassName: "bg-yellow-200",
       shortLabel: "Backorder",
+      backgroundColor: Theme.theme.colors.yellow["200"],
+      textColor: Theme.theme.colors.yellow["700"],
     },
     {
       value: ProductStatus.InStock,
@@ -32,6 +43,8 @@ export const ProductStatuses = enumeratedLiterals(
       badgeBgColorClassName: "bg-green-200",
       badgeTextColorClassName: "text-green-600",
       shortLabel: "In Stock",
+      backgroundColor: Theme.theme.colors.green["200"],
+      textColor: Theme.theme.colors.green["600"],
     },
     {
       value: ProductStatus.OutOfStock,
@@ -41,6 +54,8 @@ export const ProductStatuses = enumeratedLiterals(
       badgeBgColorClassName: "bg-amber-200",
       badgeTextColorClassName: "text-amber-600",
       shortLabel: "Out of Stock",
+      backgroundColor: Theme.theme.colors.amber["200"],
+      textColor: Theme.theme.colors.amber["600"],
     },
     {
       value: ProductStatus.NotListed,
@@ -50,6 +65,8 @@ export const ProductStatuses = enumeratedLiterals(
       description: "The product is not longer listed on the website.",
       badgeBgColorClassName: "bg-gray-200",
       badgeTextColorClassName: "text-gray-600",
+      backgroundColor: Theme.theme.colors.gray["200"],
+      textColor: Theme.theme.colors.gray["600"],
     },
   ] as const satisfies {
     value: ProductStatus;
@@ -57,6 +74,8 @@ export const ProductStatuses = enumeratedLiterals(
     description: string;
     label: string;
     textColorClassName: TailwindTextColorClassName;
+    backgroundColor: HexColor;
+    textColor: HexColor;
     badgeBgColorClassName: TailwindBgColorClassName;
     badgeTextColorClassName: TailwindTextColorClassName;
   }[],

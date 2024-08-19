@@ -59,6 +59,9 @@ dependencies:
   '@sentry/nextjs':
     specifier: ^8.20.0
     version: 8.25.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.25.1)(@opentelemetry/instrumentation@0.52.1)(@opentelemetry/sdk-trace-base@1.25.1)(next@14.2.5)(react@18.3.1)(webpack@5.93.0)
+  '@types/d3-shape':
+    specifier: ^3.1.6
+    version: 3.1.6
   '@types/qs':
     specifier: ^6.9.15
     version: 6.9.15
@@ -87,6 +90,9 @@ dependencies:
     specifier: ^3.3.0
     version: 3.3.0(react@18.3.1)
   '@visx/group':
+    specifier: ^3.3.0
+    version: 3.3.0(react@18.3.1)
+  '@visx/hierarchy':
     specifier: ^3.3.0
     version: 3.3.0(react@18.3.1)
   '@visx/mock-data':
@@ -122,6 +128,9 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.1
+  d3-shape:
+    specifier: ^3.2.0
+    version: 3.2.0
   domhandler:
     specifier: ^5.0.3
     version: 5.0.3
@@ -2944,6 +2953,12 @@ packages:
       '@types/d3-path': 1.0.11
     dev: false
 
+  /@types/d3-shape@3.1.6:
+    resolution: {integrity: sha512-5KKk5aKGu2I+O6SONMYSNflgiP0WfZIQvVUMan50wHsLG1G94JlxEVnCpQARfTtzytuY0p/9PXXZb3I7giofIA==}
+    dependencies:
+      '@types/d3-path': 1.0.11
+    dev: false
+
   /@types/d3-time-format@2.1.0:
     resolution: {integrity: sha512-/myT3I7EwlukNOX2xVdMzb8FRgNzRMpsZddwst9Ld/VFe6LyJyRp0s32l/V9XoUzk+Gqu56F/oGk6507+8BxrA==}
     dev: false
@@ -5122,6 +5137,11 @@ packages:
     resolution: {integrity: sha512-ZwZQxKhBnv9yHaiWd6ZU4x5BtCQ7pXszEV9CU6kRgwIQVQGLMv1oiL4M+MK/n79sYzsj+gcgpPQSctJUsLN7fA==}
     dev: false
 
+  /d3-path@3.1.0:
+    resolution: {integrity: sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ==}
+    engines: {node: '>=12'}
+    dev: false
+
   /d3-random@2.2.2:
     resolution: {integrity: sha512-0D9P8TRj6qDAtHhRQn6EfdOtHMfsUWanl3yb/84C4DqpZ+VsgfI5iTVRNRbELCfNvRfpMr8OrqqUTQ6ANGCijw==}
     dev: false
@@ -5147,6 +5167,13 @@ packages:
     resolution: {integrity: sha512-PnjUqfM2PpskbSLTJvAzp2Wv4CZsnAgTfcVRTwW03QR3MkXF8Uo7B1y/lWkAsmbKwuecto++4NlsYcvYpXpTHA==}
     dependencies:
       d3-path: 2.0.0
+    dev: false
+
+  /d3-shape@3.2.0:
+    resolution: {integrity: sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-path: 3.1.0
     dev: false
 
   /d3-time-format@4.1.0:

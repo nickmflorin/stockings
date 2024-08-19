@@ -65,6 +65,7 @@ export const PopoverContentWrapper = ({
       if (typeof _children === "function") {
         return _children({
           ref: refs.setFloating,
+          isOpen,
           setIsOpen,
           params: floatingProps,
           styles: floatingStyles,

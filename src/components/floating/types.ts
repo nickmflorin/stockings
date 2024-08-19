@@ -18,6 +18,7 @@ export type PopoverRenderProps = {
 };
 
 export type FloatingContentRenderProps = {
+  readonly isOpen: boolean;
   readonly params: Record<string, unknown>;
   readonly styles: CSSProperties;
   readonly setIsOpen: (

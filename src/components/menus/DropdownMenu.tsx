@@ -8,6 +8,7 @@ export interface DropdownMenuProps
   extends Pick<
     PopoverProps,
     | "placement"
+    | "allowedPlacements"
     | "inPortal"
     | "autoUpdate"
     | "middleware"
@@ -23,7 +24,7 @@ export interface DropdownMenuProps
   readonly contentStyle?: ComponentProps["style"];
   readonly content:
     | JSX.Element
-    | ((params: Pick<FloatingContentRenderProps, "setIsOpen">) => JSX.Element);
+    | ((params: Pick<FloatingContentRenderProps, "isOpen" | "setIsOpen">) => JSX.Element);
 }
 
 export const DropdownMenu = ({
@@ -41,14 +42,14 @@ export const DropdownMenu = ({
     placement={placement}
     offset={offset}
     triggers={triggers}
-    content={({ ref, params, styles, setIsOpen }) => (
+    content={({ ref, params, styles, isOpen, setIsOpen }) => (
       <PopoverContent
         ref={ref}
         {...params}
         style={{ ...contentStyle, ...styles }}
         className={classNames("p-[0px] rounded-md overflow-hidden", contentClassName)}
       >
-        {typeof content === "function" ? content({ setIsOpen }) : content}
+        {typeof content === "function" ? content({ isOpen, setIsOpen }) : content}
       </PopoverContent>
     )}
   >

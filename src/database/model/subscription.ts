@@ -1,4 +1,7 @@
 import { enumeratedLiterals } from "enumerated-literals";
+import { uniq } from "lodash-es";
+
+import { replaceInArray } from "~/lib/arrays";
 
 import { type TailwindTextColorClassName, type TailwindBgColorClassName } from "~/components/types";
 
@@ -84,7 +87,7 @@ export type FullProductSubscription = FullStatusChangeSubscription | FullPriceCh
 
 type FlattenedStatusChangeSubscriptionCondition = [ProductStatus, ProductStatus];
 
-export const flattenStatusChangeSubscriptionsConditions = (
+export const flattenStatusChangeSubscriptionConditions = (
   conditions:
     | Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">
     | Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">[],
@@ -103,5 +106,41 @@ export const flattenStatusChangeSubscriptionsConditions = (
       }
     }
   }
-  return flattened;
+  // Sort for consistent ordering.
+  return flattened.sort((a, b) => a[0].localeCompare(b[0]));
+};
+
+type GroupedStatusChangeSubscriptionCondition = [ProductStatus, ProductStatus[]];
+
+export const groupStatusChangeSubscriptionConditions = (
+  conditions:
+    | Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">
+    | Pick<StatusChangeSubscriptionCondition, "fromStatus" | "toStatus">[],
+): GroupedStatusChangeSubscriptionCondition[] => {
+  const flattened = flattenStatusChangeSubscriptionConditions(conditions);
+
+  return (
+    flattened
+      .reduce<GroupedStatusChangeSubscriptionCondition[]>(
+        (acc, condition): GroupedStatusChangeSubscriptionCondition[] => {
+          const [replaced, _, updated] = replaceInArray(
+            acc,
+            (
+              curr: GroupedStatusChangeSubscriptionCondition,
+            ): GroupedStatusChangeSubscriptionCondition => [
+              curr[0],
+              uniq([...curr[1], condition[1]]),
+            ],
+            v => v[0] === condition[0],
+          );
+          if (replaced) {
+            return updated;
+          }
+          return [...acc, [condition[0], [condition[1]]]];
+        },
+        [] as GroupedStatusChangeSubscriptionCondition[],
+      )
+      // Sort for consistent ordering.
+      .sort((a, b) => a[0].localeCompare(b[0]))
+  );
 };
