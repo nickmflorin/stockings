@@ -1,9 +1,10 @@
-import { enumeratedLiterals } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 import { uniq } from "lodash-es";
 import resolveConfig from "tailwindcss/resolveConfig";
 
+import type { BrandProduct } from "./brand";
 import type { ApiStatusChangeSubscription } from "./subscription";
-import type { Product, PriceChangeSubscription } from "./zenstack-generated/models";
+import type { PriceChangeSubscription } from "./zenstack-generated/models";
 
 import {
   type TailwindTextColorClassName,
@@ -14,11 +15,31 @@ import {
 import TailwindConfig from "../../tailwind.config";
 
 import { ProductStatus } from "./generated";
+import { type ConditionallyInclude } from "./inclusion";
 
-export type ApiProduct = Product & {
-  readonly statusChangeSubscription: ApiStatusChangeSubscription | null;
-  readonly priceChangeSubscription: PriceChangeSubscription | null;
-};
+export const ProductIncludesFields = enumeratedLiterals(
+  ["statusChangeSubscription", "priceChangeSubscription"] as const,
+  {},
+);
+export type ProductIncludesField = EnumeratedLiteralsMember<typeof ProductIncludesFields>;
+
+export type ProductIncludes =
+  | ["statusChangeSubscription", "priceChangeSubscription"]
+  | ["priceChangeSubscription", "statusChangeSubscription"]
+  | ["statusChangeSubscription"]
+  | ["priceChangeSubscription"]
+  | [];
+
+export type ApiProduct<
+  I extends ProductIncludes = ["statusChangeSubscription", "priceChangeSubscription"],
+> = ConditionallyInclude<
+  BrandProduct & {
+    readonly statusChangeSubscription: ApiStatusChangeSubscription | null;
+    readonly priceChangeSubscription: PriceChangeSubscription | null;
+  },
+  ["statusChangeSubscription", "priceChangeSubscription"],
+  I
+>;
 
 const Theme = resolveConfig(TailwindConfig);
 

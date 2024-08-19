@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { logger } from "~/internal/logger";
 
-import { fetchProduct } from "~/actions/fetches/products";
+import { fetchProduct } from "~/actions/products";
 
 import { ErrorView } from "~/components/errors/ErrorView";
 import { Loading } from "~/components/loading/Loading";

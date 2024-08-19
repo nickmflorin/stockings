@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import { fetchProductSubscriptionsPagination } from "~/actions/fetches/subscriptions";
+import { type SubscriptionsFilters } from "~/actions";
+import { fetchProductSubscriptionsPagination } from "~/actions/subscriptions/fetch-subscriptions";
 
 import { Paginator } from "~/components/pagination/Paginator";
-import { type SubscriptionsTableFilters } from "~/features/subscriptions";
 
 export interface SubscriptionsTablePaginatorProps {
-  readonly filters: SubscriptionsTableFilters;
+  readonly filters: SubscriptionsFilters;
   readonly page: number;
 }
 

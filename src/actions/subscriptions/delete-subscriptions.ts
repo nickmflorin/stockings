@@ -2,8 +2,8 @@
 import { difference, uniq } from "lodash-es";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 import { enhance, SubscriptionType } from "~/database/model";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import { humanizeList } from "~/lib/formatters";

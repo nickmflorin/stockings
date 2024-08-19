@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
 
-import { fetchNotifications } from "~/actions/fetches/notifications";
+import { type NotificationsFilters } from "~/actions";
+import { fetchNotifications } from "~/actions/notifications";
 
 import { Loading } from "~/components/loading/Loading";
-import { type NotificationsTableFilters } from "~/features/notifications";
 
 const ClientNotificationsTableBody = dynamic(
   () => import("~/features/notifications/components/tables/NotificationsTableBody"),
@@ -11,7 +11,7 @@ const ClientNotificationsTableBody = dynamic(
 );
 
 export interface NotificationsTableBodyProps {
-  readonly filters: NotificationsTableFilters;
+  readonly filters: NotificationsFilters;
   readonly page: number;
 }
 

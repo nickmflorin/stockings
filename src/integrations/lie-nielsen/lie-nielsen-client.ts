@@ -1,8 +1,8 @@
 import * as cheerio from "cheerio";
 import { chunk } from "lodash-es";
 
-import { db } from "~/database";
 import { type ProductRecord, type User, type Product } from "~/database/model";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import {

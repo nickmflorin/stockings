@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import { fetchProductsPagination } from "~/actions/fetches/products";
+import { type ProductsFilters } from "~/actions";
+import { fetchProductsPagination } from "~/actions/products";
 
 import { Paginator } from "~/components/pagination/Paginator";
-import { type ProductsTableFilters } from "~/features/products";
 
 export interface ProductsTablePaginatorProps {
-  readonly filters: ProductsTableFilters;
+  readonly filters: ProductsFilters;
   readonly page: number;
 }
 

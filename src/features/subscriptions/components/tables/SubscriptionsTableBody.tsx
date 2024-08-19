@@ -15,7 +15,7 @@ import { logger } from "~/internal/logger";
 
 import { arraysHaveSameElements } from "~/lib/arrays";
 
-import { updateSubscription, deleteSubscription } from "~/actions/mutations/subscriptions";
+import { updateSubscription, deleteSubscription } from "~/actions/subscriptions";
 
 import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
@@ -27,12 +27,13 @@ import { convertConfigsToColumns, type DataTableColumnConfig } from "~/component
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
 import { Text } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
+/* eslint-disable-next-line max-len */
+import { StatusChangeConditionsDropdown } from "~/features/products/components/StatusChangeConditionsDropdown";
 import {
   SubscriptionsTableColumns,
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
 
-import { StatusChangeConditionsDropdown } from "../StatusChangeConditionsDropdown";
 import { SubscriptionTypeText } from "../SubscriptionTypeText";
 
 import { SubscriptionsTableControlBar } from "./SubscriptionsTableControlBar";

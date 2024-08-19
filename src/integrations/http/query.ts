@@ -1,6 +1,5 @@
+import qs, { type ParsedUrlQuery } from "querystring";
 import urlModule from "url";
-
-import qs, { type ParsedQs } from "qs";
 
 export type QueryParamValue =
   | string
@@ -15,11 +14,10 @@ export type QueryParamObj = {
   [k: string]: QueryParamValue;
 };
 
-export const parseQueryParams = (value: string) => qs.parse(value, { allowEmptyArrays: true });
+export const parseQueryParams = (value: string) => qs.parse(value);
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const stringifyQueryParams = (query: any) =>
-  qs.stringify(query, { allowEmptyArrays: true, arrayFormat: "comma" });
+export const stringifyQueryParams = (query: any) => qs.stringify(query);
 
 /**
  * Parses the query parameters from the provided URL and returns the query parameters as an object.
@@ -29,7 +27,7 @@ export const stringifyQueryParams = (query: any) =>
  * @returns {Record<string, string>}
  * 	 An object that represents the parameter names and values that are in the URL.
  */
-export const getQueryParams = (url: string): ParsedQs => {
+export const getQueryParams = (url: string): ParsedUrlQuery => {
   const queryString = urlModule.parse(url).query;
   if (queryString) {
     return parseQueryParams(queryString);

@@ -1,11 +1,7 @@
 import { intersection, uniq } from "lodash-es";
 import { z } from "zod";
 
-import {
-  ProductStatus,
-  PriceChangeCondition,
-  productStatusesAreAny,
-} from "~/database/model";
+import { ProductStatus, PriceChangeCondition, productStatusesAreAny } from "~/database/model";
 
 export const BaseSubscriptionSchema = z.object({
   enabled: z.boolean(),

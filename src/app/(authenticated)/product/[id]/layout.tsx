@@ -5,6 +5,7 @@ import { Module } from "~/components/structural/Module";
 interface ProductLayoutProps {
   readonly priceChart: ReactNode;
   readonly detail: ReactNode;
+  readonly subscriptions: ReactNode;
 }
 
 export default function ProductLayout({ priceChart, detail }: ProductLayoutProps) {

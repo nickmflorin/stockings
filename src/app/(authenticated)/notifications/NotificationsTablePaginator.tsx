@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import { fetchNotificationsPagination } from "~/actions/fetches/notifications";
+import { type NotificationsFilters } from "~/actions";
+import { fetchNotificationsPagination } from "~/actions/notifications";
 
 import { Paginator } from "~/components/pagination/Paginator";
-import { type NotificationsTableFilters } from "~/features/notifications";
 
 export interface NotificationsTablePaginatorProps {
-  readonly filters: NotificationsTableFilters;
+  readonly filters: NotificationsFilters;
   readonly page: number;
 }
 

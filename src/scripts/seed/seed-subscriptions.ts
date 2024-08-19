@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 
-import { db } from "~/database";
 import { enhance } from "~/database/model";
 import {
   type PriceChangeSubscription,
@@ -9,6 +8,7 @@ import {
   type Product,
   ProductStatus,
 } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 

@@ -1,13 +1,4 @@
-import { z } from "zod";
-
-import {
-  type FullProductSubscription,
-  type SubscriptionType,
-  SubscriptionTypes,
-} from "~/database/model";
-
-import type { ParseFiltersOptions } from "~/lib/filters";
-import { type Ordering } from "~/lib/ordering";
+import { type FullProductSubscription } from "~/database/model";
 
 import type { DataTableColumnConfig } from "~/components/tables";
 
@@ -74,41 +65,3 @@ export type OrderableSubscriptionsTableColumnId = Extract<
 export const OrderableSubscriptionsTableColumnIds = [...SubscriptionsTableColumns]
   .filter(col => (col as { isOrderable?: boolean }).isOrderable)
   .map(col => col.id) as OrderableSubscriptionsTableColumnId[];
-
-export const SubscriptionsTableDefaultOrdering: Ordering<OrderableSubscriptionsTableColumnId> = {
-  orderBy: "createdAt",
-  order: "desc",
-};
-
-export interface SubscriptionsTableFilters {
-  readonly types: SubscriptionType[];
-  readonly search: string;
-}
-
-export interface SubscriptionsTableControls {
-  readonly filters: SubscriptionsTableFilters;
-  readonly ordering: Ordering<OrderableSubscriptionsTableColumnId>;
-  readonly page: number;
-}
-
-export const SubscriptionsTableFiltersSchemas = {
-  search: z.string(),
-  types: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return SubscriptionTypes.contains(value) ? [value] : [];
-    }
-    return value.reduce(
-      (prev, curr) => (SubscriptionTypes.contains(curr) ? [...prev, curr] : prev),
-      [] as SubscriptionType[],
-    );
-  }),
-} satisfies {
-  [key in keyof SubscriptionsTableFilters]: z.ZodType;
-};
-
-export const SubscriptionsTableFiltersOptions: ParseFiltersOptions<
-  typeof SubscriptionsTableFiltersSchemas
-> = {
-  types: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  search: { defaultValue: "", excludeWhen: v => v.length === 0 },
-};

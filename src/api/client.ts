@@ -82,7 +82,9 @@ const processors: {
     } catch (e) {
       return { error: new HttpSerializationError(params) };
     }
-    throw new Error("");
+    throw new Error(
+      "Received a successful response where the data did not conform to the expected shape!",
+    );
   },
 };
 

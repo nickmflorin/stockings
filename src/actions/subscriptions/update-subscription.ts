@@ -2,8 +2,8 @@
 import { type z } from "zod";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 import { enhance, type ProductSubscription } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
 import { BaseSubscriptionSchema } from "~/actions/schemas";

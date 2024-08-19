@@ -1,8 +1,8 @@
 "use server";
 import { getAuthedUser } from "~/application/auth/server";
 import { UnreachableCaseError } from "~/application/errors";
-import { db } from "~/database";
 import { enhance, SubscriptionType } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
 

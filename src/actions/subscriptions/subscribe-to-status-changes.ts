@@ -3,18 +3,18 @@ import { uniq } from "lodash-es";
 import { type z } from "zod";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
-import { enhance, type PriceChangeSubscription } from "~/database/model";
+import { enhance, type ApiStatusChangeSubscription } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
-import { PriceChangeSubscriptionSchema } from "~/actions/schemas";
+import { StatusChangeSubscriptionSchema } from "~/actions/schemas";
 
 import { ApiClientGlobalError, ApiClientFormError, convertToPlainObject } from "~/api";
 
-export const subscribeToPriceChanges = async (
+export const subscribeToStatusChanges = async (
   productId: string,
-  data: z.infer<typeof PriceChangeSubscriptionSchema>,
-): Promise<MutationActionResponse<PriceChangeSubscription>> => {
+  data: z.infer<typeof StatusChangeSubscriptionSchema>,
+): Promise<MutationActionResponse<ApiStatusChangeSubscription>> => {
   const { user, error } = await getAuthedUser();
   if (error) {
     return { error: error.json };
@@ -38,7 +38,7 @@ export const subscribeToPriceChanges = async (
     return { error: ApiClientGlobalError.NotFound({}).json };
   }
 
-  const parsed = PriceChangeSubscriptionSchema.safeParse(data);
+  const parsed = StatusChangeSubscriptionSchema.safeParse(data);
   if (!parsed.success) {
     return {
       error: ApiClientFormError.fromZodError({ error: parsed.error }).json,
@@ -49,22 +49,40 @@ export const subscribeToPriceChanges = async (
   // Sanity checks
   if (enabled && conditions.length === 0) {
     throw new Error(
-      "Detected empty array of price change conditions for an enabled price change " +
+      "Detected empty array of status change conditions for an enabled status change " +
         "subscription!  This should be prevented by the schema validation.",
     );
   }
 
   return convertToPlainObject({
-    data: await enhanced.priceChangeSubscription.create({
+    data: await enhanced.statusChangeSubscription.create({
+      include: { conditions: true },
       data: {
         enabled,
         productId: product.id,
         createdById: user.id,
         updatedById: user.id,
         userId: user.id,
-        /* Uniqueness should be guaranteed by the schema, but we still ensure uniqueness
-           here just in case. */
-        conditions: uniq(conditions),
+        conditions: {
+          createMany: {
+            data: conditions.map(condition => {
+              if (condition.id !== undefined) {
+                throw new Error(
+                  "Unexpectedly encountered condition with an ID when the subscription " +
+                    "does not yet exist!",
+                );
+              }
+              return {
+                /* Uniqueness should be guaranteed by the schema, but we still ensure uniqueness
+                   here just in case. */
+                fromStatus: uniq(condition.fromStatus),
+                /* Uniqueness should be guaranteed by the schema, but we still ensure uniqueness
+                   here just in case. */
+                toStatus: uniq(condition.toStatus),
+              };
+            }),
+          },
+        },
       },
     }),
   });

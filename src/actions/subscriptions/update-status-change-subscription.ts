@@ -3,12 +3,12 @@ import { uniq } from "lodash-es";
 import { type z } from "zod";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 import {
   type ApiStatusChangeSubscription,
   enhance,
   type StatusChangeSubscriptionCondition,
 } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
 import { StatusChangeSubscriptionSchema } from "~/actions/schemas";

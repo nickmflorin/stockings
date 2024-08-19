@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import { fetchProductPriceData } from "~/actions/fetches/products";
+import { fetchProductPriceData } from "~/actions/products";
 
 import { Loading } from "~/components/loading/Loading";
 

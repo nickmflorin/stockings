@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 import { logger } from "~/internal/logger";
 
-import { updatePriceChangeSubscription } from "~/actions/mutations/subscriptions";
+import { updatePriceChangeSubscription } from "~/actions/subscriptions";
 
 import { Error } from "~/components/errors/Error";
 import { usePriceChangeSubscription } from "~/hooks/api";

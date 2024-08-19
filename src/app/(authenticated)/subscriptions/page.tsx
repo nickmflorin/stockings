@@ -6,13 +6,14 @@ import { z } from "zod";
 import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
-import { Loading } from "~/components/loading/Loading";
 import {
-  SubscriptionsTableFiltersOptions,
-  SubscriptionsTableDefaultOrdering,
-  OrderableSubscriptionsTableColumnIds,
-  SubscriptionsTableFiltersSchemas,
-} from "~/features/subscriptions";
+  SubscriptionsFiltersOptions,
+  SubscriptionsFiltersSchemas,
+  SubscriptionsDefaultOrdering,
+} from "~/actions";
+
+import { Loading } from "~/components/loading/Loading";
+import { OrderableSubscriptionsTableColumnIds } from "~/features/subscriptions";
 /* eslint-disable-next-line max-len */
 import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
 /* eslint-disable-next-line max-len */
@@ -35,12 +36,12 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
 
   const filters = parseFilters(
     searchParams,
-    SubscriptionsTableFiltersSchemas,
-    SubscriptionsTableFiltersOptions,
+    SubscriptionsFiltersSchemas,
+    SubscriptionsFiltersOptions,
   );
 
   const ordering = parseOrdering(searchParams, {
-    defaultOrdering: SubscriptionsTableDefaultOrdering,
+    defaultOrdering: SubscriptionsDefaultOrdering,
     fields: OrderableSubscriptionsTableColumnIds,
   });
 

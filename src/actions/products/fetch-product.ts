@@ -1,14 +1,14 @@
 import { cache } from "react";
 
-import { db } from "~/database";
 import type { Product } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import {
   dataInFetchContext,
   errorInFetchContext,
   type FetchActionContext,
   type FetchActionResponse,
-} from "~/actions/types";
+} from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
 

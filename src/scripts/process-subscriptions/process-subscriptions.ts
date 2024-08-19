@@ -1,7 +1,7 @@
 import type { ScriptContext } from "~/scripts/context";
 
-import { db } from "~/database";
 import { enhance } from "~/database/model";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import { processRecord } from "./process-record";

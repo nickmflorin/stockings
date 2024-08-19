@@ -29,7 +29,7 @@ export interface BasicSelectProps
   readonly renderedValue?: ReactNode;
 }
 
-export const BasicSelect = forwardRef<types.SelectInstance, BasicSelectProps>(
+export const BasicSelect = forwardRef<Omit<types.SelectInstance, "clear">, BasicSelectProps>(
   (
     {
       menuOffset = { mainAxis: 2 },
@@ -50,9 +50,9 @@ export const BasicSelect = forwardRef<types.SelectInstance, BasicSelectProps>(
       onOpenChange,
       ...props
     }: BasicSelectProps,
-    ref: ForwardedRef<types.SelectInstance>,
+    ref: ForwardedRef<Omit<types.SelectInstance, "clear">>,
   ): JSX.Element => {
-    const innerRef = useRef<Omit<types.SelectInstance, "focusInput"> | null>(null);
+    const innerRef = useRef<Omit<types.SelectInstance, "focusInput" | "clear"> | null>(null);
     const innerInputRef = useRef<BasicSelectInputInstance | null>(null);
 
     useImperativeHandle(ref, () => ({

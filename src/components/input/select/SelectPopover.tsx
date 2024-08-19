@@ -15,16 +15,23 @@ export interface SelectPopoverProps
   readonly menuWidth?: PopoverProps["width"];
   readonly isLoading?: boolean;
   readonly isReady?: boolean;
-  readonly onOpen?: (e: Event | React.MouseEvent<HTMLButtonElement>) => void;
-  readonly onClose?: (e: Event | React.MouseEvent<HTMLButtonElement>) => void;
-  readonly onOpenChange?: (e: Event | React.MouseEvent<HTMLButtonElement>, isOpen: boolean) => void;
+  readonly onOpen?: (
+    e: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>,
+  ) => void;
+  readonly onClose?: (
+    e: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>,
+  ) => void;
+  readonly onOpenChange?: (
+    e: Event | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>,
+    isOpen: boolean,
+  ) => void;
   readonly children: (
     params: PopoverRenderProps & { readonly isOpen: boolean; readonly isLoading: boolean },
   ) => JSX.Element;
 }
 
 export const SelectPopover = forwardRef<
-  Omit<types.SelectInstance, "focusInput">,
+  Omit<types.SelectInstance, "focusInput" | "clear">,
   SelectPopoverProps
 >(
   (
@@ -41,7 +48,7 @@ export const SelectPopover = forwardRef<
       onOpenChange,
       ...props
     }: SelectPopoverProps,
-    ref: ForwardedRef<Omit<types.SelectInstance, "focusInput">>,
+    ref: ForwardedRef<Omit<types.SelectInstance, "focusInput" | "clear">>,
   ): JSX.Element => {
     const [_isLoading, setLoading] = useState(false);
     const [isOpen, setOpen] = useState(false);

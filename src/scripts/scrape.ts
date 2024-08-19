@@ -1,4 +1,4 @@
-import { db } from "~/database";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 import { LogLevel } from "~/internal/loggers/constants";
 

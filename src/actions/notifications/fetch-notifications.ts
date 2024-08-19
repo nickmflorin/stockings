@@ -1,9 +1,9 @@
 import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 import type { Notification, User } from "~/database/model";
 import { enhance } from "~/database/model";
+import { db } from "~/database/prisma";
 import { conditionalFilters } from "~/database/util";
 
 import {
@@ -14,11 +14,10 @@ import {
   errorInFetchContext,
   dataInFetchContext,
   clampPagination,
+  type NotificationsControls,
 } from "~/actions";
 
-import { type NotificationsTableControls } from "~/features/notifications";
-
-const filtersClause = (filters: Partial<NotificationsTableControls["filters"]>) =>
+const filtersClause = (filters: Partial<NotificationsControls["filters"]>) =>
   conditionalFilters([
     filters.states && filters.states.length !== 0 ? { state: { in: filters.states } } : undefined,
     filters.types && filters.types.length !== 0
@@ -29,7 +28,7 @@ const filtersClause = (filters: Partial<NotificationsTableControls["filters"]>) 
 const whereClause = ({
   filters,
   user,
-}: Pick<NotificationsTableControls, "filters"> & { readonly user: User }) => {
+}: Pick<NotificationsControls, "filters"> & { readonly user: User }) => {
   const clause = filtersClause(filters);
   if (clause.length !== 0) {
     return { AND: [...clause, { userId: user.id }] };
@@ -39,7 +38,7 @@ const whereClause = ({
 
 export const fetchNotificationsPagination = cache(
   async <C extends FetchActionContext>(
-    { filters, page: _page }: Pick<NotificationsTableControls, "filters" | "page">,
+    { filters, page: _page }: Pick<NotificationsControls, "filters" | "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
     const { user, error } = await getAuthedUser();
@@ -56,14 +55,14 @@ export const fetchNotificationsPagination = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Pick<NotificationsTableControls, "filters" | "page">,
+    params: Pick<NotificationsControls, "filters" | "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
 
 export const fetchNotifications = cache(
   async <C extends FetchActionContext>(
-    { filters, page: _page }: NotificationsTableControls,
+    { filters, page: _page }: NotificationsControls,
     context: C,
   ): Promise<FetchActionResponse<Notification[], C>> => {
     const { user, error } = await getAuthedUser({ strict: true });
@@ -79,7 +78,7 @@ export const fetchNotifications = cache(
 
     const data: Notification[] = await enhanced.notification.findMany({
       where: whereClause({ filters, user }),
-      // orderBy: [{ [ordering.field]: ordering.order }],
+      // orderBy: [{ [ordering.orderBy]: ordering.order }],
       skip: pageSize * (page - 1),
       take: pageSize,
     });
@@ -88,7 +87,7 @@ export const fetchNotifications = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: NotificationsTableControls,
+    params: NotificationsControls,
     context: C,
   ): Promise<FetchActionResponse<Notification[], C>>;
 };

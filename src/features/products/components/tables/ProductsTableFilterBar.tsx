@@ -7,6 +7,8 @@ import {
   type ProductStatus,
 } from "~/database/model";
 
+import { ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
+
 import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
 import { TextInput } from "~/components/input/TextInput";
@@ -17,10 +19,6 @@ import { ProductCategorySelect } from "~/features/products/components/input/Prod
 import { ProductStatusSelect } from "~/features/products/components/input/ProductStatusSelect";
 /* eslint-disable-next-line max-len */
 import { ProductSubCategorySelect } from "~/features/products/components/input/ProductSubCategorySelect";
-import {
-  ProductsTableFiltersOptions,
-  ProductsTableFiltersSchemas,
-} from "~/features/products/types";
 import { useDebounceCallback } from "~/hooks";
 import { useFilters } from "~/hooks/use-filters";
 
@@ -33,8 +31,8 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [filters, updateFilters] = useFilters({
-    schemas: ProductsTableFiltersSchemas,
-    options: ProductsTableFiltersOptions,
+    schemas: ProductsFiltersSchemas,
+    options: ProductsFiltersOptions,
   });
 
   const onSearch = useDebounceCallback((search: string) => {

@@ -1,13 +1,14 @@
 "use client";
 import TableContainer from "@mui/material/TableContainer";
 
+import { SubscriptionsDefaultOrdering } from "~/actions";
+
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
 import {
   SubscriptionsTableColumns,
   type OrderableSubscriptionsTableColumnId,
   OrderableSubscriptionsTableColumnIds,
-  SubscriptionsTableDefaultOrdering,
 } from "~/features/subscriptions/types";
 import { useOrdering } from "~/hooks/use-ordering";
 
@@ -26,7 +27,7 @@ export const SubscriptionsTableView = ({
   const [ordering, setOrdering] = useOrdering<OrderableSubscriptionsTableColumnId>({
     useQueryParams: true,
     fields: OrderableSubscriptionsTableColumnIds,
-    defaultOrdering: SubscriptionsTableDefaultOrdering,
+    defaultOrdering: SubscriptionsDefaultOrdering,
   });
   return (
     <TableView header={filterBar} footer={pagination}>

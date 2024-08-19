@@ -1,8 +1,8 @@
 import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 import { type ApiStatusChangeSubscription, enhance } from "~/database/model";
+import { db } from "~/database/prisma";
 
 import {
   type FetchActionResponse,

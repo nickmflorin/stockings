@@ -2,7 +2,6 @@ import fs from "fs";
 
 import qs from "qs";
 
-import { db } from "~/database";
 import {
   getModelJsonFixtureFilePath,
   type Jsonifier,
@@ -10,6 +9,7 @@ import {
   type JsonifiableModel,
 } from "~/database/fixtures";
 import { pluralizeBrandModel } from "~/database/model";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 type ParsedArgs = { [key in string]: string | boolean | number };

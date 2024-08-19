@@ -3,15 +3,14 @@ import { useRef } from "react";
 
 import { type SubscriptionType } from "~/database/model";
 
+import { SubscriptionsFiltersOptions, SubscriptionsFiltersSchemas } from "~/actions";
+
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
+import { ProductSelect } from "~/features/products/components/input/ProductSelect";
 /* eslint-disable-next-line max-len */
 import { SubscriptionTypeSelect } from "~/features/subscriptions/components/input/SubscriptionTypeSelect";
-import {
-  SubscriptionsTableFiltersOptions,
-  SubscriptionsTableFiltersSchemas,
-} from "~/features/subscriptions/types";
 import { useFilters } from "~/hooks/use-filters";
 
 export interface SubscriptionsTableFilterBarProps extends ComponentProps {}
@@ -20,10 +19,11 @@ export const SubscriptionsTableFilterBar = (
   props: SubscriptionsTableFilterBarProps,
 ): JSX.Element => {
   const typeSelectRef = useRef<SelectInstance | null>(null);
+  const productSelectRef = useRef<SelectInstance | null>(null);
 
   const [filters, updateFilters] = useFilters({
-    schemas: SubscriptionsTableFiltersSchemas,
-    options: SubscriptionsTableFiltersOptions,
+    schemas: SubscriptionsFiltersSchemas,
+    options: SubscriptionsFiltersOptions,
   });
 
   return (
@@ -32,12 +32,23 @@ export const SubscriptionsTableFilterBar = (
       onSearch={v => updateFilters({ search: v })}
       search={filters.search}
       onClear={() => {
-        for (const r of [typeSelectRef]) {
+        for (const r of [typeSelectRef, productSelectRef]) {
           r.current?.clear();
         }
-        updateFilters({ search: "", types: [] });
+        updateFilters({ search: "", types: [], products: [] });
       }}
     >
+      <ProductSelect
+        ref={productSelectRef}
+        behavior="multi"
+        filters={{ subscribed: true }}
+        dynamicHeight={false}
+        placeholder="Products"
+        inputClassName="max-w-[320px]"
+        initialValue={filters.products}
+        onChange={products => updateFilters({ products })}
+        onClear={() => updateFilters({ products: [] })}
+      />
       <SubscriptionTypeSelect
         ref={typeSelectRef}
         dynamicHeight={false}

@@ -3,6 +3,8 @@ import { useRef } from "react";
 
 import { type NotificationType, type NotificationState } from "~/database/model";
 
+import { NotificationsFiltersOptions, NotificationsFiltersSchemas } from "~/actions";
+
 import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
 import type { ComponentProps } from "~/components/types";
@@ -11,10 +13,6 @@ import { classNames } from "~/components/types";
 import { NotificationStateSelect } from "~/features/notifications/components/input/NotificationStateSelect";
 /* eslint-disable-next-line max-len */
 import { NotificationTypeSelect } from "~/features/notifications/components/input/NotificationTypeSelect";
-import {
-  NotificationsTableFiltersOptions,
-  NotificationsTableFiltersSchemas,
-} from "~/features/notifications/types";
 import { useFilters } from "~/hooks/use-filters";
 
 export interface NotificationsTableFilterBarProps extends ComponentProps {}
@@ -26,8 +24,8 @@ export const NotificationsTableFilterBar = (
   const typeSelectRef = useRef<SelectInstance | null>(null);
 
   const [filters, updateFilters] = useFilters({
-    schemas: NotificationsTableFiltersSchemas,
-    options: NotificationsTableFiltersOptions,
+    schemas: NotificationsFiltersSchemas,
+    options: NotificationsFiltersOptions,
   });
 
   return (

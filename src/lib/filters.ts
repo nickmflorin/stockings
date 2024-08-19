@@ -46,14 +46,23 @@ export const pruneFilters = <S extends FiltersSchemas>(
 };
 
 export const parseFilters = <S extends FiltersSchemas>(
-  params: ReadonlyURLSearchParams | Record<string, string | string[] | undefined>,
+  params:
+    | URLSearchParams
+    | ReadonlyURLSearchParams
+    | Record<string, string | string[] | undefined>
+    | string
+    | null
+    | undefined,
   schemas: S,
   options: ParseFiltersOptions<S>,
 ) => {
   let f: ParsedFilters<S> = {} as ParsedFilters<S>;
   const parsed =
-    params instanceof ReadonlyURLSearchParams ? parseQueryParams(params.toString()) : params;
-
+    params instanceof ReadonlyURLSearchParams || params instanceof URLSearchParams
+      ? parseQueryParams(params.toString())
+      : typeof params === "string"
+        ? parseQueryParams(params)
+        : (params ?? {});
   for (const [field, schema] of Object.entries(schemas)) {
     if (parsed[field] !== undefined) {
       const parsedField = schema.safeParse(parsed[field]);

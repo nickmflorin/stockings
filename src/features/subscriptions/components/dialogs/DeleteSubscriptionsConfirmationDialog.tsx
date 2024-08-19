@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import type { FullProductSubscription } from "~/database/model";
 import { logger } from "~/internal/logger";
 
-import { deleteSubscriptions } from "~/actions/mutations/subscriptions";
+import { deleteSubscriptions } from "~/actions/subscriptions";
 
 import { Dialog } from "~/components/dialogs/Dialog";
 import { ButtonFooter } from "~/components/structural/ButtonFooter";

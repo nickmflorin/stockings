@@ -1,6 +1,5 @@
 import { chunk } from "lodash-es";
 
-import { db } from "~/database";
 import { fixtures } from "~/database/fixtures";
 import {
   type Product,
@@ -10,6 +9,7 @@ import {
 } from "~/database/model";
 /* eslint-disable-next-line no-restricted-imports */
 import type { GetBatchResult } from "~/database/model/generated/runtime/library";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import { randomBoolean } from "~/lib/random";

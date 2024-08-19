@@ -1,6 +1,5 @@
 import type { ScriptContext } from "~/scripts/context";
 
-import { db } from "~/database";
 import {
   type ProductRecord,
   type ModelWithNonNullField,
@@ -12,6 +11,7 @@ import {
   type ApiProductSubscription,
   enhance,
 } from "~/database/model";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import { walkBackwardsUntil } from "~/lib/arrays";

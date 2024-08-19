@@ -5,11 +5,9 @@ import { z } from "zod";
 
 import { parseFilters } from "~/lib/filters";
 
+import { NotificationsFiltersOptions, NotificationsFiltersSchemas } from "~/actions";
+
 import { Loading } from "~/components/loading/Loading";
-import {
-  NotificationsTableFiltersOptions,
-  NotificationsTableFiltersSchemas,
-} from "~/features/notifications";
 /* eslint-disable-next-line max-len */
 import { NotificationsTableFilterBar } from "~/features/notifications/components/tables/NotificationsTableFilterBar";
 
@@ -30,8 +28,8 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
 
   const filters = parseFilters(
     searchParams,
-    NotificationsTableFiltersSchemas,
-    NotificationsTableFiltersOptions,
+    NotificationsFiltersSchemas,
+    NotificationsFiltersOptions,
   );
 
   return (

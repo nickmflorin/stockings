@@ -1,9 +1,9 @@
 import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { db } from "~/database";
 import type { FullProductSubscription, User } from "~/database/model";
 import { enhance, SubscriptionType } from "~/database/model";
+import { db } from "~/database/prisma";
 import { conditionalFilters } from "~/database/util";
 
 import {
@@ -15,13 +15,15 @@ import {
   dataInFetchContext,
   type ServerSidePaginationParams,
   clampPagination,
+  type SubscriptionsControls,
 } from "~/actions";
 
-import { type SubscriptionsTableControls } from "~/features/subscriptions";
-
-const filtersClause = (filters: Partial<SubscriptionsTableControls["filters"]>) =>
+const filtersClause = (filters: Partial<SubscriptionsControls["filters"]>) =>
   conditionalFilters([
     filters.search ? { product: constructTableSearchClause("product", filters.search) } : undefined,
+    filters.products && filters.products.length !== 0
+      ? { productId: { in: filters.products } }
+      : undefined,
     filters.types && filters.types.length !== 0
       ? { subscriptionType: { in: filters.types } }
       : undefined,
@@ -30,7 +32,7 @@ const filtersClause = (filters: Partial<SubscriptionsTableControls["filters"]>) 
 const whereClause = ({
   filters,
   user,
-}: Pick<SubscriptionsTableControls, "filters"> & { readonly user: User }) => {
+}: Pick<SubscriptionsControls, "filters"> & { readonly user: User }) => {
   const clause = filtersClause(filters);
   if (clause.length !== 0) {
     return { AND: [...clause, { userId: user.id }] };
@@ -40,7 +42,7 @@ const whereClause = ({
 
 export const fetchProductSubscriptionsPagination = cache(
   async <C extends FetchActionContext>(
-    { filters, page: _page }: Pick<SubscriptionsTableControls, "filters" | "page">,
+    { filters, page: _page }: Pick<SubscriptionsControls, "filters" | "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
     const { user, error } = await getAuthedUser();
@@ -57,13 +59,13 @@ export const fetchProductSubscriptionsPagination = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Pick<SubscriptionsTableControls, "filters" | "page">,
+    params: Pick<SubscriptionsControls, "filters" | "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
 
 const _fetchProductSubscriptions = async <C extends FetchActionContext>(
-  { filters, page: _page, ordering }: SubscriptionsTableControls,
+  { filters, page: _page, ordering }: SubscriptionsControls,
   context: C,
 ): Promise<FetchActionResponse<FullProductSubscription[], C>> => {
   const { user, error } = await getAuthedUser();

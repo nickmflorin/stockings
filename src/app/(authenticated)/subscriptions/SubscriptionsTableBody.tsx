@@ -1,14 +1,9 @@
 import dynamic from "next/dynamic";
 
-import { type Ordering } from "~/lib/ordering";
-
-import { fetchProductSubscriptions } from "~/actions/fetches/subscriptions";
+import { type SubscriptionsFilters, type SubscriptionsControls } from "~/actions";
+import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-subscriptions";
 
 import { Loading } from "~/components/loading/Loading";
-import {
-  type OrderableSubscriptionsTableColumnId,
-  type SubscriptionsTableFilters,
-} from "~/features/subscriptions";
 
 const ClientSubscriptionsTableBody = dynamic(
   () => import("~/features/subscriptions/components/tables/SubscriptionsTableBody"),
@@ -16,9 +11,9 @@ const ClientSubscriptionsTableBody = dynamic(
 );
 
 export interface SubscriptionsTableBodyProps {
-  readonly filters: SubscriptionsTableFilters;
+  readonly filters: SubscriptionsFilters;
   readonly page: number;
-  readonly ordering: Ordering<OrderableSubscriptionsTableColumnId>;
+  readonly ordering: SubscriptionsControls["ordering"];
 }
 
 export const SubscriptionsTableBody = async ({

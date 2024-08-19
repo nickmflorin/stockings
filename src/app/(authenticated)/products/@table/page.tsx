@@ -5,8 +5,9 @@ import { z } from "zod";
 
 import { parseFilters } from "~/lib/filters";
 
+import { ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
+
 import { Loading } from "~/components/loading/Loading";
-import { ProductsTableFiltersOptions, ProductsTableFiltersSchemas } from "~/features/products";
 /* eslint-disable-next-line max-len */
 import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
 
@@ -25,11 +26,7 @@ export interface ProductsTablePageProps {
 export default function ProductsTablePage({ searchParams }: ProductsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    ProductsTableFiltersSchemas,
-    ProductsTableFiltersOptions,
-  );
+  const filters = parseFilters(searchParams, ProductsFiltersSchemas, ProductsFiltersOptions);
 
   return (
     <ProductsTableView

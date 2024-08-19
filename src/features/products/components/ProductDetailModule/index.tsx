@@ -1,9 +1,5 @@
-import { ComponentProps } from "~/components/types"
+import { type ComponentProps } from "~/components/types";
 
-export interface ProductDetailModuleProps extends ComponentProps {
+export interface ProductDetailModuleProps extends ComponentProps {}
 
-}
-
-export const ProductDetailModule = () => (
-
-)
+export const ProductDetailModule = () => <></>;

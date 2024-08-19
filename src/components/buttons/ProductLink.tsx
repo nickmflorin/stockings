@@ -9,7 +9,7 @@ import { getProductDetailPageUrl } from "~/integrations/lie-nielsen/paths";
 import { Link } from "./generic";
 
 export interface ProductLinkProps extends Omit<LinkProps<"a">, "href" | "element"> {
-  readonly product: Pick<Product, "slug" | "name">;
+  readonly product: Pick<Product, "id" | "slug" | "name">;
   readonly location?: "external" | "internal";
 }
 

@@ -1,8 +1,8 @@
 "use server";
 import { getAuth, auth } from "@clerk/nextjs/server";
 
-import { db } from "~/database";
 import { type User } from "~/database/model";
+import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import { ApiClientGlobalError } from "~/api";

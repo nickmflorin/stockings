@@ -79,6 +79,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
       isClearable,
       chipsCanDeselect: _chipsCanDeselect,
       showIconsInChips = true,
+      getItemValueLabel,
       children,
       content,
       onChange,
@@ -90,7 +91,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
     }: DataSelectBaseProps<M, O>,
     ref: ForwardedRef<types.SelectInstance>,
   ): JSX.Element => {
-    const innerRef = useRef<Omit<types.SelectInstance, "focusInput"> | null>(null);
+    const innerRef = useRef<Omit<types.SelectInstance, "clear"> | null>(null);
     const innerInputRef = useRef<BasicSelectInputInstance | null>(null);
 
     const { value, clear, ...managed } = useSelectModelValue<M, O>({
@@ -133,16 +134,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
 
     return (
       <BasicSelect
-        ref={instance => {
-          if (instance) {
-            innerRef.current = instance;
-            if (typeof ref === "function") {
-              ref(instance);
-            } else if (ref) {
-              ref.current = instance;
-            }
-          }
-        }}
+        ref={innerRef}
         maxHeight={maxHeight}
         isReady={isReady}
         isLoading={isLoading}
@@ -164,7 +156,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
             <DataSelectInput<M, O>
               {...params}
               {...props}
-              getItemLabel={props.getItemValueLabel}
+              getItemLabel={getItemValueLabel}
               getBadgeIcon={showIconsInChips ? getBadgeIcon : undefined}
               isDisabled={props.isDisabled || managed.modelValue === types.NOTSET}
               options={options}

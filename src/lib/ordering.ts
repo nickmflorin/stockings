@@ -34,11 +34,13 @@ const OrderingSchema = <F extends string>(options: ParseOrderingOptions<F>) =>
     );
 
 export const parseOrdering = <F extends string>(
-  params: ReadonlyURLSearchParams | Record<string, string | string[] | undefined>,
+  params: ReadonlyURLSearchParams | URLSearchParams | Record<string, string | string[] | undefined>,
   { fields, defaultOrdering }: ParseOrderingOptions<F>,
 ): Ordering<F> => {
   const parsed =
-    params instanceof ReadonlyURLSearchParams ? parseQueryParams(params.toString()) : params;
+    params instanceof ReadonlyURLSearchParams || params instanceof URLSearchParams
+      ? parseQueryParams(params.toString())
+      : params;
 
   const parsedData = OrderingSchema({ fields, defaultOrdering }).safeParse(parsed);
   if (parsedData.success) {
