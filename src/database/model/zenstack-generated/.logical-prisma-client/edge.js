@@ -454,7 +454,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/nickflorin/repos/tooltrack/src/database/zenstack/logical-1724011846713.prisma",
+    "sourceFilePath": "/Users/nickflorin/repos/tooltrack/src/database/zenstack/logical-1724077889725.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

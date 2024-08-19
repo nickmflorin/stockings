@@ -31,7 +31,7 @@ export const ProductLink = ({
       {product.name}
     </Link>
   ) : (
-    <Link {...props} href={`/products/${product.id}`} element="a" component={NextLink}>
+    <Link {...props} href={`/product/${product.id}`} element="a" component={NextLink}>
       {product.name}
     </Link>
   );
