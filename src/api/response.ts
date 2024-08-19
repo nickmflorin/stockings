@@ -11,6 +11,7 @@ export const ClientSuccessCodes = enumeratedLiterals(
   [{ value: "HTTP_200_OK", statusCode: 200 }] as const,
   {},
 );
+
 export type ClientSuccessCode = EnumeratedLiteralsMember<typeof ClientSuccessCodes>;
 
 export type ClientSuccessStatusCode<C extends ClientSuccessCode = ClientSuccessCode> = Extract<

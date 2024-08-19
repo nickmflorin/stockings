@@ -20,6 +20,9 @@ export const ProductPriceAreaChart = async ({
   height,
   width,
 }: ProductPriceAreaChartProps): Promise<JSX.Element> => {
-  const records = await fetchProductPriceData(productId);
+  const { data: records } = await fetchProductPriceData(productId, {
+    scope: "action",
+    strict: true,
+  });
   return <ClientProductPriceAreaChart height={height} width={width} data={records} />;
 };

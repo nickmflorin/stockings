@@ -84,7 +84,7 @@
     "domhandler": "^5.0.3",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
-    "enumerated-literals": "^1.2.1",
+    "enumerated-literals": "^1.2.5",
     "framer-motion": "^10.18.0",
     "htmlparser2": "^9.1.0",
     "lodash-es": "^4.17.21",

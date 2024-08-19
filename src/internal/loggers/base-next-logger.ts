@@ -10,6 +10,8 @@ import {
 
 import { isHttpError } from "~/integrations/http";
 
+import { isApiClientGlobalErrorJson } from "~/api";
+
 import { AbstractLogger } from "./abstract-logger";
 import { createBrowserWriter } from "./browser-writer";
 import {
@@ -64,15 +66,27 @@ const includeErrorContext = (parsed: ParsedArgs, error: types.LoggerError): Pars
          object, and can be used with 'Sentry.captureException'. */
       error,
     };
+  } else if (error instanceof Error) {
+    return {
+      ...parsed,
+      error,
+      message: parsed.message ?? error.message,
+      context: {
+        ...parsed.context,
+        message: error.message,
+      },
+    };
+  } else if (isApiClientGlobalErrorJson(error)) {
+    return {
+      ...parsed,
+      message: parsed.message ?? error.message,
+      context: { ...parsed.context, ...error },
+    };
   }
   return {
     ...parsed,
-    error,
-    message: parsed.message ?? error.message,
-    context: {
-      ...parsed.context,
-      message: error.message,
-    },
+    message: parsed.message,
+    context: { ...parsed.context, ...error },
   };
 };
 
