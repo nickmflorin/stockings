@@ -24,7 +24,10 @@ import { useDrawers } from "~/components/drawers/hooks";
 import { EnabledIcon } from "~/components/icons/EnabledIcon";
 import Icon from "~/components/icons/Icon";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
-import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
+import {
+  DataTableBody,
+  type DataTableBodyProps,
+} from "~/components/tables/data-tables/DataTableBody";
 import { Text } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 /* eslint-disable-next-line max-len */
@@ -38,16 +41,19 @@ import { SubscriptionTypeText } from "../SubscriptionTypeText";
 
 import { SubscriptionsTableControlBar } from "./SubscriptionsTableControlBar";
 
-export interface SubscriptionsTableBodyProps {
-  readonly data: FullProductSubscription[];
+export interface SubscriptionsTableBodyProps
+  extends Omit<
+    DataTableBodyProps<FullProductSubscription>,
+    "rowIsSelected" | "onRowSelected" | "getRowActions" | "columns"
+  > {
   readonly controlBarTargetId: string;
   readonly controlBarTooltipsInPortal?: boolean;
 }
 
 export const SubscriptionsTableBody = ({
-  data,
   controlBarTargetId,
   controlBarTooltipsInPortal,
+  ...props
 }: SubscriptionsTableBodyProps): JSX.Element => {
   const { ids, open } = useDrawers();
   const [selectedRows, setSelectedRows] = useState<FullProductSubscription[]>([]);
@@ -60,26 +66,28 @@ export const SubscriptionsTableBody = ({
   const [editPending, editTransition] = useTransition();
 
   useEffect(() => {
-    setSelectedRows(curr => data.filter(d => curr.map(r => r.id).includes(d.id)));
-  }, [data]);
+    setSelectedRows(curr => props.data.filter(d => curr.map(r => r.id).includes(d.id)));
+  }, [props.data]);
 
   return (
     <>
       <SubscriptionsTableControlBar
+        isDisabled={props.isEmpty}
         targetId={controlBarTargetId}
         tooltipsInPortal={controlBarTooltipsInPortal}
         selectedRows={selectedRows}
         allRowsAreSelected={
-          data.length !== 0 &&
+          props.data.length !== 0 &&
           arraysHaveSameElements(
             selectedRows.map(r => r.id),
-            data.map(datum => datum.id),
+            props.data.map(datum => datum.id),
           )
         }
-        onSelectAllRows={selected => (selected ? setSelectedRows(data) : setSelectedRows([]))}
+        onSelectAllRows={selected => (selected ? setSelectedRows(props.data) : setSelectedRows([]))}
       />
       <DataTableBody
         actionMenuWidth={140}
+        {...props}
         rowIsSelected={datum => selectedRows.map(r => r.id).includes(datum.id)}
         onRowSelected={(datum, isSelected) =>
           setSelectedRows(curr =>
@@ -328,7 +336,6 @@ export const SubscriptionsTableBody = ({
             },
           },
         )}
-        data={data}
       />
     </>
   );

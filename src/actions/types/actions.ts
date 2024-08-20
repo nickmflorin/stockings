@@ -1,5 +1,7 @@
 import { clamp } from "lodash-es";
 
+import { logger } from "~/internal/logger";
+
 import { type ApiClientError, type ApiClientErrorJson } from "~/api";
 
 export type ServerSidePaginationParams = {
@@ -40,16 +42,31 @@ export type MutationActionResponse<T> =
   | { data: T; error?: never }
   | { data?: never; error: ApiClientErrorJson };
 
+interface ErrorInFetchContextOptions {
+  readonly logData?: Record<string, unknown>;
+  readonly logMessage?: string;
+  readonly log?: boolean;
+}
+
 export const errorInFetchContext = <C extends FetchActionContext>(
   error: ApiClientError,
   context: C,
+  options?: ErrorInFetchContextOptions,
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 ): FetchActionResponse<any, C> => {
+  const { logData = {}, logMessage, log = true } = options ?? {};
+
   if (context.strict) {
     throw error;
   } else if (context.scope === "api") {
+    if (log) {
+      logger.error(error, logMessage ?? error.message, logData);
+    }
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     return { error } as FetchActionResponse<any, C>;
+  }
+  if (log) {
+    logger.error(error, logMessage ?? error.message, logData);
   }
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   return { error: error.json } as FetchActionResponse<any, C>;

@@ -103,8 +103,8 @@ const _fetchProductSubscriptions = async <C extends FetchActionContext>(
     where: whereClause({ filters, user }),
     orderBy: ordering
       ? ordering.orderBy === "product"
-        ? [{ product: { name: ordering.order } }]
-        : [{ [ordering.orderBy]: ordering.order }]
+        ? [{ product: { name: ordering.order } }, { id: "asc" }]
+        : [{ [ordering.orderBy]: ordering.order }, { id: "asc" }]
       : undefined,
     skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
     take: pagination ? pagination.pageSize : undefined,

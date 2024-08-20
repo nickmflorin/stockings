@@ -39,11 +39,7 @@ export default function SubscriptionsPage({ searchParams, params }: Subscription
           </>
         }
       >
-        <SubscriptionsTableBody
-          productId={params.id}
-          ordering={ordering}
-          controlBarTargetId="product-subscriptions-control-bar"
-        />
+        <SubscriptionsTableBody productId={params.id} ordering={ordering} />
       </Suspense>
     </SubscriptionsTableView>
   );

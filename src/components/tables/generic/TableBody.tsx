@@ -8,14 +8,18 @@ import { Loading } from "~/components/loading/Loading";
 import { tableHasLoadingIndicator, type TableLoadingIndicator } from "~/components/tables/types";
 import { classNames, type QuantitativeSize, type MuiComponentProps } from "~/components/types";
 
-import { TableEmptyState } from "./TableEmptyState";
+import { TableFeedbackState } from "./TableFeedbackState";
 
 const TableSkeleton = dynamic(() => import("./TableSkeleton").then(mod => mod.TableSkeleton));
 
 export type TableBodyProps = MuiComponentProps<RootTableBodyProps<"tbody">> & {
   readonly isLoading?: boolean;
   readonly isEmpty?: boolean;
-  readonly emptyState?: ReactNode;
+  readonly isError?: boolean;
+  readonly emptyContent?: string | JSX.Element;
+  readonly errorTitle?: string;
+  readonly errorMessage?: string;
+  readonly errorContent?: string | JSX.Element;
   readonly numSkeletonRows?: number;
   readonly numSkeletonColumns?: number;
   readonly cellSkeletons?: ReactNode[];
@@ -26,7 +30,11 @@ export type TableBodyProps = MuiComponentProps<RootTableBodyProps<"tbody">> & {
 export const TableBody = ({
   children,
   isEmpty,
-  emptyState,
+  isError,
+  emptyContent,
+  errorMessage,
+  errorTitle,
+  errorContent,
   isLoading,
   cellSkeletons,
   skeletonRowHeight,
@@ -58,10 +66,22 @@ export const TableBody = ({
       /* See comment towards the top of the file related to the overridden 'console.error'
          method. */
       <Loading
-        component={ps => <tr {...ps} />}
+        component={ps => <tr {...ps} className={classNames("tr--loading", ps.className)} />}
         isLoading={isLoading && tableHasLoadingIndicator(loadingIndicator, "spinner")}
       >
-        {isEmpty ? <TableEmptyState emptyState={emptyState} as="tr" /> : children}
+        {isError ? (
+          <TableFeedbackState
+            as="tr"
+            stateType="error"
+            errorContent={errorContent}
+            errorTitle={errorTitle}
+            errorMessage={errorMessage}
+          />
+        ) : isEmpty ? (
+          <TableFeedbackState stateType="empty" emptyContent={emptyContent} as="tr" />
+        ) : (
+          children
+        )}
       </Loading>
     )}
   </RootTableBody>

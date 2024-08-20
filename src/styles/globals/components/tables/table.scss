@@ -149,7 +149,6 @@ $table-size-properties: (
       color: inherit;
 
       @include table-header-cell($direct: true) {
-        // border-bottom: $table-border;
         border-bottom: none;
         color: inherit;
         font-size: 13px;
@@ -173,7 +172,9 @@ $table-size-properties: (
       }
 
       &--highlighted {
-        background-color: $table-row-highlighted-color;
+        &:not(.tr--loading, .tr--feedback) {
+          background-color: $table-row-highlighted-color;
+        }
       }
 
       &--loading {
@@ -195,7 +196,9 @@ $table-size-properties: (
   &--higlighted-rows-on-hover {
     @include table-body-row($direct: false) {
       &:hover {
-        background-color: $table-row-highlighted-color;
+        &:not(.tr--loading, .tr--feedback) {
+          background-color: $table-row-highlighted-color;
+        }
       }
     }
   }

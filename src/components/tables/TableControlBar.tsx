@@ -23,7 +23,7 @@ export interface TableControlBarProps<T> extends ComponentProps {
   readonly children: ReactNode;
   readonly tooltipsInPortal?: boolean;
   readonly allRowsAreSelected?: boolean;
-  readonly selectionIsDisabled?: boolean;
+  readonly isDisabled?: boolean;
   readonly selectedRows: T[];
   readonly targetId: string;
   readonly canDeleteRows?: boolean;
@@ -40,7 +40,7 @@ export const TableControlBar = <T,>({
   allRowsAreSelected = false,
   tooltipsInPortal = false,
   selectedRows,
-  selectionIsDisabled = false,
+  isDisabled = false,
   canDeleteRows = false,
   confirmationModal = DefaultDeleteConfirmationModal,
   deleteTooltipContent = (numRows: number) => `Delete ${numRows} selected rows.`,
@@ -60,12 +60,14 @@ export const TableControlBar = <T,>({
     <>
       <Portal container={container}>
         <div {...props} className={classNames("table-view__control-bar", props.className)}>
-          <Checkbox
-            readOnly
-            value={allRowsAreSelected}
-            isDisabled={selectionIsDisabled}
-            onChange={e => onSelectAllRows?.(e.target.checked)}
-          />
+          <div className="table-view__control-bar__checkbox-wrapper">
+            <Checkbox
+              readOnly
+              value={allRowsAreSelected}
+              isDisabled={isDisabled}
+              onChange={e => onSelectAllRows?.(e.target.checked)}
+            />
+          </div>
           <div className="table-view__control-bar-actions">
             {canDeleteRows && (
               <Tooltip
@@ -78,7 +80,7 @@ export const TableControlBar = <T,>({
                     : deleteTooltipContent(selectedRows.length)
                 }
                 className="text-sm"
-                isDisabled={selectedRows.length === 0}
+                isDisabled={selectedRows.length === 0 || isDisabled}
               >
                 <DeleteButton
                   isDisabled={selectedRows.length === 0}

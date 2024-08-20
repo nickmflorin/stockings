@@ -22,7 +22,7 @@ export interface DataTableProps<D extends types.DataTableDatum, I extends string
       | "columns"
       | "skeletonRowHeight"
       | "numSkeletonRows"
-      | "emptyState"
+      | "emptyContent"
       | "isEmpty"
       | "isLoading"
       | "rowHeight"
@@ -47,7 +47,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
   numSkeletonRows,
   skeletonRowHeight,
   isEmpty,
-  emptyState,
+  emptyContent,
   isLoading,
   loadingIndicator,
   actionMenuWidth,
@@ -77,7 +77,7 @@ export const DataTable = <D extends types.DataTableDatum, I extends string>({
     >
       <DataTableBody<D, I>
         isEmpty={isEmpty}
-        emptyState={emptyState}
+        emptyContent={emptyContent}
         data={data}
         ordering={ordering}
         columns={props.columns}

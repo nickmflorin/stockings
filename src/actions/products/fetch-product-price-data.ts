@@ -3,6 +3,8 @@ import { cache } from "react";
 import type { ProductPriceChartDataPoint } from "~/database/model";
 import { db } from "~/database/prisma";
 
+import { isUuid } from "~/lib/typeguards";
+
 import {
   dataInFetchContext,
   errorInFetchContext,
@@ -17,6 +19,10 @@ export const fetchProductPriceData = cache(
     id: string,
     context: C,
   ): Promise<FetchActionResponse<ProductPriceChartDataPoint[], C>> => {
+    if (!isUuid(id)) {
+      const err = ApiClientGlobalError.NotFound({});
+      return errorInFetchContext(err, context);
+    }
     const product = await db.product.findUnique({ where: { id } });
     if (!product) {
       const err = ApiClientGlobalError.NotFound({});

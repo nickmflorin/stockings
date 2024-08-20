@@ -31,9 +31,9 @@ export const SubscriptionsTableControlBar = ({
         offset={{ mainAxis: 6 }}
         content={`Enable ${numDisabled} selected subscription${numDisabled <= 1 ? "" : "s"}.`}
         className="text-sm"
-        isDisabled={numDisabled === 0}
+        isDisabled={numDisabled === 0 || props.isDisabled}
       >
-        <EnableButton isDisabled={numDisabled === 0} />
+        <EnableButton isDisabled={numDisabled === 0 || props.isDisabled} />
       </Tooltip>
       <Tooltip
         placement="top-start"
@@ -41,9 +41,9 @@ export const SubscriptionsTableControlBar = ({
         offset={{ mainAxis: 6 }}
         content={`Disable ${numEnabled} selected subscription${numEnabled <= 1 ? "" : "s"}.`}
         className="text-sm"
-        isDisabled={numEnabled === 0}
+        isDisabled={numEnabled === 0 || props.isDisabled}
       >
-        <DisableButton isDisabled={numEnabled === 0} />
+        <DisableButton isDisabled={numEnabled === 0 || props.isDisabled} />
       </Tooltip>
     </TableControlBar>
   );

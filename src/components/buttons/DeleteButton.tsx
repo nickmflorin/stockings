@@ -13,6 +13,7 @@ export const DeleteButton = forwardRef<HTMLButtonElement, DeleteButtonProps>(
       {...props}
       ref={ref}
       icon="trash-alt"
+      disabledClassName="text-disabled hover:text-disabled hover:bg-transparent"
       className={classNames(
         "text-red-600 hover:text-red-700 hover:bg-transparent",
         props.className,

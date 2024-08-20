@@ -1,3 +1,5 @@
+import { type Order } from "~/lib/ordering";
+
 import {
   TableHeaderCell,
   type TableHeaderCellProps,
@@ -7,7 +9,7 @@ import type * as types from "~/components/tables/types";
 export interface DataTableHeaderCellProps<D extends types.DataTableDatum, I extends string = string>
   extends Omit<TableHeaderCellProps, "ordering" | "icon" | "id" | "isOrderable" | "children"> {
   readonly column: types.DataTableColumnConfig<D, I>;
-  readonly order?: types.TableOrder | null;
+  readonly order?: Order | null;
 }
 
 export const DataTableHeaderCell = <D extends types.DataTableDatum, I extends string>({

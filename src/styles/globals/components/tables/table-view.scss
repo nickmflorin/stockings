@@ -22,7 +22,23 @@
       gap: theme("spacing.4");
       align-items: center;
       width: 100%;
-      padding-left: 12px;
+      // The left padding is to get the checkbox in the action bar to vertically align with the
+      // checkboxes in the table rows.
+      padding-left: 4px;
+      height: 32px;
+
+      /* The purpose of the wrapper is to wrap the checkbox in a square box that is the same
+         dimensions as the icon buttons inside the control bar, which allows the gap to apply
+         the same visual spacing between the checkbox and the actions as it does between the actions
+         themselves. */
+      > .table-view__control-bar__checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: auto;
+        aspect-ratio: 1;
+      }
 
       > .table-view__control-bar-actions {
         display: flex;

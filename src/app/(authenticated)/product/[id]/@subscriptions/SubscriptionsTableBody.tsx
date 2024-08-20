@@ -6,6 +6,7 @@ import { type SubscriptionsControls } from "~/actions";
 import { fetchProduct } from "~/actions/products";
 import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-subscriptions";
 
+import { InlineLink } from "~/components/buttons";
 import { Loading } from "~/components/loading/Loading";
 
 import { ApiClientGlobalErrorCodes } from "~/api";
@@ -18,12 +19,10 @@ const ClientSubscriptionsTableBody = dynamic(
 export interface SubscriptionsTableBodyProps {
   readonly productId: string;
   readonly ordering: SubscriptionsControls["ordering"];
-  readonly controlBarTargetId: string;
 }
 
 export const SubscriptionsTableBody = async ({
   ordering,
-  controlBarTargetId,
   productId,
 }: SubscriptionsTableBodyProps): Promise<JSX.Element> => {
   const { data: product, error } = await fetchProduct(productId, { strict: false });
@@ -33,8 +32,14 @@ export const SubscriptionsTableBody = async ({
         productId,
       });
     }
-    // TODO: Show an empty or error state here.
-    return <ClientSubscriptionsTableBody data={[]} controlBarTargetId={controlBarTargetId} />;
+    return (
+      <ClientSubscriptionsTableBody
+        data={[]}
+        isError
+        errorMessage="There was an error loading the subscriptions."
+        controlBarTargetId="product-subscriptions-control-bar"
+      />
+    );
   }
 
   const { data } = await fetchProductSubscriptions(
@@ -44,11 +49,18 @@ export const SubscriptionsTableBody = async ({
     },
     { strict: true },
   );
-  // TODO: Show an empty state if data is not present.
+
   return (
     <ClientSubscriptionsTableBody
       data={data}
-      controlBarTargetId={controlBarTargetId}
+      isEmpty={data.length === 0}
+      emptyContent={
+        <>
+          You are currently not subscribed to the product. Click <InlineLink>here</InlineLink> to
+          subsribe.
+        </>
+      }
+      controlBarTargetId="product-subscriptions-control-bar"
       controlBarTooltipsInPortal
     />
   );
