@@ -21,6 +21,7 @@ const DefaultDeleteConfirmationModal = () => <></>;
 
 export interface TableControlBarProps<T> extends ComponentProps {
   readonly children: ReactNode;
+  readonly tooltipsInPortal?: boolean;
   readonly allRowsAreSelected?: boolean;
   readonly selectionIsDisabled?: boolean;
   readonly selectedRows: T[];
@@ -37,6 +38,7 @@ export const TableControlBar = <T,>({
   children,
   targetId,
   allRowsAreSelected = false,
+  tooltipsInPortal = false,
   selectedRows,
   selectionIsDisabled = false,
   canDeleteRows = false,
@@ -68,6 +70,7 @@ export const TableControlBar = <T,>({
             {canDeleteRows && (
               <Tooltip
                 placement="top-start"
+                inPortal={tooltipsInPortal}
                 offset={{ mainAxis: 6 }}
                 content={
                   typeof deleteTooltipContent === "string"

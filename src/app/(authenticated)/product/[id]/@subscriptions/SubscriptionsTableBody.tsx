@@ -45,5 +45,11 @@ export const SubscriptionsTableBody = async ({
     { strict: true },
   );
   // TODO: Show an empty state if data is not present.
-  return <ClientSubscriptionsTableBody data={data} controlBarTargetId={controlBarTargetId} />;
+  return (
+    <ClientSubscriptionsTableBody
+      data={data}
+      controlBarTargetId={controlBarTargetId}
+      controlBarTooltipsInPortal
+    />
+  );
 };

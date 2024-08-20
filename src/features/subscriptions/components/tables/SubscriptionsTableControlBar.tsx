@@ -27,6 +27,7 @@ export const SubscriptionsTableControlBar = ({
     >
       <Tooltip
         placement="top-start"
+        inPortal={props.tooltipsInPortal}
         offset={{ mainAxis: 6 }}
         content={`Enable ${numDisabled} selected subscription${numDisabled <= 1 ? "" : "s"}.`}
         className="text-sm"
@@ -36,6 +37,7 @@ export const SubscriptionsTableControlBar = ({
       </Tooltip>
       <Tooltip
         placement="top-start"
+        inPortal={props.tooltipsInPortal}
         offset={{ mainAxis: 6 }}
         content={`Disable ${numEnabled} selected subscription${numEnabled <= 1 ? "" : "s"}.`}
         className="text-sm"
