@@ -32,8 +32,11 @@ const filtersClause = (filters: Partial<SubscriptionsControls["filters"]>) =>
 const whereClause = ({
   filters,
   user,
-}: Pick<SubscriptionsControls, "filters"> & { readonly user: User }) => {
-  const clause = filtersClause(filters);
+}: {
+  readonly filters?: Partial<SubscriptionsControls["filters"]>;
+  readonly user: User;
+}) => {
+  const clause = filters ? filtersClause(filters) : [];
   if (clause.length !== 0) {
     return { AND: [...clause, { userId: user.id }] };
   }
@@ -42,7 +45,10 @@ const whereClause = ({
 
 export const fetchProductSubscriptionsPagination = cache(
   async <C extends FetchActionContext>(
-    { filters, page: _page }: Pick<SubscriptionsControls, "filters" | "page">,
+    {
+      filters,
+      page: _page,
+    }: { page: SubscriptionsControls["page"]; filters?: Partial<SubscriptionsControls["filters"]> },
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
     const { user, error } = await getAuthedUser();
@@ -59,13 +65,24 @@ export const fetchProductSubscriptionsPagination = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Pick<SubscriptionsControls, "filters" | "page">,
+    params: {
+      page: SubscriptionsControls["page"];
+      filters?: Partial<SubscriptionsControls["filters"]>;
+    },
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
 
 const _fetchProductSubscriptions = async <C extends FetchActionContext>(
-  { filters, page: _page, ordering }: SubscriptionsControls,
+  {
+    filters,
+    page,
+    ordering,
+  }: {
+    ordering?: SubscriptionsControls["ordering"];
+    filters?: Partial<SubscriptionsControls["filters"]>;
+    page?: number;
+  },
   context: C,
 ): Promise<FetchActionResponse<FullProductSubscription[], C>> => {
   const { user, error } = await getAuthedUser();
@@ -73,19 +90,24 @@ const _fetchProductSubscriptions = async <C extends FetchActionContext>(
     return errorInFetchContext(error, context);
   }
 
-  const {
-    data: { page, pageSize },
-  } = await fetchProductSubscriptionsPagination({ filters, page: _page }, { strict: true });
+  let pagination: Pick<ServerSidePaginationParams, "page" | "pageSize"> | null = null;
+  if (page) {
+    ({ data: pagination } = await fetchProductSubscriptionsPagination(
+      { filters, page },
+      { strict: true },
+    ));
+  }
 
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
   const data = await enhanced.productSubscription.findMany({
     where: whereClause({ filters, user }),
-    orderBy:
-      ordering.orderBy === "product"
+    orderBy: ordering
+      ? ordering.orderBy === "product"
         ? [{ product: { name: ordering.order } }]
-        : [{ [ordering.orderBy]: ordering.order }],
-    skip: pageSize * (page - 1),
-    take: pageSize,
+        : [{ [ordering.orderBy]: ordering.order }]
+      : undefined,
+    skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
+    take: pagination ? pagination.pageSize : undefined,
     include: { product: true },
   });
   const conditions = await enhanced.statusChangeSubscriptionCondition.findMany({

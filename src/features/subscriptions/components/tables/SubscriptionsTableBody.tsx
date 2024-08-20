@@ -40,9 +40,13 @@ import { SubscriptionsTableControlBar } from "./SubscriptionsTableControlBar";
 
 export interface SubscriptionsTableBodyProps {
   readonly data: FullProductSubscription[];
+  readonly controlBarTargetId: string;
 }
 
-export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): JSX.Element => {
+export const SubscriptionsTableBody = ({
+  data,
+  controlBarTargetId,
+}: SubscriptionsTableBodyProps): JSX.Element => {
   const { ids, open } = useDrawers();
   const [selectedRows, setSelectedRows] = useState<FullProductSubscription[]>([]);
 
@@ -60,6 +64,7 @@ export const SubscriptionsTableBody = ({ data }: SubscriptionsTableBodyProps): J
   return (
     <>
       <SubscriptionsTableControlBar
+        targetId={controlBarTargetId}
         selectedRows={selectedRows}
         allRowsAreSelected={
           data.length !== 0 &&

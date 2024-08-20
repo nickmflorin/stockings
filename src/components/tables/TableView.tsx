@@ -17,6 +17,7 @@ export interface TableViewProps extends ComponentProps {
   readonly footer?: JSX.Element;
   readonly footerProps?: ComponentProps;
   readonly header?: JSX.Element;
+  readonly controlBarTargetId?: string;
 }
 
 const LocalTableView = ({
@@ -27,13 +28,16 @@ const LocalTableView = ({
   headerProps,
   footerProps,
   header,
+  controlBarTargetId,
   ...props
 }: TableViewProps): JSX.Element => (
   <div
     {...props}
     className={classNames("table-view", { "table-view--loading": isLoading }, props.className)}
   >
-    <TableViewHeader {...headerProps}>{header}</TableViewHeader>
+    <TableViewHeader {...headerProps} controlBarTargetId={controlBarTargetId}>
+      {header}
+    </TableViewHeader>
     <div className={classNames("table-view__content", contentClassName)}>
       <Loading isLoading={isLoading}>{children}</Loading>
     </div>

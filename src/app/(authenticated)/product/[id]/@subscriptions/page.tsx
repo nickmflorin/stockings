@@ -1,35 +1,50 @@
-import { logger } from "~/internal/logger";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
-import { fetchProduct } from "~/actions/products";
+import { parseOrdering } from "~/lib/ordering";
 
-import { ErrorView } from "~/components/errors/ErrorView";
-import { Avatar } from "~/components/images/Avatar";
-import { Module } from "~/components/structural/Module";
-import { ProductCategoryText } from "~/features/products/components/ProductCategoryText";
+import { SubscriptionsDefaultOrdering } from "~/actions";
 
-import { ApiClientGlobalErrorCodes } from "~/api";
+import { Loading } from "~/components/loading/Loading";
+import { OrderableSubscriptionsTableColumnIds } from "~/features/subscriptions";
+/* eslint-disable-next-line max-len */
+import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const productId = params.id;
-  const { data: product, error } = await fetchProduct(productId, { strict: false });
-  if (error) {
-    if (error.code !== ApiClientGlobalErrorCodes.NOT_FOUND) {
-      logger.error(error, "There was an error loading the product for the detail view.", {
-        productId,
-      });
-    }
-  }
+import { SubscriptionsTableBody } from "./SubscriptionsTableBody";
+
+const SubscriptionsTableView = dynamic(
+  () => import("~/features/subscriptions/components/tables/SubscriptionsTableView"),
+  { loading: () => <Loading isLoading /> },
+);
+
+export interface SubscriptionsTablePageProps {
+  readonly searchParams: Record<string, string>;
+  readonly params: { id: string };
+}
+
+export default function SubscriptionsPage({ searchParams, params }: SubscriptionsTablePageProps) {
+  const ordering = parseOrdering(searchParams, {
+    defaultOrdering: SubscriptionsDefaultOrdering,
+    fields: OrderableSubscriptionsTableColumnIds,
+  });
+
   return (
-    <>
-      <Module.Header
-        title={product?.name ?? "-"}
-        avatar={<Avatar size={80} src={product?.imageSrc} className="border" radius="full" />}
+    <SubscriptionsTableView controlBarTargetId="product-subscriptions-control-bar">
+      <Suspense
+        key={JSON.stringify(ordering)}
+        fallback={
+          <>
+            <SubscriptionsTableControlBarPlaceholder targetId="product-subscriptions-control-bar" />
+            <Loading isLoading component="tbody" />
+          </>
+        }
       >
-        {product?.category ? <ProductCategoryText inherit category={product.category} /> : "-"}
-      </Module.Header>
-      <Module.Content>
-        {!product ? <ErrorView>There was an error loading the product.</ErrorView> : product.name}
-      </Module.Content>
-    </>
+        <SubscriptionsTableBody
+          productId={params.id}
+          ordering={ordering}
+          controlBarTargetId="product-subscriptions-control-bar"
+        />
+      </Suspense>
+    </SubscriptionsTableView>
   );
 }

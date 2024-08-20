@@ -17,12 +17,14 @@ export interface SubscriptionsTableViewProps {
   readonly filterBar?: JSX.Element;
   readonly controlBar?: JSX.Element;
   readonly pagination?: JSX.Element;
+  readonly controlBarTargetId?: string;
 }
 
 export const SubscriptionsTableView = ({
   children,
   filterBar,
   pagination,
+  controlBarTargetId = "subscriptions-table-control-bar-target",
 }: SubscriptionsTableViewProps) => {
   const [ordering, setOrdering] = useOrdering<OrderableSubscriptionsTableColumnId>({
     useQueryParams: true,
@@ -30,7 +32,7 @@ export const SubscriptionsTableView = ({
     defaultOrdering: SubscriptionsDefaultOrdering,
   });
   return (
-    <TableView header={filterBar} footer={pagination}>
+    <TableView header={filterBar} footer={pagination} controlBarTargetId={controlBarTargetId}>
       <TableContainer sx={{ maxHeight: "100%" }}>
         <DataTableWrapper
           ordering={ordering}

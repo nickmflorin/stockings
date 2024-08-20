@@ -24,6 +24,7 @@ export interface TableControlBarProps<T> extends ComponentProps {
   readonly allRowsAreSelected?: boolean;
   readonly selectionIsDisabled?: boolean;
   readonly selectedRows: T[];
+  readonly targetId: string;
   readonly canDeleteRows?: boolean;
   readonly deleteTooltipContent?: string | ((numRows: number) => string);
   readonly onSelectAllRows?: (v: boolean) => void;
@@ -34,6 +35,7 @@ export interface TableControlBarProps<T> extends ComponentProps {
 
 export const TableControlBar = <T,>({
   children,
+  targetId,
   allRowsAreSelected = false,
   selectedRows,
   selectionIsDisabled = false,
@@ -47,8 +49,8 @@ export const TableControlBar = <T,>({
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setContainer(document.getElementById("table-view-control-bar-portal-target"));
-  }, []);
+    setContainer(document.getElementById(targetId));
+  }, [targetId]);
 
   const ConfirmationModal = confirmationModal;
 

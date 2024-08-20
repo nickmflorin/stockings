@@ -47,6 +47,7 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
 
   return (
     <SubscriptionsTableView
+      controlBarTargetId="subscriptions-control-bar"
       filterBar={
         <Suspense>
           <SubscriptionsTableFilterBar />
@@ -62,12 +63,17 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
         fallback={
           <>
-            <SubscriptionsTableControlBarPlaceholder />
+            <SubscriptionsTableControlBarPlaceholder targetId="subscriptions-control-bar" />
             <Loading isLoading component="tbody" />
           </>
         }
       >
-        <SubscriptionsTableBody filters={filters} page={page} ordering={ordering} />
+        <SubscriptionsTableBody
+          filters={filters}
+          page={page}
+          ordering={ordering}
+          controlBarTargetId="subscriptions-control-bar"
+        />
       </Suspense>
     </SubscriptionsTableView>
   );

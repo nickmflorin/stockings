@@ -1,21 +1,19 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ESNext",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
-    "types": [],
-    "typeRoots": ["./node_modules/@types"],
     "plugins": [
       {
         "name": "next"
@@ -31,6 +29,6 @@
     },
     "require": ["tsconfig-paths/register"]
   },
-  "include": ["next-env.d.ts", "src"],
-  "exclude": ["node_modules", ".next"]
+  "include": ["next-env.d.ts", "src", ".next/types/**/*.ts", "tailwind.config.ts"],
+  "exclude": ["node_modules", "**/.*/"]
 }

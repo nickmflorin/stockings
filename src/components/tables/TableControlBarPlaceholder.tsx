@@ -10,18 +10,20 @@ import { classNames } from "~/components/types";
 export interface TableControlBarPlaceholderProps extends ComponentProps {
   readonly children: ReactNode;
   readonly canDeleteRows?: boolean;
+  readonly targetId?: string;
 }
 
 export const TableControlBarPlaceholder = ({
   children,
   canDeleteRows = false,
+  targetId,
   ...props
 }: TableControlBarPlaceholderProps): JSX.Element => {
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setContainer(document.getElementById("table-view-control-bar-portal-target"));
-  }, []);
+    setContainer(document.getElementById(targetId));
+  }, [targetId]);
 
   return (
     <Portal container={container}>
