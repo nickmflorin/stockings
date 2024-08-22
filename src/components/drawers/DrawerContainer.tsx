@@ -20,6 +20,7 @@ export const DrawerContainer = ({ children, width, ...props }: DrawerContainerPr
       ...props.style,
       width: sizeToString(width, "px"),
       maxWidth: sizeToString(width, "px"),
+      minWidth: sizeToString(width, "px"),
     }}
   >
     {children}

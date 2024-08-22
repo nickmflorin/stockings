@@ -6,13 +6,15 @@ import { type SubscriptionsControls } from "~/actions";
 import { fetchProduct } from "~/actions/products";
 import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-subscriptions";
 
-import { InlineLink } from "~/components/buttons";
 import { Loading } from "~/components/loading/Loading";
 
 import { ApiClientGlobalErrorCodes } from "~/api";
 
-const ClientSubscriptionsTableBody = dynamic(
-  () => import("~/features/subscriptions/components/tables/SubscriptionsTableBody"),
+const ProductSubscriptionsTableBody = dynamic(
+  () =>
+    import("~/features/products/components/tables/ProductSubscriptionsTableBody").then(
+      mod => mod.ProductSubscriptionsTableBody,
+    ),
   { loading: () => <Loading isLoading component="tbody" /> },
 );
 
@@ -33,11 +35,10 @@ export const SubscriptionsTableBody = async ({
       });
     }
     return (
-      <ClientSubscriptionsTableBody
+      <ProductSubscriptionsTableBody
         data={[]}
         isError
         errorMessage="There was an error loading the subscriptions."
-        controlBarTargetId="product-subscriptions-control-bar"
       />
     );
   }
@@ -50,18 +51,5 @@ export const SubscriptionsTableBody = async ({
     { strict: true },
   );
 
-  return (
-    <ClientSubscriptionsTableBody
-      data={data}
-      isEmpty={data.length === 0}
-      emptyContent={
-        <>
-          You are currently not subscribed to the product. Click <InlineLink>here</InlineLink> to
-          subsribe.
-        </>
-      }
-      controlBarTargetId="product-subscriptions-control-bar"
-      controlBarTooltipsInPortal
-    />
-  );
+  return <ProductSubscriptionsTableBody data={data} product={product} />;
 };

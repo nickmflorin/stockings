@@ -33,10 +33,8 @@ const TableFeedbackStates: {
   ) => JSX.Element;
 } = {
   empty: ({ emptyContent }) => {
-    if (typeof emptyContent === "string") {
+    if (emptyContent) {
       return <EmptyMessage>{emptyContent}</EmptyMessage>;
-    } else if (emptyContent) {
-      return emptyContent;
     }
     return <EmptyMessage>No data.</EmptyMessage>;
   },

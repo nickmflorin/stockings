@@ -27,10 +27,7 @@ export const usePriceChangeSubscriptionForm = () =>
     schema: PriceChangeSubscriptionSchema,
     defaultValues: {
       enabled: true,
-      conditions: [
-        PriceChangeCondition.PriceIncrease,
-        PriceChangeCondition.PriceDecrease,
-      ],
+      conditions: [PriceChangeCondition.PriceIncrease, PriceChangeCondition.PriceDecrease],
     },
   });
 

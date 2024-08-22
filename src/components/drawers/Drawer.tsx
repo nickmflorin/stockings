@@ -5,6 +5,7 @@ import { ErrorBoundary } from "~/components/errors/ErrorBoundary";
 import { type ComponentProps, classNames } from "~/components/types";
 
 import { DrawerContent } from "./DrawerContent";
+import { DrawerFooter } from "./DrawerFooter";
 import { DrawerHeader } from "./DrawerHeader";
 
 export interface DrawerProps extends ComponentProps {
@@ -22,6 +23,7 @@ export const Drawer = Object.assign(LocalDrawer, {
   displayName: "Drawer",
   Content: DrawerContent,
   Header: DrawerHeader,
+  Footer: DrawerFooter,
 });
 
 export default Drawer;

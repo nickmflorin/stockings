@@ -18,7 +18,7 @@ export default function ProductLayout({ priceChart, detail, subscriptions }: Pro
       </div>
       <div className="flex flex-row gap-[16px] h-[400px]">
         {/* TODO: Revisit these sizes when we make the page responsive. */}
-        <div className="flex flex-col gap-[16px] min-w-[600px] max-w-[600px] h-full">
+        <div className="flex flex-col gap-[16px] max-w-[600px] h-full">
           <Module component="paper" className="h-full">
             <Module.Header title="Price History">
               Historical recorded prices for the product.

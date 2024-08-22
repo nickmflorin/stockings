@@ -265,6 +265,7 @@ export const SubscriptionsTableBody = ({
                 datum.conditions.length !== 0 ? (
                   <div className="flex flex-row items-center justify-center">
                     <StatusChangeConditionsDropdown
+                      inPortal
                       conditions={datum.conditions as StatusChangeSubscriptionCondition[]}
                     />
                   </div>

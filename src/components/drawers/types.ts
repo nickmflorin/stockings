@@ -8,6 +8,7 @@ export const DrawerIds = enumeratedLiterals(
     "subscribe-to-status-changes",
     "update-status-change-subscription",
     "update-price-change-subscription",
+    "subscribe-to-product-multipart",
   ] as const,
   {},
 );

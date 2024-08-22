@@ -37,6 +37,11 @@ const SubscribeToStatusChangesDrawer = dynamic(
   { loading: () => <Loading isLoading={true} /> },
 );
 
+const SubscribeToProductMultipartDrawer = dynamic(
+  () => import("~/features/subscriptions/components/drawers/SubscribeToProductMultipartDrawer"),
+  { loading: () => <Loading isLoading={true} /> },
+);
+
 export const Drawers = {
   [DrawerIds.SUBSCRIBE_TO_PRICE_CHANGES]: Drawer(
     DrawerIds.SUBSCRIBE_TO_PRICE_CHANGES,
@@ -56,6 +61,11 @@ export const Drawers = {
   [DrawerIds.UPDATE_STATUS_CHANGE_SUBSCRIPTION]: Drawer(
     DrawerIds.UPDATE_STATUS_CHANGE_SUBSCRIPTION,
     UpdateStatusChangeSubscriptionDrawer,
+    "500px",
+  ),
+  [DrawerIds.SUBSCRIBE_TO_PRODUCT_MULTIPART]: Drawer(
+    DrawerIds.SUBSCRIBE_TO_PRODUCT_MULTIPART,
+    SubscribeToProductMultipartDrawer,
     "500px",
   ),
 } as const satisfies {

@@ -22,7 +22,7 @@ export const EmptyMessage = ({
   <div
     {...props}
     className={classNames(
-      "flex flex-col items-center justify-center gap-8 max-w-[220px] p-2",
+      "flex flex-col items-center justify-center gap-8 max-w-[280px] p-2",
       props.className,
     )}
   >
