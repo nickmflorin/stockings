@@ -113,3 +113,36 @@ export const PriceChangeSubscriptionSchema = z
       }
     }
   });
+
+export const SubscribeToProductSchema = z
+  .object({
+    priceChangeConditions: z.array(z.nativeEnum(PriceChangeCondition)),
+    statusChangeConditions: z.array(StatusChangeSubscriptionConditionSchema),
+  })
+  .superRefine(({ priceChangeConditions, statusChangeConditions }, ctx: z.RefinementCtx) => {
+    for (let i = 0; i < statusChangeConditions.length; i++) {
+      const condition = statusChangeConditions[i];
+      StatusChangeSubscriptionConditionRefinement(["statusChangeConditions", `${i}`])(
+        condition,
+        ctx,
+      );
+      if (
+        !productStatusesAreAny(condition.fromStatus) &&
+        !productStatusesAreAny(condition.toStatus) &&
+        intersection(condition.fromStatus, condition.toStatus).length !== 0
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["statusChangeConditions", `${i}`, "toStatus"],
+          message: "A status cannot appear in both the 'from' and 'to' status lists.",
+        });
+      }
+    }
+    if (uniq(priceChangeConditions).length !== priceChangeConditions.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["priceChangeConditions"],
+        message: "The conditions must be a unique list.",
+      });
+    }
+  });

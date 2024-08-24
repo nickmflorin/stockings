@@ -64,11 +64,26 @@ const TableFeedbackStateInner = ({ stateType, ...props }: Omit<TableFeedbackStat
   );
 };
 
-export const TableFeedbackState = ({ as = "tbody", ...props }: TableFeedbackStateProps) =>
+export const TableFeedbackState = ({
+  as = "tbody",
+  stateType,
+  errorContent,
+  errorMessage,
+  errorTitle,
+  emptyContent,
+  ...props
+}: TableFeedbackStateProps) =>
   as === "tbody" ? (
     <Table.Body {...(props as TableBodyProps)}>
       <Table.BodyRow className="tr--feedback">
-        <TableFeedbackStateInner {...props} />
+        <TableFeedbackStateInner
+          {...props}
+          stateType={stateType}
+          emptyContent={emptyContent}
+          errorMessage={errorMessage}
+          errorTitle={errorTitle}
+          errorContent={errorContent}
+        />
       </Table.BodyRow>
     </Table.Body>
   ) : (
@@ -76,6 +91,12 @@ export const TableFeedbackState = ({ as = "tbody", ...props }: TableFeedbackStat
       {...(props as TableBodyRowProps)}
       className={classNames("tr--feedback", props.className)}
     >
-      <TableFeedbackStateInner {...props} />
+      <TableFeedbackStateInner
+        stateType={stateType}
+        emptyContent={emptyContent}
+        errorMessage={errorMessage}
+        errorTitle={errorTitle}
+        errorContent={errorContent}
+      />
     </Table.BodyRow>
   );

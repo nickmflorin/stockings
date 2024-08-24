@@ -2,7 +2,6 @@ import { PriceChangeCondition } from "~/database/model";
 
 import { Form, type FormProps } from "~/components/forms/Form";
 import { MultiCheckbox } from "~/components/input/MultiCheckbox";
-import { ButtonFooter } from "~/components/structural/ButtonFooter";
 
 import { type PriceChangeSubscriptionFormValues } from "./hooks";
 import { ProductSubscriptionFormSection } from "./ProductSubscriptionFormSection";
@@ -12,31 +11,32 @@ export interface PriceChangeSubscriptionFormProps
     FormProps<PriceChangeSubscriptionFormValues>,
     "children" | "onSubmit" | "contentClassName"
   > {
-  readonly onCancel?: () => void;
+  readonly excludeEnableToggle?: boolean;
+  readonly withContext?: boolean;
 }
 
 export const PriceChangeSubscriptionForm = ({
-  onCancel,
+  excludeEnableToggle,
+  withContext,
   ...props
 }: PriceChangeSubscriptionFormProps) => (
-  <Form
-    {...props}
-    contentClassName="gap-[12px]"
-    footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
-  >
+  <Form {...props} contentClassName="gap-[12px]">
     <ProductSubscriptionFormSection
       label="Enable Price Change Notifications"
       form={props.form}
       field="enabled"
+      excludeEnableToggle={excludeEnableToggle}
     >
       <Form.ControlledField
         name="conditions"
         form={props.form}
         descriptionSeparation={12}
-        label="Conditions"
+        label={withContext ? "Conditions" : undefined}
         description={
-          "Select the specific price change conditions that you would like to be notified about " +
-          "for this product. At least 1 must be selected."
+          withContext
+            ? "Select the specific price change conditions that you would like to be notified " +
+              "about for this product. At least 1 must be selected."
+            : undefined
         }
       >
         {({ value, onChange }) => (

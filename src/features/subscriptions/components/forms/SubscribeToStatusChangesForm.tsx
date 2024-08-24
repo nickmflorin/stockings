@@ -8,6 +8,8 @@ import { logger } from "~/internal/logger";
 
 import { subscribeToStatusChanges } from "~/actions/subscriptions";
 
+import { ButtonFooter } from "~/components/structural/ButtonFooter";
+
 import { useStatusChangeSubscriptionForm } from "./hooks";
 import {
   StatusChangeSubscriptionForm,
@@ -15,26 +17,27 @@ import {
 } from "./StatusChangeSubscriptionForm";
 
 export interface SubscribeToStatusChangesFormProps
-  extends Omit<StatusChangeSubscriptionFormProps, "form"> {
+  extends Omit<StatusChangeSubscriptionFormProps, "form" | "footer" | "action"> {
   readonly productId: string;
+  readonly onCancel?: () => void;
   readonly onSuccess?: () => void;
 }
 
 export const SubscribeToStatusChangesForm = ({
   productId,
+  onCancel,
   onSuccess,
   ...props
 }: SubscribeToStatusChangesFormProps): JSX.Element => {
   const [pending, transition] = useTransition();
   const { refresh } = useRouter();
-
   const form = useStatusChangeSubscriptionForm();
-
   return (
     <StatusChangeSubscriptionForm
       {...props}
       form={form}
-      isLoading={pending}
+      isLoading={pending || props.isLoading}
+      footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
       action={async data => {
         let response: Awaited<ReturnType<typeof subscribeToStatusChanges>> | null = null;
         try {

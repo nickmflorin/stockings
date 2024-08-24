@@ -48,6 +48,7 @@ type BaseAbstractFieldProps<T> = T &
     readonly autoRenderErrors?: boolean;
     readonly condition?: FieldCondition;
     readonly labelSeparation?: QuantitativeSize<"px">;
+    readonly errorSeparation?: QuantitativeSize<"px">;
     readonly description?: string;
     readonly descriptionSeparation?: QuantitativeSize<"px">;
     readonly descriptionClassName?: ComponentProps["className"];
@@ -87,6 +88,7 @@ export const Field = <N extends FieldName<I>, I extends BaseFormValues>({
   labelSeparation = "6px",
   helpTextSeparation = "4px",
   descriptionSeparation = "8px",
+  errorSeparation = "6px",
   labelClassName,
   labelProps,
   condition,
@@ -129,7 +131,18 @@ export const Field = <N extends FieldName<I>, I extends BaseFormValues>({
       </Text>
     )}
     <ShowHide show={autoRenderErrors}>
-      {form ? <FormFieldErrors form={form} name={name} /> : <FormFieldErrors errors={_errors} />}
+      {form ? (
+        <FormFieldErrors
+          form={form}
+          name={name}
+          style={{ marginTop: sizeToString(errorSeparation, "px") }}
+        />
+      ) : (
+        <FormFieldErrors
+          errors={_errors}
+          style={{ marginTop: sizeToString(errorSeparation, "px") }}
+        />
+      )}
     </ShowHide>
   </div>
 );

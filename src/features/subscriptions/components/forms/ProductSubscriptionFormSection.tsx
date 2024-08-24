@@ -20,6 +20,7 @@ export interface ProductSubscriptionFormSectionProps<
   readonly field: Path<V>;
   readonly children: ReactNode;
   readonly description?: string;
+  readonly excludeEnableToggle?: boolean;
 }
 
 export const ProductSubscriptionFormSection = <
@@ -30,17 +31,21 @@ export const ProductSubscriptionFormSection = <
   children,
   description,
   label,
+  excludeEnableToggle = false,
 }: ProductSubscriptionFormSectionProps<V>) => {
   const enabled = useWatch({ control: form.control, name: field });
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <CheckboxField form={form} name={field} label={label} />
-        <Description fontSize="xs" className="text-gray-500">
-          {description}
-        </Description>
+  if (!excludeEnableToggle) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <CheckboxField form={form} name={field} label={label} />
+          <Description fontSize="xs" className="text-gray-500">
+            {description}
+          </Description>
+        </div>
+        <Disabled isDisabled={!enabled}>{children}</Disabled>
       </div>
-      <Disabled isDisabled={!enabled}>{children}</Disabled>
-    </div>
-  );
+    );
+  }
+  return <>{children}</>;
 };

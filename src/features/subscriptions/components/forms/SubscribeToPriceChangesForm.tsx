@@ -8,6 +8,8 @@ import { logger } from "~/internal/logger";
 
 import { subscribeToPriceChanges } from "~/actions/subscriptions";
 
+import { ButtonFooter } from "~/components/structural/ButtonFooter";
+
 import { usePriceChangeSubscriptionForm } from "./hooks";
 import {
   PriceChangeSubscriptionForm,
@@ -15,26 +17,28 @@ import {
 } from "./PriceChangeSubscriptionForm";
 
 export interface SubscribeToPriceChangesFormProps
-  extends Omit<PriceChangeSubscriptionFormProps, "form"> {
+  extends Omit<PriceChangeSubscriptionFormProps, "form" | "action" | "footer"> {
   readonly productId: string;
+  readonly onCancel?: () => void;
   readonly onSuccess?: () => void;
 }
 
 export const SubscribeToPriceChangesForm = ({
   productId,
   onSuccess,
+  onCancel,
   ...props
 }: SubscribeToPriceChangesFormProps): JSX.Element => {
   const [pending, transition] = useTransition();
   const { refresh } = useRouter();
-
   const form = usePriceChangeSubscriptionForm();
 
   return (
     <PriceChangeSubscriptionForm
       {...props}
       form={form}
-      isLoading={pending}
+      isLoading={pending || props.isLoading}
+      footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
       action={async data => {
         let response: Awaited<ReturnType<typeof subscribeToPriceChanges>> | null = null;
         try {

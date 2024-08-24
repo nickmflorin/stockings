@@ -9,6 +9,7 @@ import { logger } from "~/internal/logger";
 import { updatePriceChangeSubscription } from "~/actions/subscriptions";
 
 import { Error } from "~/components/errors/Error";
+import { ButtonFooter } from "~/components/structural/ButtonFooter";
 import { usePriceChangeSubscription } from "~/hooks/api";
 
 import { usePriceChangeSubscriptionForm } from "./hooks";
@@ -18,15 +19,17 @@ import {
 } from "./PriceChangeSubscriptionForm";
 
 export interface UpdatePriceChangeSubscriptionFormProps
-  extends Omit<PriceChangeSubscriptionFormProps, "form"> {
+  extends Omit<PriceChangeSubscriptionFormProps, "form" | "footer" | "action"> {
   readonly subscriptionId: string;
   readonly productId: string;
+  readonly onCancel?: () => void;
   readonly onSuccess?: () => void;
 }
 
 export const UpdatePriceChangeSubscriptionForm = ({
   subscriptionId,
   productId,
+  onCancel,
   onSuccess,
   ...props
 }: UpdatePriceChangeSubscriptionFormProps): JSX.Element => {
@@ -67,8 +70,9 @@ export const UpdatePriceChangeSubscriptionForm = ({
       <PriceChangeSubscriptionForm
         {...props}
         form={form}
-        isLoading={isLoading || pending}
-        isDisabled={isLoading}
+        footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
+        isLoading={isLoading || pending || props.isLoading}
+        isDisabled={isLoading || props.isDisabled}
         action={async data => {
           let response: Awaited<ReturnType<typeof updatePriceChangeSubscription>> | null = null;
           try {

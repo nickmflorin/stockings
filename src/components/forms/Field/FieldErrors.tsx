@@ -48,7 +48,7 @@ export const FormFieldErrors = <N extends FieldName<I>, I extends BaseFormValues
 
   if (errors.length !== 0) {
     return (
-      <div {...props} className={classNames("flex flex-col gap-[2px] mt-[4px]", props.className)}>
+      <div {...props} className={classNames("flex flex-col gap-[2px]", props.className)}>
         {errors.map((e, i) => (
           <FormFieldError key={i}>{e}</FormFieldError>
         ))}

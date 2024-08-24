@@ -2,7 +2,6 @@ import { useFieldArray } from "react-hook-form";
 
 import { Link } from "~/components/buttons";
 import { Form, type FormProps } from "~/components/forms/Form";
-import { ButtonFooter } from "~/components/structural/ButtonFooter";
 
 import { type StatusChangeSubscriptionFormValues } from "../hooks";
 import { ProductSubscriptionFormSection } from "../ProductSubscriptionFormSection";
@@ -14,11 +13,13 @@ export interface StatusChangeSubscriptionFormProps
     FormProps<StatusChangeSubscriptionFormValues>,
     "children" | "onSubmit" | "contentClassName"
   > {
-  readonly onCancel?: () => void;
+  readonly excludeEnableToggle?: boolean;
+  readonly withContext?: boolean;
 }
 
 export const StatusChangeSubscriptionForm = ({
-  onCancel,
+  excludeEnableToggle,
+  withContext = true,
   ...props
 }: StatusChangeSubscriptionFormProps) => {
   const { fields, append, remove } = useFieldArray({
@@ -27,22 +28,21 @@ export const StatusChangeSubscriptionForm = ({
   });
 
   return (
-    <Form
-      {...props}
-      contentClassName="gap-[12px]"
-      footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
-    >
+    <Form {...props} contentClassName="gap-[12px]">
       <ProductSubscriptionFormSection
         label="Enable Status Change Notifications"
         form={props.form}
         field="enabled"
+        excludeEnableToggle={excludeEnableToggle}
       >
         <Form.GenericField
           descriptionSeparation={12}
-          label="Conditions"
+          label={withContext ? "Conditions" : undefined}
           description={
-            "Select the specific status change conditions that you would like to be " +
-            "notified about for this product. At least 1 must be selected."
+            withContext
+              ? "Select the specific status change conditions that you would like to be " +
+                "notified about for this product. At least 1 must be selected."
+              : undefined
           }
         >
           <div className="flex flex-col gap-4">

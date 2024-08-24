@@ -13,17 +13,20 @@ import {
 export interface CircleNumberProps extends ComponentProps, TypographyCharacteristics {
   readonly children: number;
   readonly size?: QuantitativeSize<"px">;
+  readonly isActive?: boolean;
 }
 
 export const CircleNumber = ({
   children,
+  isActive = false,
   size = "24px",
   ...props
 }: CircleNumberProps): JSX.Element => (
   <div
     className={classNames(
       "typography-component",
-      "flex items-center justify-center rounded-full bg-gray-300 text-body p-[2px]",
+      "flex items-center justify-center rounded-full p-[2px]",
+      { "bg-blue-700 text-white": isActive, "bg-gray-300 text-body": !isActive },
       getTypographyClassName({ fontWeight: "medium", ...props }),
       props.className,
     )}

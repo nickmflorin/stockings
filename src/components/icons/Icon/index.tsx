@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import { forwardRef } from "react";
 
 import { pick } from "lodash-es";
 
@@ -22,61 +22,69 @@ import { getIconClassName, getInternalIconClassName, getNativeIconStyle } from "
  * element will allow the FontAwesome package to nest an <svg> element corresponding to the
  * appropriate Font Awesome icon inside of the <i> element.
  */
-export const Icon = ({
-  icon,
-  children,
-  isLoading,
-  style,
-  iconStyle,
-  loadingClassName,
-  spinnerSize,
-  family,
-  ...props
-}: IconProps): JSX.Element => {
-  if (isLoading) {
-    /* If the Icon is in a loading state, render the <Spinner /> animated SVG component with the
-       exact same size as the <Icon /> component. */
-    return (
-      <Spinner
-        isLoading
-        {...pick(props, ["className", "style"])}
-        size={spinnerSize ?? props.size}
-        style={style}
-        className={classNames(props.className, loadingClassName)}
-      />
-    );
-  } else if (icon !== undefined) {
-    if (isSvgIconProp(icon)) {
+export const Icon = forwardRef<HTMLElement, IconProps>(
+  (
+    {
+      icon,
+      children,
+      isLoading,
+      style,
+      iconStyle,
+      loadingClassName,
+      spinnerSize,
+      family,
+      ...props
+    },
+    ref,
+  ): JSX.Element => {
+    if (isLoading) {
+      /* If the Icon is in a loading state, render the <Spinner /> animated SVG component with the
+         exact same size as the <Icon /> component. */
       return (
-        <Image
-          className={classNames("icon", props.className)}
-          style={{ ...style, ...getNativeIconStyle(props) }}
-          src={icon}
-          height={typeof props.size === "number" ? props.size : 16}
-          width={typeof props.size === "number" ? props.size : 16}
-          alt="Icon"
+        <Spinner
+          isLoading
+          {...pick(props, ["className", "style"])}
+          size={spinnerSize ?? props.size}
+          style={style}
+          className={classNames(props.className, loadingClassName)}
+        />
+      );
+    } else if (icon !== undefined) {
+      if (isSvgIconProp(icon)) {
+        return (
+          <Image
+            className={classNames("icon", props.className)}
+            style={{ ...style, ...getNativeIconStyle(props) }}
+            src={icon}
+            height={typeof props.size === "number" ? props.size : 16}
+            width={typeof props.size === "number" ? props.size : 16}
+            alt="Icon"
+          />
+        );
+      }
+      const ic =
+        typeof icon === "string"
+          ? { name: icon, iconStyle, family }
+          : { iconStyle, family, ...icon };
+      return (
+        <NativeIcon
+          {...props}
+          ref={ref}
+          style={style}
+          className={getIconClassName({
+            ...props,
+            icon: ic,
+          })}
         />
       );
     }
-    const ic =
-      typeof icon === "string" ? { name: icon, iconStyle, family } : { iconStyle, family, ...icon };
+    // Here, the icon is an internal SVG component that is provided via the 'children' prop.
     return (
-      <NativeIcon
-        {...props}
-        style={style}
-        className={getIconClassName({
-          ...props,
-          icon: ic,
-        })}
-      />
+      <NativeIcon {...props} ref={ref} style={style} className={getInternalIconClassName(props)}>
+        {children}
+      </NativeIcon>
     );
-  }
-  // Here, the icon is an internal SVG component that is provided via the 'children' prop.
-  return (
-    <NativeIcon {...props} style={style} className={getInternalIconClassName(props)}>
-      {children}
-    </NativeIcon>
-  );
-};
+  },
+);
 
 export default Icon;
