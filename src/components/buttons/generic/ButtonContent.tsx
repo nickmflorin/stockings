@@ -145,7 +145,7 @@ export const ButtonContent = ({
       className={classNames("button__content", props.className)}
       style={{ ...props.style, gap: gap !== undefined ? sizeToString(gap, "px") : undefined }}
     >
-      {leftIcon && isIconProp(leftIcon) ? (
+      {leftIcon && (isIconProp(leftIcon) || typeof leftIcon === "string") ? (
         <ContentIcon {...commonIconProps} icon={leftIcon} location="left" />
       ) : (
         <RenderOrSpinner {...commonIconProps} location="left">
@@ -164,7 +164,7 @@ export const ButtonContent = ({
         className={classNames("absolute mx-auto", iconClassName, spinnerClassName)}
         isLoading={isLoading && loadingLocation === "over"}
       />
-      {rightIcon && isIconProp(rightIcon) ? (
+      {rightIcon && (isIconProp(rightIcon) || typeof rightIcon === "string") ? (
         <ContentIcon {...commonIconProps} icon={rightIcon} location="right" />
       ) : rightIcon ? (
         <RenderOrSpinner {...commonIconProps} location="right">

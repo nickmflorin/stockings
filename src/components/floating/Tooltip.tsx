@@ -1,8 +1,6 @@
 import dynamic from "next/dynamic";
 import { type ReactNode } from "react";
 
-import { isFragment } from "react-is";
-
 import { type PopoverProps } from "./Popover";
 import { TooltipContent, type TooltipContentProps } from "./TooltipContent";
 
@@ -14,7 +12,7 @@ export interface TooltipProps extends Omit<PopoverProps, "content"> {
 }
 
 export const Tooltip = ({ children, content, className, ...props }: TooltipProps) =>
-  content && !isFragment(content) ? (
+  content ? (
     <Popover {...props} content={<TooltipContent className={className}>{content}</TooltipContent>}>
       {children}
     </Popover>

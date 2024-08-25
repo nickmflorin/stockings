@@ -23,6 +23,7 @@ import { ProductLink } from "~/components/buttons/ProductLink";
 import { useDrawers } from "~/components/drawers/hooks";
 import { EnabledIcon } from "~/components/icons/EnabledIcon";
 import Icon from "~/components/icons/Icon";
+import type { Action } from "~/components/structural/Actions";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import {
   DataTableBody,
@@ -48,11 +49,13 @@ export interface SubscriptionsTableBodyProps
   > {
   readonly controlBarTargetId: string;
   readonly controlBarTooltipsInPortal?: boolean;
+  readonly actions?: Action[];
 }
 
 export const SubscriptionsTableBody = ({
   controlBarTargetId,
   controlBarTooltipsInPortal,
+  actions,
   ...props
 }: SubscriptionsTableBodyProps): JSX.Element => {
   const { ids, open } = useDrawers();
@@ -72,6 +75,7 @@ export const SubscriptionsTableBody = ({
   return (
     <>
       <SubscriptionsTableControlBar
+        actions={actions}
         isDisabled={props.isEmpty}
         targetId={controlBarTargetId}
         tooltipsInPortal={controlBarTooltipsInPortal}

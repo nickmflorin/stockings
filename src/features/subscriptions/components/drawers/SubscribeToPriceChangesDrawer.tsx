@@ -13,10 +13,12 @@ const SubscribeToPriceChangesForm = dynamic(
 
 interface SubscribeToPriceChangesDrawerProps extends ExtendingDrawerProps {
   readonly product: Product;
+  readonly excludeEnableToggle?: boolean;
 }
 
 export const SubscribeToPriceChangesDrawer = ({
   product,
+  excludeEnableToggle,
   onClose,
 }: SubscribeToPriceChangesDrawerProps): JSX.Element => (
   <Drawer>
@@ -27,6 +29,7 @@ export const SubscribeToPriceChangesDrawer = ({
     </Drawer.Header>
     <Drawer.Content className="overflow-y-hidden">
       <SubscribeToPriceChangesForm
+        excludeEnableToggle={excludeEnableToggle}
         productId={product.id}
         onCancel={() => onClose()}
         onSuccess={() => onClose()}

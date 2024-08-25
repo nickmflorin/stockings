@@ -31,6 +31,7 @@ export const PriceChangeSubscriptionForm = ({
         name="conditions"
         form={props.form}
         descriptionSeparation={12}
+        errorSeparation={16}
         label={withContext ? "Conditions" : undefined}
         description={
           withContext

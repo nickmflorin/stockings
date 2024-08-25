@@ -1,3 +1,10 @@
+@mixin control-bar-flex() {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: theme("spacing.4");
+}
+
 .table-view {
   width: 100%;
   flex-direction: column;
@@ -17,36 +24,41 @@
     gap: theme("spacing.4");
 
     .table-view__control-bar {
-      display: flex;
-      flex-direction: row;
-      gap: theme("spacing.4");
-      align-items: center;
+      @include control-bar-flex();
       width: 100%;
       // The left padding is to get the checkbox in the action bar to vertically align with the
       // checkboxes in the table rows.
       padding-left: 4px;
       height: 32px;
+      justify-content: space-between;
 
-      /* The purpose of the wrapper is to wrap the checkbox in a square box that is the same
-         dimensions as the icon buttons inside the control bar, which allows the gap to apply
-         the same visual spacing between the checkbox and the actions as it does between the actions
-         themselves. */
-      > .table-view__control-bar__checkbox-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        width: auto;
-        aspect-ratio: 1;
-      }
+      > .table-view__control-bar__left {
+        @include control-bar-flex();
+        /* The purpose of the wrapper is to wrap the checkbox in a square box that is the same
+           dimensions as the icon buttons inside the control bar, which allows the gap to apply
+           the same visual spacing between the checkbox and the actions as it does between the
+           actions themselves. */
+        > .table-view__control-bar__checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          width: auto;
+          aspect-ratio: 1;
+        }
 
-      > .table-view__control-bar-actions {
-        display: flex;
-        flex-direction: row;
-        gap: theme("spacing.4");
-        align-items: center;
-        flex-grow: 1;
+        > .table-view__control-bar-actions {
+          display: flex;
+          flex-direction: row;
+          gap: theme("spacing.4");
+          align-items: center;
+          flex-grow: 1;
+        }
       }
+    }
+
+    > .table-view__control-bar__right {
+      @include control-bar-flex();
     }
   }
 

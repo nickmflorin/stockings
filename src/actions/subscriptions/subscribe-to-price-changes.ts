@@ -3,7 +3,7 @@ import { uniq } from "lodash-es";
 import { type z } from "zod";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { enhance, type PriceChangeSubscription } from "~/database/model";
+import { enhance, type PriceChangeSubscription, SubscriptionType } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
@@ -23,7 +23,11 @@ export const subscribeToPriceChanges = async (
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 
   const subscription = await enhanced.productSubscription.findFirst({
-    where: { productId, userId: user.id },
+    where: {
+      productId,
+      userId: user.id,
+      subscriptionType: SubscriptionType.PriceChangeSubscription,
+    },
   });
   if (subscription) {
     return {

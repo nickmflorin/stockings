@@ -37,7 +37,7 @@ export const SubscribeToStatusChangesForm = ({
       {...props}
       form={form}
       isLoading={pending || props.isLoading}
-      footer={<ButtonFooter submitText="Save" orientation="full-width" onCancel={onCancel} />}
+      footer={<ButtonFooter submitText="Subscribe" orientation="full-width" onCancel={onCancel} />}
       action={async data => {
         let response: Awaited<ReturnType<typeof subscribeToStatusChanges>> | null = null;
         try {

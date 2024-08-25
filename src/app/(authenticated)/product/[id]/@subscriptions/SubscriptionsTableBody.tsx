@@ -10,6 +10,8 @@ import { Loading } from "~/components/loading/Loading";
 
 import { ApiClientGlobalErrorCodes } from "~/api";
 
+import { SubscribeToOtherAction } from "./SubscribeToOtherAction";
+
 const ProductSubscriptionsTableBody = dynamic(
   () =>
     import("~/features/products/components/tables/ProductSubscriptionsTableBody").then(
@@ -51,5 +53,11 @@ export const SubscriptionsTableBody = async ({
     { strict: true },
   );
 
-  return <ProductSubscriptionsTableBody data={data} product={product} />;
+  return (
+    <ProductSubscriptionsTableBody
+      data={data}
+      product={product}
+      actions={[<SubscribeToOtherAction key="0" subscriptions={data} product={product} />]}
+    />
+  );
 };
