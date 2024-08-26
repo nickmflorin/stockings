@@ -27,10 +27,15 @@ export const LayoutNavAnchor = forwardRef<
         <IconButton.Solid<"a", LinkProps>
           {...props}
           {...params}
+          activeClassName="bg-blue-800 outline-blue-800 text-white"
           component={Link}
           isLoading={isPending}
           onClick={() => setActiveOptimistically()}
-          className={classNames("z-0", props.className)}
+          className={classNames(
+            "z-0 text-body outline-transparent bg-transparent",
+            { ["hover:bg-gray-300 hover:outline-gray-300"]: !isActive },
+            props.className,
+          )}
           ref={instance => {
             ref(instance);
             if (typeof forwardedRef === "function") {

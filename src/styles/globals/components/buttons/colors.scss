@@ -24,6 +24,10 @@ $button-solid-colors: (
       background-color: theme("colors.disabled-background"),
       outline-color: theme("colors.disabled-border"),
     ),
+    active: (
+      background-color: theme("colors.blue.900"),
+      outline-color: theme("colors.blue.900"),
+    ),
   ),
   "secondary": (
     background-color: theme("colors.gray.200"),
