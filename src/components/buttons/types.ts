@@ -120,7 +120,7 @@ export type PolymorphicAbstractButtonProps<E extends ButtonElement> = E extends 
 export type ButtonComponentProps<E extends ButtonElement> = PolymorphicAbstractButtonProps<E> & {
   readonly className?: string;
   readonly style?: React.CSSProperties;
-  readonly ref?: PolymorphicButtonRef<E>;
+  // readonly ref?: PolymorphicButtonRef<E>;
 };
 
 export type ButtonComponent<

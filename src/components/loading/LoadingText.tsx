@@ -1,15 +1,16 @@
+"use client";
 import { useState } from "react";
 
 import { useInterval } from "usehooks-ts";
 
 export interface LoadingTextProps {
-  readonly children: string;
+  readonly children?: string;
   readonly interval?: number;
   readonly isLoading?: boolean;
 }
 
 export const LoadingText = ({
-  children,
+  children = "",
   interval = 500,
   isLoading = true,
 }: LoadingTextProps): JSX.Element => {

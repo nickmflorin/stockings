@@ -50,6 +50,21 @@ const whereClause = ({ filters }: Pick<ProductsControls, "filters">, user: User)
   return undefined;
 };
 
+export const fetchProductsCount = cache(
+  async <C extends FetchActionContext>(
+    context: C,
+  ): Promise<FetchActionResponse<{ count: number }, C>> => {
+    const { error } = await getAuthedUser();
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+    const count = await db.product.count({});
+    return dataInFetchContext({ count }, context);
+  },
+) as {
+  <C extends FetchActionContext>(context: C): Promise<FetchActionResponse<{ count: number }, C>>;
+};
+
 export const fetchProductsPagination = cache(
   async <C extends FetchActionContext>(
     { filters, page: _page }: Pick<ProductsControls, "filters" | "page">,

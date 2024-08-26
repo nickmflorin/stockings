@@ -17,7 +17,7 @@ export const NotificationsTableView = ({
   pagination,
 }: NotificationsTableViewProps) => (
   <TableView header={filterBar} footer={pagination}>
-    <TableContainer sx={{ maxHeight: "100%" }}>
+    <TableContainer sx={{ maxHeight: "100%", height: "100%" }}>
       <DataTableWrapper columns={NotificationsTableColumns}>{children}</DataTableWrapper>
     </TableContainer>
   </TableView>

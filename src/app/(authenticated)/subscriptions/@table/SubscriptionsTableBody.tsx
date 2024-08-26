@@ -13,7 +13,7 @@ const ClientSubscriptionsTableBody = dynamic(
 export interface SubscriptionsTableBodyProps {
   readonly filters: SubscriptionsFilters;
   readonly page: number;
-  readonly controlBarTargetId?: string;
+  readonly controlBarTargetId: string;
   readonly ordering: SubscriptionsControls["ordering"];
 }
 

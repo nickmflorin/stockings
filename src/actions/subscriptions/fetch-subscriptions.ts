@@ -43,6 +43,21 @@ const whereClause = ({
   return { userId: user.id };
 };
 
+export const fetchSubscriptionsCount = cache(
+  async <C extends FetchActionContext>(
+    context: C,
+  ): Promise<FetchActionResponse<{ count: number }, C>> => {
+    const { user, error } = await getAuthedUser();
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+    const count = await db.productSubscription.count({ where: { userId: user.id } });
+    return dataInFetchContext({ count }, context);
+  },
+) as {
+  <C extends FetchActionContext>(context: C): Promise<FetchActionResponse<{ count: number }, C>>;
+};
+
 export const fetchProductSubscriptionsPagination = cache(
   async <C extends FetchActionContext>(
     {

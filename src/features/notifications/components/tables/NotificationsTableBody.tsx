@@ -1,9 +1,12 @@
 "use client";
+import RouterLink from "next/link";
+
 import { type Notification } from "~/database/model";
 
+import { InlineLink } from "~/components/buttons";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
-import { Text } from "~/components/typography";
+import { Text, Description } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 import {
   NotificationsTableColumns,
@@ -18,6 +21,19 @@ export interface NotificationsTableBodyProps {
 
 export const NotificationsTableBody = ({ data }: NotificationsTableBodyProps): JSX.Element => (
   <DataTableBody
+    isEmpty={data.length === 0}
+    emptyContent={
+      <div className="flex flex-col gap-4">
+        <Description fontSize="sm">You have not received any notifications.</Description>
+        <Description fontSize="sm">
+          If you have not yet already done so, visit the{" "}
+          <InlineLink element="a" component={RouterLink} href="/products" fontWeight="medium">
+            Products Page
+          </InlineLink>{" "}
+          and subscribe to receive notifications for the products you would like.
+        </Description>
+      </div>
+    }
     columns={convertConfigsToColumns(
       [...NotificationsTableColumns] as DataTableColumnConfig<
         Notification,

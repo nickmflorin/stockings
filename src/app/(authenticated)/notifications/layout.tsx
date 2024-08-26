@@ -5,7 +5,7 @@ interface ProductsLayoutProps {
   readonly title: ReactNode;
 }
 
-export default function ProductsLayout({ table, title }: ProductsLayoutProps) {
+export default function NotificationsLayout({ table, title }: ProductsLayoutProps) {
   return (
     <div className="flex flex-col gap-[16px]">
       {title}

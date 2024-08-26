@@ -36,6 +36,21 @@ const whereClause = ({
   return { userId: user.id };
 };
 
+export const fetchNotificationsCount = cache(
+  async <C extends FetchActionContext>(
+    context: C,
+  ): Promise<FetchActionResponse<{ count: number }, C>> => {
+    const { user, error } = await getAuthedUser();
+    if (error) {
+      return errorInFetchContext(error, context);
+    }
+    const count = await db.notification.count({ where: { userId: user.id } });
+    return dataInFetchContext({ count }, context);
+  },
+) as {
+  <C extends FetchActionContext>(context: C): Promise<FetchActionResponse<{ count: number }, C>>;
+};
+
 export const fetchNotificationsPagination = cache(
   async <C extends FetchActionContext>(
     { filters, page: _page }: Pick<NotificationsControls, "filters" | "page">,

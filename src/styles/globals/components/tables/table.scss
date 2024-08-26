@@ -135,6 +135,8 @@ $table-size-properties: (
 }
 
 .table {
+  height: 100%;
+
   @include table-size($table-default-size);
   @each $size in $table-sizes {
     &.table--#{$size} {
