@@ -15,6 +15,8 @@ async function main() {
 
 main()
   .then(async () => {
+    /* eslint-disable-next-line no-console */
+    console.info("Script Finished - Disconnecting from DB...");
     await db.$disconnect();
   })
   .catch(async e => {

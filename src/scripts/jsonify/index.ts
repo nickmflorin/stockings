@@ -69,7 +69,7 @@ async function main() {
           if (err) {
             logger.error(`There was an error writing the fixtures to file ${filename}: \n${err}`);
           } else {
-            logger.info(`Successfully saved skills fixtures to file ${filename}.`);
+            logger.info(`Successfully saved products fixtures to file ${filename}.`);
           }
         },
       );

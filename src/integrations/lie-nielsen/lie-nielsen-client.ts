@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { chunk } from "lodash-es";
 
-import { type ProductRecord, type User, type Product } from "~/database/model";
+import { type ProductRecord, type User } from "~/database/model";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
@@ -25,8 +25,6 @@ type UpdateProductRecordsContext = {
   readonly user: User;
   readonly page?: paths.ProductsPageId;
 };
-
-type ProductRecords = { [key in string]: ProductRecord[] };
 
 interface ScrapeThumbnailProductsContext {
   readonly limit?: number;
@@ -174,27 +172,12 @@ export class LieNielsenClient
 
   public async updateProducts({ limit, user, batchSize = 10, page }: UpdateProductRecordsContext) {
     const scrapedProducts = await this.scrapeProducts({ page, limit, batchSize });
-
-    const products = await db.product.findMany({
-      include: { records: { orderBy: { timestamp: "desc" } } },
-    });
-    const allProductRecords = await db.productRecord.findMany({
-      where: { productId: { in: products.map(p => p.id) } },
-      orderBy: { timestamp: "desc" },
-    });
-    const productRecords: ProductRecords = products.reduce(
-      (prev: ProductRecords, curr: Product) => ({
-        ...prev,
-        [curr.id]: allProductRecords.filter(rec => rec.productId === curr.id),
-      }),
-      {} as ProductRecords,
-    );
+    const products = await db.product.findMany({});
 
     type ProductRecordPromise = Promise<{
       record: ProductRecord | null;
       state: "updated" | "created";
     }>;
-
     const results = await db.$transaction(async tx => {
       const promises = scrapedProducts.map((scrapedProduct): ProductRecordPromise => {
         if (scrapedProduct.thumbnail.validatedData.isComposite) {
@@ -203,12 +186,7 @@ export class LieNielsenClient
         const existing = products.find(p => p.slug === scrapedProduct.slug);
         if (existing) {
           return (async () => {
-            const [_, record] = await scrapedProduct.syncProduct(
-              tx,
-              existing,
-              productRecords[existing.id],
-              { user },
-            );
+            const [_, record] = await scrapedProduct.syncProduct(tx, existing, { user });
             return {
               state: "updated" as const,
               record: record,

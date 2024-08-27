@@ -7,8 +7,6 @@ import {
   type StatusChangeSubscription,
   type ApiProductSubscription,
 } from "~/database/model";
-/* eslint-disable-next-line no-restricted-imports */
-import type { GetBatchResult } from "~/database/model/generated/runtime/library";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
@@ -19,14 +17,22 @@ import { type ScriptContext } from "../context";
 import { seedRecords, type RecordDatum } from "./seed-records";
 import { seedSubscription } from "./seed-subscriptions";
 
-const BATCH_SIZE = 20;
+const BATCH_SIZE = 50;
+const RECORDS_BATCH_SIZE = 500;
 
 const SubscriptionFrequency = 0.4;
+
+const seedRecordsBatch = async (records: RecordDatum[]) => {
+  const result = await db.productRecord.createMany({
+    data: records.map(r => ({ ...r, createdAt: r.createdAt.toJSDate() })),
+  });
+  return result.count;
+};
 
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
   ctx: ScriptContext,
-): Promise<[Product[], GetBatchResult, ApiProductSubscription[]]> => {
+): Promise<[Product[], number, ApiProductSubscription[]]> => {
   const products = await Promise.all(
     jsonProducts.map(jsonProduct =>
       db.product.create({
@@ -38,18 +44,24 @@ const seedProductBatch = async (
       }),
     ),
   );
+
+  let totalRecordsCount = 0;
+  for (let i = 0; i < products.length; i++) {
+    const product = products[i];
+    const recs = seedRecords(product, ctx);
+    const batches = chunk(recs, RECORDS_BATCH_SIZE);
+    for (let b = 0; b < batches.length; b++) {
+      logger.info(
+        `Creating '${recs.length}' records for product '${product.slug}' in batch ` +
+          `'${b + 1}/${batches.length}'...`,
+      );
+      totalRecordsCount += await seedRecordsBatch(batches[b]);
+    }
+  }
+
   return [
     products,
-    await db.productRecord.createMany({
-      data: products.reduce(
-        (prev: (Omit<RecordDatum, "createdAt"> & { createdAt: Date })[], product: Product) => {
-          const recs = seedRecords(product, ctx);
-          logger.info(`Creating '${recs.length}' records for product '${product.slug}'...`);
-          return [...prev, ...recs.map(r => ({ ...r, createdAt: r.createdAt.toJSDate() }))];
-        },
-        [],
-      ),
-    }),
+    totalRecordsCount,
     (
       await Promise.all(
         products.reduce(
@@ -73,7 +85,7 @@ export const seedProducts = async (ctx: ScriptContext) => {
   for (let i = 0; i < batches.length; i++) {
     const [products, records, subscriptions] = await seedProductBatch(batches[i], ctx);
     logger.info(
-      `Created '${products.length}' products, '${records.count}' records and ` +
+      `Created '${products.length}' products, '${records}' records and ` +
         `'${subscriptions.length}' subscriptions in batch '${i + 1}/${batches.length}'...`,
     );
   }

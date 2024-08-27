@@ -74,7 +74,9 @@ export type BaseScrapedModelDataValue =
   | string
   | number
   | boolean
-  | Record<string, string | number | boolean>;
+  | Record<string, string | number | boolean>
+  | string[]
+  | number[];
 
 export type BaseScrapedModelData = Record<string, BaseScrapedModelDataValue>;
 

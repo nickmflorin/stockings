@@ -1,14 +1,10 @@
 import dynamic from "next/dynamic";
 
-import { logger } from "~/internal/logger";
-
 import { type SubscriptionsControls } from "~/actions";
 import { fetchProduct } from "~/actions/products";
 import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-subscriptions";
 
 import { Loading } from "~/components/loading/Loading";
-
-import { ApiClientGlobalErrorCodes } from "~/api";
 
 import { SubscribeToOtherAction } from "./SubscribeToOtherAction";
 
@@ -29,22 +25,7 @@ export const SubscriptionsTableBody = async ({
   ordering,
   productId,
 }: SubscriptionsTableBodyProps): Promise<JSX.Element> => {
-  const { data: product, error } = await fetchProduct(productId, { strict: false });
-  if (error) {
-    if (error.code !== ApiClientGlobalErrorCodes.NOT_FOUND) {
-      logger.error(error, "There was an error loading the product for the detail view.", {
-        productId,
-      });
-    }
-    return (
-      <ProductSubscriptionsTableBody
-        data={[]}
-        isError
-        errorMessage="There was an error loading the subscriptions."
-      />
-    );
-  }
-
+  const { data: product } = await fetchProduct(productId, { strict: true });
   const { data } = await fetchProductSubscriptions(
     {
       ordering,
@@ -52,7 +33,6 @@ export const SubscriptionsTableBody = async ({
     },
     { strict: true },
   );
-
   return (
     <ProductSubscriptionsTableBody
       data={data}

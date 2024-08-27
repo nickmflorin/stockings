@@ -51,6 +51,7 @@ const subPageMessage = (a: ProcessedScrapedThumbnail, b: ProcessedScrapedThumbna
 };
 
 const logExisting = (thumbs: [ProcessedScrapedThumbnail, ProcessedScrapedThumbnail]) => {
+  return;
   // Note: This method assumes that both thumbnails were partially valid.
   if (
     thumbs[0].page !== thumbs[1].page ||

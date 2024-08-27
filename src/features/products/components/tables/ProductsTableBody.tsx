@@ -56,7 +56,8 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
           },
         },
         {
-          isVisible: product.statusChangeSubscription === null,
+          isVisible:
+            product.statusChangeSubscription === null && product.priceChangeSubscription !== null,
           content: "Subscribe to Status Changes",
           onClick: e => {
             setIsOpen(false, e);
@@ -66,11 +67,23 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
           },
         },
         {
-          isVisible: product.priceChangeSubscription === null,
+          isVisible:
+            product.priceChangeSubscription === null && product.statusChangeSubscription !== null,
           content: "Subscribe to Price Changes",
           onClick: e => {
             setIsOpen(false, e);
             open(ids.SUBSCRIBE_TO_PRICE_CHANGES, {
+              product,
+            });
+          },
+        },
+        {
+          isVisible:
+            product.priceChangeSubscription === null && product.statusChangeSubscription === null,
+          content: "Subscribe",
+          onClick: e => {
+            setIsOpen(false, e);
+            open(ids.SUBSCRIBE_TO_PRODUCT_MULTIPART, {
               product,
             });
           },

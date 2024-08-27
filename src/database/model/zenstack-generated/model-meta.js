@@ -655,6 +655,10 @@ const metadata = {
                     name: "name",
                     type: "String",
                     isOptional: true,
+                }, descriptions: {
+                    name: "descriptions",
+                    type: "String",
+                    isArray: true,
                 }, slug: {
                     name: "slug",
                     type: "String",

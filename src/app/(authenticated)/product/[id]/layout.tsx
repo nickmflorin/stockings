@@ -1,21 +1,34 @@
+import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
+import { fetchProduct } from "~/actions/products";
+
 import { Module } from "~/components/structural/Module";
+
+import { ApiClientGlobalErrorCodes } from "~/api";
 
 interface ProductLayoutProps {
   readonly priceChart: ReactNode;
   readonly detail: ReactNode;
   readonly subscriptions: ReactNode;
+  readonly params: { id: string };
 }
 
-export default function ProductLayout({ priceChart, detail, subscriptions }: ProductLayoutProps) {
+export default async function ProductLayout({
+  priceChart,
+  detail,
+  subscriptions,
+  params,
+}: ProductLayoutProps) {
+  const { error } = await fetchProduct(params.id, { strict: false });
+  if (error) {
+    if (error.code === ApiClientGlobalErrorCodes.NOT_FOUND) {
+      return redirect("/404");
+    }
+  }
   return (
     <div className="flex flex-col gap-[16px]">
-      <div className="flex flex-row items-center">
-        <Module component="paper" width="parent">
-          {detail}
-        </Module>
-      </div>
+      <div className="flex flex-row items-center max-w-[500px]">{detail}</div>
       <div className="flex flex-row gap-[16px] h-[400px]">
         {/* TODO: Revisit these sizes when we make the page responsive. */}
         <div className="flex flex-col gap-[16px] max-w-[600px] h-full">

@@ -2,8 +2,8 @@ import { type z } from "zod";
 
 import type * as types from "./types";
 
-import type { Transaction } from "~/database";
 import type { BrandProduct } from "~/database/model";
+import type { Transaction } from "~/database/prisma";
 
 import { type JsonSchemas } from "./schemas";
 import { cleanModel } from "./util";

@@ -55,7 +55,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps<TextComponent>>(
       props.children === undefined ||
       props.children === null ||
       typeof props.children === "boolean" ||
-      (typeof props.children === "string" && props.children.trim() === "")
+      (typeof props.children === "string" && props.children === "")
     ) {
       return <></>;
     }

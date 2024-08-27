@@ -33,7 +33,7 @@ export const ProductsTableColumns = [
   },
   {
     id: "subscription",
-    label: "Subscription",
+    label: "Subscriptions",
     minWidth: 200,
     maxWidth: 220,
   },

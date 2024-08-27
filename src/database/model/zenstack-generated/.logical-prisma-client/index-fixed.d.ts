@@ -794,6 +794,7 @@ export namespace Prisma {
         createdById: 'createdById',
         updatedById: 'updatedById',
         name: 'name',
+        descriptions: 'descriptions',
         slug: 'slug',
         code: 'code',
         imageSrc: 'imageSrc',
@@ -5884,6 +5885,7 @@ export namespace Prisma {
         readonly createdById: FieldRef<"Product", 'String'>;
         readonly updatedById: FieldRef<"Product", 'String'>;
         readonly name: FieldRef<"Product", 'String'>;
+        readonly descriptions: FieldRef<"Product", 'String[]'>;
         readonly slug: FieldRef<"Product", 'String'>;
         readonly code: FieldRef<"Product", 'String'>;
         readonly imageSrc: FieldRef<"Product", 'String'>;
@@ -17654,6 +17656,7 @@ export namespace Prisma {
         createdById: number
         updatedById: number
         name: number
+        descriptions: number
         slug: number
         code: number
         imageSrc: number
@@ -17716,6 +17719,7 @@ export namespace Prisma {
         createdById?: true
         updatedById?: true
         name?: true
+        descriptions?: true
         slug?: true
         code?: true
         imageSrc?: true
@@ -17816,6 +17820,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name: string | null
+        descriptions: string[]
         slug: string
         code: string | null
         imageSrc: string | null
@@ -17852,6 +17857,7 @@ export namespace Prisma {
         createdById?: boolean
         updatedById?: boolean
         name?: boolean
+        descriptions?: boolean
         slug?: boolean
         code?: boolean
         imageSrc?: boolean
@@ -17879,6 +17885,7 @@ export namespace Prisma {
         createdById?: boolean
         updatedById?: boolean
         name?: boolean
+        descriptions?: boolean
         slug?: boolean
         code?: boolean
         imageSrc?: boolean
@@ -17919,6 +17926,7 @@ export namespace Prisma {
             createdById: string
             updatedById: string
             name: string | null
+            descriptions: string[]
             slug: string
             code: string | null
             imageSrc: string | null
@@ -23584,6 +23592,7 @@ export namespace Prisma {
         createdById?: UuidFilter<"Product"> | string
         updatedById?: UuidFilter<"Product"> | string
         name?: StringNullableFilter<"Product"> | string | null
+        descriptions?: StringNullableListFilter<"Product">
         slug?: StringFilter<"Product"> | string
         code?: StringNullableFilter<"Product"> | string | null
         imageSrc?: StringNullableFilter<"Product"> | string | null
@@ -23610,6 +23619,7 @@ export namespace Prisma {
         createdById?: SortOrder
         updatedById?: SortOrder
         name?: SortOrderInput | SortOrder
+        descriptions?: SortOrder
         slug?: SortOrder
         code?: SortOrderInput | SortOrder
         imageSrc?: SortOrderInput | SortOrder
@@ -23640,6 +23650,7 @@ export namespace Prisma {
         createdById?: UuidFilter<"Product"> | string
         updatedById?: UuidFilter<"Product"> | string
         name?: StringNullableFilter<"Product"> | string | null
+        descriptions?: StringNullableListFilter<"Product">
         code?: StringNullableFilter<"Product"> | string | null
         imageSrc?: StringNullableFilter<"Product"> | string | null
         status?: EnumProductStatusNullableFilter<"Product"> | $Enums.ProductStatus | null
@@ -23665,6 +23676,7 @@ export namespace Prisma {
         createdById?: SortOrder
         updatedById?: SortOrder
         name?: SortOrderInput | SortOrder
+        descriptions?: SortOrder
         slug?: SortOrder
         code?: SortOrderInput | SortOrder
         imageSrc?: SortOrderInput | SortOrder
@@ -23692,6 +23704,7 @@ export namespace Prisma {
         createdById?: UuidWithAggregatesFilter<"Product"> | string
         updatedById?: UuidWithAggregatesFilter<"Product"> | string
         name?: StringNullableWithAggregatesFilter<"Product"> | string | null
+        descriptions?: StringNullableListFilter<"Product">
         slug?: StringWithAggregatesFilter<"Product"> | string
         code?: StringNullableWithAggregatesFilter<"Product"> | string | null
         imageSrc?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -25163,6 +25176,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -25189,6 +25203,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -25211,6 +25226,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25237,6 +25253,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25261,6 +25278,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -25278,6 +25296,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25297,6 +25316,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26639,6 +26659,13 @@ export namespace Prisma {
         recordId?: SortOrder
         userId?: SortOrder
     };
+    export type StringNullableListFilter<$PrismaModel = never> = {
+        equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        has?: string | StringFieldRefInput<$PrismaModel> | null
+        hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+        hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+        isEmpty?: boolean
+    };
     export type DateTimeNullableFilter<$PrismaModel = never> = {
         equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
         in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -26669,6 +26696,7 @@ export namespace Prisma {
         createdById?: SortOrder
         updatedById?: SortOrder
         name?: SortOrder
+        descriptions?: SortOrder
         slug?: SortOrder
         code?: SortOrder
         imageSrc?: SortOrder
@@ -28551,6 +28579,9 @@ export namespace Prisma {
         connect?: UserWhereUniqueInput
         update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProcessedProductRecordsInput, UserUpdateWithoutProcessedProductRecordsInput>, UserUncheckedUpdateWithoutProcessedProductRecordsInput>
     };
+    export type ProductCreatedescriptionsInput = {
+        set: string[]
+    };
     export type ProductCreatesubCategoriesInput = {
         set: $Enums.ProductSubCategory[]
     };
@@ -28623,6 +28654,10 @@ export namespace Prisma {
         connectOrCreate?: PriceChangeSubscriptionCreateOrConnectWithoutProductInput | PriceChangeSubscriptionCreateOrConnectWithoutProductInput[]
         createMany?: PriceChangeSubscriptionCreateManyProductInputEnvelope
         connect?: PriceChangeSubscriptionWhereUniqueInput | PriceChangeSubscriptionWhereUniqueInput[]
+    };
+    export type ProductUpdatedescriptionsInput = {
+        set?: string[]
+        push?: string | string[]
     };
     export type NullableDateTimeFieldUpdateOperationsInput = {
         set?: Date | string | null
@@ -29673,6 +29708,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -29697,6 +29733,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -29727,6 +29764,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -29751,6 +29789,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -30675,6 +30714,7 @@ export namespace Prisma {
         createdById?: UuidFilter<"Product"> | string
         updatedById?: UuidFilter<"Product"> | string
         name?: StringNullableFilter<"Product"> | string | null
+        descriptions?: StringNullableListFilter<"Product">
         slug?: StringFilter<"Product"> | string
         code?: StringNullableFilter<"Product"> | string | null
         imageSrc?: StringNullableFilter<"Product"> | string | null
@@ -31426,6 +31466,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -31451,6 +31492,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -31779,6 +31821,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31804,6 +31847,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33241,6 +33285,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -33266,6 +33311,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -33549,6 +33595,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33574,6 +33621,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33890,6 +33938,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -33915,6 +33964,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -34260,6 +34310,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34285,6 +34336,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34577,6 +34629,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -34602,6 +34655,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -34927,6 +34981,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34952,6 +35007,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36953,6 +37009,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -36978,6 +37035,7 @@ export namespace Prisma {
         createdById: string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -37261,6 +37319,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37286,6 +37345,7 @@ export namespace Prisma {
         createdById?: StringFieldUpdateOperationsInput | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37308,6 +37368,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         updatedById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -37326,6 +37387,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdById: string
         name?: string | null
+        descriptions?: ProductCreatedescriptionsInput | string[]
         slug: string
         code?: string | null
         imageSrc?: string | null
@@ -37660,6 +37722,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37684,6 +37747,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37707,6 +37771,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37724,6 +37789,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37748,6 +37814,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37771,6 +37838,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdById?: StringFieldUpdateOperationsInput | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
+        descriptions?: ProductUpdatedescriptionsInput | string[]
         slug?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         imageSrc?: NullableStringFieldUpdateOperationsInput | string | null

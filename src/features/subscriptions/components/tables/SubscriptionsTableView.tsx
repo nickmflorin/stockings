@@ -1,4 +1,6 @@
 "use client";
+import type { ReactNode } from "react";
+
 import TableContainer from "@mui/material/TableContainer";
 
 import { SubscriptionsDefaultOrdering } from "~/actions";
@@ -13,7 +15,7 @@ import {
 import { useOrdering } from "~/hooks/use-ordering";
 
 export interface SubscriptionsTableViewProps {
-  readonly children: JSX.Element;
+  readonly children: ReactNode;
   readonly filterBar?: JSX.Element;
   readonly controlBar?: JSX.Element;
   readonly pagination?: JSX.Element;

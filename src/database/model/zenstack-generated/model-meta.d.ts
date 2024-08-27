@@ -1024,6 +1024,11 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                descriptions: {
+                    name: string;
+                    type: string;
+                    isArray: boolean;
+                };
                 slug: {
                     name: string;
                     type: string;

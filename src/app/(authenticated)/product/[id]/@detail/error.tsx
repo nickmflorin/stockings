@@ -1,6 +1,22 @@
 "use client";
-import { ErrorView } from "~/components/errors/ErrorView";
+import { ProductCategory } from "~/database/model";
+
+import { ProductInfoTile } from "~/features/products/components/ProductInfoTile";
 
 export default function Error() {
-  return <ErrorView>There was an error loading the product. Do not worry, we are on it.</ErrorView>;
+  return (
+    <ProductInfoTile
+      product={{
+        subCategories: [],
+        name: "",
+        descriptions: [""],
+        price: 0,
+        status: null,
+        category: ProductCategory.HandTools,
+        statusAsOf: null,
+        priceAsOf: null,
+        imageSrc: null,
+      }}
+    />
+  );
 }

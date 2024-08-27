@@ -236,6 +236,7 @@ model Product {
   createdBy                                             User                       @relation("createdProducts", fields: [createdById], references: [id])
   updatedBy                                             User                       @relation("updatedProducts", fields: [updatedById], references: [id])
   name                                                  String?
+  descriptions                                          String[]
   slug                                                  String                     @unique()
   code                                                  String?
   imageSrc                                              String?
