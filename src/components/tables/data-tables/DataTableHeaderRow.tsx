@@ -42,8 +42,6 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
         }}
       />
     ))}
-    {rowsHaveActions && (
-      <TableHeaderCell align="center" width={120} maxWidth={120} minWidth={120} />
-    )}
+    {rowsHaveActions && <TableHeaderCell align="center" width={60} maxWidth={60} minWidth={60} />}
   </Table.HeaderRow>
 );

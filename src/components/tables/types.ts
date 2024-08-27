@@ -45,7 +45,13 @@ export interface DataTableColumnConfig<D extends DataTableDatum, I extends strin
   readonly icon?: IconProp | IconName;
   readonly label?: string;
   readonly isOrderable?: boolean;
-  readonly props?: Omit<TableHeaderCellProps, "children" | "align" | "id" | "icon" | "isOrderable">;
+  readonly columnCellClassName?: ComponentProps["className"];
+  readonly headerCellClassName?: ComponentProps["className"];
+  readonly bodyCellClassName?: ComponentProps["className"];
+  readonly props?: Omit<
+    TableHeaderCellProps,
+    "children" | "align" | "id" | "icon" | "isOrderable" | "className"
+  >;
   readonly align?: TableHeaderCellProps["align"];
   readonly accessor?: Exclude<keyof D, "id">;
   readonly width?: QuantitativeSize<"px">;

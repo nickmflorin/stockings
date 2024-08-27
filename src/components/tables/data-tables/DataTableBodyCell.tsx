@@ -2,6 +2,7 @@ import { isValidElement } from "react";
 
 import { TableBodyCell } from "~/components/tables/generic/TableBodyCell";
 import type * as types from "~/components/tables/types";
+import { classNames } from "~/components/types";
 
 export interface DataTableBodyCellProps<D extends types.DataTableDatum, I extends string = string> {
   readonly datum: D;
@@ -26,7 +27,11 @@ export const DataTableBodyCell = <D extends types.DataTableDatum, I extends stri
   column,
   datum,
 }: DataTableBodyCellProps<D, I>): JSX.Element => (
-  <TableBodyCell {...column.cellProps} align={column.config.align}>
+  <TableBodyCell
+    {...column.cellProps}
+    align={column.config.align}
+    className={classNames(column.config.columnCellClassName, column.config.bodyCellClassName)}
+  >
     {column.cellRenderer ? (
       column.cellRenderer(datum)
     ) : column.config.accessor ? (

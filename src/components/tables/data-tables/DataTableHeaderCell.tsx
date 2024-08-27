@@ -5,6 +5,7 @@ import {
   type TableHeaderCellProps,
 } from "~/components/tables/generic/TableHeaderCell";
 import type * as types from "~/components/tables/types";
+import { classNames } from "~/components/types";
 
 export interface DataTableHeaderCellProps<D extends types.DataTableDatum, I extends string = string>
   extends Omit<TableHeaderCellProps, "ordering" | "icon" | "id" | "isOrderable" | "children"> {
@@ -20,6 +21,7 @@ export const DataTableHeaderCell = <D extends types.DataTableDatum, I extends st
   <TableHeaderCell
     {...props}
     {...column.props}
+    className={classNames(column.columnCellClassName, column.headerCellClassName, props.className)}
     align={column.align ?? "left"}
     isOrderable={column.isOrderable}
     order={order}

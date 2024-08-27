@@ -1,3 +1,4 @@
+import ContainerQueriesPlugin from "@tailwindcss/container-queries";
 import { type Config } from "tailwindcss";
 
 const config = {
@@ -7,7 +8,7 @@ const config = {
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/database/model/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  plugins: [],
+  plugins: [ContainerQueriesPlugin],
   important: true,
   theme: {
     extend: {},

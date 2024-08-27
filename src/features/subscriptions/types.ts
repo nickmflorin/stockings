@@ -44,6 +44,7 @@ export const SubscriptionsTableColumns = [
     maxWidth: 240,
     isOrderable: true,
     align: "left",
+    columnCellClassName: "hidden @3xl/subscriptions-table-view:table-cell",
   },
   {
     id: "updatedAt",
@@ -52,6 +53,7 @@ export const SubscriptionsTableColumns = [
     maxWidth: 240,
     isOrderable: true,
     align: "left",
+    columnCellClassName: "hidden @3xl/subscriptions-table-view:table-cell",
   },
 ] as const satisfies DataTableColumnConfig<FullProductSubscription, string>[];
 
