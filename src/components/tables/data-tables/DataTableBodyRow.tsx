@@ -14,6 +14,7 @@ export interface DataTableBodyRowProps<D extends types.DataTableDatum, I extends
   readonly datum: D;
   readonly columns: types.DataTableColumn<D, I>[];
   readonly actionMenuWidth?: ActionsCellProps["menuWidth"];
+  readonly excludeColumns?: I[];
   readonly rowIsSelected?: (datum: D) => boolean;
   readonly onRowSelected?: (datum: D, isSelected: boolean) => void;
   readonly getRowActions?: (
@@ -26,6 +27,7 @@ export const DataTableBodyRow = <D extends types.DataTableDatum, I extends strin
   datum,
   columns,
   actionMenuWidth,
+  excludeColumns = [],
   onRowSelected,
   rowIsSelected,
   getRowActions,
@@ -40,9 +42,11 @@ export const DataTableBodyRow = <D extends types.DataTableDatum, I extends strin
         />
       </TableBodyCell>
     )}
-    {columns.map(col => (
-      <DataTableBodyCell<D, I> key={`${col.id}-${datum.id}`} column={col} datum={datum} />
-    ))}
+    {columns
+      .filter(col => !excludeColumns.includes(col.id))
+      .map(col => (
+        <DataTableBodyCell<D, I> key={`${col.id}-${datum.id}`} column={col} datum={datum} />
+      ))}
     {getRowActions && (
       <TableBodyCell align="center">
         <ActionsCell menuWidth={actionMenuWidth} actions={params => getRowActions(datum, params)} />

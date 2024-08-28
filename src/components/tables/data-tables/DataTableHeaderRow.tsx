@@ -11,6 +11,7 @@ import { DataTableHeaderCell } from "./DataTableHeaderCell";
 export interface DataTableHeaderRowProps<D extends types.DataTableDatum, I extends string = string>
   extends Omit<TableHeaderRowProps, "children"> {
   readonly columns: types.DataTableColumnConfig<D, I>[];
+  readonly excludeColumns?: I[];
   readonly ordering?: Ordering<I> | null;
   readonly rowsHaveActions?: boolean;
   readonly rowsAreSelectable?: boolean;
@@ -25,23 +26,26 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
   ordering,
   rowsHaveActions,
   rowsAreSelectable,
+  excludeColumns = [],
   onSort,
   ...props
 }: DataTableHeaderRowProps<D, I>): JSX.Element => (
   <Table.HeaderRow {...props}>
     {rowsAreSelectable && <TableHeaderCell align="center" width={40} maxWidth={40} minWidth={40} />}
-    {columns.map(column => (
-      <DataTableHeaderCell<D, I>
-        key={column.id}
-        column={column}
-        order={ordering?.orderBy === column.id ? ordering.order : null}
-        onSort={e => {
-          if (column.isOrderable && onSort) {
-            onSort(e, column);
-          }
-        }}
-      />
-    ))}
+    {columns
+      .filter(col => !excludeColumns.includes(col.id))
+      .map(column => (
+        <DataTableHeaderCell<D, I>
+          key={column.id}
+          column={column}
+          order={ordering?.orderBy === column.id ? ordering.order : null}
+          onSort={e => {
+            if (column.isOrderable && onSort) {
+              onSort(e, column);
+            }
+          }}
+        />
+      ))}
     {rowsHaveActions && <TableHeaderCell align="center" width={60} maxWidth={60} minWidth={60} />}
   </Table.HeaderRow>
 );

@@ -100,90 +100,94 @@ export const BrushedAreaChart = <
 
   return (
     <div className="h-full w-full" ref={parentRef}>
-      <svg width={width} height={height}>
-        <AreaChart
-          {...props}
-          left={constants.ChartYAxisHorizontalOffset}
-          width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
-          data={filteredData}
-          yMax={primaryChartRanges.y[0]}
-          accessors={accessors}
-          scales={scales}
-          ranges={primaryChartRanges}
-        >
-          <Bar
-            x={constants.ChartYAxisHorizontalOffset}
+      {height > 10 && width > 10 && (
+        <svg width={width} height={height}>
+          <AreaChart
+            {...props}
+            left={constants.ChartYAxisHorizontalOffset}
             width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
-            height={innerHeight}
-            fill="transparent"
-            rx={14}
-            onTouchStart={handleTooltip}
-            onTouchMove={handleTooltip}
-            onMouseMove={handleTooltip}
-            onMouseLeave={() => hideTooltip()}
-          />
-          {tooltipData && (
-            <>
-              <Line
-                from={{ x: tooltipLeft, y: constants.ChartYAxisVerticalOffset }}
-                to={{ x: tooltipLeft, y: innerHeight + constants.ChartYAxisVerticalOffset }}
-                stroke={constants.CrossHairColor}
-                strokeWidth={2}
-                pointerEvents="none"
-                strokeDasharray="5,2"
-              />
-              <circle
-                cx={tooltipLeft}
-                cy={tooltipTop}
-                r={4}
-                fill={constants.CrossHairColor}
-                stroke="white"
-                strokeWidth={2}
-                pointerEvents="none"
-              />
-            </>
-          )}
-        </AreaChart>
-        <AbstractAreaChart
-          data={data}
-          width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
-          left={constants.ChartYAxisHorizontalOffset}
-          top={
-            constants.ChartYAxisVerticalOffset + topChartHeight + constants.BrushedChartSeparation
-          }
-          scales={scales}
-          ranges={secondaryChartRanges}
-          accessors={accessors}
-        >
-          <Brush
+            data={filteredData}
+            yMax={primaryChartRanges.y[0]}
+            accessors={accessors}
+            scales={scales}
+            ranges={primaryChartRanges}
+          >
+            <Bar
+              x={constants.ChartYAxisHorizontalOffset}
+              width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
+              height={innerHeight}
+              fill="transparent"
+              rx={14}
+              onTouchStart={handleTooltip}
+              onTouchMove={handleTooltip}
+              onMouseMove={handleTooltip}
+              onMouseLeave={() => hideTooltip()}
+            />
+            {tooltipData && (
+              <>
+                <Line
+                  from={{ x: tooltipLeft, y: constants.ChartYAxisVerticalOffset }}
+                  to={{ x: tooltipLeft, y: innerHeight + constants.ChartYAxisVerticalOffset }}
+                  stroke={constants.CrossHairColor}
+                  strokeWidth={2}
+                  pointerEvents="none"
+                  strokeDasharray="5,2"
+                />
+                <circle
+                  cx={tooltipLeft}
+                  cy={tooltipTop}
+                  r={4}
+                  fill={constants.CrossHairColor}
+                  stroke="white"
+                  strokeWidth={2}
+                  pointerEvents="none"
+                />
+              </>
+            )}
+          </AreaChart>
+          <AbstractAreaChart
             data={data}
             width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
             left={constants.ChartYAxisHorizontalOffset}
             top={
               constants.ChartYAxisVerticalOffset + topChartHeight + constants.BrushedChartSeparation
             }
-            height={secondaryChartRanges.y[0]}
             scales={scales}
             ranges={secondaryChartRanges}
             accessors={accessors}
-            onClick={() => setFilteredData(data)}
-            onChange={(domain: Bounds | null) => {
-              if (!domain) {
-                return;
+          >
+            <Brush
+              data={data}
+              width={width - constants.ChartYAxisHorizontalOffset - constants.ChartRightMargin}
+              left={constants.ChartYAxisHorizontalOffset}
+              top={
+                constants.ChartYAxisVerticalOffset +
+                topChartHeight +
+                constants.BrushedChartSeparation
               }
-              setFilteredData(
-                data.filter(
-                  s =>
-                    accessors.x(s) > domain.x0 &&
-                    accessors.x(s) < domain.x1 &&
-                    accessors.y(s) > domain.y0 &&
-                    accessors.y(s) < domain.y1,
-                ),
-              );
-            }}
-          />
-        </AbstractAreaChart>
-      </svg>
+              height={secondaryChartRanges.y[0]}
+              scales={scales}
+              ranges={secondaryChartRanges}
+              accessors={accessors}
+              onClick={() => setFilteredData(data)}
+              onChange={(domain: Bounds | null) => {
+                if (!domain) {
+                  return;
+                }
+                setFilteredData(
+                  data.filter(
+                    s =>
+                      accessors.x(s) > domain.x0 &&
+                      accessors.x(s) < domain.x1 &&
+                      accessors.y(s) > domain.y0 &&
+                      accessors.y(s) < domain.y1,
+                  ),
+                );
+              }}
+            />
+          </AbstractAreaChart>
+        </svg>
+      )}
       {tooltipData && (
         <div>
           <TooltipWithBounds

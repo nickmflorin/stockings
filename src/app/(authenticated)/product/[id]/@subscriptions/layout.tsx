@@ -14,7 +14,10 @@ interface ProductSubscriptionsLayoutProps {
 
 export default function ProductSubscriptionsLayout({ children }: ProductSubscriptionsLayoutProps) {
   return (
-    <SubscriptionsTableView controlBarTargetId="product-subscriptions-control-bar">
+    <SubscriptionsTableView
+      controlBarTargetId="product-subscriptions-control-bar"
+      excludeColumns={["product"]}
+    >
       {children}
     </SubscriptionsTableView>
   );

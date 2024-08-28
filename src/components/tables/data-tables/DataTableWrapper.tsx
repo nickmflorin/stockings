@@ -12,7 +12,7 @@ export type DataTableWrapperProps<D extends types.DataTableDatum, I extends stri
 > &
   Pick<
     DataTableHeaderRowProps<D, I>,
-    "rowsHaveActions" | "rowsAreSelectable" | "onSort" | "columns" | "ordering"
+    "rowsHaveActions" | "rowsAreSelectable" | "onSort" | "columns" | "ordering" | "excludeColumns"
   > & {
     readonly headerHeight?: QuantitativeSize<"px">;
     readonly children: ReactNode;
@@ -25,6 +25,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
   columns,
   rowsHaveActions,
   rowsAreSelectable,
+  excludeColumns,
   onSort,
   ...props
 }: DataTableWrapperProps<D, I>): JSX.Element => (
@@ -34,6 +35,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
         columns={columns}
         ordering={ordering}
         height={headerHeight}
+        excludeColumns={excludeColumns}
         rowsHaveActions={rowsHaveActions}
         rowsAreSelectable={rowsAreSelectable}
         onSort={(e, col) => {

@@ -12,6 +12,7 @@ import {
   SubscriptionsTableColumns,
   type OrderableSubscriptionsTableColumnId,
   OrderableSubscriptionsTableColumnIds,
+  type SubscriptionsTableColumnId,
 } from "~/features/subscriptions/types";
 import { useOrdering } from "~/hooks/use-ordering";
 
@@ -21,11 +22,13 @@ export interface SubscriptionsTableViewProps extends ComponentProps {
   readonly controlBar?: JSX.Element;
   readonly pagination?: JSX.Element;
   readonly controlBarTargetId?: string;
+  readonly excludeColumns?: SubscriptionsTableColumnId[];
 }
 
 export const SubscriptionsTableView = ({
   children,
   filterBar,
+  excludeColumns,
   pagination,
   controlBarTargetId = "subscriptions-table-control-bar-target",
   ...props
@@ -48,6 +51,7 @@ export const SubscriptionsTableView = ({
           ordering={ordering}
           rowsAreSelectable
           rowsHaveActions
+          excludeColumns={excludeColumns}
           columns={SubscriptionsTableColumns}
           onSort={(e, col) => {
             if (

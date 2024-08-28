@@ -20,6 +20,7 @@ export interface DataTableBodyProps<D extends types.DataTableDatum, I extends st
   extends Omit<TableBodyProps, "cellSkeletons" | "numSkeletonColumns" | "children"> {
   readonly data: D[];
   readonly columns: types.DataTableColumn<D, I>[];
+  readonly excludeColumns?: I[];
   readonly ordering?: Ordering<I> | null;
   readonly rowHoveredClassName?: ClassName;
   readonly highlightRowOnHover?: boolean;
@@ -44,6 +45,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
   columns,
   ordering,
   actionMenuWidth,
+  excludeColumns = [],
   rowIsSelected,
   onRowSelected,
   getRowId,
@@ -88,6 +90,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
             hoveredClassName={rowHoveredClassName}
             highlightOnHover={highlightRowOnHover}
             actionMenuWidth={actionMenuWidth}
+            excludeColumns={excludeColumns}
             onClick={() => onRowClick?.(rowId, datum)}
             getRowActions={getRowActions}
             rowIsSelected={rowIsSelected}

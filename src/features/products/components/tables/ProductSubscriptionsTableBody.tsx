@@ -12,7 +12,11 @@ import {
 export interface ProductSubscriptionsTableBodyProps
   extends Omit<
     SubscriptionsTableBodyProps,
-    "emptyContent" | "isEmpty" | "controlBarTargetId" | "controlBarTooltipsInPortal"
+    | "emptyContent"
+    | "isEmpty"
+    | "controlBarTargetId"
+    | "controlBarTooltipsInPortal"
+    | "excludeColumns"
   > {
   readonly product?: Product;
 }
@@ -26,6 +30,7 @@ export const ProductSubscriptionsTableBody = ({
     <SubscriptionsTableBody
       {...props}
       isEmpty={props.data.length === 0}
+      excludeColumns={["product"]}
       emptyContent={
         product ? (
           <div className="flex flex-col gap-4">

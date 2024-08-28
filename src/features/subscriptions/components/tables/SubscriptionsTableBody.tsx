@@ -44,7 +44,7 @@ import { SubscriptionsTableControlBar } from "./SubscriptionsTableControlBar";
 
 export interface SubscriptionsTableBodyProps
   extends Omit<
-    DataTableBodyProps<FullProductSubscription>,
+    DataTableBodyProps<FullProductSubscription, SubscriptionsTableColumnId>,
     "rowIsSelected" | "onRowSelected" | "getRowActions" | "columns"
   > {
   readonly controlBarTargetId: string;
