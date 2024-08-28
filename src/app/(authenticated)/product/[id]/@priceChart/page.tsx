@@ -8,7 +8,7 @@ import { ProductPriceAreaChart } from "./ProductPriceAreaChart";
 export default async function ProductPriceChartPage({ params }: { params: { id: string } }) {
   return (
     <Suspense key={params.id} fallback={<Loading isLoading />}>
-      <ProductPriceAreaChart width={400} height={300} productId={params.id} />
+      <ProductPriceAreaChart productId={params.id} />
     </Suspense>
   );
 }

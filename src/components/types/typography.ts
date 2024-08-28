@@ -9,6 +9,9 @@ export const FontSizes = enumeratedLiterals(
 );
 export type FontSize = EnumeratedLiteralsMember<typeof FontSizes>;
 
+export type TitleOrder = 1 | 2 | 3 | 4 | 5 | 6;
+export type TitleComponent = `h${TitleOrder}`;
+
 export const TextAligns = enumeratedLiterals(
   ["left", "center", "right", "justify", "start", "end"] as const,
   {},
@@ -29,9 +32,6 @@ export const FontWeights = enumeratedLiterals(
   {},
 );
 export type FontWeight = EnumeratedLiteralsMember<typeof FontWeights>;
-
-export type TitleOrder = 1 | 2 | 3 | 4 | 5 | 6;
-export type TitleComponent = `h${TitleOrder}`;
 
 export const TitleFontSizeOrderMap = {
   xxxs: "h6",

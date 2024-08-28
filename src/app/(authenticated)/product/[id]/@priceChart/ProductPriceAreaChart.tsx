@@ -11,18 +11,14 @@ const ClientProductPriceAreaChart = dynamic(
 
 export interface ProductPriceAreaChartProps {
   readonly productId: string;
-  readonly width: number;
-  readonly height: number;
 }
 
 export const ProductPriceAreaChart = async ({
   productId,
-  height,
-  width,
 }: ProductPriceAreaChartProps): Promise<JSX.Element> => {
   const { data: records } = await fetchProductPriceData(productId, {
     scope: "action",
     strict: true,
   });
-  return <ClientProductPriceAreaChart height={height} width={width} data={records} />;
+  return <ClientProductPriceAreaChart data={records} />;
 };

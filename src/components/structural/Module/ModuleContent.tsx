@@ -19,7 +19,7 @@ export const ModuleContent = ({
   isLoading,
   ...props
 }: ModuleContentProps) => (
-  <View flex column {...props} className={classNames("gap-2", props.className)}>
+  <View flex column grow {...props} className={classNames("gap-2", props.className)}>
     <Loading isLoading={isLoading} isDisabled={isDisabled}>
       {children}
     </Loading>

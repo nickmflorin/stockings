@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback } from "react";
 
 import { type Bounds } from "@visx/brush/lib/types";
 import { localPoint } from "@visx/event";
+import { useParentSize } from "@visx/responsive";
 import { Line, Bar } from "@visx/shape";
 import { Tooltip, TooltipWithBounds, useTooltip } from "@visx/tooltip";
 import { bisector } from "@visx/vendor/d3-array";
@@ -15,8 +16,7 @@ export interface BrushedAreaChartProps<
   D extends constants.ChartDatum,
   S extends constants.ChartRawScales<D>,
   A extends constants.ChartAccessors<D>,
-> extends Omit<AreaChartProps<D, S, A>, "yMax" | "ranges"> {
-  readonly height: number;
+> extends Omit<AreaChartProps<D, S, A>, "yMax" | "ranges" | "width" | "height"> {
   readonly tooltipFormatters?: constants.TooltipFormatters<D, A>;
 }
 
@@ -25,14 +25,14 @@ export const BrushedAreaChart = <
   S extends constants.ChartRawScales<D>,
   A extends constants.ChartAccessors<D>,
 >({
-  height,
   data,
   accessors,
   tooltipFormatters,
-  width,
   scales,
   ...props
 }: BrushedAreaChartProps<D, S, A>) => {
+  const { parentRef, width, height } = useParentSize({ debounceTime: 150 });
+
   const { tooltipData, tooltipLeft, tooltipTop, showTooltip, hideTooltip } = useTooltip<D>();
 
   const [filteredData, setFilteredData] = useState<D[]>(data);
@@ -99,7 +99,7 @@ export const BrushedAreaChart = <
   );
 
   return (
-    <div>
+    <div className="h-full w-full" ref={parentRef}>
       <svg width={width} height={height}>
         <AreaChart
           {...props}

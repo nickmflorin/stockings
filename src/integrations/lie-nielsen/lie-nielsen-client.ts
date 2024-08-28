@@ -124,12 +124,14 @@ export class LieNielsenClient
     return ScrapedThumbnail.processScrapedThumbnails(thumbnails);
   }
 
-  public async scrapeProduct<O extends ScrapeProductOptions>(
+  public async scrapeProductFromThumbnail<O extends ScrapeProductOptions>(
     thumbnail: ProcessedScrapedThumbnail,
     options: O,
   ): Promise<ScrapedProductRT<O>> {
     if (!thumbnail.isValid) {
       throw new Error("Cannot scrape a product with an invalid thumbnail!");
+    } else if (thumbnail.validatedData.isComposite) {
+      throw new Error("Cannot scrape a product with a composite thumbnail!");
     }
     let domApi: DomApiType;
     try {
@@ -140,7 +142,20 @@ export class LieNielsenClient
       }
       throw e;
     }
-    return new ScrapedProduct(domApi, { thumbnail });
+    return new ScrapedProduct(domApi, { slug: thumbnail.validatedData.slug });
+  }
+
+  public async scrapeProduct<O extends ScrapeProductOptions>(slug: string, options: O) {
+    let domApi: DomApiType;
+    try {
+      domApi = await this.fetchProduct(slug);
+    } catch (e) {
+      if (isScrapingHttpError(e) && options.strict !== true) {
+        return e as ScrapedProductRT<O>;
+      }
+      throw e;
+    }
+    return new ScrapedProduct(domApi, { slug });
   }
 
   public async scrapeProducts({
@@ -163,7 +178,7 @@ export class LieNielsenClient
           `Size ${chunks[i].length}.`,
       );
       const promises: Promise<ScrapedProduct>[] = chunks[i].map(thumb =>
-        this.scrapeProduct(thumb, { strict: true }),
+        this.scrapeProductFromThumbnail(thumb, { strict: true }),
       );
       scrapedProducts = [...scrapedProducts, ...(await Promise.all(promises))];
     }
@@ -180,9 +195,9 @@ export class LieNielsenClient
     }>;
     const results = await db.$transaction(async tx => {
       const promises = scrapedProducts.map((scrapedProduct): ProductRecordPromise => {
-        if (scrapedProduct.thumbnail.validatedData.isComposite) {
-          throw new Error("Unexpectedly encountered product with composite thumbnail!");
-        }
+        /* if (scrapedProduct.thumbnail.validatedData.isComposite) {
+             throw new Error("Unexpectedly encountered product with composite thumbnail!");
+           } */
         const existing = products.find(p => p.slug === scrapedProduct.slug);
         if (existing) {
           return (async () => {

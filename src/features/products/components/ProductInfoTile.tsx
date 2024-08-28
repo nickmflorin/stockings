@@ -5,7 +5,7 @@ import type { Product, ProductSubCategory } from "~/database/model";
 import { Avatar } from "~/components/images/Avatar";
 import type { ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
-import { Description, Title, Label, Text } from "~/components/typography";
+import { Description, Label, Text } from "~/components/typography";
 import { CurrencyText } from "~/components/typography/CurrencyText";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 import { HumanizedList } from "~/components/typography/HumanizedList";
@@ -36,17 +36,9 @@ export interface ProductInfoTileProps extends ComponentProps {
 }
 
 export const ProductInfoTile = ({ product, ...props }: ProductInfoTileProps): JSX.Element => (
-  <div {...props} className={classNames("flex flex-row gap-4 w-full", props.className)}>
-    <Avatar size={80} src={product?.imageSrc} className="border" radius="full" />
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-col gap-1">
-        <Title component="h3">{product.name}</Title>
-        <div className="flex flex-col gap-1">
-          {product.descriptions.map((description, index) => (
-            <Description key={index}>{description}</Description>
-          ))}
-        </div>
-      </div>
+  <div {...props} className={classNames("flex flex-col gap-4 w-full", props.className)}>
+    <div className="flex flex-row gap-4 w-full">
+      <Avatar size={132} src={product?.imageSrc} className="border" radius="sm" />
       <div className="flex flex-col gap-2">
         <InfoItem label="Status">
           {product.status && (
@@ -88,6 +80,11 @@ export const ProductInfoTile = ({ product, ...props }: ProductInfoTileProps): JS
           />
         </InfoItem>
       </div>
+    </div>
+    <div className="flex flex-col gap-1">
+      {product.descriptions.map((description, index) => (
+        <Description key={index}>{description}</Description>
+      ))}
     </div>
   </div>
 );

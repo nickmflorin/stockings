@@ -108,7 +108,7 @@ const parseFlex = ({
   "flex" | "orientation" | "row" | "column" | "centerChildren" | "grow"
 >): string => {
   if (centerChildren) {
-    return classNames("flex", "flex-col", "items-center", "justify-center");
+    return classNames("flex", "flex-col", "items-center", "justify-center", { grow });
   } else if (flex) {
     if (orientation) {
       if (row || column) {

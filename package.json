@@ -38,6 +38,7 @@
     "jsonify-fixtures": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/jsonify/index.ts --live && pnpm format-json-fixtures",
     "format-json-fixtures": "npx prettier ./src/database/fixtures/json/*.json --write --ignore-path=./.prettierignore",
     "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape.ts",
+    "scrape-product": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape-product.ts",
     "process-subscriptions": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/process-subscriptions/index.ts"
   },
   "dependencies": {
@@ -73,6 +74,7 @@
     "@visx/hierarchy": "^3.3.0",
     "@visx/mock-data": "^3.3.0",
     "@visx/pattern": "^3.3.0",
+    "@visx/responsive": "^3.10.2",
     "@visx/scale": "^3.5.0",
     "@visx/shape": "^3.5.0",
     "@visx/tooltip": "^3.3.0",
@@ -110,6 +112,7 @@
     "superjson": "^2.2.1",
     "swr": "^2.2.4",
     "tailwind-merge": "^2.4.0",
+    "tsx": "^4.19.0",
     "use-debounce": "^10.0.0",
     "usehooks-ts": "^3.1.0",
     "uuid": "^9.0.1",

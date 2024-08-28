@@ -12,8 +12,6 @@ import type * as constants from "~/components/charts/constants";
 
 export interface ProductPriceAreaChartProps {
   readonly data: ProductPriceChartDataPoint[];
-  readonly width: number;
-  readonly height: number;
 }
 
 const scales = (data: ProductPriceChartDataPoint[], range: constants.ChartRanges) => ({
@@ -33,11 +31,9 @@ const accessors = {
   y: (d: ProductPriceChartDataPoint) => d.price,
 };
 
-export const ProductPriceAreaChart = ({ data, width, height }: ProductPriceAreaChartProps) => (
+export const ProductPriceAreaChart = ({ data }: ProductPriceAreaChartProps) => (
   <BrushedAreaChart<ProductPriceChartDataPoint, typeof scales, typeof accessors>
     data={data}
-    width={width}
-    height={height}
     accessors={accessors}
     tickFormatters={{
       x: v =>
@@ -53,4 +49,5 @@ export const ProductPriceAreaChart = ({ data, width, height }: ProductPriceAreaC
     scales={scales}
   />
 );
+
 export default ProductPriceAreaChart;

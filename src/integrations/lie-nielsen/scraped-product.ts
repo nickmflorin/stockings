@@ -1,4 +1,5 @@
 import {
+  type ProductCategory,
   ProductStatus,
   type ProductRecord,
   type Product,
@@ -6,10 +7,12 @@ import {
   ProductRecordDataField,
   type ScrapingErrorData,
   createScrapingErrorData,
+  type ProductSubCategory,
 } from "~/database/model";
 import { type Transaction } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
+import type { ProductsPage, ProductsSubPage } from "~/integrations/lie-nielsen/paths";
 import {
   type ScrapedModelField,
   type ScrapingDomError,
@@ -24,7 +27,6 @@ import { arraysHaveSameElements } from "~/lib/arrays";
 import { humanizeList } from "~/lib/formatters";
 
 import { checkScrapedProductInconsistencies } from "./inconsistencies";
-import { type ProcessedScrapedThumbnail } from "./scraped-thumbnail";
 import { autoCorrectProductStatusDates, autoCorrectProductPriceDates } from "./util";
 
 /* const logExisting = (products: [ProcessedScrapedProduct, ProcessedScrapedProduct]) => {
@@ -92,7 +94,13 @@ export type PersistedError = {
 };
 
 export type ScrapedProductConfig = {
-  readonly thumbnail: ProcessedScrapedThumbnail;
+  readonly slug: string;
+  readonly thumbnailData?: {
+    readonly page: ProductsPage;
+    readonly subPage: ProductsSubPage;
+    readonly category: ProductCategory;
+    readonly subCategories: ProductSubCategory[];
+  };
 };
 
 class ScrapedProductData extends BaseScrapedModel<DomApiType> implements IScrapedProductData {
@@ -177,13 +185,15 @@ class ScrapedProductData extends BaseScrapedModel<DomApiType> implements IScrape
       { tag: "p" },
       { multiple: true },
     );
-    return paragraphs.reduce((acc, paragraph) => {
-      const text = paragraph.findText({ strict: false });
-      if (text) {
-        return [...acc, text];
-      }
-      return acc;
+    const allText = paragraphs.reduce((acc, paragraph) => {
+      const text = paragraph.findText({ strict: false, multiple: true });
+      return [...acc, ...text.filter(v => v.trim().length !== 0)];
     }, [] as string[]);
+
+    /* There are a lot of paragraph elements we do not want to include in the descriptions.  For
+       now it is just easier to use the first paragraph content as the description - as it is
+       less likely to contain white noise. */
+    return [allText[0]];
   }
 
   public get code() {
@@ -248,28 +258,12 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
   ScrapedProductConfig,
   readonly []
 > {
-  public get thumbnail() {
-    return this.options.thumbnail;
-  }
-
   public get slug() {
-    return this.thumbnail.validatedData.slug;
+    return this.options.slug;
   }
 
-  public get page() {
-    return this.thumbnail.page;
-  }
-
-  public get subPage() {
-    return this.thumbnail.subPage;
-  }
-
-  public get category() {
-    return this.thumbnail.category;
-  }
-
-  public get subCategories() {
-    return this.thumbnail.subCategories;
+  public get thumbnailData() {
+    return this.options.thumbnailData ?? null;
   }
 
   public async persistErrors(tx: Transaction): Promise<PersistedError[]> {
@@ -426,11 +420,13 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
       };
     }
 
-    if (!arraysHaveSameElements(this.subCategories, product.subCategories)) {
-      updateData = { ...updateData, subCategories: this.subCategories };
-    }
-    if (this.category !== product.category) {
-      updateData = { ...updateData, category: this.category };
+    if (this.thumbnailData) {
+      if (this.thumbnailData.category !== product.category) {
+        updateData = { ...updateData, category: this.thumbnailData.category };
+      }
+      if (!arraysHaveSameElements(this.thumbnailData.subCategories, product.subCategories)) {
+        updateData = { ...updateData, subCategories: this.thumbnailData.subCategories };
+      }
     }
     return updateData;
   }
@@ -439,6 +435,9 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
     tx: Transaction,
     ctx: { user: User },
   ): Promise<[Product, ProductRecord | null]> {
+    if (!this.thumbnailData) {
+      throw new Error("Products can only be created from thumbnails!");
+    }
     const product = await tx.product.create({
       data: {
         name: this.data.name.value ?? null,
@@ -448,8 +447,8 @@ export class ProcessedScrapedProduct extends ProcessedScrapedModel<
         status: this.data.status.value ?? null,
         price: this.data.price.value !== undefined ? this.data.price.value : null,
         imageSrc: this.data.imageSrc.value ?? null,
-        subCategories: this.subCategories,
-        category: this.category,
+        subCategories: this.thumbnailData.subCategories,
+        category: this.thumbnailData.category,
         // Only set the 'priceAsOf' field if the price was in fact successfully scraped.
         priceAsOf: this.data.price.value !== undefined ? new Date() : null,
         // Only set the 'priceLastUpdatedAt' field if the price was in fact successfully scraped.

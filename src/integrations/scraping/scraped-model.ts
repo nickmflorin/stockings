@@ -102,6 +102,16 @@ export abstract class ProcessedScrapedModel<
     }, {} as types.ScrapedModelFieldErrors<D>);
   }
 
+  public enumeratedErrors(): string {
+    const errs = Object.entries(this.data).reduce((acc, [k, v], index) => {
+      if (v.error) {
+        return [...acc, `${index + 1}. ${k}: ${v.error.message}`];
+      }
+      return acc;
+    }, [] as string[]);
+    return errs.join("\n");
+  }
+
   public get unvalidatedData(): Partial<D> {
     return Object.entries(this.data).reduce((curr, [k, v]) => {
       if (v.value !== undefined) {
