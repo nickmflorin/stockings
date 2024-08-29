@@ -4,10 +4,12 @@ import { Suspense } from "react";
 import { z } from "zod";
 
 import { parseFilters } from "~/lib/filters";
+import { parseOrdering } from "~/lib/ordering";
 
-import { ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
+import { ProductsDefaultOrdering, ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
+import { OrderableProductsTableColumnIds } from "~/features/products";
 /* eslint-disable-next-line max-len */
 import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
 
@@ -28,6 +30,11 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
 
   const filters = parseFilters(searchParams, ProductsFiltersSchemas, ProductsFiltersOptions);
 
+  const ordering = parseOrdering(searchParams, {
+    defaultOrdering: ProductsDefaultOrdering,
+    fields: OrderableProductsTableColumnIds,
+  });
+
   return (
     <ProductsTableView
       filterBar={
@@ -42,10 +49,10 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
       }
     >
       <Suspense
-        key={JSON.stringify(filters) + String(page)}
+        key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
         fallback={<Loading isLoading component="tbody" />}
       >
-        <ProductsTableBody filters={filters} page={page} />
+        <ProductsTableBody filters={filters} page={page} ordering={ordering} />
       </Suspense>
     </ProductsTableView>
   );

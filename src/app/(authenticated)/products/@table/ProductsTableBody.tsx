@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import { type ProductsFilters } from "~/actions";
+import { type ProductsControls, type ProductsFilters } from "~/actions";
 import { fetchProducts } from "~/actions/products";
 
 import { Loading } from "~/components/loading/Loading";
@@ -13,16 +13,18 @@ const ClientProductsTableBody = dynamic(
 export interface ProductsTableBodyProps {
   readonly filters: ProductsFilters;
   readonly page: number;
+  readonly ordering: ProductsControls["ordering"];
 }
 
 export const ProductsTableBody = async ({
   filters,
   page,
+  ordering,
 }: ProductsTableBodyProps): Promise<JSX.Element> => {
   const { data: products } = await fetchProducts(
     {
       filters,
-      ordering: { orderBy: "name", order: "asc" },
+      ordering,
       page,
       includes: ["priceChangeSubscription", "statusChangeSubscription"],
     },

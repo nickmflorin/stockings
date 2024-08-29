@@ -49,3 +49,7 @@ export type OrderableProductsTableColumnId = Extract<
   (typeof ProductsTableColumns)[number],
   { isOrderable: true }
 >["id"];
+
+export const OrderableProductsTableColumnIds = [...ProductsTableColumns]
+  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
+  .map(col => col.id) as OrderableProductsTableColumnId[];
