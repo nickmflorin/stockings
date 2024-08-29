@@ -2,7 +2,7 @@
 import { difference, uniq } from "lodash-es";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { enhance, SubscriptionType } from "~/database/model";
+import { enhance, ProductSubscriptionType } from "~/database/model";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
@@ -12,7 +12,7 @@ import { type MutationActionResponse } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
 
-export const deleteSubscriptions = async (
+export const deleteProductSubscriptions = async (
   _ids: string[],
 ): Promise<MutationActionResponse<{ message: string }>> => {
   const { user, error } = await getAuthedUser();
@@ -24,7 +24,7 @@ export const deleteSubscriptions = async (
 
   const ids = uniq(_ids);
   const subscriptions = await enhanced.productSubscription.findMany({
-    where: { id: { in: ids }, subscriptionType: { not: SubscriptionType.NewProductSubscription } },
+    where: { id: { in: ids } },
   });
   const invalidIds = difference(
     ids,
@@ -59,7 +59,7 @@ export const deleteSubscriptions = async (
         subscriptionId: {
           in: subscriptions.reduce(
             (prev, sub) =>
-              sub.subscriptionType === SubscriptionType.PriceChangeSubscription
+              sub.subscriptionType === ProductSubscriptionType.PriceChangeSubscription
                 ? [...prev, sub.id]
                 : prev,
             [] as string[],
@@ -72,7 +72,7 @@ export const deleteSubscriptions = async (
         subscriptionId: {
           in: subscriptions.reduce(
             (prev, sub) =>
-              sub.subscriptionType === SubscriptionType.StatusChangeSubscription
+              sub.subscriptionType === ProductSubscriptionType.StatusChangeSubscription
                 ? [...prev, sub.id]
                 : prev,
             [] as string[],
@@ -85,7 +85,7 @@ export const deleteSubscriptions = async (
         subscriptionId: {
           in: subscriptions.reduce(
             (prev, sub) =>
-              sub.subscriptionType === SubscriptionType.StatusChangeSubscription
+              sub.subscriptionType === ProductSubscriptionType.StatusChangeSubscription
                 ? [...prev, sub.id]
                 : prev,
             [] as string[],

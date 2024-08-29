@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { NotificationType } from "~/database/model";
+import { ProductNotificationType } from "~/database/model";
 
 import { useForm } from "~/components/forms/hooks";
 
@@ -16,8 +16,8 @@ const ChooseNotificationTypesSchema = z.object({
   notificationTypes: z
     .array(
       z.union([
-        z.literal(NotificationType.PriceChangeNotification),
-        z.literal(NotificationType.StatusChangeNotification),
+        z.literal(ProductNotificationType.PriceChangeNotification),
+        z.literal(ProductNotificationType.StatusChangeNotification),
       ]),
     )
     .min(

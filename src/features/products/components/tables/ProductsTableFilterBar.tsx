@@ -9,17 +9,13 @@ import {
 
 import { ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
 
-import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
-import { TextInput } from "~/components/input/TextInput";
+import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
-import { classNames } from "~/components/types";
 import { ProductCategorySelect } from "~/features/products/components/input/ProductCategorySelect";
-/* eslint-disable-next-line max-len */
 import { ProductStatusSelect } from "~/features/products/components/input/ProductStatusSelect";
 /* eslint-disable-next-line max-len */
 import { ProductSubCategorySelect } from "~/features/products/components/input/ProductSubCategorySelect";
-import { useDebounceCallback } from "~/hooks";
 import { useFilters } from "~/hooks/use-filters";
 
 export interface ProductsTableFilterBarProps extends ComponentProps {}
@@ -28,32 +24,25 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
   const statusesSelectRef = useRef<SelectInstance | null>(null);
   const categoriesSelectRef = useRef<SelectInstance | null>(null);
   const subCategoriesSelectRef = useRef<SelectInstance | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [filters, updateFilters] = useFilters({
     schemas: ProductsFiltersSchemas,
     options: ProductsFiltersOptions,
   });
 
-  const onSearch = useDebounceCallback((search: string) => {
-    updateFilters({ search });
-  }, 0);
-
   return (
-    <div className={classNames("flex flex-row items-center gap-2", props.className)}>
-      <TextInput
-        ref={inputRef}
-        defaultValue={filters.search}
-        onChange={e => onSearch(e.target.value)}
-        placeholder="Search for products"
-        className="grow"
-        onClear={() => {
-          if (inputRef.current) {
-            inputRef.current.value = "";
-          }
-          updateFilters({ search: "" });
-        }}
-      />
+    <TableView.FilterBar
+      {...props}
+      searchPlaceholder="Search products..."
+      onSearch={v => updateFilters({ search: v })}
+      search={filters.search}
+      onClear={() => {
+        for (const r of [statusesSelectRef, categoriesSelectRef, subCategoriesSelectRef]) {
+          r.current?.clear();
+        }
+        updateFilters({ subCategories: [], categories: [], search: "", statuses: [] });
+      }}
+    >
       <ProductStatusSelect
         ref={statusesSelectRef}
         dynamicHeight={false}
@@ -84,21 +73,6 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
         onChange={(subCategories: ProductSubCategory[]) => updateFilters({ subCategories })}
         onClear={() => updateFilters({ subCategories: [] })}
       />
-      <IconButton.Transparent
-        icon="xmark"
-        radius="full"
-        element="button"
-        className="text-gray-400 h-full aspect-square w-auto p-[4px] hover:text-gray-500"
-        onClick={() => {
-          for (const r of [statusesSelectRef, categoriesSelectRef, subCategoriesSelectRef]) {
-            r.current?.clear();
-          }
-          if (inputRef.current) {
-            inputRef.current.value = "";
-          }
-          updateFilters({ subCategories: [], categories: [], search: "", statuses: [] });
-        }}
-      />
-    </div>
+    </TableView.FilterBar>
   );
 };

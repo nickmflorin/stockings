@@ -7,938 +7,898 @@ import { ProductStatus } from "../generated";
 import { ProductCategory } from "../generated";
 import { ProductSubCategory } from "../generated";
 import { PriceChangeCondition } from "../generated";
-import { SubscriptionType } from "../generated";
-import { NotificationType } from "../generated";
+import { ProductSubscriptionType } from "../generated";
+import { ProductNotificationType } from "../generated";
 import { NotificationState } from "../generated";
 
 const policy: PolicyDef = {
-    policy: {
-        user: {
-            modelLevel: {
-                read: {
-                    guard: User_read,
+        policy:{
+            user: {
+                modelLevel:{
+                    read:{
+                        guard: User_read,
+                    }
+                    ,
+                    create:{
+                        guard: User_create,inputChecker: User_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: User_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: User_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: User_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: User_create, inputChecker: User_create_input,
-                }
-                ,
-                update: {
-                    guard: User_update,
-                }
-                ,
-                postUpdate: {
-                    guard: User_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: User_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        httpNetworkErrorData: {
-            modelLevel: {
-                read: {
-                    guard: HttpNetworkErrorData_read,
-                }
-                ,
-                create: {
-                    guard: HttpNetworkErrorData_create, inputChecker: HttpNetworkErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: HttpNetworkErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: HttpNetworkErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: HttpNetworkErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        httpSerializationErrorData: {
-            modelLevel: {
-                read: {
-                    guard: HttpSerializationErrorData_read,
+            httpNetworkErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: HttpNetworkErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: HttpNetworkErrorData_create,inputChecker: HttpNetworkErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: HttpNetworkErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: HttpNetworkErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: HttpNetworkErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: HttpSerializationErrorData_create, inputChecker: HttpSerializationErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: HttpSerializationErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: HttpSerializationErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: HttpSerializationErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        httpClientErrorData: {
-            modelLevel: {
-                read: {
-                    guard: HttpClientErrorData_read,
-                }
-                ,
-                create: {
-                    guard: HttpClientErrorData_create, inputChecker: HttpClientErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: HttpClientErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: HttpClientErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: HttpClientErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        missingAttributeErrorData: {
-            modelLevel: {
-                read: {
-                    guard: MissingAttributeErrorData_read,
+            httpSerializationErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: HttpSerializationErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: HttpSerializationErrorData_create,inputChecker: HttpSerializationErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: HttpSerializationErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: HttpSerializationErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: HttpSerializationErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: MissingAttributeErrorData_create, inputChecker: MissingAttributeErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: MissingAttributeErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: MissingAttributeErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: MissingAttributeErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        invalidAttributeErrorData: {
-            modelLevel: {
-                read: {
-                    guard: InvalidAttributeErrorData_read,
-                }
-                ,
-                create: {
-                    guard: InvalidAttributeErrorData_create, inputChecker: InvalidAttributeErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: InvalidAttributeErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: InvalidAttributeErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: InvalidAttributeErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        invalidTextErrorData: {
-            modelLevel: {
-                read: {
-                    guard: InvalidTextErrorData_read,
+            httpClientErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: HttpClientErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: HttpClientErrorData_create,inputChecker: HttpClientErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: HttpClientErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: HttpClientErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: HttpClientErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: InvalidTextErrorData_create, inputChecker: InvalidTextErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: InvalidTextErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: InvalidTextErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: InvalidTextErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        missingTextErrorData: {
-            modelLevel: {
-                read: {
-                    guard: MissingTextErrorData_read,
-                }
-                ,
-                create: {
-                    guard: MissingTextErrorData_create, inputChecker: MissingTextErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: MissingTextErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: MissingTextErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: MissingTextErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        nonUniqueTextErrorData: {
-            modelLevel: {
-                read: {
-                    guard: NonUniqueTextErrorData_read,
+            missingAttributeErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: MissingAttributeErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: MissingAttributeErrorData_create,inputChecker: MissingAttributeErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: MissingAttributeErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: MissingAttributeErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: MissingAttributeErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: NonUniqueTextErrorData_create, inputChecker: NonUniqueTextErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: NonUniqueTextErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: NonUniqueTextErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: NonUniqueTextErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        missingElementErrorData: {
-            modelLevel: {
-                read: {
-                    guard: MissingElementErrorData_read,
-                }
-                ,
-                create: {
-                    guard: MissingElementErrorData_create, inputChecker: MissingElementErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: MissingElementErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: MissingElementErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: MissingElementErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        nonUniqueElementErrorData: {
-            modelLevel: {
-                read: {
-                    guard: NonUniqueElementErrorData_read,
+            invalidAttributeErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: InvalidAttributeErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: InvalidAttributeErrorData_create,inputChecker: InvalidAttributeErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: InvalidAttributeErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: InvalidAttributeErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: InvalidAttributeErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: NonUniqueElementErrorData_create, inputChecker: NonUniqueElementErrorData_create_input,
-                }
-                ,
-                update: {
-                    guard: NonUniqueElementErrorData_update,
-                }
-                ,
-                postUpdate: {
-                    guard: NonUniqueElementErrorData_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: NonUniqueElementErrorData_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        productRecordError: {
-            modelLevel: {
-                read: {
-                    guard: ProductRecordError_read,
-                }
-                ,
-                create: {
-                    guard: ProductRecordError_create, inputChecker: ProductRecordError_create_input,
-                }
-                ,
-                update: {
-                    guard: ProductRecordError_update,
-                }
-                ,
-                postUpdate: {
-                    guard: ProductRecordError_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: ProductRecordError_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        productRecord: {
-            modelLevel: {
-                read: {
-                    guard: ProductRecord_read,
+            invalidTextErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: InvalidTextErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: InvalidTextErrorData_create,inputChecker: InvalidTextErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: InvalidTextErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: InvalidTextErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: InvalidTextErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: ProductRecord_create, inputChecker: ProductRecord_create_input,
-                }
-                ,
-                update: {
-                    guard: ProductRecord_update,
-                }
-                ,
-                postUpdate: {
-                    guard: ProductRecord_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: ProductRecord_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        processedProductRecord: {
-            modelLevel: {
-                read: {
-                    guard: ProcessedProductRecord_read,
-                }
-                ,
-                create: {
-                    guard: ProcessedProductRecord_create, inputChecker: ProcessedProductRecord_create_input,
-                }
-                ,
-                update: {
-                    guard: ProcessedProductRecord_update,
-                }
-                ,
-                postUpdate: {
-                    guard: ProcessedProductRecord_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: ProcessedProductRecord_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        product: {
-            modelLevel: {
-                read: {
-                    guard: Product_read,
+            missingTextErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: MissingTextErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: MissingTextErrorData_create,inputChecker: MissingTextErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: MissingTextErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: MissingTextErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: MissingTextErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: Product_create, inputChecker: Product_create_input,
-                }
-                ,
-                update: {
-                    guard: Product_update,
-                }
-                ,
-                postUpdate: {
-                    guard: Product_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: Product_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        productSubscription: {
-            modelLevel: {
-                read: {
-                    guard: ProductSubscription_read,
-                }
-                ,
-                create: {
-                    guard: ProductSubscription_create, inputChecker: ProductSubscription_create_input,
-                }
-                ,
-                update: {
-                    guard: ProductSubscription_update,
-                }
-                ,
-                postUpdate: {
-                    guard: ProductSubscription_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: ProductSubscription_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        statusChangeSubscriptionCondition: {
-            modelLevel: {
-                read: {
-                    guard: StatusChangeSubscriptionCondition_read,
+            nonUniqueTextErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: NonUniqueTextErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: NonUniqueTextErrorData_create,inputChecker: NonUniqueTextErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: NonUniqueTextErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: NonUniqueTextErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: NonUniqueTextErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: StatusChangeSubscriptionCondition_create, inputChecker: StatusChangeSubscriptionCondition_create_input,
-                }
-                ,
-                update: {
-                    guard: StatusChangeSubscriptionCondition_update,
-                }
-                ,
-                postUpdate: {
-                    guard: StatusChangeSubscriptionCondition_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: StatusChangeSubscriptionCondition_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        statusChangeSubscription: {
-            modelLevel: {
-                read: {
-                    guard: StatusChangeSubscription_read,
-                }
-                ,
-                create: {
-                    guard: StatusChangeSubscription_create, inputChecker: StatusChangeSubscription_create_input,
-                }
-                ,
-                update: {
-                    guard: StatusChangeSubscription_update,
-                }
-                ,
-                postUpdate: {
-                    guard: StatusChangeSubscription_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: StatusChangeSubscription_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        priceChangeSubscription: {
-            modelLevel: {
-                read: {
-                    guard: PriceChangeSubscription_read,
+            missingElementErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: MissingElementErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: MissingElementErrorData_create,inputChecker: MissingElementErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: MissingElementErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: MissingElementErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: MissingElementErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: PriceChangeSubscription_create, inputChecker: PriceChangeSubscription_create_input,
-                }
-                ,
-                update: {
-                    guard: PriceChangeSubscription_update,
-                }
-                ,
-                postUpdate: {
-                    guard: PriceChangeSubscription_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: PriceChangeSubscription_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        notification: {
-            modelLevel: {
-                read: {
-                    guard: Notification_read,
-                }
-                ,
-                create: {
-                    guard: Notification_create, inputChecker: Notification_create_input,
-                }
-                ,
-                update: {
-                    guard: Notification_update,
-                }
-                ,
-                postUpdate: {
-                    guard: Notification_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: Notification_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        priceChangeNotification: {
-            modelLevel: {
-                read: {
-                    guard: PriceChangeNotification_read,
+            nonUniqueElementErrorData: {
+                modelLevel:{
+                    read:{
+                        guard: NonUniqueElementErrorData_read,
+                    }
+                    ,
+                    create:{
+                        guard: NonUniqueElementErrorData_create,inputChecker: NonUniqueElementErrorData_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: NonUniqueElementErrorData_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: NonUniqueElementErrorData_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: NonUniqueElementErrorData_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: PriceChangeNotification_create, inputChecker: PriceChangeNotification_create_input,
-                }
-                ,
-                update: {
-                    guard: PriceChangeNotification_update,
-                }
-                ,
-                postUpdate: {
-                    guard: PriceChangeNotification_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: PriceChangeNotification_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
-                }
-                ,
-            }
-            ,
-        }
-        ,
-        statusChangeNotification: {
-            modelLevel: {
-                read: {
-                    guard: StatusChangeNotification_read,
-                }
-                ,
-                create: {
-                    guard: StatusChangeNotification_create, inputChecker: StatusChangeNotification_create_input,
-                }
-                ,
-                update: {
-                    guard: StatusChangeNotification_update,
-                }
-                ,
-                postUpdate: {
-                    guard: StatusChangeNotification_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: StatusChangeNotification_delete,
-                }
-            }
-            ,
-            fieldLevel: {
-                read:
-                {
-                }
-                ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
-        }
-        ,
-        newProductNotification: {
-            modelLevel: {
-                read: {
-                    guard: NewProductNotification_read,
+            productRecordError: {
+                modelLevel:{
+                    read:{
+                        guard: ProductRecordError_read,
+                    }
+                    ,
+                    create:{
+                        guard: ProductRecordError_create,inputChecker: ProductRecordError_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: ProductRecordError_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: ProductRecordError_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: ProductRecordError_delete,
+                    }
                 }
                 ,
-                create: {
-                    guard: NewProductNotification_create, inputChecker: NewProductNotification_create_input,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
-                update: {
-                    guard: NewProductNotification_update,
-                }
-                ,
-                postUpdate: {
-                    guard: NewProductNotification_postUpdate,
-                }
-                ,
-                delete: {
-                    guard: NewProductNotification_delete,
-                }
             }
             ,
-            fieldLevel: {
-                read:
-                {
+            productRecord: {
+                modelLevel:{
+                    read:{
+                        guard: ProductRecord_read,
+                    }
+                    ,
+                    create:{
+                        guard: ProductRecord_create,inputChecker: ProductRecord_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: ProductRecord_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: ProductRecord_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: ProductRecord_delete,
+                    }
                 }
                 ,
-                update:
-                {
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            processedProductRecord: {
+                modelLevel:{
+                    read:{
+                        guard: ProcessedProductRecord_read,
+                    }
+                    ,
+                    create:{
+                        guard: ProcessedProductRecord_create,inputChecker: ProcessedProductRecord_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: ProcessedProductRecord_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: ProcessedProductRecord_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: ProcessedProductRecord_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            product: {
+                modelLevel:{
+                    read:{
+                        guard: Product_read,
+                    }
+                    ,
+                    create:{
+                        guard: Product_create,inputChecker: Product_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: Product_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: Product_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: Product_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            productSubscription: {
+                modelLevel:{
+                    read:{
+                        guard: ProductSubscription_read,
+                    }
+                    ,
+                    create:{
+                        guard: ProductSubscription_create,inputChecker: ProductSubscription_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: ProductSubscription_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: ProductSubscription_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: ProductSubscription_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            statusChangeSubscriptionCondition: {
+                modelLevel:{
+                    read:{
+                        guard: StatusChangeSubscriptionCondition_read,
+                    }
+                    ,
+                    create:{
+                        guard: StatusChangeSubscriptionCondition_create,inputChecker: StatusChangeSubscriptionCondition_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: StatusChangeSubscriptionCondition_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: StatusChangeSubscriptionCondition_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: StatusChangeSubscriptionCondition_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            statusChangeSubscription: {
+                modelLevel:{
+                    read:{
+                        guard: StatusChangeSubscription_read,
+                    }
+                    ,
+                    create:{
+                        guard: StatusChangeSubscription_create,inputChecker: StatusChangeSubscription_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: StatusChangeSubscription_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: StatusChangeSubscription_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: StatusChangeSubscription_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            priceChangeSubscription: {
+                modelLevel:{
+                    read:{
+                        guard: PriceChangeSubscription_read,
+                    }
+                    ,
+                    create:{
+                        guard: PriceChangeSubscription_create,inputChecker: PriceChangeSubscription_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: PriceChangeSubscription_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: PriceChangeSubscription_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: PriceChangeSubscription_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            productNotification: {
+                modelLevel:{
+                    read:{
+                        guard: ProductNotification_read,
+                    }
+                    ,
+                    create:{
+                        guard: ProductNotification_create,inputChecker: ProductNotification_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: ProductNotification_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: ProductNotification_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: ProductNotification_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            priceChangeNotification: {
+                modelLevel:{
+                    read:{
+                        guard: PriceChangeNotification_read,
+                    }
+                    ,
+                    create:{
+                        guard: PriceChangeNotification_create,inputChecker: PriceChangeNotification_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: PriceChangeNotification_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: PriceChangeNotification_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: PriceChangeNotification_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
+                }
+                ,
+            }
+            ,
+            statusChangeNotification: {
+                modelLevel:{
+                    read:{
+                        guard: StatusChangeNotification_read,
+                    }
+                    ,
+                    create:{
+                        guard: StatusChangeNotification_create,inputChecker: StatusChangeNotification_create_input,
+                    }
+                    ,
+                    update:{
+                        guard: StatusChangeNotification_update,
+                    }
+                    ,
+                    postUpdate:{
+                        guard: StatusChangeNotification_postUpdate,
+                    }
+                    ,
+                    delete:{
+                        guard: StatusChangeNotification_delete,
+                    }
+                }
+                ,
+                fieldLevel:{
+                    read:
+                    {
+                    }
+                    ,
+                    update:
+                    {
+                    }
+                    ,
                 }
                 ,
             }
             ,
         }
         ,
-    }
-    ,
-    validation: {
-        user: {
-            hasValidation: false
+        validation:{
+            user:{
+                hasValidation: false
+            }
+            ,
+            httpNetworkErrorData:{
+                hasValidation: false
+            }
+            ,
+            httpSerializationErrorData:{
+                hasValidation: false
+            }
+            ,
+            httpClientErrorData:{
+                hasValidation: false
+            }
+            ,
+            missingAttributeErrorData:{
+                hasValidation: false
+            }
+            ,
+            invalidAttributeErrorData:{
+                hasValidation: false
+            }
+            ,
+            invalidTextErrorData:{
+                hasValidation: false
+            }
+            ,
+            missingTextErrorData:{
+                hasValidation: false
+            }
+            ,
+            nonUniqueTextErrorData:{
+                hasValidation: false
+            }
+            ,
+            missingElementErrorData:{
+                hasValidation: false
+            }
+            ,
+            nonUniqueElementErrorData:{
+                hasValidation: false
+            }
+            ,
+            productRecordError:{
+                hasValidation: false
+            }
+            ,
+            productRecord:{
+                hasValidation: false
+            }
+            ,
+            processedProductRecord:{
+                hasValidation: false
+            }
+            ,
+            product:{
+                hasValidation: false
+            }
+            ,
+            productSubscription:{
+                hasValidation: false
+            }
+            ,
+            statusChangeSubscriptionCondition:{
+                hasValidation: false
+            }
+            ,
+            statusChangeSubscription:{
+                hasValidation: false
+            }
+            ,
+            priceChangeSubscription:{
+                hasValidation: false
+            }
+            ,
+            productNotification:{
+                hasValidation: false
+            }
+            ,
+            priceChangeNotification:{
+                hasValidation: false
+            }
+            ,
+            statusChangeNotification:{
+                hasValidation: false
+            }
+            ,
         }
         ,
-        httpNetworkErrorData: {
-            hasValidation: false
-        }
-        ,
-        httpSerializationErrorData: {
-            hasValidation: false
-        }
-        ,
-        httpClientErrorData: {
-            hasValidation: false
-        }
-        ,
-        missingAttributeErrorData: {
-            hasValidation: false
-        }
-        ,
-        invalidAttributeErrorData: {
-            hasValidation: false
-        }
-        ,
-        invalidTextErrorData: {
-            hasValidation: false
-        }
-        ,
-        missingTextErrorData: {
-            hasValidation: false
-        }
-        ,
-        nonUniqueTextErrorData: {
-            hasValidation: false
-        }
-        ,
-        missingElementErrorData: {
-            hasValidation: false
-        }
-        ,
-        nonUniqueElementErrorData: {
-            hasValidation: false
-        }
-        ,
-        productRecordError: {
-            hasValidation: false
-        }
-        ,
-        productRecord: {
-            hasValidation: false
-        }
-        ,
-        processedProductRecord: {
-            hasValidation: false
-        }
-        ,
-        product: {
-            hasValidation: false
-        }
-        ,
-        productSubscription: {
-            hasValidation: false
-        }
-        ,
-        statusChangeSubscriptionCondition: {
-            hasValidation: false
-        }
-        ,
-        statusChangeSubscription: {
-            hasValidation: false
-        }
-        ,
-        priceChangeSubscription: {
-            hasValidation: false
-        }
-        ,
-        notification: {
-            hasValidation: false
-        }
-        ,
-        priceChangeNotification: {
-            hasValidation: false
-        }
-        ,
-        statusChangeNotification: {
-            hasValidation: false
-        }
-        ,
-        newProductNotification: {
-            hasValidation: false
-        }
-        ,
-    }
-    ,
-};
+    };
 
 function User_read(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
@@ -1776,47 +1736,47 @@ function $check_PriceChangeSubscription_delete(input: any, context: QueryContext
     return false;
 }
 
-function Notification_read(context: QueryContext, db: CrudContract): any {
+function ProductNotification_read(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
 }
 
-function $check_Notification_read(input: any, context: QueryContext): any {
+function $check_ProductNotification_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function Notification_create(context: QueryContext, db: CrudContract): any {
+function ProductNotification_create(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
 }
 
-function $check_Notification_create(input: any, context: QueryContext): any {
+function $check_ProductNotification_create(input: any, context: QueryContext): any {
     return false;
 }
 
-function Notification_create_input(input: any, context: QueryContext): boolean {
+function ProductNotification_create_input(input: any, context: QueryContext): boolean {
     return false;
 }
 
-function Notification_update(context: QueryContext, db: CrudContract): any {
+function ProductNotification_update(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
 }
 
-function $check_Notification_update(input: any, context: QueryContext): any {
+function $check_ProductNotification_update(input: any, context: QueryContext): any {
     return false;
 }
 
-function Notification_postUpdate(context: QueryContext, db: CrudContract): any {
+function ProductNotification_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_Notification_postUpdate(input: any, context: QueryContext): any {
+function $check_ProductNotification_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function Notification_delete(context: QueryContext, db: CrudContract): any {
+function ProductNotification_delete(context: QueryContext, db: CrudContract): any {
     return { OR: [] };
 }
 
-function $check_Notification_delete(input: any, context: QueryContext): any {
+function $check_ProductNotification_delete(input: any, context: QueryContext): any {
     return false;
 }
 
@@ -1905,50 +1865,6 @@ function StatusChangeNotification_delete(context: QueryContext, db: CrudContract
 }
 
 function $check_StatusChangeNotification_delete(input: any, context: QueryContext): any {
-    return false;
-}
-
-function NewProductNotification_read(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_NewProductNotification_read(input: any, context: QueryContext): any {
-    return false;
-}
-
-function NewProductNotification_create(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_NewProductNotification_create(input: any, context: QueryContext): any {
-    return false;
-}
-
-function NewProductNotification_create_input(input: any, context: QueryContext): boolean {
-    return false;
-}
-
-function NewProductNotification_update(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_NewProductNotification_update(input: any, context: QueryContext): any {
-    return false;
-}
-
-function NewProductNotification_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_NewProductNotification_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function NewProductNotification_delete(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_NewProductNotification_delete(input: any, context: QueryContext): any {
     return false;
 }
 export default policy

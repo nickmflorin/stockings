@@ -1,9 +1,9 @@
-import { NotificationTypes, type NotificationType } from "~/database/model";
+import { ProductNotificationTypes, type ProductNotificationType } from "~/database/model";
 
 import { Text, type TextProps, type TextComponent } from "~/components/typography";
 
 export type NotificationTypeTextProps<C extends TextComponent> = Omit<TextProps<C>, "children"> & {
-  readonly notificationType: NotificationType;
+  readonly notificationType: ProductNotificationType;
 };
 
 export const NotificationTypeText = <C extends TextComponent>({
@@ -11,6 +11,6 @@ export const NotificationTypeText = <C extends TextComponent>({
   ...props
 }: NotificationTypeTextProps<C>): JSX.Element => (
   <Text fontSize="sm" transform="uppercase" fontWeight="medium" {...props}>
-    {NotificationTypes.getModel(notificationType).label}
+    {ProductNotificationTypes.getModel(notificationType).label}
   </Text>
 );

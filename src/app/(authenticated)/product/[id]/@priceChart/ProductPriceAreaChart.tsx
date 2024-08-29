@@ -20,5 +20,5 @@ export const ProductPriceAreaChart = async ({
     scope: "action",
     strict: true,
   });
-  return <ClientProductPriceAreaChart data={records} />;
+  return <ClientProductPriceAreaChart data={records} isEmpty={records.length === 0} />;
 };

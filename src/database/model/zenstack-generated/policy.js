@@ -439,22 +439,22 @@ const policy = {
                 update: {},
             },
         },
-        notification: {
+        productNotification: {
             modelLevel: {
                 read: {
-                    guard: Notification_read,
+                    guard: ProductNotification_read,
                 },
                 create: {
-                    guard: Notification_create, inputChecker: Notification_create_input,
+                    guard: ProductNotification_create, inputChecker: ProductNotification_create_input,
                 },
                 update: {
-                    guard: Notification_update,
+                    guard: ProductNotification_update,
                 },
                 postUpdate: {
-                    guard: Notification_postUpdate,
+                    guard: ProductNotification_postUpdate,
                 },
                 delete: {
-                    guard: Notification_delete,
+                    guard: ProductNotification_delete,
                 }
             },
             fieldLevel: {
@@ -501,29 +501,6 @@ const policy = {
                 },
                 delete: {
                     guard: StatusChangeNotification_delete,
-                }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        newProductNotification: {
-            modelLevel: {
-                read: {
-                    guard: NewProductNotification_read,
-                },
-                create: {
-                    guard: NewProductNotification_create, inputChecker: NewProductNotification_create_input,
-                },
-                update: {
-                    guard: NewProductNotification_update,
-                },
-                postUpdate: {
-                    guard: NewProductNotification_postUpdate,
-                },
-                delete: {
-                    guard: NewProductNotification_delete,
                 }
             },
             fieldLevel: {
@@ -590,16 +567,13 @@ const policy = {
         priceChangeSubscription: {
             hasValidation: false
         },
-        notification: {
+        productNotification: {
             hasValidation: false
         },
         priceChangeNotification: {
             hasValidation: false
         },
         statusChangeNotification: {
-            hasValidation: false
-        },
-        newProductNotification: {
             hasValidation: false
         },
     },
@@ -1231,37 +1205,37 @@ function PriceChangeSubscription_delete(context, db) {
 function $check_PriceChangeSubscription_delete(input, context) {
     return false;
 }
-function Notification_read(context, db) {
+function ProductNotification_read(context, db) {
     return { OR: [] };
 }
-function $check_Notification_read(input, context) {
+function $check_ProductNotification_read(input, context) {
     return false;
 }
-function Notification_create(context, db) {
+function ProductNotification_create(context, db) {
     return { OR: [] };
 }
-function $check_Notification_create(input, context) {
+function $check_ProductNotification_create(input, context) {
     return false;
 }
-function Notification_create_input(input, context) {
+function ProductNotification_create_input(input, context) {
     return false;
 }
-function Notification_update(context, db) {
+function ProductNotification_update(context, db) {
     return { OR: [] };
 }
-function $check_Notification_update(input, context) {
+function $check_ProductNotification_update(input, context) {
     return false;
 }
-function Notification_postUpdate(context, db) {
+function ProductNotification_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Notification_postUpdate(input, context) {
+function $check_ProductNotification_postUpdate(input, context) {
     return true;
 }
-function Notification_delete(context, db) {
+function ProductNotification_delete(context, db) {
     return { OR: [] };
 }
-function $check_Notification_delete(input, context) {
+function $check_ProductNotification_delete(input, context) {
     return false;
 }
 function PriceChangeNotification_read(context, db) {
@@ -1328,39 +1302,6 @@ function StatusChangeNotification_delete(context, db) {
     return { OR: [] };
 }
 function $check_StatusChangeNotification_delete(input, context) {
-    return false;
-}
-function NewProductNotification_read(context, db) {
-    return { OR: [] };
-}
-function $check_NewProductNotification_read(input, context) {
-    return false;
-}
-function NewProductNotification_create(context, db) {
-    return { OR: [] };
-}
-function $check_NewProductNotification_create(input, context) {
-    return false;
-}
-function NewProductNotification_create_input(input, context) {
-    return false;
-}
-function NewProductNotification_update(context, db) {
-    return { OR: [] };
-}
-function $check_NewProductNotification_update(input, context) {
-    return false;
-}
-function NewProductNotification_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_NewProductNotification_postUpdate(input, context) {
-    return true;
-}
-function NewProductNotification_delete(context, db) {
-    return { OR: [] };
-}
-function $check_NewProductNotification_delete(input, context) {
     return false;
 }
 exports.default = policy;

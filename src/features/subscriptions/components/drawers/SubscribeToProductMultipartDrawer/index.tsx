@@ -4,7 +4,7 @@ import React, { useState, useCallback, useTransition } from "react";
 import { toast } from "react-toastify";
 
 import { UnreachableCaseError } from "~/application/errors";
-import { NotificationType, type Product } from "~/database/model";
+import { ProductNotificationType, type Product } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { subscribeToProduct } from "~/actions/subscriptions";
@@ -103,7 +103,7 @@ export const SubscribeToProductMultipartDrawer = ({
           if (d.length !== 0) {
             _setStepData({ ...stepData, [StepNames.CONFIGURE]: d });
             return setActiveStep(
-              d.includes(NotificationType.PriceChangeNotification)
+              d.includes(ProductNotificationType.PriceChangeNotification)
                 ? StepNames.PRICECHANGE
                 : StepNames.STATUSCHANGE,
             );
@@ -114,7 +114,7 @@ export const SubscribeToProductMultipartDrawer = ({
           const d = data as StepData<"priceChange">;
           if (stepData.configure) {
             _setStepData({ ...stepData, [StepNames.PRICECHANGE]: d });
-            if (stepData.configure.includes(NotificationType.StatusChangeNotification)) {
+            if (stepData.configure.includes(ProductNotificationType.StatusChangeNotification)) {
               return setActiveStep(StepNames.STATUSCHANGE);
             }
             return submit({ ...stepData, [StepNames.PRICECHANGE]: d });
@@ -145,7 +145,7 @@ export const SubscribeToProductMultipartDrawer = ({
         case StepNames.STATUSCHANGE: {
           if (
             stepData.configure &&
-            stepData.configure.includes(NotificationType.PriceChangeNotification)
+            stepData.configure.includes(ProductNotificationType.PriceChangeNotification)
           ) {
             return setActiveStep(StepNames.PRICECHANGE);
           }
@@ -174,7 +174,7 @@ export const SubscribeToProductMultipartDrawer = ({
                   ? 1
                   : activeStep === StepNames.PRICECHANGE
                     ? 2
-                    : stepData.configure.includes(NotificationType.PriceChangeNotification)
+                    : stepData.configure.includes(ProductNotificationType.PriceChangeNotification)
                       ? 3
                       : 2}
               </CircleNumber>

@@ -2,7 +2,7 @@ import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-li
 import { uniq } from "lodash-es";
 import resolveConfig from "tailwindcss/resolveConfig";
 
-import type { BrandProduct } from "./brand";
+import type { BrandProduct, BrandProductRecord, BrandProcessedProductRecord } from "./brand";
 import type { ApiStatusChangeSubscription } from "./subscription";
 import type { PriceChangeSubscription } from "./zenstack-generated/models";
 
@@ -17,27 +17,55 @@ import TailwindConfig from "../../tailwind.config";
 import { ProductStatus } from "./generated";
 import { type ConditionallyInclude } from "./inclusion";
 
+export const ProductRecordIncludesFields = enumeratedLiterals(["processedRecords"] as const, {});
+export type ProductRecordIncludesField = EnumeratedLiteralsMember<
+  typeof ProductRecordIncludesFields
+>;
+
+export type ProductRecordIncludes = ["processedRecords"] | [];
+
+export type ApiProductRecord<I extends ProductRecordIncludes = []> = ConditionallyInclude<
+  BrandProductRecord & {
+    readonly processedRecords: BrandProcessedProductRecord[];
+  },
+  ["processedRecords"],
+  I
+>;
+
 export const ProductIncludesFields = enumeratedLiterals(
-  ["statusChangeSubscription", "priceChangeSubscription"] as const,
+  ["statusChangeSubscription", "priceChangeSubscription", "records"] as const,
   {},
 );
 export type ProductIncludesField = EnumeratedLiteralsMember<typeof ProductIncludesFields>;
 
 export type ProductIncludes =
+  | ["statusChangeSubscription", "priceChangeSubscription", "records"]
+  | ["statusChangeSubscription", "records", "priceChangeSubscription"]
+  | ["priceChangeSubscription", "statusChangeSubscription", "records"]
+  | ["priceChangeSubscription", "records", "statusChangeSubscription"]
+  | ["records", "statusChangeSubscription", "priceChangeSubscription"]
+  | ["records", "priceChangeSubscription", "statusChangeSubscription"]
   | ["statusChangeSubscription", "priceChangeSubscription"]
+  | ["statusChangeSubscription", "records"]
   | ["priceChangeSubscription", "statusChangeSubscription"]
+  | ["priceChangeSubscription", "records"]
+  | ["records", "statusChangeSubscription"]
+  | ["records", "priceChangeSubscription"]
   | ["statusChangeSubscription"]
   | ["priceChangeSubscription"]
+  | ["records"]
   | [];
 
 export type ApiProduct<
-  I extends ProductIncludes = ["statusChangeSubscription", "priceChangeSubscription"],
+  I extends ProductIncludes = [],
+  RI extends ProductRecordIncludes = [],
 > = ConditionallyInclude<
   BrandProduct & {
     readonly statusChangeSubscription: ApiStatusChangeSubscription | null;
     readonly priceChangeSubscription: PriceChangeSubscription | null;
+    readonly records: ApiProductRecord<RI>[];
   },
-  ["statusChangeSubscription", "priceChangeSubscription"],
+  ["statusChangeSubscription", "priceChangeSubscription", "records"],
   I
 >;
 

@@ -1,6 +1,36 @@
-import { enumeratedLiterals } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
-import { NotificationState, NotificationType } from "./generated";
+import {
+  type BrandPriceChangeNotification,
+  type BrandStatusChangeNotification,
+} from "~/database/model";
+
+import { NotificationState, ProductNotificationType } from "./generated";
+import { type ConditionallyInclude } from "./inclusion";
+import { type Product } from "./zenstack-generated/models";
+
+export const ProductNotificationIncludesFields = enumeratedLiterals(["product"] as const, {});
+export type ProductNotificationIncludesField = EnumeratedLiteralsMember<
+  typeof ProductNotificationIncludesFields
+>;
+
+export type ProductNotificationIncludes = ["product"] | [];
+
+export type ApiProductNotification<I extends ProductNotificationIncludes = []> =
+  | ConditionallyInclude<
+      BrandPriceChangeNotification & {
+        readonly product: Product;
+      },
+      ["product"],
+      I
+    >
+  | ConditionallyInclude<
+      BrandStatusChangeNotification & {
+        readonly product: Product;
+      },
+      ["product"],
+      I
+    >;
 
 export const NotificationStates = enumeratedLiterals(
   [
@@ -27,25 +57,20 @@ export const NotificationStates = enumeratedLiterals(
   {},
 );
 
-export const NotificationTypes = enumeratedLiterals(
+export const ProductNotificationTypes = enumeratedLiterals(
   [
     {
-      value: NotificationType.NewProductNotification,
-      label: "New Product",
-      description: "A notification that is sent when a new product is added.",
-    },
-    {
-      value: NotificationType.PriceChangeNotification,
+      value: ProductNotificationType.PriceChangeNotification,
       label: "Price Change",
       description: "A notification that is sent when a product's price changes.",
     },
     {
-      value: NotificationType.StatusChangeNotification,
+      value: ProductNotificationType.StatusChangeNotification,
       label: "Status Change",
       description: "A notification that is sent when a product's status changes.",
     },
   ] as const satisfies {
-    value: NotificationType;
+    value: ProductNotificationType;
     description: string;
     label: string;
   }[],

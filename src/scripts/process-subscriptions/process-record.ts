@@ -7,9 +7,10 @@ import {
   type PriceChangeSubscription,
   type ApiStatusChangeSubscription,
   NotificationState,
-  SubscriptionType,
+  ProductSubscriptionType,
   type ApiProductSubscription,
   enhance,
+  type Product,
 } from "~/database/model";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
@@ -17,13 +18,14 @@ import { logger } from "~/internal/logger";
 import { walkBackwardsUntil } from "~/lib/arrays";
 
 interface ProcessRecordParams {
+  readonly product: Product;
   readonly subscription: ApiProductSubscription;
   readonly previousRecords: ProductRecord[];
   readonly record: ProductRecord;
 }
 
 export const processRecord = async (
-  { record, subscription, previousRecords }: ProcessRecordParams,
+  { product, record, subscription, previousRecords }: ProcessRecordParams,
   ctx: ScriptContext,
 ) => {
   if (!record.price && !record.status) {
@@ -60,6 +62,7 @@ export const processRecord = async (
               subscription: { connect: { id: sub.id } },
               state: NotificationState.Pending,
               stateAsOf: new Date(),
+              product: { connect: { id: product.id } },
               condition:
                 previousRecordWithPrice.price > record.price
                   ? PriceChangeCondition.PriceDecrease
@@ -112,6 +115,7 @@ export const processRecord = async (
               updatedBy: { connect: { id: ctx.user.id } },
               user: { connect: { id: subscription.userId } },
               productRecord: { connect: { id: record.id } },
+              product: { connect: { id: product.id } },
               subscription: { connect: { id: sub.id } },
               state: NotificationState.Pending,
               stateAsOf: new Date(),
@@ -136,9 +140,11 @@ export const processRecord = async (
 
   await enhanced.$transaction(async tx => {
     if (record.timestamp >= subscription.createdAt) {
-      if (subscription.subscriptionType === SubscriptionType.PriceChangeSubscription) {
+      if (subscription.subscriptionType === ProductSubscriptionType.PriceChangeSubscription) {
         await processPriceChange(tx, subscription as PriceChangeSubscription);
-      } else if (subscription.subscriptionType === SubscriptionType.StatusChangeSubscription) {
+      } else if (
+        subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription
+      ) {
         await processStatusChange(tx, subscription as ApiStatusChangeSubscription);
       }
     }

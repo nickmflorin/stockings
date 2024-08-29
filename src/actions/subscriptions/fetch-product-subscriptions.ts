@@ -2,12 +2,11 @@ import { cache } from "react";
 
 import { getAuthedUser } from "~/application/auth/server";
 import type { FullProductSubscription, User } from "~/database/model";
-import { enhance, SubscriptionType } from "~/database/model";
+import { enhance, ProductSubscriptionType, ProductNotificationType } from "~/database/model";
 import { db } from "~/database/prisma";
-import { conditionalFilters } from "~/database/util";
+import { conditionalFilters, constructOrSearch } from "~/database/util";
 
 import {
-  constructTableSearchClause,
   PAGE_SIZES,
   type FetchActionContext,
   type FetchActionResponse,
@@ -20,7 +19,9 @@ import {
 
 const filtersClause = (filters: Partial<SubscriptionsControls["filters"]>) =>
   conditionalFilters([
-    filters.search ? { product: constructTableSearchClause("product", filters.search) } : undefined,
+    filters.search
+      ? { product: constructOrSearch(filters.search, ["name", "code", "slug"]) }
+      : undefined,
     filters.products && filters.products.length !== 0
       ? { productId: { in: filters.products } }
       : undefined,
@@ -43,7 +44,7 @@ const whereClause = ({
   return { userId: user.id };
 };
 
-export const fetchSubscriptionsCount = cache(
+export const fetchProductSubscriptionsCount = cache(
   async <C extends FetchActionContext>(
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>> => {
@@ -129,18 +130,20 @@ const _fetchProductSubscriptions = async <C extends FetchActionContext>(
     where: {
       subscriptionId: {
         in: data
-          .filter(d => d.subscriptionType === SubscriptionType.StatusChangeSubscription)
+          .filter(d => d.subscriptionType === ProductSubscriptionType.StatusChangeSubscription)
           .map(d => d.id),
       },
     },
   });
-  const priceChangeCounts = await enhanced.priceChangeNotification.groupBy({
+  const priceChangeCounts = await enhanced.productNotification.groupBy({
     by: ["subscriptionId"],
     _count: { id: true },
+    where: { notificationType: ProductNotificationType.PriceChangeNotification },
   });
-  const statusChangeCounts = await enhanced.statusChangeNotification.groupBy({
+  const statusChangeCounts = await enhanced.productNotification.groupBy({
     by: ["subscriptionId"],
     _count: { id: true },
+    where: { notificationType: ProductNotificationType.StatusChangeNotification },
   });
 
   const getNotificationsCount = (subscriptionId: string) =>
@@ -149,7 +152,7 @@ const _fetchProductSubscriptions = async <C extends FetchActionContext>(
 
   return dataInFetchContext(
     data.map((subscription): FullProductSubscription => {
-      if (subscription.subscriptionType === SubscriptionType.StatusChangeSubscription) {
+      if (subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription) {
         return {
           ...subscription,
           notificationsCount: getNotificationsCount(subscription.id),

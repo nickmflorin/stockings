@@ -6,13 +6,13 @@ import { enhance, type ProductSubscription } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
-import { BaseSubscriptionSchema } from "~/actions/schemas";
+import { BaseProductSubscriptionSchema } from "~/actions/schemas";
 
 import { convertToPlainObject, ApiClientGlobalError, ApiClientFormError } from "~/api";
 
-const Schema = BaseSubscriptionSchema.partial();
+const Schema = BaseProductSubscriptionSchema.partial();
 
-export const updateSubscription = async (
+export const updateProductSubscription = async (
   id: string,
   data: z.infer<typeof Schema>,
 ): Promise<MutationActionResponse<ProductSubscription>> => {

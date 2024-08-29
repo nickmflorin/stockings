@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { ProductStatus, PriceChangeCondition, productStatusesAreAny } from "~/database/model";
 
-export const BaseSubscriptionSchema = z.object({
+export const BaseProductSubscriptionSchema = z.object({
   enabled: z.boolean(),
 });
 

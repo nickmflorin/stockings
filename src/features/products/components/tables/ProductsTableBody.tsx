@@ -19,7 +19,7 @@ import { ProductStatusText } from "~/features/products/components/ProductStatusT
 const SubscriptionCell = dynamic(() => import("./cells/SubscriptionCell"));
 
 export interface ProductsTableBodyProps {
-  readonly data: ApiProduct[];
+  readonly data: ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>[];
 }
 
 export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element => {
@@ -90,7 +90,10 @@ export const ProductsTableBody = ({ data }: ProductsTableBodyProps): JSX.Element
         },
       ]}
       columns={convertConfigsToColumns(
-        [...ProductsTableColumns] as DataTableColumnConfig<ApiProduct, ProductsTableColumnId>[],
+        [...ProductsTableColumns] as DataTableColumnConfig<
+          ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>,
+          ProductsTableColumnId
+        >[],
         {
           name: {
             cellRenderer(datum) {

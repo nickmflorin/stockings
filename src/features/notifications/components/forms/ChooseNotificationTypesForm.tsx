@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-import { NotificationType } from "~/database/model";
+import { ProductNotificationType } from "~/database/model";
 
 import { Form, type FormProps } from "~/components/forms/Form";
 import { MultiCheckbox } from "~/components/input/MultiCheckbox";
@@ -18,9 +18,12 @@ export interface ChooseNotificationTypesFormProps
 }
 
 const TooltipDescriptions: {
-  [key in Exclude<NotificationType, typeof NotificationType.NewProductNotification>]: ReactNode;
+  [key in Exclude<
+    ProductNotificationType,
+    typeof ProductNotificationType.NewProductNotification
+  >]: ReactNode;
 } = {
-  [NotificationType.PriceChangeNotification]: (
+  [ProductNotificationType.PriceChangeNotification]: (
     <Text inherit>
       If enabled, you will configure/receive notifications that are sent when the{" "}
       <Text component="span" fontWeight="semibold">
@@ -29,7 +32,7 @@ const TooltipDescriptions: {
       of the product changes.
     </Text>
   ),
-  [NotificationType.StatusChangeNotification]: (
+  [ProductNotificationType.StatusChangeNotification]: (
     <Text inherit>
       If enabled, you will configure/receive notifications that are sent when the{" "}
       <Text component="span" fontWeight="semibold">
@@ -64,17 +67,17 @@ export const ChooseNotificationTypesForm = ({
           value={value}
           data={[
             {
-              value: NotificationType.PriceChangeNotification,
+              value: ProductNotificationType.PriceChangeNotification,
               label: "Notifications when Price Changes",
               tooltipDescription: withTooltips
-                ? TooltipDescriptions[NotificationType.PriceChangeNotification]
+                ? TooltipDescriptions[ProductNotificationType.PriceChangeNotification]
                 : undefined,
             },
             {
-              value: NotificationType.StatusChangeNotification,
+              value: ProductNotificationType.StatusChangeNotification,
               label: "Notifications when Inventory Changes",
               tooltipDescription: withTooltips
-                ? TooltipDescriptions[NotificationType.StatusChangeNotification]
+                ? TooltipDescriptions[ProductNotificationType.StatusChangeNotification]
                 : undefined,
             },
           ]}

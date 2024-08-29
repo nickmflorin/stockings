@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 
 import { type SubscriptionsFilters } from "~/actions";
-import { fetchProductSubscriptionsPagination } from "~/actions/subscriptions/fetch-subscriptions";
+/* eslint-disable-next-line max-len */
+import { fetchProductSubscriptionsPagination } from "~/actions/subscriptions/fetch-product-subscriptions";
 
 import { Paginator } from "~/components/pagination/Paginator";
 

@@ -32,7 +32,7 @@ const seedRecordsBatch = async (records: RecordDatum[]) => {
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
   ctx: ScriptContext,
-): Promise<[Product[], number, ApiProductSubscription[]]> => {
+): Promise<[Product[], ApiProductSubscription[]]> => {
   const products = await Promise.all(
     jsonProducts.map(jsonProduct =>
       db.product.create({
@@ -45,23 +45,23 @@ const seedProductBatch = async (
     ),
   );
 
-  let totalRecordsCount = 0;
-  for (let i = 0; i < products.length; i++) {
-    const product = products[i];
-    const recs = seedRecords(product, ctx);
-    const batches = chunk(recs, RECORDS_BATCH_SIZE);
-    for (let b = 0; b < batches.length; b++) {
-      logger.info(
-        `Creating '${recs.length}' records for product '${product.slug}' in batch ` +
-          `'${b + 1}/${batches.length}'...`,
-      );
-      totalRecordsCount += await seedRecordsBatch(batches[b]);
-    }
-  }
+  /* let totalRecordsCount = 0;
+     for (let i = 0; i < products.length; i++) {
+       const product = products[i];
+       const recs = seedRecords(product, ctx);
+       const batches = chunk(recs, RECORDS_BATCH_SIZE);
+       for (let b = 0; b < batches.length; b++) {
+         logger.info(
+           `Creating '${recs.length}' records for product '${product.slug}' in batch ` +
+             `'${b + 1}/${batches.length}'...`,
+         );
+         totalRecordsCount += await seedRecordsBatch(batches[b]);
+       }
+     } */
 
   return [
     products,
-    totalRecordsCount,
+    // totalRecordsCount,
     (
       await Promise.all(
         products.reduce(
@@ -83,9 +83,9 @@ const seedProductBatch = async (
 export const seedProducts = async (ctx: ScriptContext) => {
   const batches = chunk(fixtures.products, BATCH_SIZE);
   for (let i = 0; i < batches.length; i++) {
-    const [products, records, subscriptions] = await seedProductBatch(batches[i], ctx);
+    const [products, subscriptions] = await seedProductBatch(batches[i], ctx);
     logger.info(
-      `Created '${products.length}' products, '${records}' records and ` +
+      `Created '${products.length}' products and ` +
         `'${subscriptions.length}' subscriptions in batch '${i + 1}/${batches.length}'...`,
     );
   }

@@ -10,10 +10,10 @@ import {
   SubscriptionsFiltersOptions,
   SubscriptionsFiltersSchemas,
   SubscriptionsDefaultOrdering,
+  SubscriptionOrderableFields,
 } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
-import { OrderableSubscriptionsTableColumnIds } from "~/features/subscriptions";
 /* eslint-disable-next-line max-len */
 import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
 /* eslint-disable-next-line max-len */
@@ -42,7 +42,7 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: SubscriptionsDefaultOrdering,
-    fields: OrderableSubscriptionsTableColumnIds,
+    fields: [...SubscriptionOrderableFields],
   });
 
   return (

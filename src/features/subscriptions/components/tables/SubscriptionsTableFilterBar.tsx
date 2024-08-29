@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 
-import { type SubscriptionType } from "~/database/model";
+import { type ProductSubscriptionType } from "~/database/model";
 
 import { SubscriptionsFiltersOptions, SubscriptionsFiltersSchemas } from "~/actions";
 
@@ -29,6 +29,7 @@ export const SubscriptionsTableFilterBar = (
   return (
     <TableView.FilterBar
       {...props}
+      searchPlaceholder="Search subscriptions..."
       onSearch={v => updateFilters({ search: v })}
       search={filters.search}
       onClear={() => {
@@ -44,7 +45,7 @@ export const SubscriptionsTableFilterBar = (
         filters={{ subscribed: true }}
         dynamicHeight={false}
         placeholder="Products"
-        inputClassName="max-w-[320px]"
+        inputClassName="max-w-[520px]"
         initialValue={filters.products}
         onChange={products => updateFilters({ products })}
         onClear={() => updateFilters({ products: [] })}
@@ -56,7 +57,7 @@ export const SubscriptionsTableFilterBar = (
         behavior="multi"
         inputClassName="max-w-[320px]"
         initialValue={filters.types}
-        onChange={(types: SubscriptionType[]) => updateFilters({ types })}
+        onChange={(types: ProductSubscriptionType[]) => updateFilters({ types })}
         onClear={() => updateFilters({ types: [] })}
       />
     </TableView.FilterBar>

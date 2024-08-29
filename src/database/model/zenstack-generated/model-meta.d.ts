@@ -144,7 +144,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                createdNotifications: {
+                createdProductNotifications: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -157,7 +157,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                updatedNotifications: {
+                updatedProductNotifications: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -744,20 +744,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                statusChangeNotifications: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                };
-                priceChangeNotifications: {
+                notifications: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -1112,7 +1099,7 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
-                newProductNotifications: {
+                notifications: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -1282,6 +1269,19 @@ declare const metadata: {
                             value: boolean;
                         }[];
                     }[];
+                };
+                notifications: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
                 };
             };
             uniqueConstraints: {
@@ -1527,7 +1527,7 @@ declare const metadata: {
                     }[];
                     inheritedFrom: string;
                 };
-                conditions: {
+                notifications: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -1538,9 +1538,10 @@ declare const metadata: {
                             value: string;
                         }[];
                     }[];
-                    backLink: string;
+                    isRelationOwner: boolean;
+                    inheritedFrom: string;
                 };
-                notifications: {
+                conditions: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -1716,15 +1717,6 @@ declare const metadata: {
                     }[];
                     inheritedFrom: string;
                 };
-                conditions: {
-                    name: string;
-                    type: string;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
                 notifications: {
                     name: string;
                     type: string;
@@ -1736,7 +1728,17 @@ declare const metadata: {
                             value: string;
                         }[];
                     }[];
-                    backLink: string;
+                    isRelationOwner: boolean;
+                    inheritedFrom: string;
+                };
+                conditions: {
+                    name: string;
+                    type: string;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
                 };
             };
             uniqueConstraints: {
@@ -1746,7 +1748,7 @@ declare const metadata: {
                 };
             };
         };
-        notification: {
+        productNotification: {
             name: string;
             fields: {
                 id: {
@@ -1851,6 +1853,84 @@ declare const metadata: {
                     }[];
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                productRecordId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                productRecord: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                productId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                product: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subscriptionId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                subscription: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
                 };
                 notificationType: {
                     name: string;
@@ -1999,6 +2079,87 @@ declare const metadata: {
                     relationField: string;
                     inheritedFrom: string;
                 };
+                productRecordId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                productRecord: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                productId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                product: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
+                subscriptionId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                subscription: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
+                };
                 notificationType: {
                     name: string;
                     type: string;
@@ -2025,58 +2186,6 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                     inheritedFrom: string;
-                };
-                productRecordId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                productRecord: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                subscriptionId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                subscription: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
                 };
                 condition: {
                     name: string;
@@ -2210,33 +2319,6 @@ declare const metadata: {
                     relationField: string;
                     inheritedFrom: string;
                 };
-                notificationType: {
-                    name: string;
-                    type: string;
-                    inheritedFrom: string;
-                };
-                state: {
-                    name: string;
-                    type: string;
-                    inheritedFrom: string;
-                };
-                stateAsOf: {
-                    name: string;
-                    type: string;
-                    inheritedFrom: string;
-                };
-                failedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    inheritedFrom: string;
-                };
-                sentAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    inheritedFrom: string;
-                };
                 productRecordId: {
                     name: string;
                     type: string;
@@ -2246,6 +2328,7 @@ declare const metadata: {
                     }[];
                     isForeignKey: boolean;
                     relationField: string;
+                    inheritedFrom: string;
                 };
                 productRecord: {
                     name: string;
@@ -2257,11 +2340,38 @@ declare const metadata: {
                             value: string;
                         }[];
                     }[];
-                    backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
                         id: string;
                     };
+                    inheritedFrom: string;
+                };
+                productId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                    inheritedFrom: string;
+                };
+                product: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            value: string;
+                        }[];
+                    }[];
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                    inheritedFrom: string;
                 };
                 subscriptionId: {
                     name: string;
@@ -2272,6 +2382,7 @@ declare const metadata: {
                     }[];
                     isForeignKey: boolean;
                     relationField: string;
+                    inheritedFrom: string;
                 };
                 subscription: {
                     name: string;
@@ -2283,138 +2394,10 @@ declare const metadata: {
                             value: string;
                         }[];
                     }[];
-                    backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
                         id: string;
                     };
-                };
-                previousStatus: {
-                    name: string;
-                    type: string;
-                };
-                newStatus: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-        };
-        newProductNotification: {
-            name: string;
-            baseTypes: string[];
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    inheritedFrom: string;
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    inheritedFrom: string;
-                };
-                createdById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                updatedById: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                    inheritedFrom: string;
-                };
-                createdBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                updatedBy: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                user: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                    inheritedFrom: string;
-                };
-                userId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
                     inheritedFrom: string;
                 };
                 notificationType: {
@@ -2444,31 +2427,13 @@ declare const metadata: {
                     isOptional: boolean;
                     inheritedFrom: string;
                 };
-                productId: {
+                previousStatus: {
                     name: string;
                     type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
                 };
-                product: {
+                newStatus: {
                     name: string;
                     type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
                 };
             };
             uniqueConstraints: {

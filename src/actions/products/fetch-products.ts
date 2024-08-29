@@ -31,6 +31,7 @@ const filtersClause = (filters: Partial<ProductsControls["filters"]>, user: User
   conditionalFilters([
     filters.search ? constructTableSearchClause("product", filters.search) : undefined,
     filters.subscribed ? { subscriptions: { some: { userId: user.id } } } : undefined,
+    filters.notified ? { notifications: { some: { userId: user.id } } } : undefined,
     filters.categories && filters.categories.length !== 0
       ? { category: { in: filters.categories } }
       : undefined,
@@ -125,6 +126,7 @@ export const fetchProducts = cache(
           ? limit
           : undefined,
       include: {
+        records: fieldIsIncluded("records", includes),
         subscriptions: {
           where: { userId: user.id },
         },

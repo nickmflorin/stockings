@@ -1,9 +1,9 @@
-import { SubscriptionTypes, type SubscriptionType } from "~/database/model";
+import { ProductSubscriptionTypes, type ProductSubscriptionType } from "~/database/model";
 
 import { Text, type TextProps, type TextComponent } from "~/components/typography";
 
 export type SubscriptionTypeTextProps<C extends TextComponent> = Omit<TextProps<C>, "children"> & {
-  readonly subscriptionType: SubscriptionType;
+  readonly subscriptionType: ProductSubscriptionType;
 };
 
 export const SubscriptionTypeText = <C extends TextComponent>({
@@ -11,6 +11,6 @@ export const SubscriptionTypeText = <C extends TextComponent>({
   ...props
 }: SubscriptionTypeTextProps<C>): JSX.Element => (
   <Text fontSize="sm" transform="uppercase" fontWeight="medium" {...props}>
-    {SubscriptionTypes.getModel(subscriptionType).label}
+    {ProductSubscriptionTypes.getModel(subscriptionType).label}
   </Text>
 );

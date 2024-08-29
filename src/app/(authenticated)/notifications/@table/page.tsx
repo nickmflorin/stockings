@@ -4,8 +4,14 @@ import { Suspense } from "react";
 import { z } from "zod";
 
 import { parseFilters } from "~/lib/filters";
+import { parseOrdering } from "~/lib/ordering";
 
-import { NotificationsFiltersOptions, NotificationsFiltersSchemas } from "~/actions";
+import {
+  ProductNotificationOrderableFields,
+  ProductNotificationsDefaultOrdering,
+  ProductNotificationsFiltersOptions,
+  ProductNotificationsFiltersSchemas,
+} from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
 /* eslint-disable-next-line max-len */
@@ -28,9 +34,14 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
 
   const filters = parseFilters(
     searchParams,
-    NotificationsFiltersSchemas,
-    NotificationsFiltersOptions,
+    ProductNotificationsFiltersSchemas,
+    ProductNotificationsFiltersOptions,
   );
+
+  const ordering = parseOrdering(searchParams, {
+    defaultOrdering: ProductNotificationsDefaultOrdering,
+    fields: [...ProductNotificationOrderableFields],
+  });
 
   return (
     <NotificationsTableView
@@ -46,10 +57,10 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
       }
     >
       <Suspense
-        key={JSON.stringify(filters) + String(page)}
+        key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
         fallback={<Loading isLoading component="tbody" />}
       >
-        <NotificationsTableBody filters={filters} page={page} />
+        <NotificationsTableBody filters={filters} page={page} ordering={ordering} />
       </Suspense>
     </NotificationsTableView>
   );

@@ -5,7 +5,7 @@ import type {
   PriceChangeSubscriptionFormValues,
 } from "../../forms";
 
-import { type NotificationType } from "~/database/model";
+import { type ProductNotificationType } from "~/database/model";
 
 import type { FormInstance } from "~/components/forms";
 import { type ChooseNotificationTypesFormValues } from "~/features/notifications/components/forms";
@@ -17,7 +17,7 @@ export const StepNames = enumeratedLiterals(
 export type StepName = EnumeratedLiteralsMember<typeof StepNames>;
 
 export type StepData<N extends StepName> = {
-  [StepNames.CONFIGURE]: Exclude<NotificationType, "NewProductNotification">[];
+  [StepNames.CONFIGURE]: Exclude<ProductNotificationType, "NewProductNotification">[];
   [StepNames.STATUSCHANGE]: StatusChangeSubscriptionFormValues;
   [StepNames.PRICECHANGE]: PriceChangeSubscriptionFormValues;
 }[N];

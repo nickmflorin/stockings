@@ -1,1 +1,1 @@
-export * from "./fetch-notifications";
+export * from "./fetch-product-notifications";

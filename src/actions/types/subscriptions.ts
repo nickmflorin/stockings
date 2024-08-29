@@ -1,21 +1,24 @@
 import { z } from "zod";
 
-import type { SubscriptionType } from "~/database/model";
-import { SubscriptionTypes } from "~/database/model";
+import type { ProductSubscriptionType } from "~/database/model";
+import { ProductSubscriptionTypes } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
 import { type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
+export const SubscriptionOrderableFields = ["createdAt", "updatedAt", "product"] as const;
+export type SubscriptionOrderableField = (typeof SubscriptionOrderableFields)[number];
+
 export interface SubscriptionsFilters {
-  readonly types: SubscriptionType[];
+  readonly types: ProductSubscriptionType[];
   readonly search: string;
   readonly products: string[];
 }
 
 export interface SubscriptionsControls {
   readonly filters: SubscriptionsFilters;
-  readonly ordering: Ordering<"product" | "createdAt" | "updatedAt">;
+  readonly ordering: Ordering<SubscriptionOrderableField>;
   readonly page: number;
 }
 
@@ -28,11 +31,11 @@ export const SubscriptionsFiltersSchemas = {
   search: z.string(),
   types: z.union([z.string(), z.array(z.string())]).transform(value => {
     if (typeof value === "string") {
-      return SubscriptionTypes.contains(value) ? [value] : [];
+      return ProductSubscriptionTypes.contains(value) ? [value] : [];
     }
     return value.reduce(
-      (prev, curr) => (SubscriptionTypes.contains(curr) ? [...prev, curr] : prev),
-      [] as SubscriptionType[],
+      (prev, curr) => (ProductSubscriptionTypes.contains(curr) ? [...prev, curr] : prev),
+      [] as ProductSubscriptionType[],
     );
   }),
   products: z.union([z.string(), z.array(z.string())]).transform(value => {

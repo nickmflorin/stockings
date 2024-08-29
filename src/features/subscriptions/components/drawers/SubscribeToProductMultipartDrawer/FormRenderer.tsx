@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import { NotificationType } from "~/database/model";
+import { ProductNotificationType } from "~/database/model";
 
 import { Loading } from "~/components/loading/Loading";
 import { ButtonFooter } from "~/components/structural/ButtonFooter";
@@ -67,7 +67,7 @@ const Renderers: {
         <ButtonFooter
           submitText={
             stepData.configure &&
-            stepData.configure.includes(NotificationType.StatusChangeNotification)
+            stepData.configure.includes(ProductNotificationType.StatusChangeNotification)
               ? "Next"
               : "Subscribe"
           }

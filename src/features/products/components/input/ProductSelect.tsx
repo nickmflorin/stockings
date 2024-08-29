@@ -60,6 +60,7 @@ export const ProductSelect = forwardRef<SelectInstance, ProductSelectProps<Selec
         search={search}
         onSearch={e => setSearch(e.target.value)}
         data={products ?? []}
+        isReady={products !== undefined}
         isDisabled={error !== undefined}
         isLocked={isLoading}
         isLoading={isLoading}

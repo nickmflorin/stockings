@@ -1,6 +1,6 @@
 "use client";
 import type { FullProductSubscription, Product } from "~/database/model";
-import { SubscriptionType } from "~/database/model";
+import { ProductSubscriptionType } from "~/database/model";
 
 import { Link } from "~/components/buttons";
 import { useDrawers } from "~/components/drawers/hooks";
@@ -20,10 +20,10 @@ export const SubscribeToOtherAction = ({
 
   const hasPriceChangeSubscription = subscriptions
     .map(sub => sub.subscriptionType)
-    .includes(SubscriptionType.PriceChangeSubscription);
+    .includes(ProductSubscriptionType.PriceChangeSubscription);
   const hasStatusChangeSubscription = subscriptions
     .map(sub => sub.subscriptionType)
-    .includes(SubscriptionType.StatusChangeSubscription);
+    .includes(ProductSubscriptionType.StatusChangeSubscription);
 
   if (
     (hasStatusChangeSubscription && hasPriceChangeSubscription) ||

@@ -1,18 +1,19 @@
 "use client";
 import { useRef } from "react";
 
-import { type NotificationType, type NotificationState } from "~/database/model";
+import { type ProductNotificationType, type NotificationState } from "~/database/model";
 
-import { NotificationsFiltersOptions, NotificationsFiltersSchemas } from "~/actions";
+import { ProductNotificationsFiltersOptions, ProductNotificationsFiltersSchemas } from "~/actions";
 
 import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
+import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
-import { classNames } from "~/components/types";
 /* eslint-disable-next-line max-len */
 import { NotificationStateSelect } from "~/features/notifications/components/input/NotificationStateSelect";
 /* eslint-disable-next-line max-len */
 import { NotificationTypeSelect } from "~/features/notifications/components/input/NotificationTypeSelect";
+import { ProductSelect } from "~/features/products/components/input/ProductSelect";
 import { useFilters } from "~/hooks/use-filters";
 
 export interface NotificationsTableFilterBarProps extends ComponentProps {}
@@ -22,14 +23,37 @@ export const NotificationsTableFilterBar = (
 ): JSX.Element => {
   const stateSelectRef = useRef<SelectInstance | null>(null);
   const typeSelectRef = useRef<SelectInstance | null>(null);
+  const productSelectRef = useRef<SelectInstance | null>(null);
 
   const [filters, updateFilters] = useFilters({
-    schemas: NotificationsFiltersSchemas,
-    options: NotificationsFiltersOptions,
+    schemas: ProductNotificationsFiltersSchemas,
+    options: ProductNotificationsFiltersOptions,
   });
 
   return (
-    <div className={classNames("flex flex-row items-center gap-2", props.className)}>
+    <TableView.FilterBar
+      {...props}
+      searchPlaceholder="Search notifications..."
+      onSearch={v => updateFilters({ search: v })}
+      search={filters.search}
+      onClear={() => {
+        for (const r of [typeSelectRef, stateSelectRef]) {
+          r.current?.clear();
+        }
+        updateFilters({ states: [], types: [], search: "" });
+      }}
+    >
+      <ProductSelect
+        ref={productSelectRef}
+        behavior="multi"
+        filters={{ notified: true }}
+        dynamicHeight={false}
+        placeholder="Products"
+        inputClassName="max-w-[520px]"
+        initialValue={filters.products}
+        onChange={products => updateFilters({ products })}
+        onClear={() => updateFilters({ products: [] })}
+      />
       <NotificationStateSelect
         ref={stateSelectRef}
         dynamicHeight={false}
@@ -47,7 +71,7 @@ export const NotificationsTableFilterBar = (
         behavior="multi"
         inputClassName="max-w-[320px]"
         initialValue={filters.types}
-        onChange={(types: NotificationType[]) => updateFilters({ types })}
+        onChange={(types: ProductNotificationType[]) => updateFilters({ types })}
         onClear={() => updateFilters({ types: [] })}
       />
       <IconButton.Transparent
@@ -61,6 +85,6 @@ export const NotificationsTableFilterBar = (
           }
         }}
       />
-    </div>
+    </TableView.FilterBar>
   );
 };

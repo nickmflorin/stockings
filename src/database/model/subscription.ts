@@ -6,7 +6,7 @@ import { replaceInArray } from "~/lib/arrays";
 import { type TailwindTextColorClassName, type TailwindBgColorClassName } from "~/components/types";
 
 import {
-  SubscriptionType,
+  ProductSubscriptionType,
   type Product,
   type ProductStatus,
   PriceChangeCondition,
@@ -46,27 +46,22 @@ export type ApiStatusChangeSubscription = StatusChangeSubscription & {
 
 export type ApiProductSubscription = ApiStatusChangeSubscription | PriceChangeSubscription;
 
-export const SubscriptionTypes = enumeratedLiterals(
+export const ProductSubscriptionTypes = enumeratedLiterals(
   [
     {
-      value: SubscriptionType.NewProductSubscription,
-      label: "New Product",
-      description: "A subscription that will issue notifications when new products are added.",
-    },
-    {
-      value: SubscriptionType.PriceChangeSubscription,
+      value: ProductSubscriptionType.PriceChangeSubscription,
       label: "Price Change",
       description:
         "A subscription that will issue notifications when the price of a product changes.",
     },
     {
-      value: SubscriptionType.StatusChangeSubscription,
+      value: ProductSubscriptionType.StatusChangeSubscription,
       label: "Status Change",
       description:
         "A subscription that will issue notifications when the status of a product changes.",
     },
   ] as const satisfies {
-    value: SubscriptionType;
+    value: ProductSubscriptionType;
     description: string;
     label: string;
   }[],

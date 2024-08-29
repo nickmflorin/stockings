@@ -3,7 +3,7 @@ import { uniq } from "lodash-es";
 import { type z } from "zod";
 
 import { getAuthedUser } from "~/application/auth/server";
-import { enhance, type PriceChangeSubscription, SubscriptionType } from "~/database/model";
+import { enhance, type PriceChangeSubscription, ProductSubscriptionType } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
@@ -26,7 +26,7 @@ export const subscribeToPriceChanges = async (
     where: {
       productId,
       userId: user.id,
-      subscriptionType: SubscriptionType.PriceChangeSubscription,
+      subscriptionType: ProductSubscriptionType.PriceChangeSubscription,
     },
   });
   if (subscription) {

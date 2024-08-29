@@ -8,9 +8,11 @@ import { DateTime } from "luxon";
 import { type ProductPriceChartDataPoint } from "~/database/model";
 
 import { BrushedAreaChart } from "~/components/charts/BrushedAreaChart";
+import { ChartContainer, type ChartContainerProps } from "~/components/charts/ChartContainer";
 import type * as constants from "~/components/charts/constants";
 
-export interface ProductPriceAreaChartProps {
+export interface ProductPriceAreaChartProps
+  extends Pick<ChartContainerProps, "isEmpty" | "emptyContent"> {
   readonly data: ProductPriceChartDataPoint[];
 }
 
@@ -31,23 +33,33 @@ const accessors = {
   y: (d: ProductPriceChartDataPoint) => d.price,
 };
 
-export const ProductPriceAreaChart = ({ data }: ProductPriceAreaChartProps) => (
-  <BrushedAreaChart<ProductPriceChartDataPoint, typeof scales, typeof accessors>
-    data={data}
-    accessors={accessors}
-    tickFormatters={{
-      x: v =>
-        v instanceof Date
-          ? DateTime.fromJSDate(v).toFormat("MMM d")
-          : DateTime.fromMillis(typeof v === "number" ? v : v.valueOf()).toFormat("MMM d"),
-      y: v => `$${v}`,
-    }}
-    tooltipFormatters={{
-      x: v => DateTime.fromMillis(v).toFormat("MMM d"),
-      y: v => `$${v}`,
-    }}
-    scales={scales}
-  />
+export const ProductPriceAreaChart = ({
+  data,
+  isEmpty,
+  emptyContent = "There is currently no price data for this product.",
+}: ProductPriceAreaChartProps) => (
+  <ChartContainer isEmpty={isEmpty} emptyContent={emptyContent}>
+    {({ height, width }) => (
+      <BrushedAreaChart<ProductPriceChartDataPoint, typeof scales, typeof accessors>
+        height={height}
+        width={width}
+        data={data}
+        accessors={accessors}
+        tickFormatters={{
+          x: v =>
+            v instanceof Date
+              ? DateTime.fromJSDate(v).toFormat("MMM d")
+              : DateTime.fromMillis(typeof v === "number" ? v : v.valueOf()).toFormat("MMM d"),
+          y: v => `$${v}`,
+        }}
+        tooltipFormatters={{
+          x: v => DateTime.fromMillis(v).toFormat("MMM d"),
+          y: v => `$${v}`,
+        }}
+        scales={scales}
+      />
+    )}
+  </ChartContainer>
 );
 
 export default ProductPriceAreaChart;

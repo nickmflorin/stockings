@@ -1,14 +1,14 @@
 import { forwardRef, type ForwardedRef } from "react";
 
-import { NotificationTypes, type NotificationType } from "~/database/model";
+import { ProductNotificationTypes, type ProductNotificationType } from "~/database/model";
 
 import type { SelectBehaviorType, SelectInstance } from "~/components/input/select";
 import { DataSelect, type DataSelectProps } from "~/components/input/select/DataSelect";
 import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
 
-type M = { readonly value: NotificationType };
+type M = { readonly value: ProductNotificationType };
 
-const getItemValue = (m: M) => NotificationTypes.getModel(m.value).value;
+const getItemValue = (m: M) => ProductNotificationTypes.getModel(m.value).value;
 
 export interface NotificationTypeSelectProps<B extends SelectBehaviorType>
   extends Omit<
@@ -29,7 +29,7 @@ export const NotificationTypeSelect = forwardRef<
     <DataSelect<M, { behavior: B; getItemValue: typeof getItemValue }>
       {...props}
       ref={ref}
-      data={[...NotificationTypes.models]}
+      data={[...ProductNotificationTypes.models]}
       options={{ behavior, getItemValue }}
       itemRenderer={(m, { isDisabled }) => (
         <NotificationTypeText notificationType={m.value} isDisabled={isDisabled} />

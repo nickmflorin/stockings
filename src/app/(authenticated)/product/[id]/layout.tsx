@@ -16,6 +16,7 @@ interface ProductLayoutProps {
   readonly priceChart: ReactNode;
   readonly detail: ReactNode;
   readonly subscriptions: ReactNode;
+  readonly notifications: ReactNode;
   readonly params: { id: string };
 }
 
@@ -23,9 +24,14 @@ export default async function ProductLayout({
   priceChart,
   detail,
   subscriptions,
+  notifications,
   params,
 }: ProductLayoutProps) {
-  const { data: product, error } = await fetchProduct(params.id, { strict: false });
+  const { data: product, error } = await fetchProduct(
+    params.id,
+    { includes: [] },
+    { strict: false },
+  );
   if (error) {
     if (error.code === ApiClientGlobalErrorCodes.NOT_FOUND) {
       return redirect("/404");
@@ -62,11 +68,17 @@ export default async function ProductLayout({
           </Module>
         </div>
         <div className="flex flex-col gap-[16px] grow min-w-0 h-full">
-          <Module component="paper" className="max-h-[500px] h-full">
+          <Module component="paper">
             <Module.Header title="Subscriptions">
               Your current subscriptions to the product.
             </Module.Header>
             <Module.Content>{subscriptions}</Module.Content>
+          </Module>
+          <Module component="paper" className="max-h-[500px] grow">
+            <Module.Header title="Notifications">
+              Notifications you have received for the product.
+            </Module.Header>
+            <Module.Content>{notifications}</Module.Content>
           </Module>
         </div>
       </div>

@@ -1,27 +1,33 @@
 "use client";
 import RouterLink from "next/link";
 
-import { type Notification } from "~/database/model";
+import { type ApiProductNotification } from "~/database/model";
 
 import { InlineLink } from "~/components/buttons";
+import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
+import { ProductLink } from "~/components/buttons/ProductLink";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
-import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
+import {
+  type DataTableBodyProps,
+  DataTableBody,
+} from "~/components/tables/data-tables/DataTableBody";
 import { Text, Description } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 import {
-  NotificationsTableColumns,
-  type NotificationsTableColumnId,
+  ProductNotificationsTableColumns,
+  type ProductNotificationsTableColumnId,
 } from "~/features/notifications";
 import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
 import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
 
-export interface NotificationsTableBodyProps {
-  readonly data: Notification[];
-}
+export interface NotificationsTableBodyProps
+  extends Omit<
+    DataTableBodyProps<ApiProductNotification<["product"]>, ProductNotificationsTableColumnId>,
+    "rowIsSelected" | "onRowSelected" | "getRowActions" | "columns"
+  > {}
 
-export const NotificationsTableBody = ({ data }: NotificationsTableBodyProps): JSX.Element => (
+export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.Element => (
   <DataTableBody
-    isEmpty={data.length === 0}
     emptyContent={
       <div className="flex flex-col gap-4">
         <Description fontSize="sm">You have not received any notifications.</Description>
@@ -34,12 +40,23 @@ export const NotificationsTableBody = ({ data }: NotificationsTableBodyProps): J
         </Description>
       </div>
     }
+    {...props}
     columns={convertConfigsToColumns(
-      [...NotificationsTableColumns] as DataTableColumnConfig<
-        Notification,
-        NotificationsTableColumnId
+      [...ProductNotificationsTableColumns] as DataTableColumnConfig<
+        ApiProductNotification<["product"]>,
+        ProductNotificationsTableColumnId
       >[],
       {
+        product: {
+          cellRenderer(datum) {
+            return (
+              <div className="flex flex-row items-center gap-2">
+                <ProductLink product={datum.product} location="internal" />
+                <ExternalProductIconLink product={datum.product} />
+              </div>
+            );
+          },
+        },
         type: {
           cellRenderer(datum) {
             return (
@@ -66,9 +83,13 @@ export const NotificationsTableBody = ({ data }: NotificationsTableBodyProps): J
             );
           },
         },
+        sentAt: {
+          cellRenderer(datum) {
+            return <div className="flex flex-col">Need to do</div>;
+          },
+        },
       },
     )}
-    data={data}
   />
 );
 

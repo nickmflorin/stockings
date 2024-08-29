@@ -6,7 +6,7 @@ import { Icon } from "~/components/icons/Icon";
 import { Text } from "~/components/typography";
 
 export interface SubscriptionCellProps {
-  readonly product: ApiProduct;
+  readonly product: ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>;
 }
 
 export const SubscriptionCell = ({ product }: SubscriptionCellProps): JSX.Element => {

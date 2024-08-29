@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import { type NotificationsFilters } from "~/actions";
-import { fetchNotificationsPagination } from "~/actions/notifications";
+import { type ProductNotificationsFilters } from "~/actions";
+import { fetchProductNotificationsPagination } from "~/actions/notifications";
 
 import { Paginator } from "~/components/pagination/Paginator";
 
 export interface NotificationsTablePaginatorProps {
-  readonly filters: NotificationsFilters;
+  readonly filters: ProductNotificationsFilters;
   readonly page: number;
 }
 
@@ -16,7 +16,7 @@ export const NotificationsTablePaginator = async ({
 }: NotificationsTablePaginatorProps): Promise<JSX.Element> => {
   const {
     data: { count, page, pageSize },
-  } = await fetchNotificationsPagination({ filters, page: _page }, { strict: true });
+  } = await fetchProductNotificationsPagination({ filters, page: _page }, { strict: true });
   return (
     <Suspense>
       <Paginator count={count} pageSize={pageSize} page={page} />

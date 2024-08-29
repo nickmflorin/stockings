@@ -10,12 +10,12 @@ import {
   type PriceChangeCondition,
   type StatusChangeSubscriptionCondition,
 } from "~/database/model";
-import { SubscriptionType } from "~/database/model";
+import { ProductSubscriptionType } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { arraysHaveSameElements } from "~/lib/arrays";
 
-import { updateSubscription, deleteSubscription } from "~/actions/subscriptions";
+import { updateProductSubscription, deleteProductSubscription } from "~/actions/subscriptions";
 
 import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
@@ -103,24 +103,26 @@ export const SubscriptionsTableBody = ({
             content: "Edit",
             isLoading: editPending,
             isVisible: [
-              SubscriptionType.StatusChangeSubscription,
-              SubscriptionType.PriceChangeSubscription,
+              ProductSubscriptionType.StatusChangeSubscription,
+              ProductSubscriptionType.PriceChangeSubscription,
             ].includes(
               subscription.subscriptionType as
-                | typeof SubscriptionType.StatusChangeSubscription
-                | typeof SubscriptionType.PriceChangeSubscription,
+                | typeof ProductSubscriptionType.StatusChangeSubscription
+                | typeof ProductSubscriptionType.PriceChangeSubscription,
             ),
             icon: <Icon icon="pen-to-square" size="16px" className="text-blue-600" />,
             onClick: async e =>
               editTransition(() => {
-                if (subscription.subscriptionType === SubscriptionType.StatusChangeSubscription) {
+                if (
+                  subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription
+                ) {
                   open(ids.UPDATE_STATUS_CHANGE_SUBSCRIPTION, {
                     subscriptionId: subscription.id,
                     product: subscription.product,
                   });
                   setIsOpen(false, e);
                 } else if (
-                  subscription.subscriptionType === SubscriptionType.PriceChangeSubscription
+                  subscription.subscriptionType === ProductSubscriptionType.PriceChangeSubscription
                 ) {
                   open(ids.UPDATE_PRICE_CHANGE_SUBSCRIPTION, {
                     subscriptionId: subscription.id,
@@ -138,9 +140,9 @@ export const SubscriptionsTableBody = ({
             isLoading: enablePending,
             onClick: async (e, instance) => {
               instance.setLoading(true);
-              let response: Awaited<ReturnType<typeof updateSubscription>> | null = null;
+              let response: Awaited<ReturnType<typeof updateProductSubscription>> | null = null;
               try {
-                response = await updateSubscription(subscription.id, { enabled: true });
+                response = await updateProductSubscription(subscription.id, { enabled: true });
               } catch (e) {
                 logger.errorUnsafe(
                   e,
@@ -177,9 +179,9 @@ export const SubscriptionsTableBody = ({
             isLoading: disablePending,
             onClick: async (e, instance) => {
               instance.setLoading(true);
-              let response: Awaited<ReturnType<typeof updateSubscription>> | null = null;
+              let response: Awaited<ReturnType<typeof updateProductSubscription>> | null = null;
               try {
-                response = await updateSubscription(subscription.id, { enabled: false });
+                response = await updateProductSubscription(subscription.id, { enabled: false });
               } catch (e) {
                 logger.errorUnsafe(
                   e,
@@ -215,9 +217,9 @@ export const SubscriptionsTableBody = ({
             icon: <Icon icon="trash-alt" size="16px" className="text-red-600" />,
             onClick: async (e, instance) => {
               instance.setLoading(true);
-              let response: Awaited<ReturnType<typeof deleteSubscription>> | null = null;
+              let response: Awaited<ReturnType<typeof deleteProductSubscription>> | null = null;
               try {
-                response = await deleteSubscription(subscription.id);
+                response = await deleteProductSubscription(subscription.id);
               } catch (e) {
                 logger.errorUnsafe(
                   e,
@@ -265,7 +267,7 @@ export const SubscriptionsTableBody = ({
             },
             conditions: {
               cellRenderer: datum =>
-                datum.subscriptionType === SubscriptionType.StatusChangeSubscription &&
+                datum.subscriptionType === ProductSubscriptionType.StatusChangeSubscription &&
                 datum.conditions.length !== 0 ? (
                   <div className="flex flex-row items-center justify-center">
                     <StatusChangeConditionsDropdown
@@ -273,7 +275,7 @@ export const SubscriptionsTableBody = ({
                       conditions={datum.conditions as StatusChangeSubscriptionCondition[]}
                     />
                   </div>
-                ) : datum.subscriptionType === SubscriptionType.PriceChangeSubscription &&
+                ) : datum.subscriptionType === ProductSubscriptionType.PriceChangeSubscription &&
                   datum.conditions.length !== 0 ? (
                   <div className="flex flex-col items-center gap-2">
                     {uniq(datum.conditions as PriceChangeCondition[]).map((condition, index) => (

@@ -21,8 +21,8 @@ export {
   Prisma,
   PrismaClient,
   NotificationState,
-  NotificationType,
-  SubscriptionType,
+  ProductNotificationType,
+  ProductSubscriptionType,
 } from "./generated";
 
 export type {
@@ -43,10 +43,10 @@ export type {
   ProductRecord,
   ProductRecordError,
   Product,
-  Notification,
-  NewProductNotification,
+  ProductNotification,
   PriceChangeNotification,
   StatusChangeNotification,
+  ProcessedProductRecord,
 } from "./zenstack-generated/models";
 
 export { enhance } from "./zenstack-generated/enhance";

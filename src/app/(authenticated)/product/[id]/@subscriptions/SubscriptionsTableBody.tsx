@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 
 import { type SubscriptionsControls } from "~/actions";
 import { fetchProduct } from "~/actions/products";
-import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-subscriptions";
+import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-product-subscriptions";
 
 import { Loading } from "~/components/loading/Loading";
 
@@ -25,7 +25,7 @@ export const SubscriptionsTableBody = async ({
   ordering,
   productId,
 }: SubscriptionsTableBodyProps): Promise<JSX.Element> => {
-  const { data: product } = await fetchProduct(productId, { strict: true });
+  const { data: product } = await fetchProduct(productId, { includes: [] }, { strict: true });
   const { data } = await fetchProductSubscriptions(
     {
       ordering,

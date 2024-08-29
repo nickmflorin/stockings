@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import type { FullProductSubscription } from "~/database/model";
 import { logger } from "~/internal/logger";
 
-import { deleteSubscriptions } from "~/actions/subscriptions";
+import { deleteProductSubscriptions } from "~/actions/subscriptions";
 
 import { Dialog } from "~/components/dialogs/Dialog";
 import { ButtonFooter } from "~/components/structural/ButtonFooter";
@@ -49,9 +49,9 @@ export const DeleteSubscriptionsConfirmationDialog = ({
             onCancel={onCancel}
             onSubmit={async () => {
               setIsDeleting(true);
-              let response: Awaited<ReturnType<typeof deleteSubscriptions>> | null = null;
+              let response: Awaited<ReturnType<typeof deleteProductSubscriptions>> | null = null;
               try {
-                response = await deleteSubscriptions(rows.map(sub => sub.id));
+                response = await deleteProductSubscriptions(rows.map(sub => sub.id));
               } catch (e) {
                 logger.errorUnsafe(e, "There was an error deleting the subscription(s)!", {
                   subscriptions: rows.map(sub => sub.id),

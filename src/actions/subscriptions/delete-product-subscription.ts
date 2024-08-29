@@ -1,14 +1,14 @@
 "use server";
 import { getAuthedUser } from "~/application/auth/server";
 import { UnreachableCaseError } from "~/application/errors";
-import { enhance, SubscriptionType } from "~/database/model";
+import { enhance, ProductSubscriptionType } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { type MutationActionResponse } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
 
-export const deleteSubscription = async (
+export const deleteProductSubscription = async (
   id: string,
 ): Promise<MutationActionResponse<{ message: string }>> => {
   const { user, error } = await getAuthedUser();
@@ -32,12 +32,12 @@ export const deleteSubscription = async (
   }
 
   return enhanced.$transaction(async tx => {
-    if (subscription.subscriptionType === SubscriptionType.PriceChangeSubscription) {
+    if (subscription.subscriptionType === ProductSubscriptionType.PriceChangeSubscription) {
       await tx.priceChangeNotification.deleteMany({
         where: { subscriptionId: subscription.id },
       });
       await tx.productSubscription.delete({ where: { id: subscription.id } });
-    } else if (subscription.subscriptionType === SubscriptionType.StatusChangeSubscription) {
+    } else if (subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription) {
       await tx.statusChangeSubscriptionCondition.deleteMany({
         where: { subscriptionId: subscription.id },
       });

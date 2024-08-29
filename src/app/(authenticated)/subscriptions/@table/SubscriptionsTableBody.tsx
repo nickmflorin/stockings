@@ -1,7 +1,13 @@
 import dynamic from "next/dynamic";
 
-import { type SubscriptionsFilters, type SubscriptionsControls } from "~/actions";
-import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-subscriptions";
+import { pruneFilters } from "~/lib/filters";
+
+import {
+  type SubscriptionsFilters,
+  type SubscriptionsControls,
+  SubscriptionsFiltersOptions,
+} from "~/actions";
+import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-product-subscriptions";
 
 import { Loading } from "~/components/loading/Loading";
 
@@ -31,5 +37,12 @@ export const SubscriptionsTableBody = async ({
     },
     { strict: true },
   );
-  return <ClientSubscriptionsTableBody data={data} controlBarTargetId={controlBarTargetId} />;
+  const pruned = pruneFilters(filters, SubscriptionsFiltersOptions);
+  return (
+    <ClientSubscriptionsTableBody
+      data={data}
+      controlBarTargetId={controlBarTargetId}
+      isEmpty={data.length === 0 && Object.keys(pruned).length === 0}
+    />
+  );
 };

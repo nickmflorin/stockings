@@ -2,25 +2,45 @@ import { z } from "zod";
 
 import {
   type NotificationState,
-  type NotificationType,
+  type ProductNotificationType,
   NotificationStates,
-  NotificationTypes,
+  ProductNotificationTypes,
+  type ProductNotificationIncludes,
+  ProductNotificationIncludesFields,
+  type ProductNotificationIncludesField,
 } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
+import { type Ordering } from "~/lib/ordering";
+import { isUuid } from "~/lib/typeguards";
 
-export interface NotificationsFilters {
+export const ProductNotificationOrderableFields = ["product", "sentAt"] as const;
+export type ProductNotificationOrderableField = (typeof ProductNotificationOrderableFields)[number];
+
+export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOrderableField> = {
+  orderBy: "sentAt",
+  order: "asc",
+};
+
+export interface ProductNotificationsFilters {
   readonly states: NotificationState[];
-  readonly types: NotificationType[];
+  readonly types: ProductNotificationType[];
+  readonly products: string[];
+  readonly search: string;
 }
 
-export interface NotificationsControls {
-  readonly filters: NotificationsFilters;
-  // readonly ordering: Ordering<OrderableNotificationsColumnId>;
+export interface ProductNotificationsControls<
+  I extends ProductNotificationIncludes = ProductNotificationIncludes,
+> {
+  readonly filters: ProductNotificationsFilters;
+  readonly ordering: Ordering<ProductNotificationOrderableField>;
   readonly page: number;
+  readonly includes: I;
+  readonly limit: number;
 }
 
-export const NotificationsFiltersSchemas = {
+export const ProductNotificationsFiltersSchemas = {
+  search: z.string(),
   states: z.union([z.string(), z.array(z.string())]).transform(value => {
     if (typeof value === "string") {
       return NotificationStates.contains(value) ? [value] : [];
@@ -32,19 +52,42 @@ export const NotificationsFiltersSchemas = {
   }),
   types: z.union([z.string(), z.array(z.string())]).transform(value => {
     if (typeof value === "string") {
-      return NotificationTypes.contains(value) ? [value] : [];
+      return ProductNotificationTypes.contains(value) ? [value] : [];
     }
     return value.reduce(
-      (prev, curr) => (NotificationTypes.contains(curr) ? [...prev, curr] : prev),
-      [] as NotificationType[],
+      (prev, curr) => (ProductNotificationTypes.contains(curr) ? [...prev, curr] : prev),
+      [] as ProductNotificationType[],
     );
   }),
+  products: z.union([z.string(), z.array(z.string())]).transform(value => {
+    if (typeof value === "string") {
+      return isUuid(value) ? [value] : [];
+    }
+    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+  }),
 } satisfies {
-  [key in keyof NotificationsFilters]: z.ZodType;
+  [key in keyof ProductNotificationsFilters]: z.ZodType;
 };
 
-export const NotificationsFiltersOptions: ParseFiltersOptions<typeof NotificationsFiltersSchemas> =
-  {
-    types: { defaultValue: [], excludeWhen: v => v.length === 0 },
-    states: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  };
+export const ProductNotificationsFiltersOptions: ParseFiltersOptions<
+  typeof ProductNotificationsFiltersSchemas
+> = {
+  types: { defaultValue: [], excludeWhen: v => v.length === 0 },
+  states: { defaultValue: [], excludeWhen: v => v.length === 0 },
+  products: { defaultValue: [], excludeWhen: v => v.length === 0 },
+  search: { defaultValue: "", excludeWhen: v => v.length === 0 },
+};
+
+export const ProductNotificationIncludesSchema = z
+  .union([z.string(), z.array(z.string())])
+  .transform(value => {
+    if (typeof value === "string") {
+      return (
+        ProductNotificationIncludesFields.contains(value) ? [value] : []
+      ) as ProductNotificationIncludesField[];
+    }
+    return value.reduce(
+      (prev, curr) => (ProductNotificationIncludesFields.contains(curr) ? [...prev, curr] : prev),
+      [] as ProductNotificationIncludesField[],
+    ) as ProductNotificationIncludes;
+  });

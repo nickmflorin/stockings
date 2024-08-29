@@ -23,6 +23,7 @@ export type ProductsFilters = {
   readonly subCategories: ProductSubCategory[];
   readonly statuses: ProductStatus[];
   readonly subscribed: boolean;
+  readonly notified: boolean;
 };
 
 export type ProductsControls<I extends ProductIncludes = ProductIncludes> = {
@@ -52,6 +53,12 @@ export const ProductsDefaultOrdering: Ordering<"name" | "price"> = {
 export const ProductsFiltersSchemas = {
   search: z.string(),
   subscribed: z.union([z.boolean(), z.literal("true"), z.literal("false")]).transform(value => {
+    if (typeof value === "string") {
+      return value === "true" ? true : false;
+    }
+    return value;
+  }),
+  notified: z.union([z.boolean(), z.literal("true"), z.literal("false")]).transform(value => {
     if (typeof value === "string") {
       return value === "true" ? true : false;
     }
@@ -93,6 +100,7 @@ export const ProductsFiltersOptions: ParseFiltersOptions<typeof ProductsFiltersS
   subCategories: { defaultValue: [], excludeWhen: v => v.length === 0 },
   search: { defaultValue: "", excludeWhen: v => v.length === 0 },
   subscribed: { defaultValue: false, excludeWhen: v => !v },
+  notified: { defaultValue: false, excludeWhen: v => !v },
   statuses: { defaultValue: [], excludeWhen: v => v.length === 0 },
 };
 
