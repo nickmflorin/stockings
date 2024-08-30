@@ -15,6 +15,7 @@ interface ProductSubscriptionsLayoutProps {
 export default function ProductSubscriptionsLayout({ children }: ProductSubscriptionsLayoutProps) {
   return (
     <SubscriptionsTableView
+      className="overflow-y-hidden"
       controlBarTargetId="product-subscriptions-control-bar"
       excludeColumns={["product"]}
     >

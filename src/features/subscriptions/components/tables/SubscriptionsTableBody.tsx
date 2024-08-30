@@ -92,6 +92,7 @@ export const SubscriptionsTableBody = ({
       <DataTableBody
         actionMenuWidth={140}
         {...props}
+        rowHeight={58}
         rowIsSelected={datum => selectedRows.map(r => r.id).includes(datum.id)}
         onRowSelected={(datum, isSelected) =>
           setSelectedRows(curr =>

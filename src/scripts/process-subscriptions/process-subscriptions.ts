@@ -12,9 +12,12 @@ export const processSubscriptions = async (ctx: ScriptContext) => {
   const subscriptions = [
     ...(await enhanced.statusChangeSubscription.findMany({
       where: { enabled: true },
-      include: { conditions: true },
+      include: { conditions: true, product: true },
     })),
-    ...(await enhanced.priceChangeSubscription.findMany({ where: { enabled: true } })),
+    ...(await enhanced.priceChangeSubscription.findMany({
+      where: { enabled: true },
+      include: { product: true },
+    })),
   ];
 
   if (subscriptions.length === 0) {
@@ -22,21 +25,9 @@ export const processSubscriptions = async (ctx: ScriptContext) => {
     return;
   }
 
-  const products = await enhanced.product.findMany({
-    where: { id: { in: subscriptions.map(sub => sub.productId) } },
-    include: { records: { orderBy: [{ timestamp: "desc" }], include: { processedRecords: true } } },
-  });
-
   for (let i = 0; i < subscriptions.length; i++) {
     logger.info(`Processing subscription ${i + 1} out of ${subscriptions.length}.`);
     const subscription = subscriptions[i];
-    const product = products.find(product => product.id === subscription.productId);
-    if (!product) {
-      throw new Error(
-        "Could not find a product for associated subscription.  This should not happen, as the " +
-          "products were queried based on the product FK's on the subscriptions!",
-      );
-    }
-    await processSubscription(subscription, product, ctx);
+    await processSubscription(subscription, subscription.product, ctx);
   }
 };

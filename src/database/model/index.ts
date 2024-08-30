@@ -1,5 +1,3 @@
-import { type Equals } from "~/lib/types";
-
 export * from "./brand";
 export * from "./categories";
 export * from "./charting";
@@ -50,7 +48,3 @@ export type {
 } from "./zenstack-generated/models";
 
 export { enhance } from "./zenstack-generated/enhance";
-
-export type ModelWithNonNullField<T extends Record<string, unknown>, K extends keyof T> = {
-  [key in keyof T]: Equals<key, K, Exclude<T[key], null>, T[key]>;
-};

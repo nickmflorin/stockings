@@ -68,13 +68,13 @@ export default async function ProductLayout({
           </Module>
         </div>
         <div className="flex flex-col gap-[16px] grow min-w-0 h-full max-h-full">
-          <Module component="paper">
+          <Module component="paper" className="min-h-[220px] shrink-0">
             <Module.Header title="Subscriptions">
               Your current subscriptions to the product.
             </Module.Header>
             <Module.Content>{subscriptions}</Module.Content>
           </Module>
-          <Module component="paper" className="grow">
+          <Module component="paper" className="grow shrink-0">
             <Module.Header title="Notifications">
               Notifications you have received for the product.
             </Module.Header>

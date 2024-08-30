@@ -1,8 +1,8 @@
 import type { ScriptContext } from "~/scripts/context";
 
+import { UnreachableCaseError } from "~/application/errors";
 import {
   type ProductRecord,
-  type ModelWithNonNullField,
   PriceChangeCondition,
   type PriceChangeSubscription,
   type ApiStatusChangeSubscription,
@@ -11,21 +11,19 @@ import {
   type ApiProductSubscription,
   enhance,
   type Product,
+  type ProductStatus,
 } from "~/database/model";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
-import { walkBackwardsUntil } from "~/lib/arrays";
-
 interface ProcessRecordParams {
   readonly product: Product;
   readonly subscription: ApiProductSubscription;
-  readonly previousRecords: ProductRecord[];
   readonly record: ProductRecord;
 }
 
 export const processRecord = async (
-  { product, record, subscription, previousRecords }: ProcessRecordParams,
+  { product, record, subscription }: ProcessRecordParams,
   ctx: ScriptContext,
 ) => {
   if (!record.price && !record.status) {
@@ -35,117 +33,152 @@ export const processRecord = async (
 
   type Transaction = Parameters<Parameters<typeof enhanced.$transaction>[0]>[0];
 
-  const processPriceChange = async (tx: Transaction, sub: PriceChangeSubscription) => {
-    if (record.price) {
-      const previousRecordWithPrice = walkBackwardsUntil(
-        previousRecords,
-        (r): r is ModelWithNonNullField<typeof record, "price"> => r.price !== null,
-      );
-      /* If there is not a previous record with a price, we treat it the same way as if the
-         record is the first in the product's history - we do not issue notifications. */
-      if (previousRecordWithPrice) {
-        /* Note: It is possible that two consecutive records have the same price.  Even though we
-           do not add records to the database unless there is a notable difference in the price
-           or status, it is possible that the sequential records were created due to a change in
-           status, but the price remained the same. */
-        if (
-          previousRecordWithPrice.price !== record.price &&
-          sub.conditions.includes(PriceChangeCondition.PriceDecrease) &&
-          sub.enabled
-        ) {
-          await tx.priceChangeNotification.create({
-            data: {
-              createdBy: { connect: { id: ctx.user.id } },
-              updatedBy: { connect: { id: ctx.user.id } },
-              user: { connect: { id: subscription.userId } },
-              productRecord: { connect: { id: record.id } },
-              subscription: { connect: { id: sub.id } },
-              state: NotificationState.Pending,
-              stateAsOf: new Date(),
-              product: { connect: { id: product.id } },
-              condition:
-                previousRecordWithPrice.price > record.price
-                  ? PriceChangeCondition.PriceDecrease
-                  : PriceChangeCondition.PriceIncrease,
-              previousPrice: previousRecordWithPrice.price,
-              newPrice: record.price,
-            },
-          });
-        }
-      } else {
-        logger.info(
-          "Encountered a record with a price but no previous records with a price exist. " +
-            "Price notifications will not be issued for this record.",
-        );
-      }
-    } else {
-      logger.info(
-        "Encountered a record without a price - most likely due to an error scraping. " +
-          "Price notifications will not be issued for this record.",
-      );
+  const processPriceChange = async (
+    tx: Transaction,
+    sub: PriceChangeSubscription,
+    prices: { previous: number; current: number },
+  ) => {
+    if (
+      sub.enabled &&
+      ((prices.previous < prices.current &&
+        sub.conditions.includes(PriceChangeCondition.PriceIncrease)) ||
+        (prices.previous > prices.current &&
+          sub.conditions.includes(PriceChangeCondition.PriceDecrease)))
+    ) {
+      await tx.priceChangeNotification.create({
+        data: {
+          createdBy: { connect: { id: ctx.user.id } },
+          updatedBy: { connect: { id: ctx.user.id } },
+          user: { connect: { id: subscription.userId } },
+          productRecord: { connect: { id: record.id } },
+          subscription: { connect: { id: sub.id } },
+          state: NotificationState.Pending,
+          stateAsOf: new Date(),
+          product: { connect: { id: product.id } },
+          condition:
+            prices.previous > prices.current
+              ? PriceChangeCondition.PriceDecrease
+              : PriceChangeCondition.PriceIncrease,
+          previousPrice: prices.previous,
+          newPrice: prices.current,
+        },
+      });
     }
   };
 
-  const processStatusChange = async (tx: Transaction, sub: ApiStatusChangeSubscription) => {
-    const status = record.status;
-    if (status) {
-      const previousRecordWithStatus = walkBackwardsUntil(
-        previousRecords,
-        (r): r is ModelWithNonNullField<typeof record, "status"> => r.status !== null,
-      );
-      /* If there is not a previous record with a status, we treat it the same way as if the
-         record is the first in the product's history - we do not issue notifications. */
-      if (previousRecordWithStatus) {
-        /* Note: It is possible that two consecutive records have the same status.  Even though we
-           do not add records to the database unless there is a notable difference in the price
-           or status, it is possible that the sequential records were created due to a change in
-           price, but the status remained the same. */
-        if (
-          previousRecordWithStatus.status != status &&
-          sub.enabled &&
-          sub.conditions.some(
-            condition =>
-              condition.fromStatus.includes(previousRecordWithStatus.status) &&
-              condition.toStatus.includes(status),
-          )
-        ) {
-          await tx.statusChangeNotification.create({
-            data: {
-              createdBy: { connect: { id: ctx.user.id } },
-              updatedBy: { connect: { id: ctx.user.id } },
-              user: { connect: { id: subscription.userId } },
-              productRecord: { connect: { id: record.id } },
-              product: { connect: { id: product.id } },
-              subscription: { connect: { id: sub.id } },
-              state: NotificationState.Pending,
-              stateAsOf: new Date(),
-              previousStatus: previousRecordWithStatus.status,
-              newStatus: status,
-            },
-          });
-        }
-      } else {
-        logger.info(
-          "Encountered a record with a status but no previous records with a status exist. " +
-            "Status notifications will not be issued for this record.",
-        );
-      }
-    } else {
-      logger.info(
-        "Encountered a record without a status - most likely due to an error scraping. " +
-          "Status notifications will not be issued for this record.",
-      );
+  const processStatusChange = async (
+    tx: Transaction,
+    sub: ApiStatusChangeSubscription,
+    statuses: { previous: ProductStatus; current: ProductStatus },
+  ) => {
+    if (
+      sub.enabled &&
+      statuses.previous !== statuses.current &&
+      sub.conditions.some(
+        condition =>
+          condition.fromStatus.includes(statuses.previous) &&
+          condition.toStatus.includes(statuses.current),
+      )
+    ) {
+      await tx.statusChangeNotification.create({
+        data: {
+          createdBy: { connect: { id: ctx.user.id } },
+          updatedBy: { connect: { id: ctx.user.id } },
+          user: { connect: { id: subscription.userId } },
+          productRecord: { connect: { id: record.id } },
+          product: { connect: { id: product.id } },
+          subscription: { connect: { id: sub.id } },
+          state: NotificationState.Pending,
+          stateAsOf: new Date(),
+          previousStatus: statuses.previous,
+          newStatus: statuses.current,
+        },
+      });
     }
   };
 
   await enhanced.$transaction(async tx => {
     if (record.timestamp >= subscription.createdAt) {
       if (subscription.subscriptionType === ProductSubscriptionType.PriceChangeSubscription) {
-        await processPriceChange(tx, subscription as PriceChangeSubscription);
+        if (record.price) {
+          const previousRecordsWithPrices = await tx.productRecord.findMany({
+            where: {
+              productId: product.id,
+              price: { not: null },
+              timestamp: { lt: record.timestamp },
+            },
+            orderBy: [{ timestamp: "desc" }],
+            take: 1,
+          });
+          const prevRecordWithPrice =
+            previousRecordsWithPrices.length === 0 ? null : previousRecordsWithPrices[0];
+          if (!prevRecordWithPrice) {
+            /* Note: This can only happen if a user subscribes to a product when there are no
+             historical successfully scraped product records yet - it may happen in development, but
+             should never happen in production, as long as we wait a sufficient amount of time
+             before first users sign up (allowing the data to accumulate) - it is an edge case. */
+            logger.info(
+              "Encountered a record with a price but no previous records with a price exist. " +
+                "Price notifications will not be issued for this record.",
+            );
+          } else if (prevRecordWithPrice.price === null) {
+            throw new Error(
+              "Unexpected Condition: The record should have a price based on the Prisma query!",
+            );
+          } else {
+            await processPriceChange(tx, subscription as PriceChangeSubscription, {
+              previous: prevRecordWithPrice.price,
+              current: record.price,
+            });
+          }
+        } else {
+          logger.info(
+            "Encountered a record without a price - cannot process price change subscription.",
+          );
+        }
       } else if (
         subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription
       ) {
-        await processStatusChange(tx, subscription as ApiStatusChangeSubscription);
+        if (record.status) {
+          const previousRecordsWithStatuses = await tx.productRecord.findMany({
+            where: {
+              productId: product.id,
+              status: { not: null },
+              timestamp: { lt: record.timestamp },
+            },
+            orderBy: [{ timestamp: "desc" }],
+            take: 1,
+          });
+          const prevRecordWithStatus =
+            previousRecordsWithStatuses.length === 0 ? null : previousRecordsWithStatuses[0];
+          if (!prevRecordWithStatus) {
+            /* Note: This can only happen if a user subscribes to a product when there are no
+               historical successfully scraped product records yet - it may happen in development,
+               but should never happen in production, as long as we wait a sufficient amount of time
+               before first users sign up (allowing the data to accumulate) - it is an edge case. */
+            logger.info(
+              "Encountered a record with a status but no previous records with a status exist. " +
+                "Status notifications will not be issued for this record.",
+            );
+          } else if (prevRecordWithStatus.status === null) {
+            throw new Error(
+              "Unexpected Condition: The record should have a status based on the Prisma query!",
+            );
+          } else {
+            await processStatusChange(tx, subscription as ApiStatusChangeSubscription, {
+              previous: prevRecordWithStatus.status,
+              current: record.status,
+            });
+          }
+        } else {
+          logger.info(
+            "Encountered a record without a status - cannot process status change subscription.",
+          );
+        }
+      } else {
+        throw new UnreachableCaseError(
+          `Unexpected Condition: Invalid subscription type '${subscription.subscriptionType}'.`,
+        );
       }
     }
     await tx.processedProductRecord.create({

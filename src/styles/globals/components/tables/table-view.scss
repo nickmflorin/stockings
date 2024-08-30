@@ -9,7 +9,6 @@
   width: 100%;
   flex-direction: column;
   display: flex;
-  gap: theme("spacing.4");
   max-height: 100%;
   height: 100%;
   position: relative;
@@ -21,7 +20,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: theme("spacing.4");
+    margin-bottom: theme("spacing.4");
 
     .table-view__control-bar {
       @include control-bar-flex();
@@ -72,5 +71,6 @@
 
   > .table-view__footer {
     width: 100%;
+    margin-top: theme("spacing.4");
   }
 }
