@@ -2,8 +2,7 @@ import { type ReactNode } from "react";
 
 import { Loading } from "~/components/loading/Loading";
 import { type ComponentProps, classNames } from "~/components/types";
-
-const BooleanToTruthyFlag = (v: boolean | undefined): true | undefined => v === false ? undefined : v
+import { Disabled } from "~/components/util";
 
 export interface FormBodyProps extends ComponentProps {
   readonly contentClassName?: ComponentProps["className"];
@@ -29,8 +28,13 @@ export const FormBody = ({
       props.className,
     )}
   >
-    <Loading isLoading={isLoading} isDisabled={BooleanToTruthyFlag(isDisabled)} dim={BooleanToTruthyFlag(isLoading || isDisabled)}>
-      <div className={classNames("flex flex-col gap-[8px]", contentClassName)}>{children}</div>
+    <Loading isLoading={isLoading}>
+      <Disabled
+        isDisabled={isDisabled}
+        className={classNames("flex flex-col gap-[8px]", contentClassName)}
+      >
+        {children}
+      </Disabled>
     </Loading>
   </div>
 );

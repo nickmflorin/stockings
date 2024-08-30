@@ -26,7 +26,6 @@ export const StatusChangeSubscriptionForm = ({
     control: props.form.control,
     name: "conditions",
   });
-
   return (
     <Form {...props} contentClassName="gap-[12px]">
       <ProductSubscriptionFormSection
