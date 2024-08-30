@@ -12,6 +12,8 @@ import type { IconName } from "~/components/icons";
 import { Icon } from "~/components/icons/Icon";
 import { classNames, type ComponentProps } from "~/components/types";
 
+import { StatusChangeConditionTransition } from "./StatusChangeConditionTransition";
+
 export interface StatusChangeConditionTransitionsProps extends ComponentProps {
   readonly grouped?: boolean;
   readonly conditions: SingleOrArray<
@@ -47,15 +49,11 @@ export const StatusChangeConditionTransitions = ({
     return (
       <div {...props} className={classNames("flex flex-col gap-1 max-w-fit", props.className)}>
         {flattened.map(([fromStatus, toStatus], index) => (
-          <div className="w-full flex flex-row items-center gap-2" key={index}>
-            <div className="flex flex-row items-center justify-start w-[96px]">
-              <ProductStatusBadge status={fromStatus} />
-            </div>
-            <Icon icon="arrow-right" className="text-gray-600" size="14px" />
-            <div className="flex flex-row items-center justify-end w-[96px]">
-              <ProductStatusBadge status={toStatus} />
-            </div>
-          </div>
+          <StatusChangeConditionTransition
+            key={index}
+            fromStatus={fromStatus}
+            toStatus={toStatus}
+          />
         ))}
       </div>
     );

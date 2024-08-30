@@ -2,6 +2,11 @@ import dynamic from "next/dynamic";
 
 import { Loading } from "~/components/loading/Loading";
 
+const NotificationsTableView = dynamic(
+  () => import("~/features/notifications/components/tables/NotificationsTableView"),
+  { loading: () => <Loading isLoading /> },
+);
+
 const ClientProductNotificationsTableBody = dynamic(
   () =>
     import("~/features/products/components/tables/ProductNotificationsTableBody").then(
@@ -11,5 +16,10 @@ const ClientProductNotificationsTableBody = dynamic(
 );
 
 export default function NotificationsLoading() {
-  return <ClientProductNotificationsTableBody data={[]} isLoading activeSubscriptions={[]} />;
+  // TODO: We have to plugin placeholders for the filter bar and pagination!
+  return (
+    <NotificationsTableView excludeColumns={["product"]}>
+      <ClientProductNotificationsTableBody data={[]} isLoading activeSubscriptions={[]} />
+    </NotificationsTableView>
+  );
 }

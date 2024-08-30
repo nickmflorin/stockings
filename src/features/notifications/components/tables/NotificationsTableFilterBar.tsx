@@ -9,6 +9,7 @@ import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
+import { ShowHide } from "~/components/util";
 /* eslint-disable-next-line max-len */
 import { NotificationStateSelect } from "~/features/notifications/components/input/NotificationStateSelect";
 /* eslint-disable-next-line max-len */
@@ -16,11 +17,14 @@ import { NotificationTypeSelect } from "~/features/notifications/components/inpu
 import { ProductSelect } from "~/features/products/components/input/ProductSelect";
 import { useFilters } from "~/hooks/use-filters";
 
-export interface NotificationsTableFilterBarProps extends ComponentProps {}
+export interface NotificationsTableFilterBarProps extends ComponentProps {
+  readonly excludeProducts?: boolean;
+}
 
-export const NotificationsTableFilterBar = (
-  props: NotificationsTableFilterBarProps,
-): JSX.Element => {
+export const NotificationsTableFilterBar = ({
+  excludeProducts = false,
+  ...props
+}: NotificationsTableFilterBarProps): JSX.Element => {
   const stateSelectRef = useRef<SelectInstance | null>(null);
   const typeSelectRef = useRef<SelectInstance | null>(null);
   const productSelectRef = useRef<SelectInstance | null>(null);
@@ -43,17 +47,19 @@ export const NotificationsTableFilterBar = (
         updateFilters({ states: [], types: [], search: "" });
       }}
     >
-      <ProductSelect
-        ref={productSelectRef}
-        behavior="multi"
-        filters={{ notified: true }}
-        dynamicHeight={false}
-        placeholder="Products"
-        inputClassName="max-w-[520px]"
-        initialValue={filters.products}
-        onChange={products => updateFilters({ products })}
-        onClear={() => updateFilters({ products: [] })}
-      />
+      <ShowHide show={!excludeProducts}>
+        <ProductSelect
+          ref={productSelectRef}
+          behavior="multi"
+          filters={{ notified: true }}
+          dynamicHeight={false}
+          placeholder="Products"
+          inputClassName="max-w-[520px]"
+          initialValue={filters.products}
+          onChange={products => updateFilters({ products })}
+          onClear={() => updateFilters({ products: [] })}
+        />
+      </ShowHide>
       <NotificationStateSelect
         ref={stateSelectRef}
         dynamicHeight={false}

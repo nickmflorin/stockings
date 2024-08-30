@@ -1,4 +1,4 @@
-import { type Notification } from "~/database/model";
+import { type ApiProductNotification } from "~/database/model";
 
 import type { DataTableColumnConfig } from "~/components/tables";
 
@@ -18,6 +18,12 @@ export const ProductNotificationsTableColumns = [
     maxWidth: 240,
   },
   {
+    id: "transition",
+    label: "Transition",
+    // minWidth: 240,
+    maxWidth: 240,
+  },
+  {
     id: "state",
     label: "State",
     // minWidth: 240,
@@ -30,7 +36,7 @@ export const ProductNotificationsTableColumns = [
     maxWidth: 240,
     isOrderable: true,
   },
-] as const satisfies DataTableColumnConfig<Notification, string>[];
+] as const satisfies DataTableColumnConfig<ApiProductNotification<["product"]>, string>[];
 
 export type ProductNotificationsTableColumnId =
   (typeof ProductNotificationsTableColumns)[number]["id"];

@@ -14,13 +14,6 @@ import { CaretIcon } from "~/components/icons/CaretIcon";
 import { Loading } from "~/components/loading/Loading";
 import { DropdownMenu, type DropdownMenuProps } from "~/components/menus/DropdownMenu";
 
-/* const ProductStatusTransitionChart = dynamic(
-     () =>
-       import("./charts/ProductStatusTransitionChart")
-       .then(mod => mod.ProductStatusTransitionChart),
-     { ssr: false, loading: () => <Loading isLoading /> },
-   ); */
-
 const StatusChangeConditionTransitions = dynamic(
   () =>
     import("./StatusChangeConditionTransitions").then(mod => mod.StatusChangeConditionTransitions),

@@ -39,7 +39,7 @@ export default async function ProductLayout({
     logger.error(error, "There was an error fetching the product.");
   }
   return (
-    <div className="flex flex-col gap-[16px] overflow-y-auto">
+    <div className="flex flex-col gap-[16px] overflow-y-hidden">
       <div className="flex flex-row items-center gap-2">
         <Link
           className="text-title-md"
@@ -55,7 +55,7 @@ export default async function ProductLayout({
         </Title>
         <Title component="h3">{product?.name}</Title>
       </div>
-      <div className="flex flex-row gap-[16px]">
+      <div className="flex flex-row gap-[16px] grow min-h-0 overflow-y-auto">
         <div className="flex flex-col items-center max-w-[650px] gap-[16px]">
           <Module component="paper" className="w-full">
             <Module.Content>{detail}</Module.Content>
@@ -67,14 +67,14 @@ export default async function ProductLayout({
             <Module.Content>{priceChart}</Module.Content>
           </Module>
         </div>
-        <div className="flex flex-col gap-[16px] grow min-w-0 h-full">
+        <div className="flex flex-col gap-[16px] grow min-w-0 h-full max-h-full">
           <Module component="paper">
             <Module.Header title="Subscriptions">
               Your current subscriptions to the product.
             </Module.Header>
             <Module.Content>{subscriptions}</Module.Content>
           </Module>
-          <Module component="paper" className="max-h-[500px] grow">
+          <Module component="paper" className="grow">
             <Module.Header title="Notifications">
               Notifications you have received for the product.
             </Module.Header>

@@ -2,6 +2,7 @@
 import RouterLink from "next/link";
 
 import { type ApiProductNotification } from "~/database/model";
+import { ProductNotificationType } from "~/database/model";
 
 import { InlineLink } from "~/components/buttons";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
@@ -19,6 +20,8 @@ import {
 } from "~/features/notifications";
 import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
 import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
+/* eslint-disable-next-line max-len */
+import { StatusChangeConditionTransition } from "~/features/products/components/StatusChangeConditionTransition";
 
 export interface NotificationsTableBodyProps
   extends Omit<
@@ -55,6 +58,19 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
                 <ExternalProductIconLink product={datum.product} />
               </div>
             );
+          },
+        },
+        transition: {
+          cellRenderer(datum) {
+            if (datum.notificationType === ProductNotificationType.StatusChangeNotification) {
+              return (
+                <StatusChangeConditionTransition
+                  fromStatus={datum.previousStatus}
+                  toStatus={datum.newStatus}
+                />
+              );
+            }
+            return <></>;
           },
         },
         type: {
