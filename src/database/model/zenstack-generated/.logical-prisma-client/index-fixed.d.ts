@@ -7423,7 +7423,7 @@ export namespace Prisma {
         user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
         productRecord<T extends ProductRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecordDefaultArgs<ExtArgs>>): Prisma__ProductRecordClient<$Result.GetResult<Prisma.$ProductRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
         product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-        subscription<T extends ProductSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductSubscriptionDefaultArgs<ExtArgs>>): Prisma__ProductSubscriptionClient<$Result.GetResult<Prisma.$ProductSubscriptionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+        subscription<T extends ProductNotification$subscriptionArgs<ExtArgs> = {}>(args?: Subset<T, ProductNotification$subscriptionArgs<ExtArgs>>): Prisma__ProductSubscriptionClient<$Result.GetResult<Prisma.$ProductSubscriptionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7764,7 +7764,7 @@ export namespace Prisma {
         user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
         productRecord<T extends ProductRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecordDefaultArgs<ExtArgs>>): Prisma__ProductRecordClient<$Result.GetResult<Prisma.$ProductRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
         product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-        subscription<T extends ProductSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductSubscriptionDefaultArgs<ExtArgs>>): Prisma__ProductSubscriptionClient<$Result.GetResult<Prisma.$ProductSubscriptionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+        subscription<T extends PriceChangeNotification$subscriptionArgs<ExtArgs> = {}>(args?: Subset<T, PriceChangeNotification$subscriptionArgs<ExtArgs>>): Prisma__ProductSubscriptionClient<$Result.GetResult<Prisma.$ProductSubscriptionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8108,7 +8108,7 @@ export namespace Prisma {
         user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
         productRecord<T extends ProductRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecordDefaultArgs<ExtArgs>>): Prisma__ProductRecordClient<$Result.GetResult<Prisma.$ProductRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
         product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-        subscription<T extends ProductSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductSubscriptionDefaultArgs<ExtArgs>>): Prisma__ProductSubscriptionClient<$Result.GetResult<Prisma.$ProductSubscriptionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+        subscription<T extends StatusChangeNotification$subscriptionArgs<ExtArgs> = {}>(args?: Subset<T, StatusChangeNotification$subscriptionArgs<ExtArgs>>): Prisma__ProductSubscriptionClient<$Result.GetResult<Prisma.$ProductSubscriptionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20305,7 +20305,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date
@@ -20351,7 +20351,7 @@ export namespace Prisma {
         user?: boolean | UserDefaultArgs<ExtArgs>
         productRecord?: boolean | ProductRecordDefaultArgs<ExtArgs>
         product?: boolean | ProductDefaultArgs<ExtArgs>
-        subscription?: boolean | ProductSubscriptionDefaultArgs<ExtArgs>
+        subscription?: boolean | ProductNotification$subscriptionArgs<ExtArgs>
 
 
     }, ExtArgs["result"]["productNotification"]>;
@@ -20379,7 +20379,7 @@ export namespace Prisma {
         user?: boolean | UserDefaultArgs<ExtArgs>
         productRecord?: boolean | ProductRecordDefaultArgs<ExtArgs>
         product?: boolean | ProductDefaultArgs<ExtArgs>
-        subscription?: boolean | ProductSubscriptionDefaultArgs<ExtArgs>
+        subscription?: boolean | ProductNotification$subscriptionArgs<ExtArgs>
 
 
     };
@@ -20671,6 +20671,48 @@ export namespace Prisma {
         where?: ProductNotificationWhereInput
     };
     /**
+     * ProductNotification.subscription
+     */
+    export type ProductNotification$subscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ProductSubscription
+         */
+        select?: ProductSubscriptionSelect<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well.
+         */
+        include?: ProductSubscriptionInclude<ExtArgs> | null
+        where?: ProductSubscriptionWhereInput
+    };
+    /**
+     * ProductNotification.delegate_aux_ProductNotification_subscription_Statu_0
+     */
+    export type ProductNotification$delegate_aux_ProductNotification_subscription_Statu_0Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StatusChangeSubscription
+         */
+        select?: StatusChangeSubscriptionSelect<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well.
+         */
+        include?: StatusChangeSubscriptionInclude<ExtArgs> | null
+        where?: StatusChangeSubscriptionWhereInput
+    };
+    /**
+     * ProductNotification.delegate_aux_ProductNotification_subscription_Price_0
+     */
+    export type ProductNotification$delegate_aux_ProductNotification_subscription_Price_0Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the PriceChangeSubscription
+         */
+        select?: PriceChangeSubscriptionSelect<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well.
+         */
+        include?: PriceChangeSubscriptionInclude<ExtArgs> | null
+        where?: PriceChangeSubscriptionWhereInput
+    };
+    /**
      * ProductNotification without action
      */
     export type ProductNotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20914,7 +20956,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date
@@ -20964,7 +21006,7 @@ export namespace Prisma {
         user?: boolean | UserDefaultArgs<ExtArgs>
         productRecord?: boolean | ProductRecordDefaultArgs<ExtArgs>
         product?: boolean | ProductDefaultArgs<ExtArgs>
-        subscription?: boolean | ProductSubscriptionDefaultArgs<ExtArgs>
+        subscription?: boolean | PriceChangeNotification$subscriptionArgs<ExtArgs>
     }, ExtArgs["result"]["priceChangeNotification"]>;
     export type PriceChangeNotificationSelectScalar = {
         id?: boolean
@@ -20991,7 +21033,7 @@ export namespace Prisma {
         user?: boolean | UserDefaultArgs<ExtArgs>
         productRecord?: boolean | ProductRecordDefaultArgs<ExtArgs>
         product?: boolean | ProductDefaultArgs<ExtArgs>
-        subscription?: boolean | ProductSubscriptionDefaultArgs<ExtArgs>
+        subscription?: boolean | PriceChangeNotification$subscriptionArgs<ExtArgs>
     };
     export type $PriceChangeNotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "PriceChangeNotification"
@@ -21001,7 +21043,7 @@ export namespace Prisma {
             user: Prisma.$UserPayload<ExtArgs>
             productRecord: Prisma.$ProductRecordPayload<ExtArgs>
             product: Prisma.$ProductPayload<ExtArgs>
-            subscription: Prisma.$ProductSubscriptionPayload<ExtArgs>
+            subscription: Prisma.$ProductSubscriptionPayload<ExtArgs> | null
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -21012,7 +21054,7 @@ export namespace Prisma {
             userId: string
             productRecordId: string
             productId: string
-            subscriptionId: string
+            subscriptionId: string | null
             notificationType: $Enums.ProductNotificationType
             state: $Enums.NotificationState
             stateAsOf: Date
@@ -21311,6 +21353,20 @@ export namespace Prisma {
         where?: PriceChangeNotificationWhereInput
     };
     /**
+     * PriceChangeNotification.subscription
+     */
+    export type PriceChangeNotification$subscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ProductSubscription
+         */
+        select?: ProductSubscriptionSelect<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well.
+         */
+        include?: ProductSubscriptionInclude<ExtArgs> | null
+        where?: ProductSubscriptionWhereInput
+    };
+    /**
      * PriceChangeNotification without action
      */
     export type PriceChangeNotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -21516,7 +21572,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date
@@ -21562,7 +21618,7 @@ export namespace Prisma {
         user?: boolean | UserDefaultArgs<ExtArgs>
         productRecord?: boolean | ProductRecordDefaultArgs<ExtArgs>
         product?: boolean | ProductDefaultArgs<ExtArgs>
-        subscription?: boolean | ProductSubscriptionDefaultArgs<ExtArgs>
+        subscription?: boolean | StatusChangeNotification$subscriptionArgs<ExtArgs>
     }, ExtArgs["result"]["statusChangeNotification"]>;
     export type StatusChangeNotificationSelectScalar = {
         id?: boolean
@@ -21588,7 +21644,7 @@ export namespace Prisma {
         user?: boolean | UserDefaultArgs<ExtArgs>
         productRecord?: boolean | ProductRecordDefaultArgs<ExtArgs>
         product?: boolean | ProductDefaultArgs<ExtArgs>
-        subscription?: boolean | ProductSubscriptionDefaultArgs<ExtArgs>
+        subscription?: boolean | StatusChangeNotification$subscriptionArgs<ExtArgs>
     };
     export type $StatusChangeNotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "StatusChangeNotification"
@@ -21598,7 +21654,7 @@ export namespace Prisma {
             user: Prisma.$UserPayload<ExtArgs>
             productRecord: Prisma.$ProductRecordPayload<ExtArgs>
             product: Prisma.$ProductPayload<ExtArgs>
-            subscription: Prisma.$ProductSubscriptionPayload<ExtArgs>
+            subscription: Prisma.$ProductSubscriptionPayload<ExtArgs> | null
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -21609,7 +21665,7 @@ export namespace Prisma {
             userId: string
             productRecordId: string
             productId: string
-            subscriptionId: string
+            subscriptionId: string | null
             notificationType: $Enums.ProductNotificationType
             state: $Enums.NotificationState
             stateAsOf: Date
@@ -21905,6 +21961,20 @@ export namespace Prisma {
          * Filter which StatusChangeNotifications to delete
          */
         where?: StatusChangeNotificationWhereInput
+    };
+    /**
+     * StatusChangeNotification.subscription
+     */
+    export type StatusChangeNotification$subscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ProductSubscription
+         */
+        select?: ProductSubscriptionSelect<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well.
+         */
+        include?: ProductSubscriptionInclude<ExtArgs> | null
+        where?: ProductSubscriptionWhereInput
     };
     /**
      * StatusChangeNotification without action
@@ -23263,7 +23333,7 @@ export namespace Prisma {
         userId?: UuidFilter<"ProductNotification"> | string
         productRecordId?: UuidFilter<"ProductNotification"> | string
         productId?: UuidFilter<"ProductNotification"> | string
-        subscriptionId?: UuidFilter<"ProductNotification"> | string
+        subscriptionId?: UuidNullableFilter<"ProductNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"ProductNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"ProductNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"ProductNotification"> | Date | string
@@ -23276,7 +23346,7 @@ export namespace Prisma {
         user?: XOR<UserRelationFilter, UserWhereInput>
         productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
         product?: XOR<ProductRelationFilter, ProductWhereInput>
-        subscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
+        subscription?: XOR<ProductSubscriptionNullableRelationFilter, ProductSubscriptionWhereInput> | null
 
 
     };
@@ -23289,7 +23359,7 @@ export namespace Prisma {
         userId?: SortOrder
         productRecordId?: SortOrder
         productId?: SortOrder
-        subscriptionId?: SortOrder
+        subscriptionId?: SortOrderInput | SortOrder
         notificationType?: SortOrder
         state?: SortOrder
         stateAsOf?: SortOrder
@@ -23318,7 +23388,7 @@ export namespace Prisma {
         userId?: UuidFilter<"ProductNotification"> | string
         productRecordId?: UuidFilter<"ProductNotification"> | string
         productId?: UuidFilter<"ProductNotification"> | string
-        subscriptionId?: UuidFilter<"ProductNotification"> | string
+        subscriptionId?: UuidNullableFilter<"ProductNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"ProductNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"ProductNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"ProductNotification"> | Date | string
@@ -23331,7 +23401,7 @@ export namespace Prisma {
         user?: XOR<UserRelationFilter, UserWhereInput>
         productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
         product?: XOR<ProductRelationFilter, ProductWhereInput>
-        subscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
+        subscription?: XOR<ProductSubscriptionNullableRelationFilter, ProductSubscriptionWhereInput> | null
 
 
     }, "id">;
@@ -23344,7 +23414,7 @@ export namespace Prisma {
         userId?: SortOrder
         productRecordId?: SortOrder
         productId?: SortOrder
-        subscriptionId?: SortOrder
+        subscriptionId?: SortOrderInput | SortOrder
         notificationType?: SortOrder
         state?: SortOrder
         stateAsOf?: SortOrder
@@ -23368,7 +23438,7 @@ export namespace Prisma {
         userId?: UuidWithAggregatesFilter<"ProductNotification"> | string
         productRecordId?: UuidWithAggregatesFilter<"ProductNotification"> | string
         productId?: UuidWithAggregatesFilter<"ProductNotification"> | string
-        subscriptionId?: UuidWithAggregatesFilter<"ProductNotification"> | string
+        subscriptionId?: UuidNullableWithAggregatesFilter<"ProductNotification"> | string | null
         notificationType?: EnumProductNotificationTypeWithAggregatesFilter<"ProductNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateWithAggregatesFilter<"ProductNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeWithAggregatesFilter<"ProductNotification"> | Date | string
@@ -23389,7 +23459,7 @@ export namespace Prisma {
         userId?: UuidFilter<"PriceChangeNotification"> | string
         productRecordId?: UuidFilter<"PriceChangeNotification"> | string
         productId?: UuidFilter<"PriceChangeNotification"> | string
-        subscriptionId?: UuidFilter<"PriceChangeNotification"> | string
+        subscriptionId?: UuidNullableFilter<"PriceChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"PriceChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"PriceChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"PriceChangeNotification"> | Date | string
@@ -23403,7 +23473,7 @@ export namespace Prisma {
         user?: XOR<UserRelationFilter, UserWhereInput>
         productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
         product?: XOR<ProductRelationFilter, ProductWhereInput>
-        subscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
+        subscription?: XOR<ProductSubscriptionNullableRelationFilter, ProductSubscriptionWhereInput> | null
     };
     export type PriceChangeNotificationOrderByWithRelationInput = {
         id?: SortOrder
@@ -23414,7 +23484,7 @@ export namespace Prisma {
         userId?: SortOrder
         productRecordId?: SortOrder
         productId?: SortOrder
-        subscriptionId?: SortOrder
+        subscriptionId?: SortOrderInput | SortOrder
         notificationType?: SortOrder
         state?: SortOrder
         stateAsOf?: SortOrder
@@ -23442,7 +23512,7 @@ export namespace Prisma {
         userId?: UuidFilter<"PriceChangeNotification"> | string
         productRecordId?: UuidFilter<"PriceChangeNotification"> | string
         productId?: UuidFilter<"PriceChangeNotification"> | string
-        subscriptionId?: UuidFilter<"PriceChangeNotification"> | string
+        subscriptionId?: UuidNullableFilter<"PriceChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"PriceChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"PriceChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"PriceChangeNotification"> | Date | string
@@ -23456,7 +23526,7 @@ export namespace Prisma {
         user?: XOR<UserRelationFilter, UserWhereInput>
         productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
         product?: XOR<ProductRelationFilter, ProductWhereInput>
-        subscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
+        subscription?: XOR<ProductSubscriptionNullableRelationFilter, ProductSubscriptionWhereInput> | null
     }, "id">;
     export type PriceChangeNotificationOrderByWithAggregationInput = {
         id?: SortOrder
@@ -23467,7 +23537,7 @@ export namespace Prisma {
         userId?: SortOrder
         productRecordId?: SortOrder
         productId?: SortOrder
-        subscriptionId?: SortOrder
+        subscriptionId?: SortOrderInput | SortOrder
         notificationType?: SortOrder
         state?: SortOrder
         stateAsOf?: SortOrder
@@ -23494,7 +23564,7 @@ export namespace Prisma {
         userId?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
         productRecordId?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
         productId?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
-        subscriptionId?: UuidWithAggregatesFilter<"PriceChangeNotification"> | string
+        subscriptionId?: UuidNullableWithAggregatesFilter<"PriceChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeWithAggregatesFilter<"PriceChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateWithAggregatesFilter<"PriceChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeWithAggregatesFilter<"PriceChangeNotification"> | Date | string
@@ -23516,7 +23586,7 @@ export namespace Prisma {
         userId?: UuidFilter<"StatusChangeNotification"> | string
         productRecordId?: UuidFilter<"StatusChangeNotification"> | string
         productId?: UuidFilter<"StatusChangeNotification"> | string
-        subscriptionId?: UuidFilter<"StatusChangeNotification"> | string
+        subscriptionId?: UuidNullableFilter<"StatusChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"StatusChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"StatusChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"StatusChangeNotification"> | Date | string
@@ -23529,7 +23599,7 @@ export namespace Prisma {
         user?: XOR<UserRelationFilter, UserWhereInput>
         productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
         product?: XOR<ProductRelationFilter, ProductWhereInput>
-        subscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
+        subscription?: XOR<ProductSubscriptionNullableRelationFilter, ProductSubscriptionWhereInput> | null
     };
     export type StatusChangeNotificationOrderByWithRelationInput = {
         id?: SortOrder
@@ -23540,7 +23610,7 @@ export namespace Prisma {
         userId?: SortOrder
         productRecordId?: SortOrder
         productId?: SortOrder
-        subscriptionId?: SortOrder
+        subscriptionId?: SortOrderInput | SortOrder
         notificationType?: SortOrder
         state?: SortOrder
         stateAsOf?: SortOrder
@@ -23567,7 +23637,7 @@ export namespace Prisma {
         userId?: UuidFilter<"StatusChangeNotification"> | string
         productRecordId?: UuidFilter<"StatusChangeNotification"> | string
         productId?: UuidFilter<"StatusChangeNotification"> | string
-        subscriptionId?: UuidFilter<"StatusChangeNotification"> | string
+        subscriptionId?: UuidNullableFilter<"StatusChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"StatusChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"StatusChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"StatusChangeNotification"> | Date | string
@@ -23580,7 +23650,7 @@ export namespace Prisma {
         user?: XOR<UserRelationFilter, UserWhereInput>
         productRecord?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
         product?: XOR<ProductRelationFilter, ProductWhereInput>
-        subscription?: XOR<ProductSubscriptionRelationFilter, ProductSubscriptionWhereInput>
+        subscription?: XOR<ProductSubscriptionNullableRelationFilter, ProductSubscriptionWhereInput> | null
     }, "id">;
     export type StatusChangeNotificationOrderByWithAggregationInput = {
         id?: SortOrder
@@ -23591,7 +23661,7 @@ export namespace Prisma {
         userId?: SortOrder
         productRecordId?: SortOrder
         productId?: SortOrder
-        subscriptionId?: SortOrder
+        subscriptionId?: SortOrderInput | SortOrder
         notificationType?: SortOrder
         state?: SortOrder
         stateAsOf?: SortOrder
@@ -23615,7 +23685,7 @@ export namespace Prisma {
         userId?: UuidWithAggregatesFilter<"StatusChangeNotification"> | string
         productRecordId?: UuidWithAggregatesFilter<"StatusChangeNotification"> | string
         productId?: UuidWithAggregatesFilter<"StatusChangeNotification"> | string
-        subscriptionId?: UuidWithAggregatesFilter<"StatusChangeNotification"> | string
+        subscriptionId?: UuidNullableWithAggregatesFilter<"StatusChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeWithAggregatesFilter<"StatusChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateWithAggregatesFilter<"StatusChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeWithAggregatesFilter<"StatusChangeNotification"> | Date | string
@@ -24837,7 +24907,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutNotificationsInput
         productRecord: ProductRecordCreateNestedOneWithoutNotificationsInput
         product: ProductCreateNestedOneWithoutNotificationsInput
-        subscription: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
+        subscription?: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
 
 
     };
@@ -24850,7 +24920,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -24873,7 +24943,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutNotificationsNestedInput
         product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutNotificationsNestedInput
 
 
     };
@@ -24886,7 +24956,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24904,7 +24974,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -24932,7 +25002,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24958,7 +25028,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
     };
     export type PriceChangeNotificationUncheckedCreateInput = {
         id?: string
@@ -24969,7 +25039,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -24996,7 +25066,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
     };
     export type PriceChangeNotificationUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -25007,7 +25077,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25026,7 +25096,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -25058,7 +25128,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25084,7 +25154,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_StatusChangeNotific_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
     };
     export type StatusChangeNotificationUncheckedCreateInput = {
         id?: string
@@ -25095,7 +25165,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -25120,7 +25190,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_StatusChangeNotific_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
     };
     export type StatusChangeNotificationUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -25131,7 +25201,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25149,7 +25219,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -25179,7 +25249,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26080,6 +26150,17 @@ export namespace Prisma {
         productId?: SortOrder
         enabled?: SortOrder
     };
+    export type UuidNullableFilter<$PrismaModel = never> = {
+        equals?: string | StringFieldRefInput<$PrismaModel> | null
+        in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        lt?: string | StringFieldRefInput<$PrismaModel>
+        lte?: string | StringFieldRefInput<$PrismaModel>
+        gt?: string | StringFieldRefInput<$PrismaModel>
+        gte?: string | StringFieldRefInput<$PrismaModel>
+        mode?: QueryMode
+        not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+    };
     export type EnumProductNotificationTypeFilter<$PrismaModel = never> = {
         equals?: $Enums.ProductNotificationType | EnumProductNotificationTypeFieldRefInput<$PrismaModel>
         in?: $Enums.ProductNotificationType[] | ListEnumProductNotificationTypeFieldRefInput<$PrismaModel>
@@ -26092,13 +26173,17 @@ export namespace Prisma {
         notIn?: $Enums.NotificationState[] | ListEnumNotificationStateFieldRefInput<$PrismaModel>
         not?: NestedEnumNotificationStateFilter<$PrismaModel> | $Enums.NotificationState
     };
-    export type ProductSubscriptionRelationFilter = {
-        is?: ProductSubscriptionWhereInput
-        isNot?: ProductSubscriptionWhereInput
+    export type ProductSubscriptionNullableRelationFilter = {
+        is?: ProductSubscriptionWhereInput | null
+        isNot?: ProductSubscriptionWhereInput | null
     };
-    export type PriceChangeSubscriptionRelationFilter = {
-        is?: PriceChangeSubscriptionWhereInput
-        isNot?: PriceChangeSubscriptionWhereInput
+    export type StatusChangeSubscriptionNullableRelationFilter = {
+        is?: StatusChangeSubscriptionWhereInput | null
+        isNot?: StatusChangeSubscriptionWhereInput | null
+    };
+    export type PriceChangeSubscriptionNullableRelationFilter = {
+        is?: PriceChangeSubscriptionWhereInput | null
+        isNot?: PriceChangeSubscriptionWhereInput | null
     };
     export type ProductNotificationCountOrderByAggregateInput = {
         id?: SortOrder
@@ -26153,6 +26238,20 @@ export namespace Prisma {
         sentAt?: SortOrder
 
 
+    };
+    export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: string | StringFieldRefInput<$PrismaModel> | null
+        in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        lt?: string | StringFieldRefInput<$PrismaModel>
+        lte?: string | StringFieldRefInput<$PrismaModel>
+        gt?: string | StringFieldRefInput<$PrismaModel>
+        gte?: string | StringFieldRefInput<$PrismaModel>
+        mode?: QueryMode
+        not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedStringNullableFilter<$PrismaModel>
+        _max?: NestedStringNullableFilter<$PrismaModel>
     };
     export type EnumProductNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ProductNotificationType | EnumProductNotificationTypeFieldRefInput<$PrismaModel>
@@ -28426,24 +28525,30 @@ export namespace Prisma {
         connect?: ProductWhereUniqueInput
         update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutNotificationsInput, ProductUpdateWithoutNotificationsInput>, ProductUncheckedUpdateWithoutNotificationsInput>
     };
-    export type ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput = {
+    export type ProductSubscriptionUpdateOneWithoutNotificationsNestedInput = {
 
 
 
+        disconnect?: ProductSubscriptionWhereInput | boolean
+        delete?: ProductSubscriptionWhereInput | boolean
         connect?: ProductSubscriptionWhereUniqueInput
         update?: XOR<XOR<ProductSubscriptionUpdateToOneWithWhereWithoutNotificationsInput, ProductSubscriptionUpdateWithoutNotificationsInput>, ProductSubscriptionUncheckedUpdateWithoutNotificationsInput>
     };
-    export type StatusChangeSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput = {
+    export type StatusChangeSubscriptionUpdateOneWithoutNotificationsNestedInput = {
         create?: XOR<StatusChangeSubscriptionCreateWithoutNotificationsInput, StatusChangeSubscriptionUncheckedCreateWithoutNotificationsInput>
         connectOrCreate?: StatusChangeSubscriptionCreateOrConnectWithoutNotificationsInput
         upsert?: StatusChangeSubscriptionUpsertWithoutNotificationsInput
+        disconnect?: StatusChangeSubscriptionWhereInput | boolean
+        delete?: StatusChangeSubscriptionWhereInput | boolean
         connect?: StatusChangeSubscriptionWhereUniqueInput
         update?: XOR<XOR<StatusChangeSubscriptionUpdateToOneWithWhereWithoutNotificationsInput, StatusChangeSubscriptionUpdateWithoutNotificationsInput>, StatusChangeSubscriptionUncheckedUpdateWithoutNotificationsInput>
     };
-    export type PriceChangeSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput = {
+    export type PriceChangeSubscriptionUpdateOneWithoutNotificationsNestedInput = {
         create?: XOR<PriceChangeSubscriptionCreateWithoutNotificationsInput, PriceChangeSubscriptionUncheckedCreateWithoutNotificationsInput>
         connectOrCreate?: PriceChangeSubscriptionCreateOrConnectWithoutNotificationsInput
         upsert?: PriceChangeSubscriptionUpsertWithoutNotificationsInput
+        disconnect?: PriceChangeSubscriptionWhereInput | boolean
+        delete?: PriceChangeSubscriptionWhereInput | boolean
         connect?: PriceChangeSubscriptionWhereUniqueInput
         update?: XOR<XOR<PriceChangeSubscriptionUpdateToOneWithWhereWithoutNotificationsInput, PriceChangeSubscriptionUpdateWithoutNotificationsInput>, PriceChangeSubscriptionUncheckedUpdateWithoutNotificationsInput>
     };
@@ -28522,10 +28627,12 @@ export namespace Prisma {
         connect?: ProductWhereUniqueInput
         update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input, ProductUpdateWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input>, ProductUncheckedUpdateWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input>
     };
-    export type ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput = {
+    export type ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput = {
 
 
 
+        disconnect?: ProductSubscriptionWhereInput | boolean
+        delete?: ProductSubscriptionWhereInput | boolean
         connect?: ProductSubscriptionWhereUniqueInput
         update?: XOR<XOR<ProductSubscriptionUpdateToOneWithWhereWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input, ProductSubscriptionUpdateWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input>, ProductSubscriptionUncheckedUpdateWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input>
     };
@@ -28597,10 +28704,12 @@ export namespace Prisma {
         connect?: ProductWhereUniqueInput
         update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input, ProductUpdateWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input>, ProductUncheckedUpdateWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input>
     };
-    export type ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput = {
+    export type ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput = {
 
 
 
+        disconnect?: ProductSubscriptionWhereInput | boolean
+        delete?: ProductSubscriptionWhereInput | boolean
         connect?: ProductSubscriptionWhereUniqueInput
         update?: XOR<XOR<ProductSubscriptionUpdateToOneWithWhereWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input, ProductSubscriptionUpdateWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input>, ProductSubscriptionUncheckedUpdateWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input>
     };
@@ -28902,6 +29011,16 @@ export namespace Prisma {
         _min?: NestedEnumProductSubscriptionTypeFilter<$PrismaModel>
         _max?: NestedEnumProductSubscriptionTypeFilter<$PrismaModel>
     };
+    export type NestedUuidNullableFilter<$PrismaModel = never> = {
+        equals?: string | StringFieldRefInput<$PrismaModel> | null
+        in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        lt?: string | StringFieldRefInput<$PrismaModel>
+        lte?: string | StringFieldRefInput<$PrismaModel>
+        gt?: string | StringFieldRefInput<$PrismaModel>
+        gte?: string | StringFieldRefInput<$PrismaModel>
+        not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+    };
     export type NestedEnumProductNotificationTypeFilter<$PrismaModel = never> = {
         equals?: $Enums.ProductNotificationType | EnumProductNotificationTypeFieldRefInput<$PrismaModel>
         in?: $Enums.ProductNotificationType[] | ListEnumProductNotificationTypeFieldRefInput<$PrismaModel>
@@ -28913,6 +29032,19 @@ export namespace Prisma {
         in?: $Enums.NotificationState[] | ListEnumNotificationStateFieldRefInput<$PrismaModel>
         notIn?: $Enums.NotificationState[] | ListEnumNotificationStateFieldRefInput<$PrismaModel>
         not?: NestedEnumNotificationStateFilter<$PrismaModel> | $Enums.NotificationState
+    };
+    export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: string | StringFieldRefInput<$PrismaModel> | null
+        in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        lt?: string | StringFieldRefInput<$PrismaModel>
+        lte?: string | StringFieldRefInput<$PrismaModel>
+        gt?: string | StringFieldRefInput<$PrismaModel>
+        gte?: string | StringFieldRefInput<$PrismaModel>
+        not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedStringNullableFilter<$PrismaModel>
+        _max?: NestedStringNullableFilter<$PrismaModel>
     };
     export type NestedEnumProductNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ProductNotificationType | EnumProductNotificationTypeFieldRefInput<$PrismaModel>
@@ -29300,7 +29432,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutNotificationsInput
         productRecord: ProductRecordCreateNestedOneWithoutNotificationsInput
         product: ProductCreateNestedOneWithoutNotificationsInput
-        subscription: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
+        subscription?: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
 
 
     };
@@ -29312,7 +29444,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29342,7 +29474,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutNotificationsInput
         productRecord: ProductRecordCreateNestedOneWithoutNotificationsInput
         product: ProductCreateNestedOneWithoutNotificationsInput
-        subscription: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
+        subscription?: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
 
 
     };
@@ -29354,7 +29486,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29384,7 +29516,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutUpdatedProductNotificationsInput
         productRecord: ProductRecordCreateNestedOneWithoutNotificationsInput
         product: ProductCreateNestedOneWithoutNotificationsInput
-        subscription: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
+        subscription?: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
 
 
     };
@@ -29396,7 +29528,7 @@ export namespace Prisma {
         updatedById: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29693,7 +29825,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
     };
     export type PriceChangeNotificationUncheckedCreateWithoutCreatedByInput = {
         id?: string
@@ -29703,7 +29835,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29736,7 +29868,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_StatusChangeNotific_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
     };
     export type StatusChangeNotificationUncheckedCreateWithoutCreatedByInput = {
         id?: string
@@ -29746,7 +29878,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29779,7 +29911,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
     };
     export type PriceChangeNotificationUncheckedCreateWithoutUpdatedByInput = {
         id?: string
@@ -29789,7 +29921,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29822,7 +29954,7 @@ export namespace Prisma {
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_StatusChangeNotific_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
     };
     export type StatusChangeNotificationUncheckedCreateWithoutUpdatedByInput = {
         id?: string
@@ -29832,7 +29964,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29865,7 +29997,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutDelegate_aux_User_updatedProductNotifications_Price_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
     };
     export type PriceChangeNotificationUncheckedCreateWithoutUserInput = {
         id?: string
@@ -29875,7 +30007,7 @@ export namespace Prisma {
         updatedById: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -29908,7 +30040,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutDelegate_aux_User_updatedProductNotifications_Statu_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
     };
     export type StatusChangeNotificationUncheckedCreateWithoutUserInput = {
         id?: string
@@ -29918,7 +30050,7 @@ export namespace Prisma {
         updatedById: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -30105,7 +30237,7 @@ export namespace Prisma {
         userId?: UuidFilter<"ProductNotification"> | string
         productRecordId?: UuidFilter<"ProductNotification"> | string
         productId?: UuidFilter<"ProductNotification"> | string
-        subscriptionId?: UuidFilter<"ProductNotification"> | string
+        subscriptionId?: UuidNullableFilter<"ProductNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"ProductNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"ProductNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"ProductNotification"> | Date | string
@@ -30323,7 +30455,7 @@ export namespace Prisma {
         userId?: UuidFilter<"PriceChangeNotification"> | string
         productRecordId?: UuidFilter<"PriceChangeNotification"> | string
         productId?: UuidFilter<"PriceChangeNotification"> | string
-        subscriptionId?: UuidFilter<"PriceChangeNotification"> | string
+        subscriptionId?: UuidNullableFilter<"PriceChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"PriceChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"PriceChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"PriceChangeNotification"> | Date | string
@@ -30358,7 +30490,7 @@ export namespace Prisma {
         userId?: UuidFilter<"StatusChangeNotification"> | string
         productRecordId?: UuidFilter<"StatusChangeNotification"> | string
         productId?: UuidFilter<"StatusChangeNotification"> | string
-        subscriptionId?: UuidFilter<"StatusChangeNotification"> | string
+        subscriptionId?: UuidNullableFilter<"StatusChangeNotification"> | string | null
         notificationType?: EnumProductNotificationTypeFilter<"StatusChangeNotification"> | $Enums.ProductNotificationType
         state?: EnumNotificationStateFilter<"StatusChangeNotification"> | $Enums.NotificationState
         stateAsOf?: DateTimeFilter<"StatusChangeNotification"> | Date | string
@@ -30739,7 +30871,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutUpdatedProductNotificationsInput
         user: UserCreateNestedOneWithoutNotificationsInput
         product: ProductCreateNestedOneWithoutNotificationsInput
-        subscription: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
+        subscription?: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
 
 
     };
@@ -30751,7 +30883,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -30808,7 +30940,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutDelegate_aux_User_updatedProductNotifications_Price_0Input
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
     };
     export type PriceChangeNotificationUncheckedCreateWithoutProductRecordInput = {
         id?: string
@@ -30818,7 +30950,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -30851,7 +30983,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutDelegate_aux_User_updatedProductNotifications_Statu_0Input
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_StatusChangeNotific_0Input
         product: ProductCreateNestedOneWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
     };
     export type StatusChangeNotificationUncheckedCreateWithoutProductRecordInput = {
         id?: string
@@ -30861,7 +30993,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -31936,7 +32068,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutUpdatedProductNotificationsInput
         user: UserCreateNestedOneWithoutNotificationsInput
         productRecord: ProductRecordCreateNestedOneWithoutNotificationsInput
-        subscription: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
+        subscription?: ProductSubscriptionCreateNestedOneWithoutNotificationsInput
 
 
     };
@@ -31948,7 +32080,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productRecordId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -32045,7 +32177,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutDelegate_aux_User_updatedProductNotifications_Price_0Input
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0Input
     };
     export type PriceChangeNotificationUncheckedCreateWithoutProductInput = {
         id?: string
@@ -32055,7 +32187,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productRecordId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -32088,7 +32220,7 @@ export namespace Prisma {
         updatedBy: UserCreateNestedOneWithoutDelegate_aux_User_updatedProductNotifications_Statu_0Input
         user: UserCreateNestedOneWithoutDelegate_aux_User_notifications_StatusChangeNotific_0Input
         productRecord: ProductRecordCreateNestedOneWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0Input
-        subscription: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
+        subscription?: ProductSubscriptionCreateNestedOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0Input
     };
     export type StatusChangeNotificationUncheckedCreateWithoutProductInput = {
         id?: string
@@ -32098,7 +32230,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productRecordId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36802,7 +36934,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36819,7 +36951,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36836,7 +36968,7 @@ export namespace Prisma {
         updatedById: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36940,7 +37072,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36958,7 +37090,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36975,7 +37107,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -36993,7 +37125,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -37010,7 +37142,7 @@ export namespace Prisma {
         updatedById: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -37028,7 +37160,7 @@ export namespace Prisma {
         updatedById: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -37398,7 +37530,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutNotificationsNestedInput
         product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutNotificationsNestedInput
 
 
     };
@@ -37410,7 +37542,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37427,7 +37559,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37449,7 +37581,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutNotificationsNestedInput
         product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutNotificationsNestedInput
 
 
     };
@@ -37461,7 +37593,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37478,7 +37610,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37500,7 +37632,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductNotificationsNestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutNotificationsNestedInput
         product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutNotificationsNestedInput
 
 
     };
@@ -37512,7 +37644,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37529,7 +37661,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37833,7 +37965,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
     };
     export type PriceChangeNotificationUncheckedUpdateWithoutCreatedByInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -37843,7 +37975,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37861,7 +37993,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37886,7 +38018,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_StatusChangeNotific_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
     };
     export type StatusChangeNotificationUncheckedUpdateWithoutCreatedByInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -37896,7 +38028,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37913,7 +38045,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37938,7 +38070,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
     };
     export type PriceChangeNotificationUncheckedUpdateWithoutUpdatedByInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -37948,7 +38080,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37966,7 +38098,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37991,7 +38123,7 @@ export namespace Prisma {
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_StatusChangeNotific_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
     };
     export type StatusChangeNotificationUncheckedUpdateWithoutUpdatedByInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38001,7 +38133,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38018,7 +38150,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38043,7 +38175,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutDelegate_aux_User_updatedProductNotifications_Price_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
     };
     export type PriceChangeNotificationUncheckedUpdateWithoutUserInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38053,7 +38185,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38071,7 +38203,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38096,7 +38228,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutDelegate_aux_User_updatedProductNotifications_Statu_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
     };
     export type StatusChangeNotificationUncheckedUpdateWithoutUserInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38106,7 +38238,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38123,7 +38255,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38147,7 +38279,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -38172,7 +38304,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -38190,7 +38322,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -38233,7 +38365,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductNotificationsNestedInput
         user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
         product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutNotificationsNestedInput
 
 
     };
@@ -38245,7 +38377,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38262,7 +38394,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38311,7 +38443,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutDelegate_aux_User_updatedProductNotifications_Price_0NestedInput
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_PriceChangeNotif_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
     };
     export type PriceChangeNotificationUncheckedUpdateWithoutProductRecordInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38321,7 +38453,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38339,7 +38471,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38364,7 +38496,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutDelegate_aux_User_updatedProductNotifications_Statu_0NestedInput
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_StatusChangeNotific_0NestedInput
         product?: ProductUpdateOneRequiredWithoutDelegate_aux_Product_notifications_StatusChangeNoti_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
     };
     export type StatusChangeNotificationUncheckedUpdateWithoutProductRecordInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38374,7 +38506,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38391,7 +38523,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38431,7 +38563,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productRecordId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -38469,7 +38601,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productRecordId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -38487,7 +38619,7 @@ export namespace Prisma {
         updatedById: string
         userId: string
         productRecordId: string
-        subscriptionId: string
+        subscriptionId?: string | null
 
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -38594,7 +38726,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductNotificationsNestedInput
         user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutNotificationsNestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutNotificationsNestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutNotificationsNestedInput
 
 
     };
@@ -38606,7 +38738,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38623,7 +38755,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38717,7 +38849,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutDelegate_aux_User_updatedProductNotifications_Price_0NestedInput
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_PriceChangeNotifica_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_PriceChang_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Pric_0NestedInput
     };
     export type PriceChangeNotificationUncheckedUpdateWithoutProductInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38727,7 +38859,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38745,7 +38877,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38770,7 +38902,7 @@ export namespace Prisma {
         updatedBy?: UserUpdateOneRequiredWithoutDelegate_aux_User_updatedProductNotifications_Statu_0NestedInput
         user?: UserUpdateOneRequiredWithoutDelegate_aux_User_notifications_StatusChangeNotific_0NestedInput
         productRecord?: ProductRecordUpdateOneRequiredWithoutDelegate_aux_ProductRecord_notifications_StatusChan_0NestedInput
-        subscription?: ProductSubscriptionUpdateOneRequiredWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
+        subscription?: ProductSubscriptionUpdateOneWithoutDelegate_aux_ProductSubscription_notifications_Stat_0NestedInput
     };
     export type StatusChangeNotificationUncheckedUpdateWithoutProductInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -38780,7 +38912,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38797,7 +38929,7 @@ export namespace Prisma {
         updatedById?: StringFieldUpdateOperationsInput | string
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
 
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39023,7 +39155,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -39081,7 +39213,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39119,7 +39251,7 @@ export namespace Prisma {
         userId: string
         productRecordId: string
         productId: string
-        subscriptionId: string
+        subscriptionId?: string | null
         notificationType: $Enums.ProductNotificationType
         state: $Enums.NotificationState
         stateAsOf: Date | string
@@ -39170,7 +39302,7 @@ export namespace Prisma {
         userId?: StringFieldUpdateOperationsInput | string
         productRecordId?: StringFieldUpdateOperationsInput | string
         productId?: StringFieldUpdateOperationsInput | string
-        subscriptionId?: StringFieldUpdateOperationsInput | string
+        subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationType?: EnumProductNotificationTypeFieldUpdateOperationsInput | $Enums.ProductNotificationType
         state?: EnumNotificationStateFieldUpdateOperationsInput | $Enums.NotificationState
         stateAsOf?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -13,6 +13,7 @@ import { ProductCategoryText } from "~/features/products/components/ProductCateg
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 import { ProductSubCategoryText } from "~/features/products/components/ProductSubCategoryText";
 
+
 const InfoItem = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="flex flex-row gap-2 justify-between">
     <Label className="w-[30%] min-w-[120px] max-w-[30%]">{label}</Label>
@@ -39,7 +40,7 @@ export const ProductInfoTile = ({ product, ...props }: ProductInfoTileProps): JS
   <div {...props} className={classNames("flex flex-col gap-4 w-full", props.className)}>
     <div className="flex flex-row gap-4 w-full">
       <Avatar size={132} src={product?.imageSrc} className="border" radius="sm" />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 pt-1">
         <InfoItem label="Status">
           {product.status && (
             <div className="flex flex-col">
@@ -81,10 +82,12 @@ export const ProductInfoTile = ({ product, ...props }: ProductInfoTileProps): JS
         </InfoItem>
       </div>
     </div>
-    <div className="flex flex-col gap-1">
-      {product.descriptions.map((description, index) => (
-        <Description key={index}>{description}</Description>
-      ))}
-    </div>
+    {product.descriptions.length !== 0 && (
+      <div className="flex flex-col gap-1">
+        {product.descriptions.map((description, index) => (
+          <Description key={index}>{description}</Description>
+        ))}
+      </div>
+    )}
   </div>
 );

@@ -1909,6 +1909,7 @@ declare const metadata: {
                 subscriptionId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: never[];
@@ -1920,6 +1921,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -2136,6 +2138,7 @@ declare const metadata: {
                 subscriptionId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: never[];
@@ -2148,6 +2151,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -2376,6 +2380,7 @@ declare const metadata: {
                 subscriptionId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: never[];
@@ -2388,6 +2393,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {

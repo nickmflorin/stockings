@@ -1214,6 +1214,7 @@ const metadata = {
                         },subscriptionId: {
                             name: "subscriptionId",
                             type: "String",
+                            isOptional: true,
                             attributes: [{"name":"@db.Uuid","args":[]}],
                             isForeignKey: true,
                             relationField: 'subscription',
@@ -1221,6 +1222,7 @@ const metadata = {
                             name: "subscription",
                             type: "ProductSubscription",
                             isDataModel: true,
+                            isOptional: true,
                             attributes: [{"name":"@relation","args":[{"value":"notifications"}]}],
                             backLink: 'notifications',
                             isRelationOwner: true,
@@ -1349,6 +1351,7 @@ const metadata = {
                         },subscriptionId: {
                             name: "subscriptionId",
                             type: "String",
+                            isOptional: true,
                             attributes: [{"name":"@db.Uuid","args":[]}],
                             isForeignKey: true,
                             relationField: 'subscription',
@@ -1357,6 +1360,7 @@ const metadata = {
                             name: "subscription",
                             type: "ProductSubscription",
                             isDataModel: true,
+                            isOptional: true,
                             attributes: [{"name":"@relation","args":[{"value":"notifications"}]}],
                             isRelationOwner: true,
                             foreignKeyMapping: {"id":"subscriptionId"},
@@ -1498,6 +1502,7 @@ const metadata = {
                         },subscriptionId: {
                             name: "subscriptionId",
                             type: "String",
+                            isOptional: true,
                             attributes: [{"name":"@db.Uuid","args":[]}],
                             isForeignKey: true,
                             relationField: 'subscription',
@@ -1506,6 +1511,7 @@ const metadata = {
                             name: "subscription",
                             type: "ProductSubscription",
                             isDataModel: true,
+                            isOptional: true,
                             attributes: [{"name":"@relation","args":[{"value":"notifications"}]}],
                             isRelationOwner: true,
                             foreignKeyMapping: {"id":"subscriptionId"},

@@ -53,7 +53,7 @@ export default async function SubscriptionsPage({
       excludeColumns={["product"]}
       filterBar={
         <Suspense>
-          <NotificationsTableFilterBar excludeProducts />
+          <NotificationsTableFilterBar excludeProducts isSearchable={false} />
         </Suspense>
       }
       pagination={

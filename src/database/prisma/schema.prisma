@@ -294,8 +294,8 @@ model ProductNotification {
   productRecord                         ProductRecord             @relation("notifications", fields: [productRecordId], references: [id])
   productId                             String                    @db.Uuid()
   product                               Product                   @relation("notifications", fields: [productId], references: [id])
-  subscriptionId                        String                    @db.Uuid()
-  subscription                          ProductSubscription       @relation("notifications", fields: [subscriptionId], references: [id])
+  subscriptionId                        String?                   @db.Uuid()
+  subscription                          ProductSubscription?      @relation("notifications", fields: [subscriptionId], references: [id], onDelete: SetNull)
   notificationType                      ProductNotificationType
   state                                 NotificationState
   stateAsOf                             DateTime

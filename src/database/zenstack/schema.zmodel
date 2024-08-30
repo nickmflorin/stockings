@@ -275,14 +275,14 @@ model ProductNotification extends ModelMeta {
   // However, it is needed for ordering/filtering at the top level.
   productId        String                  @db.Uuid
   product          Product                 @relation("notifications", fields: [productId], references: [id])
-  subscriptionId   String                  @db.Uuid
+  subscriptionId   String?                 @db.Uuid
   // The original subscription that caused the notification to be created.  It is important to note
   // that the details/fields of the subscription may change, but the conditions on the subscription
   // that caused the notification need to be preserved.  As such, certain fields that are on the
   // subscription are redundantly stored on the notification as well - so we are aware of what the
   // values of those fields were when the notification was created (in other words, what the values
   // were that triggered the notification to begin with).
-  subscription     ProductSubscription     @relation("notifications", fields: [subscriptionId], references: [id])
+  subscription     ProductSubscription?    @relation("notifications", fields: [subscriptionId], references: [id], onDelete: SetNull)
   notificationType ProductNotificationType
   state            NotificationState
   stateAsOf        DateTime

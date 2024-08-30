@@ -5,10 +5,9 @@ import { type ProductNotificationType, type NotificationState } from "~/database
 
 import { ProductNotificationsFiltersOptions, ProductNotificationsFiltersSchemas } from "~/actions";
 
-import { IconButton } from "~/components/buttons";
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
-import type { ComponentProps } from "~/components/types";
+import { classNames, type ComponentProps } from "~/components/types";
 import { ShowHide } from "~/components/util";
 /* eslint-disable-next-line max-len */
 import { NotificationStateSelect } from "~/features/notifications/components/input/NotificationStateSelect";
@@ -19,6 +18,7 @@ import { useFilters } from "~/hooks/use-filters";
 
 export interface NotificationsTableFilterBarProps extends ComponentProps {
   readonly excludeProducts?: boolean;
+  readonly isSearchable?: boolean;
 }
 
 export const NotificationsTableFilterBar = ({
@@ -65,7 +65,10 @@ export const NotificationsTableFilterBar = ({
         dynamicHeight={false}
         placeholder="States"
         behavior="multi"
-        inputClassName="max-w-[260px]"
+        inputClassName={classNames({
+          "max-w-[260px]": props.isSearchable !== false,
+          "flex-1": props.isSearchable === false,
+        })}
         initialValue={filters.states}
         onChange={(states: NotificationState[]) => updateFilters({ states })}
         onClear={() => updateFilters({ states: [] })}
@@ -75,21 +78,13 @@ export const NotificationsTableFilterBar = ({
         dynamicHeight={false}
         placeholder="Types"
         behavior="multi"
-        inputClassName="max-w-[320px]"
+        inputClassName={classNames({
+          "max-w-[320px]": props.isSearchable !== false,
+          "flex-1": props.isSearchable === false,
+        })}
         initialValue={filters.types}
         onChange={(types: ProductNotificationType[]) => updateFilters({ types })}
         onClear={() => updateFilters({ types: [] })}
-      />
-      <IconButton.Transparent
-        icon="xmark"
-        radius="full"
-        element="button"
-        className="text-gray-400 h-full aspect-square w-auto p-[4px] hover:text-gray-500"
-        onClick={() => {
-          for (const r of [typeSelectRef, stateSelectRef]) {
-            r.current?.clear();
-          }
-        }}
       />
     </TableView.FilterBar>
   );

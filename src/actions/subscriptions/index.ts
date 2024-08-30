@@ -6,3 +6,5 @@ export { subscribeToProduct } from "./subscribe-to-product";
 export { updatePriceChangeSubscription } from "./update-price-change-subscription";
 export { updateStatusChangeSubscription } from "./update-status-change-subscription";
 export { updateProductSubscription } from "./update-product-subscription";
+export { enableProductSubscriptions } from "./enable-product-subscriptions";
+export { disableProductSubscriptions } from "./disable-product-subscriptions";
