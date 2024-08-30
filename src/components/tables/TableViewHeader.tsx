@@ -14,8 +14,10 @@ export const TableViewHeader = ({
   children || controlBarTargetId ? (
     <div {...props} className={classNames("table-view__header", props.className)}>
       {children}
-      <div id={controlBarTargetId} />
+      {controlBarTargetId && <div id={controlBarTargetId} />}
     </div>
-  ) : (
+  ) : controlBarTargetId ? (
     <div id={controlBarTargetId} />
+  ) : (
+    <></>
   );
