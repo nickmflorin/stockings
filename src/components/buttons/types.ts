@@ -109,19 +109,19 @@ export type AbstractAnchorProps = Pick<HTMLElementProps<"a">, ButtonCommonProp> 
   readonly rel?: string;
 };
 
-export type PolymorphicAbstractButtonProps<E extends ButtonElement> = E extends ButtonElement
-  ? {
-      button: AbstractButtonProps;
-      a: AbstractAnchorProps;
-      div: AbstractDivProps;
-    }[E]
-  : never;
+export type PolymorphicAbstractButtonProps<E extends ButtonElement> = {
+  button: AbstractButtonProps;
+  a: AbstractAnchorProps;
+  div: AbstractDivProps;
+}[E];
 
-export type ButtonComponentProps<E extends ButtonElement> = PolymorphicAbstractButtonProps<E> & {
-  readonly className?: string;
-  readonly style?: React.CSSProperties;
-  // readonly ref?: PolymorphicButtonRef<E>;
-};
+export type ButtonComponentProps<E extends ButtonElement> = E extends ButtonElement
+  ? PolymorphicAbstractButtonProps<E> & {
+      readonly className?: string;
+      readonly style?: React.CSSProperties;
+      // readonly ref?: PolymorphicButtonRef<E>;
+    }
+  : never;
 
 export type ButtonComponent<
   E extends ButtonElement,

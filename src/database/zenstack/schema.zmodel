@@ -275,9 +275,11 @@ model PriceChangeNotification extends ProductNotification {
   condition     PriceChangeCondition
   previousPrice Float
   newPrice      Float
+  @@validate(previousPrice != newPrice, "The previous and new prices for a notification must not be the same.")
 }
 
 model StatusChangeNotification extends ProductNotification {
   previousStatus ProductStatus
   newStatus      ProductStatus
+  @@validate(previousStatus != newStatus, "The previous and new statuses for a notification must not be the same.")
 }

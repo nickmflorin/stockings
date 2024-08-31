@@ -12,7 +12,17 @@ import { useNavigatable } from "~/hooks";
 import { IconButton, type IconButtonProps } from "./generic";
 
 export interface LayoutNavAnchorProps
-  extends Omit<IconButtonProps<"a">, "options" | "isActive" | "icon" | "href" | "component"> {
+  extends Omit<
+    IconButtonProps<"a">,
+    | "isActive"
+    | "icon"
+    | "href"
+    | "component"
+    | "activeClassName"
+    | "isLoading"
+    | "size"
+    | "iconSize"
+  > {
   readonly item: Pick<ILayoutNavItem, "activePaths" | "icon" | "path" | "tooltipLabel">;
 }
 

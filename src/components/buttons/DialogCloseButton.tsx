@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { IconButton, type IconButtonProps } from "./generic";
 
 export interface DialogCloseButtonProps
-  extends Omit<IconButtonProps<"button">, "icon" | "options" | "iconSize" | "size" | "scheme"> {}
+  extends Omit<IconButtonProps<"button">, "icon" | "iconSize" | "size" | "scheme"> {}
 
 export const DialogCloseButton = forwardRef<HTMLButtonElement, DialogCloseButtonProps>(
   (props: DialogCloseButtonProps, ref): JSX.Element => (

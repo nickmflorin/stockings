@@ -1,4 +1,5 @@
 import { LayoutNavAnchor } from "~/components/buttons/LayoutNavAnchor";
+import { SignOutNavButton } from "~/components/buttons/SignOutNavButton";
 
 import { type ILayoutNavItem } from "./types";
 
@@ -14,6 +15,9 @@ export const LayoutNav = ({ items }: LayoutNavProps): JSX.Element => (
         .map((item, i) => (
           <LayoutNavAnchor item={item} key={i} />
         ))}
+    </div>
+    <div className="flex flex-col gap-[8px] items-center">
+      <SignOutNavButton />
     </div>
   </div>
 );

@@ -3,7 +3,7 @@ import { classNames } from "~/components/types";
 import { IconButton, type IconButtonProps } from "./generic";
 
 export interface DrawerCloseButtonProps
-  extends Omit<IconButtonProps<"button">, "icon" | "options" | "iconSize" | "size" | "element"> {}
+  extends Omit<IconButtonProps<"button">, "icon" | "iconSize" | "size" | "element"> {}
 
 export const DrawerCloseButton = (props: DrawerCloseButtonProps): JSX.Element => (
   <IconButton.Transparent
