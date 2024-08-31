@@ -31,7 +31,7 @@ export const processSubscription = async (
   logger.info(
     `There are ${records.length} records to process for subscription '${subscription.id}'.`,
   );
-  for (let i = 1; i < records.length; i++) {
+  for (let i = 0; i < records.length; i++) {
     const record = records[i];
     await processRecord({ product, record, subscription }, ctx);
   }

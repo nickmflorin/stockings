@@ -8,7 +8,7 @@ import { processSubscription } from "./process-subscription";
 
 export const processProductSubscriptions = async (
   product: ApiProduct<["records"], ["processedRecords"]>,
-  ctx: ScriptContext,
+  { reprocess, ...ctx }: ScriptContext & { readonly reprocess?: boolean },
 ) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 
@@ -27,9 +27,19 @@ export const processProductSubscriptions = async (
     return;
   }
 
+  if (reprocess) {
+    logger.info("Deleting previously processed records so they can be reprocessed.");
+    await enhanced.processedProductRecord.deleteMany({
+      where: { record: { productId: product.id } },
+    });
+  }
+
   for (let i = 0; i < subscriptions.length; i++) {
-    logger.info(`Processing subscription ${i + 1} out of ${subscriptions.length}.`);
     const subscription = subscriptions[i];
+    logger.info(
+      `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
+        `(type = ${subscription.subscriptionType}).`,
+    );
     await processSubscription(subscription, product, ctx);
   }
 };

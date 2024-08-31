@@ -26,8 +26,11 @@ export const processSubscriptions = async (ctx: ScriptContext) => {
   }
 
   for (let i = 0; i < subscriptions.length; i++) {
-    logger.info(`Processing subscription ${i + 1} out of ${subscriptions.length}.`);
     const subscription = subscriptions[i];
+    logger.info(
+      `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
+        `(type = ${subscription.subscriptionType}).`,
+    );
     await processSubscription(subscription, subscription.product, ctx);
   }
 };

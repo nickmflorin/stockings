@@ -5,6 +5,7 @@ import { LogLevel } from "~/internal/loggers/constants";
 
 import { isUuid } from "~/lib/typeguards";
 
+import { parseBooleanFlagCliArgument } from "~/scripts/cli";
 import { getScriptContext } from "~/scripts/context";
 
 import { processProductSubscriptions } from "./process-product-subscriptions";
@@ -14,6 +15,11 @@ logger.level = LogLevel.INFO;
 
 async function main() {
   const ctx = await getScriptContext({ upsertUser: true });
+
+  const reprocess = parseBooleanFlagCliArgument("reprocess");
+  if (reprocess && process.env.NODE_ENV !== "development") {
+    throw new Error("Can only reprocess subscriptions in development mode!");
+  }
 
   const productIdentifier = process.argv.slice(2)[0];
   if (!productIdentifier) {
@@ -29,7 +35,7 @@ async function main() {
     }
     return console.error(`A product with the slug '${productIdentifier}' does not exist!`);
   }
-  await processProductSubscriptions(product, ctx);
+  await processProductSubscriptions(product, { ...ctx, reprocess });
 }
 
 main()

@@ -38,32 +38,51 @@ export const processRecord = async (
     sub: PriceChangeSubscription,
     prices: { previous: number; current: number },
   ) => {
-    if (
-      sub.enabled &&
-      ((prices.previous < prices.current &&
-        sub.conditions.includes(PriceChangeCondition.PriceIncrease)) ||
-        (prices.previous > prices.current &&
-          sub.conditions.includes(PriceChangeCondition.PriceDecrease)))
+    if (!sub.enabled) {
+      return logger.info(
+        `Not processing price change for subscription '${sub.id}' because it is disabled.`,
+      );
+    } else if (
+      prices.previous > prices.current &&
+      !sub.conditions.includes(PriceChangeCondition.PriceDecrease)
     ) {
-      await tx.priceChangeNotification.create({
-        data: {
-          createdBy: { connect: { id: ctx.user.id } },
-          updatedBy: { connect: { id: ctx.user.id } },
-          user: { connect: { id: subscription.userId } },
-          productRecord: { connect: { id: record.id } },
-          subscription: { connect: { id: sub.id } },
-          state: NotificationState.Pending,
-          stateAsOf: new Date(),
-          product: { connect: { id: product.id } },
-          condition:
-            prices.previous > prices.current
-              ? PriceChangeCondition.PriceDecrease
-              : PriceChangeCondition.PriceIncrease,
-          previousPrice: prices.previous,
-          newPrice: prices.current,
-        },
-      });
+      return logger.info(
+        `Not processing price change for subscription '${sub.id}' because the the price ` +
+          "decrease condition is not included in the subscription.",
+        { previousPrice: prices.previous, currentPrice: prices.current },
+      );
+    } else if (
+      prices.previous < prices.current &&
+      !sub.conditions.includes(PriceChangeCondition.PriceIncrease)
+    ) {
+      return logger.info(
+        `Not processing price change for subscription '${sub.id}' because the the price ` +
+          "increase condition is not included in the subscription.",
+        { previousPrice: prices.previous, currentPrice: prices.current },
+      );
     }
+    logger.info(`Creating price change notification for subscription '${sub.id}'.`, {
+      previousPrice: prices.previous,
+      currentPrice: prices.current,
+    });
+    return await tx.priceChangeNotification.create({
+      data: {
+        createdBy: { connect: { id: ctx.user.id } },
+        updatedBy: { connect: { id: ctx.user.id } },
+        user: { connect: { id: subscription.userId } },
+        productRecord: { connect: { id: record.id } },
+        subscription: { connect: { id: sub.id } },
+        state: NotificationState.Pending,
+        stateAsOf: new Date(),
+        product: { connect: { id: product.id } },
+        condition:
+          prices.previous > prices.current
+            ? PriceChangeCondition.PriceDecrease
+            : PriceChangeCondition.PriceIncrease,
+        previousPrice: prices.previous,
+        newPrice: prices.current,
+      },
+    });
   };
 
   const processStatusChange = async (
