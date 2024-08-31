@@ -79,11 +79,6 @@ export type ProductRecordError = $Result.DefaultSelection<Prisma.$ProductRecordE
  */
 export type ProductRecord = $Result.DefaultSelection<Prisma.$ProductRecordPayload>
 /**
- * Model ProcessedProductRecord
- * 
- */
-export type ProcessedProductRecord = $Result.DefaultSelection<Prisma.$ProcessedProductRecordPayload>
-/**
  * Model Product
  * 
  */
@@ -517,16 +512,6 @@ export class PrismaClient<
     * ```
     */
   get productRecord(): Prisma.ProductRecordDelegate<ExtArgs>;
-
-  /**
-   * `prisma.processedProductRecord`: Exposes CRUD operations for the **ProcessedProductRecord** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ProcessedProductRecords
-    * const processedProductRecords = await prisma.processedProductRecord.findMany()
-    * ```
-    */
-  get processedProductRecord(): Prisma.ProcessedProductRecordDelegate<ExtArgs>;
 
   /**
    * `prisma.product`: Exposes CRUD operations for the **Product** model.
@@ -1090,7 +1075,6 @@ export namespace Prisma {
     NonUniqueElementErrorData: 'NonUniqueElementErrorData',
     ProductRecordError: 'ProductRecordError',
     ProductRecord: 'ProductRecord',
-    ProcessedProductRecord: 'ProcessedProductRecord',
     Product: 'Product',
     ProductSubscription: 'ProductSubscription',
     StatusChangeSubscriptionCondition: 'StatusChangeSubscriptionCondition',
@@ -1115,7 +1099,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'user' | 'httpNetworkErrorData' | 'httpSerializationErrorData' | 'httpClientErrorData' | 'missingAttributeErrorData' | 'invalidAttributeErrorData' | 'invalidTextErrorData' | 'missingTextErrorData' | 'nonUniqueTextErrorData' | 'missingElementErrorData' | 'nonUniqueElementErrorData' | 'productRecordError' | 'productRecord' | 'processedProductRecord' | 'product' | 'productSubscription' | 'statusChangeSubscriptionCondition' | 'statusChangeSubscription' | 'priceChangeSubscription' | 'productNotification' | 'priceChangeNotification' | 'statusChangeNotification'
+      modelProps: 'user' | 'httpNetworkErrorData' | 'httpSerializationErrorData' | 'httpClientErrorData' | 'missingAttributeErrorData' | 'invalidAttributeErrorData' | 'invalidTextErrorData' | 'missingTextErrorData' | 'nonUniqueTextErrorData' | 'missingElementErrorData' | 'nonUniqueElementErrorData' | 'productRecordError' | 'productRecord' | 'product' | 'productSubscription' | 'statusChangeSubscriptionCondition' | 'statusChangeSubscription' | 'priceChangeSubscription' | 'productNotification' | 'priceChangeNotification' | 'statusChangeNotification'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1977,72 +1961,6 @@ export namespace Prisma {
           }
         }
       }
-      ProcessedProductRecord: {
-        payload: Prisma.$ProcessedProductRecordPayload<ExtArgs>
-        fields: Prisma.ProcessedProductRecordFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ProcessedProductRecordFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ProcessedProductRecordFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>
-          }
-          findFirst: {
-            args: Prisma.ProcessedProductRecordFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ProcessedProductRecordFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>
-          }
-          findMany: {
-            args: Prisma.ProcessedProductRecordFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>[]
-          }
-          create: {
-            args: Prisma.ProcessedProductRecordCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>
-          }
-          createMany: {
-            args: Prisma.ProcessedProductRecordCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.ProcessedProductRecordDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>
-          }
-          update: {
-            args: Prisma.ProcessedProductRecordUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>
-          }
-          deleteMany: {
-            args: Prisma.ProcessedProductRecordDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ProcessedProductRecordUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.ProcessedProductRecordUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$ProcessedProductRecordPayload>
-          }
-          aggregate: {
-            args: Prisma.ProcessedProductRecordAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateProcessedProductRecord>
-          }
-          groupBy: {
-            args: Prisma.ProcessedProductRecordGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<ProcessedProductRecordGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ProcessedProductRecordCountArgs<ExtArgs>,
-            result: $Utils.Optional<ProcessedProductRecordCountAggregateOutputType> | number
-          }
-        }
-      }
       Product: {
         payload: Prisma.$ProductPayload<ExtArgs>
         fields: Prisma.ProductFieldRefs
@@ -2730,9 +2648,6 @@ export namespace Prisma {
     createdProductNotifications: number
     updatedProductNotifications: number
     notifications: number
-    createdProcessedProductRecords: number
-    updatedProcessedProductRecords: number
-    processedProductRecords: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2746,9 +2661,6 @@ export namespace Prisma {
     createdProductNotifications?: boolean | UserCountOutputTypeCountCreatedProductNotificationsArgs
     updatedProductNotifications?: boolean | UserCountOutputTypeCountUpdatedProductNotificationsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
-    createdProcessedProductRecords?: boolean | UserCountOutputTypeCountCreatedProcessedProductRecordsArgs
-    updatedProcessedProductRecords?: boolean | UserCountOutputTypeCountUpdatedProcessedProductRecordsArgs
-    processedProductRecords?: boolean | UserCountOutputTypeCountProcessedProductRecordsArgs
   }
 
   // Custom InputTypes
@@ -2844,30 +2756,6 @@ export namespace Prisma {
   }
 
 
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountCreatedProcessedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcessedProductRecordWhereInput
-  }
-
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountUpdatedProcessedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcessedProductRecordWhereInput
-  }
-
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountProcessedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcessedProductRecordWhereInput
-  }
-
-
 
   /**
    * Count Type ProductRecordCountOutputType
@@ -2876,13 +2764,11 @@ export namespace Prisma {
   export type ProductRecordCountOutputType = {
     errors: number
     notifications: number
-    processedRecords: number
   }
 
   export type ProductRecordCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     errors?: boolean | ProductRecordCountOutputTypeCountErrorsArgs
     notifications?: boolean | ProductRecordCountOutputTypeCountNotificationsArgs
-    processedRecords?: boolean | ProductRecordCountOutputTypeCountProcessedRecordsArgs
   }
 
   // Custom InputTypes
@@ -2911,14 +2797,6 @@ export namespace Prisma {
    */
   export type ProductRecordCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductNotificationWhereInput
-  }
-
-
-  /**
-   * ProductRecordCountOutputType without action
-   */
-  export type ProductRecordCountOutputTypeCountProcessedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcessedProductRecordWhereInput
   }
 
 
@@ -3247,9 +3125,6 @@ export namespace Prisma {
     createdProductNotifications?: boolean | User$createdProductNotificationsArgs<ExtArgs>
     updatedProductNotifications?: boolean | User$updatedProductNotificationsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
-    createdProcessedProductRecords?: boolean | User$createdProcessedProductRecordsArgs<ExtArgs>
-    updatedProcessedProductRecords?: boolean | User$updatedProcessedProductRecordsArgs<ExtArgs>
-    processedProductRecords?: boolean | User$processedProductRecordsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3275,9 +3150,6 @@ export namespace Prisma {
     createdProductNotifications?: boolean | User$createdProductNotificationsArgs<ExtArgs>
     updatedProductNotifications?: boolean | User$updatedProductNotificationsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
-    createdProcessedProductRecords?: boolean | User$createdProcessedProductRecordsArgs<ExtArgs>
-    updatedProcessedProductRecords?: boolean | User$updatedProcessedProductRecordsArgs<ExtArgs>
-    processedProductRecords?: boolean | User$processedProductRecordsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3295,9 +3167,6 @@ export namespace Prisma {
       createdProductNotifications: Prisma.$ProductNotificationPayload<ExtArgs>[]
       updatedProductNotifications: Prisma.$ProductNotificationPayload<ExtArgs>[]
       notifications: Prisma.$ProductNotificationPayload<ExtArgs>[]
-      createdProcessedProductRecords: Prisma.$ProcessedProductRecordPayload<ExtArgs>[]
-      updatedProcessedProductRecords: Prisma.$ProcessedProductRecordPayload<ExtArgs>[]
-      processedProductRecords: Prisma.$ProcessedProductRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3692,12 +3561,6 @@ export namespace Prisma {
     updatedProductNotifications<T extends User$updatedProductNotificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$updatedProductNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    createdProcessedProductRecords<T extends User$createdProcessedProductRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdProcessedProductRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    updatedProcessedProductRecords<T extends User$updatedProcessedProductRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$updatedProcessedProductRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    processedProductRecords<T extends User$processedProductRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$processedProductRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4253,69 +4116,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductNotificationScalarFieldEnum | ProductNotificationScalarFieldEnum[]
-  }
-
-
-  /**
-   * User.createdProcessedProductRecords
-   */
-  export type User$createdProcessedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    where?: ProcessedProductRecordWhereInput
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * User.updatedProcessedProductRecords
-   */
-  export type User$updatedProcessedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    where?: ProcessedProductRecordWhereInput
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * User.processedProductRecords
-   */
-  export type User$processedProductRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    where?: ProcessedProductRecordWhereInput
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
   }
 
 
@@ -14000,7 +13800,6 @@ export namespace Prisma {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     errors?: boolean | ProductRecord$errorsArgs<ExtArgs>
     notifications?: boolean | ProductRecord$notificationsArgs<ExtArgs>
-    processedRecords?: boolean | ProductRecord$processedRecordsArgs<ExtArgs>
     _count?: boolean | ProductRecordCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productRecord"]>
 
@@ -14025,7 +13824,6 @@ export namespace Prisma {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     errors?: boolean | ProductRecord$errorsArgs<ExtArgs>
     notifications?: boolean | ProductRecord$notificationsArgs<ExtArgs>
-    processedRecords?: boolean | ProductRecord$processedRecordsArgs<ExtArgs>
     _count?: boolean | ProductRecordCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -14038,7 +13836,6 @@ export namespace Prisma {
       product: Prisma.$ProductPayload<ExtArgs>
       errors: Prisma.$ProductRecordErrorPayload<ExtArgs>[]
       notifications: Prisma.$ProductNotificationPayload<ExtArgs>[]
-      processedRecords: Prisma.$ProcessedProductRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14427,8 +14224,6 @@ export namespace Prisma {
     errors<T extends ProductRecord$errorsArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecord$errorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductRecordErrorPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     notifications<T extends ProductRecord$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecord$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    processedRecords<T extends ProductRecord$processedRecordsArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecord$processedRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -14824,27 +14619,6 @@ export namespace Prisma {
 
 
   /**
-   * ProductRecord.processedRecords
-   */
-  export type ProductRecord$processedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    where?: ProcessedProductRecordWhereInput
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
-  }
-
-
-  /**
    * ProductRecord without action
    */
   export type ProductRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14856,961 +14630,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: ProductRecordInclude<ExtArgs> | null
-  }
-
-
-
-  /**
-   * Model ProcessedProductRecord
-   */
-
-  export type AggregateProcessedProductRecord = {
-    _count: ProcessedProductRecordCountAggregateOutputType | null
-    _min: ProcessedProductRecordMinAggregateOutputType | null
-    _max: ProcessedProductRecordMaxAggregateOutputType | null
-  }
-
-  export type ProcessedProductRecordMinAggregateOutputType = {
-    id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdById: string | null
-    updatedById: string | null
-    recordId: string | null
-    userId: string | null
-  }
-
-  export type ProcessedProductRecordMaxAggregateOutputType = {
-    id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdById: string | null
-    updatedById: string | null
-    recordId: string | null
-    userId: string | null
-  }
-
-  export type ProcessedProductRecordCountAggregateOutputType = {
-    id: number
-    createdAt: number
-    updatedAt: number
-    createdById: number
-    updatedById: number
-    recordId: number
-    userId: number
-    _all: number
-  }
-
-
-  export type ProcessedProductRecordMinAggregateInputType = {
-    id?: true
-    createdAt?: true
-    updatedAt?: true
-    createdById?: true
-    updatedById?: true
-    recordId?: true
-    userId?: true
-  }
-
-  export type ProcessedProductRecordMaxAggregateInputType = {
-    id?: true
-    createdAt?: true
-    updatedAt?: true
-    createdById?: true
-    updatedById?: true
-    recordId?: true
-    userId?: true
-  }
-
-  export type ProcessedProductRecordCountAggregateInputType = {
-    id?: true
-    createdAt?: true
-    updatedAt?: true
-    createdById?: true
-    updatedById?: true
-    recordId?: true
-    userId?: true
-    _all?: true
-  }
-
-  export type ProcessedProductRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ProcessedProductRecord to aggregate.
-     */
-    where?: ProcessedProductRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProcessedProductRecords to fetch.
-     */
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProcessedProductRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProcessedProductRecords.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ProcessedProductRecords
-    **/
-    _count?: true | ProcessedProductRecordCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ProcessedProductRecordMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ProcessedProductRecordMaxAggregateInputType
-  }
-
-  export type GetProcessedProductRecordAggregateType<T extends ProcessedProductRecordAggregateArgs> = {
-        [P in keyof T & keyof AggregateProcessedProductRecord]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateProcessedProductRecord[P]>
-      : GetScalarType<T[P], AggregateProcessedProductRecord[P]>
-  }
-
-
-
-
-  export type ProcessedProductRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcessedProductRecordWhereInput
-    orderBy?: ProcessedProductRecordOrderByWithAggregationInput | ProcessedProductRecordOrderByWithAggregationInput[]
-    by: ProcessedProductRecordScalarFieldEnum[] | ProcessedProductRecordScalarFieldEnum
-    having?: ProcessedProductRecordScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ProcessedProductRecordCountAggregateInputType | true
-    _min?: ProcessedProductRecordMinAggregateInputType
-    _max?: ProcessedProductRecordMaxAggregateInputType
-  }
-
-  export type ProcessedProductRecordGroupByOutputType = {
-    id: string
-    createdAt: Date
-    updatedAt: Date
-    createdById: string
-    updatedById: string
-    recordId: string
-    userId: string
-    _count: ProcessedProductRecordCountAggregateOutputType | null
-    _min: ProcessedProductRecordMinAggregateOutputType | null
-    _max: ProcessedProductRecordMaxAggregateOutputType | null
-  }
-
-  type GetProcessedProductRecordGroupByPayload<T extends ProcessedProductRecordGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ProcessedProductRecordGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ProcessedProductRecordGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ProcessedProductRecordGroupByOutputType[P]>
-            : GetScalarType<T[P], ProcessedProductRecordGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ProcessedProductRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    createdById?: boolean
-    updatedById?: boolean
-    recordId?: boolean
-    userId?: boolean
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
-    record?: boolean | ProductRecordDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["processedProductRecord"]>
-
-  export type ProcessedProductRecordSelectScalar = {
-    id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    createdById?: boolean
-    updatedById?: boolean
-    recordId?: boolean
-    userId?: boolean
-  }
-
-  export type ProcessedProductRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
-    record?: boolean | ProductRecordDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-
-  export type $ProcessedProductRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ProcessedProductRecord"
-    objects: {
-      createdBy: Prisma.$UserPayload<ExtArgs>
-      updatedBy: Prisma.$UserPayload<ExtArgs>
-      record: Prisma.$ProductRecordPayload<ExtArgs>
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      createdAt: Date
-      updatedAt: Date
-      createdById: string
-      updatedById: string
-      recordId: string
-      userId: string
-    }, ExtArgs["result"]["processedProductRecord"]>
-    composites: {}
-  }
-
-
-  type ProcessedProductRecordGetPayload<S extends boolean | null | undefined | ProcessedProductRecordDefaultArgs> = $Result.GetResult<Prisma.$ProcessedProductRecordPayload, S>
-
-  type ProcessedProductRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ProcessedProductRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ProcessedProductRecordCountAggregateInputType | true
-    }
-
-  export interface ProcessedProductRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProcessedProductRecord'], meta: { name: 'ProcessedProductRecord' } }
-    /**
-     * Find zero or one ProcessedProductRecord that matches the filter.
-     * @param {ProcessedProductRecordFindUniqueArgs} args - Arguments to find a ProcessedProductRecord
-     * @example
-     * // Get one ProcessedProductRecord
-     * const processedProductRecord = await prisma.processedProductRecord.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends ProcessedProductRecordFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, ProcessedProductRecordFindUniqueArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one ProcessedProductRecord that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {ProcessedProductRecordFindUniqueOrThrowArgs} args - Arguments to find a ProcessedProductRecord
-     * @example
-     * // Get one ProcessedProductRecord
-     * const processedProductRecord = await prisma.processedProductRecord.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends ProcessedProductRecordFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProcessedProductRecordFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first ProcessedProductRecord that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordFindFirstArgs} args - Arguments to find a ProcessedProductRecord
-     * @example
-     * // Get one ProcessedProductRecord
-     * const processedProductRecord = await prisma.processedProductRecord.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends ProcessedProductRecordFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProcessedProductRecordFindFirstArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first ProcessedProductRecord that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordFindFirstOrThrowArgs} args - Arguments to find a ProcessedProductRecord
-     * @example
-     * // Get one ProcessedProductRecord
-     * const processedProductRecord = await prisma.processedProductRecord.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends ProcessedProductRecordFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProcessedProductRecordFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more ProcessedProductRecords that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ProcessedProductRecords
-     * const processedProductRecords = await prisma.processedProductRecord.findMany()
-     * 
-     * // Get first 10 ProcessedProductRecords
-     * const processedProductRecords = await prisma.processedProductRecord.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const processedProductRecordWithIdOnly = await prisma.processedProductRecord.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends ProcessedProductRecordFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProcessedProductRecordFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a ProcessedProductRecord.
-     * @param {ProcessedProductRecordCreateArgs} args - Arguments to create a ProcessedProductRecord.
-     * @example
-     * // Create one ProcessedProductRecord
-     * const ProcessedProductRecord = await prisma.processedProductRecord.create({
-     *   data: {
-     *     // ... data to create a ProcessedProductRecord
-     *   }
-     * })
-     * 
-    **/
-    create<T extends ProcessedProductRecordCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, ProcessedProductRecordCreateArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many ProcessedProductRecords.
-     *     @param {ProcessedProductRecordCreateManyArgs} args - Arguments to create many ProcessedProductRecords.
-     *     @example
-     *     // Create many ProcessedProductRecords
-     *     const processedProductRecord = await prisma.processedProductRecord.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends ProcessedProductRecordCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProcessedProductRecordCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a ProcessedProductRecord.
-     * @param {ProcessedProductRecordDeleteArgs} args - Arguments to delete one ProcessedProductRecord.
-     * @example
-     * // Delete one ProcessedProductRecord
-     * const ProcessedProductRecord = await prisma.processedProductRecord.delete({
-     *   where: {
-     *     // ... filter to delete one ProcessedProductRecord
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends ProcessedProductRecordDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, ProcessedProductRecordDeleteArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one ProcessedProductRecord.
-     * @param {ProcessedProductRecordUpdateArgs} args - Arguments to update one ProcessedProductRecord.
-     * @example
-     * // Update one ProcessedProductRecord
-     * const processedProductRecord = await prisma.processedProductRecord.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends ProcessedProductRecordUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, ProcessedProductRecordUpdateArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more ProcessedProductRecords.
-     * @param {ProcessedProductRecordDeleteManyArgs} args - Arguments to filter ProcessedProductRecords to delete.
-     * @example
-     * // Delete a few ProcessedProductRecords
-     * const { count } = await prisma.processedProductRecord.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends ProcessedProductRecordDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, ProcessedProductRecordDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ProcessedProductRecords.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ProcessedProductRecords
-     * const processedProductRecord = await prisma.processedProductRecord.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends ProcessedProductRecordUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, ProcessedProductRecordUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one ProcessedProductRecord.
-     * @param {ProcessedProductRecordUpsertArgs} args - Arguments to update or create a ProcessedProductRecord.
-     * @example
-     * // Update or create a ProcessedProductRecord
-     * const processedProductRecord = await prisma.processedProductRecord.upsert({
-     *   create: {
-     *     // ... data to create a ProcessedProductRecord
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ProcessedProductRecord we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends ProcessedProductRecordUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, ProcessedProductRecordUpsertArgs<ExtArgs>>
-    ): Prisma__ProcessedProductRecordClient<$Result.GetResult<Prisma.$ProcessedProductRecordPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of ProcessedProductRecords.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordCountArgs} args - Arguments to filter ProcessedProductRecords to count.
-     * @example
-     * // Count the number of ProcessedProductRecords
-     * const count = await prisma.processedProductRecord.count({
-     *   where: {
-     *     // ... the filter for the ProcessedProductRecords we want to count
-     *   }
-     * })
-    **/
-    count<T extends ProcessedProductRecordCountArgs>(
-      args?: Subset<T, ProcessedProductRecordCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ProcessedProductRecordCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ProcessedProductRecord.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ProcessedProductRecordAggregateArgs>(args: Subset<T, ProcessedProductRecordAggregateArgs>): Prisma.PrismaPromise<GetProcessedProductRecordAggregateType<T>>
-
-    /**
-     * Group by ProcessedProductRecord.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProcessedProductRecordGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ProcessedProductRecordGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProcessedProductRecordGroupByArgs['orderBy'] }
-        : { orderBy?: ProcessedProductRecordGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ProcessedProductRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProcessedProductRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ProcessedProductRecord model
-   */
-  readonly fields: ProcessedProductRecordFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ProcessedProductRecord.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ProcessedProductRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    updatedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    record<T extends ProductRecordDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductRecordDefaultArgs<ExtArgs>>): Prisma__ProductRecordClient<$Result.GetResult<Prisma.$ProductRecordPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the ProcessedProductRecord model
-   */ 
-  interface ProcessedProductRecordFieldRefs {
-    readonly id: FieldRef<"ProcessedProductRecord", 'String'>
-    readonly createdAt: FieldRef<"ProcessedProductRecord", 'DateTime'>
-    readonly updatedAt: FieldRef<"ProcessedProductRecord", 'DateTime'>
-    readonly createdById: FieldRef<"ProcessedProductRecord", 'String'>
-    readonly updatedById: FieldRef<"ProcessedProductRecord", 'String'>
-    readonly recordId: FieldRef<"ProcessedProductRecord", 'String'>
-    readonly userId: FieldRef<"ProcessedProductRecord", 'String'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * ProcessedProductRecord findUnique
-   */
-  export type ProcessedProductRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * Filter, which ProcessedProductRecord to fetch.
-     */
-    where: ProcessedProductRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProcessedProductRecord findUniqueOrThrow
-   */
-  export type ProcessedProductRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * Filter, which ProcessedProductRecord to fetch.
-     */
-    where: ProcessedProductRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProcessedProductRecord findFirst
-   */
-  export type ProcessedProductRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * Filter, which ProcessedProductRecord to fetch.
-     */
-    where?: ProcessedProductRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProcessedProductRecords to fetch.
-     */
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ProcessedProductRecords.
-     */
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProcessedProductRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProcessedProductRecords.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProcessedProductRecords.
-     */
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * ProcessedProductRecord findFirstOrThrow
-   */
-  export type ProcessedProductRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * Filter, which ProcessedProductRecord to fetch.
-     */
-    where?: ProcessedProductRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProcessedProductRecords to fetch.
-     */
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ProcessedProductRecords.
-     */
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProcessedProductRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProcessedProductRecords.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProcessedProductRecords.
-     */
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * ProcessedProductRecord findMany
-   */
-  export type ProcessedProductRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * Filter, which ProcessedProductRecords to fetch.
-     */
-    where?: ProcessedProductRecordWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProcessedProductRecords to fetch.
-     */
-    orderBy?: ProcessedProductRecordOrderByWithRelationInput | ProcessedProductRecordOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ProcessedProductRecords.
-     */
-    cursor?: ProcessedProductRecordWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProcessedProductRecords from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProcessedProductRecords.
-     */
-    skip?: number
-    distinct?: ProcessedProductRecordScalarFieldEnum | ProcessedProductRecordScalarFieldEnum[]
-  }
-
-
-  /**
-   * ProcessedProductRecord create
-   */
-  export type ProcessedProductRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ProcessedProductRecord.
-     */
-    data: XOR<ProcessedProductRecordCreateInput, ProcessedProductRecordUncheckedCreateInput>
-  }
-
-
-  /**
-   * ProcessedProductRecord createMany
-   */
-  export type ProcessedProductRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ProcessedProductRecords.
-     */
-    data: ProcessedProductRecordCreateManyInput | ProcessedProductRecordCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * ProcessedProductRecord update
-   */
-  export type ProcessedProductRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ProcessedProductRecord.
-     */
-    data: XOR<ProcessedProductRecordUpdateInput, ProcessedProductRecordUncheckedUpdateInput>
-    /**
-     * Choose, which ProcessedProductRecord to update.
-     */
-    where: ProcessedProductRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProcessedProductRecord updateMany
-   */
-  export type ProcessedProductRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ProcessedProductRecords.
-     */
-    data: XOR<ProcessedProductRecordUpdateManyMutationInput, ProcessedProductRecordUncheckedUpdateManyInput>
-    /**
-     * Filter which ProcessedProductRecords to update
-     */
-    where?: ProcessedProductRecordWhereInput
-  }
-
-
-  /**
-   * ProcessedProductRecord upsert
-   */
-  export type ProcessedProductRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ProcessedProductRecord to update in case it exists.
-     */
-    where: ProcessedProductRecordWhereUniqueInput
-    /**
-     * In case the ProcessedProductRecord found by the `where` argument doesn't exist, create a new ProcessedProductRecord with this data.
-     */
-    create: XOR<ProcessedProductRecordCreateInput, ProcessedProductRecordUncheckedCreateInput>
-    /**
-     * In case the ProcessedProductRecord was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ProcessedProductRecordUpdateInput, ProcessedProductRecordUncheckedUpdateInput>
-  }
-
-
-  /**
-   * ProcessedProductRecord delete
-   */
-  export type ProcessedProductRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
-    /**
-     * Filter which ProcessedProductRecord to delete.
-     */
-    where: ProcessedProductRecordWhereUniqueInput
-  }
-
-
-  /**
-   * ProcessedProductRecord deleteMany
-   */
-  export type ProcessedProductRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ProcessedProductRecords to delete
-     */
-    where?: ProcessedProductRecordWhereInput
-  }
-
-
-  /**
-   * ProcessedProductRecord without action
-   */
-  export type ProcessedProductRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProcessedProductRecord
-     */
-    select?: ProcessedProductRecordSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ProcessedProductRecordInclude<ExtArgs> | null
   }
 
 
@@ -23824,19 +22643,6 @@ export namespace Prisma {
   export type ProductRecordScalarFieldEnum = (typeof ProductRecordScalarFieldEnum)[keyof typeof ProductRecordScalarFieldEnum]
 
 
-  export const ProcessedProductRecordScalarFieldEnum: {
-    id: 'id',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    createdById: 'createdById',
-    updatedById: 'updatedById',
-    recordId: 'recordId',
-    userId: 'userId'
-  };
-
-  export type ProcessedProductRecordScalarFieldEnum = (typeof ProcessedProductRecordScalarFieldEnum)[keyof typeof ProcessedProductRecordScalarFieldEnum]
-
-
   export const ProductScalarFieldEnum: {
     id: 'id',
     createdAt: 'createdAt',
@@ -24199,9 +23005,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationListRelationFilter
     updatedProductNotifications?: ProductNotificationListRelationFilter
     notifications?: ProductNotificationListRelationFilter
-    createdProcessedProductRecords?: ProcessedProductRecordListRelationFilter
-    updatedProcessedProductRecords?: ProcessedProductRecordListRelationFilter
-    processedProductRecords?: ProcessedProductRecordListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -24223,9 +23026,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationOrderByRelationAggregateInput
     updatedProductNotifications?: ProductNotificationOrderByRelationAggregateInput
     notifications?: ProductNotificationOrderByRelationAggregateInput
-    createdProcessedProductRecords?: ProcessedProductRecordOrderByRelationAggregateInput
-    updatedProcessedProductRecords?: ProcessedProductRecordOrderByRelationAggregateInput
-    processedProductRecords?: ProcessedProductRecordOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -24250,9 +23050,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationListRelationFilter
     updatedProductNotifications?: ProductNotificationListRelationFilter
     notifications?: ProductNotificationListRelationFilter
-    createdProcessedProductRecords?: ProcessedProductRecordListRelationFilter
-    updatedProcessedProductRecords?: ProcessedProductRecordListRelationFilter
-    processedProductRecords?: ProcessedProductRecordListRelationFilter
   }, "id" | "clerkId">
 
   export type UserOrderByWithAggregationInput = {
@@ -24771,7 +23568,6 @@ export namespace Prisma {
     product?: XOR<ProductRelationFilter, ProductWhereInput>
     errors?: ProductRecordErrorListRelationFilter
     notifications?: ProductNotificationListRelationFilter
-    processedRecords?: ProcessedProductRecordListRelationFilter
   }
 
   export type ProductRecordOrderByWithRelationInput = {
@@ -24792,7 +23588,6 @@ export namespace Prisma {
     product?: ProductOrderByWithRelationInput
     errors?: ProductRecordErrorOrderByRelationAggregateInput
     notifications?: ProductNotificationOrderByRelationAggregateInput
-    processedRecords?: ProcessedProductRecordOrderByRelationAggregateInput
   }
 
   export type ProductRecordWhereUniqueInput = Prisma.AtLeast<{
@@ -24816,7 +23611,6 @@ export namespace Prisma {
     product?: XOR<ProductRelationFilter, ProductWhereInput>
     errors?: ProductRecordErrorListRelationFilter
     notifications?: ProductNotificationListRelationFilter
-    processedRecords?: ProcessedProductRecordListRelationFilter
   }, "id">
 
   export type ProductRecordOrderByWithAggregationInput = {
@@ -24855,81 +23649,6 @@ export namespace Prisma {
     status?: EnumProductStatusNullableWithAggregatesFilter<"ProductRecord"> | $Enums.ProductStatus | null
     wasManuallyCreated?: BoolWithAggregatesFilter<"ProductRecord"> | boolean
     manuallyChangedFields?: EnumProductRecordDataFieldNullableListFilter<"ProductRecord">
-  }
-
-  export type ProcessedProductRecordWhereInput = {
-    AND?: ProcessedProductRecordWhereInput | ProcessedProductRecordWhereInput[]
-    OR?: ProcessedProductRecordWhereInput[]
-    NOT?: ProcessedProductRecordWhereInput | ProcessedProductRecordWhereInput[]
-    id?: UuidFilter<"ProcessedProductRecord"> | string
-    createdAt?: DateTimeFilter<"ProcessedProductRecord"> | Date | string
-    updatedAt?: DateTimeFilter<"ProcessedProductRecord"> | Date | string
-    createdById?: UuidFilter<"ProcessedProductRecord"> | string
-    updatedById?: UuidFilter<"ProcessedProductRecord"> | string
-    recordId?: UuidFilter<"ProcessedProductRecord"> | string
-    userId?: UuidFilter<"ProcessedProductRecord"> | string
-    createdBy?: XOR<UserRelationFilter, UserWhereInput>
-    updatedBy?: XOR<UserRelationFilter, UserWhereInput>
-    record?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }
-
-  export type ProcessedProductRecordOrderByWithRelationInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    createdById?: SortOrder
-    updatedById?: SortOrder
-    recordId?: SortOrder
-    userId?: SortOrder
-    createdBy?: UserOrderByWithRelationInput
-    updatedBy?: UserOrderByWithRelationInput
-    record?: ProductRecordOrderByWithRelationInput
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type ProcessedProductRecordWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    userId_recordId?: ProcessedProductRecordUserIdRecordIdCompoundUniqueInput
-    AND?: ProcessedProductRecordWhereInput | ProcessedProductRecordWhereInput[]
-    OR?: ProcessedProductRecordWhereInput[]
-    NOT?: ProcessedProductRecordWhereInput | ProcessedProductRecordWhereInput[]
-    createdAt?: DateTimeFilter<"ProcessedProductRecord"> | Date | string
-    updatedAt?: DateTimeFilter<"ProcessedProductRecord"> | Date | string
-    createdById?: UuidFilter<"ProcessedProductRecord"> | string
-    updatedById?: UuidFilter<"ProcessedProductRecord"> | string
-    recordId?: UuidFilter<"ProcessedProductRecord"> | string
-    userId?: UuidFilter<"ProcessedProductRecord"> | string
-    createdBy?: XOR<UserRelationFilter, UserWhereInput>
-    updatedBy?: XOR<UserRelationFilter, UserWhereInput>
-    record?: XOR<ProductRecordRelationFilter, ProductRecordWhereInput>
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id" | "userId_recordId">
-
-  export type ProcessedProductRecordOrderByWithAggregationInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    createdById?: SortOrder
-    updatedById?: SortOrder
-    recordId?: SortOrder
-    userId?: SortOrder
-    _count?: ProcessedProductRecordCountOrderByAggregateInput
-    _max?: ProcessedProductRecordMaxOrderByAggregateInput
-    _min?: ProcessedProductRecordMinOrderByAggregateInput
-  }
-
-  export type ProcessedProductRecordScalarWhereWithAggregatesInput = {
-    AND?: ProcessedProductRecordScalarWhereWithAggregatesInput | ProcessedProductRecordScalarWhereWithAggregatesInput[]
-    OR?: ProcessedProductRecordScalarWhereWithAggregatesInput[]
-    NOT?: ProcessedProductRecordScalarWhereWithAggregatesInput | ProcessedProductRecordScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ProcessedProductRecord"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"ProcessedProductRecord"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ProcessedProductRecord"> | Date | string
-    createdById?: UuidWithAggregatesFilter<"ProcessedProductRecord"> | string
-    updatedById?: UuidWithAggregatesFilter<"ProcessedProductRecord"> | string
-    recordId?: UuidWithAggregatesFilter<"ProcessedProductRecord"> | string
-    userId?: UuidWithAggregatesFilter<"ProcessedProductRecord"> | string
   }
 
   export type ProductWhereInput = {
@@ -25535,9 +24254,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -25559,9 +24275,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -25583,9 +24296,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -25607,9 +24317,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -26121,7 +24828,6 @@ export namespace Prisma {
     product: ProductCreateNestedOneWithoutRecordsInput
     errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateInput = {
@@ -26139,7 +24845,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUpdateInput = {
@@ -26157,7 +24862,6 @@ export namespace Prisma {
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
     errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateInput = {
@@ -26175,7 +24879,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordCreateManyInput = {
@@ -26218,72 +24921,6 @@ export namespace Prisma {
     status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
     wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
-  }
-
-  export type ProcessedProductRecordCreateInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedProcessedProductRecordsInput
-    updatedBy: UserCreateNestedOneWithoutUpdatedProcessedProductRecordsInput
-    record: ProductRecordCreateNestedOneWithoutProcessedRecordsInput
-    user: UserCreateNestedOneWithoutProcessedProductRecordsInput
-  }
-
-  export type ProcessedProductRecordUncheckedCreateInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    recordId: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedProcessedProductRecordsNestedInput
-    updatedBy?: UserUpdateOneRequiredWithoutUpdatedProcessedProductRecordsNestedInput
-    record?: ProductRecordUpdateOneRequiredWithoutProcessedRecordsNestedInput
-    user?: UserUpdateOneRequiredWithoutProcessedProductRecordsNestedInput
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordCreateManyInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    recordId: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProductCreateInput = {
@@ -26950,12 +25587,6 @@ export namespace Prisma {
     none?: ProductNotificationWhereInput
   }
 
-  export type ProcessedProductRecordListRelationFilter = {
-    every?: ProcessedProductRecordWhereInput
-    some?: ProcessedProductRecordWhereInput
-    none?: ProcessedProductRecordWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -26974,10 +25605,6 @@ export namespace Prisma {
   }
 
   export type ProductNotificationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ProcessedProductRecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27502,41 +26129,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type ProcessedProductRecordUserIdRecordIdCompoundUniqueInput = {
-    userId: string
-    recordId: string
-  }
-
-  export type ProcessedProductRecordCountOrderByAggregateInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    createdById?: SortOrder
-    updatedById?: SortOrder
-    recordId?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ProcessedProductRecordMaxOrderByAggregateInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    createdById?: SortOrder
-    updatedById?: SortOrder
-    recordId?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ProcessedProductRecordMinOrderByAggregateInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    createdById?: SortOrder
-    updatedById?: SortOrder
-    recordId?: SortOrder
-    userId?: SortOrder
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -28129,27 +26721,6 @@ export namespace Prisma {
     connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
   }
 
-  export type ProcessedProductRecordCreateNestedManyWithoutCreatedByInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutCreatedByInput, ProcessedProductRecordUncheckedCreateWithoutCreatedByInput> | ProcessedProductRecordCreateWithoutCreatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutCreatedByInput | ProcessedProductRecordCreateOrConnectWithoutCreatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyCreatedByInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-  }
-
-  export type ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUpdatedByInput, ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput> | ProcessedProductRecordCreateWithoutUpdatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput | ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyUpdatedByInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-  }
-
-  export type ProcessedProductRecordCreateNestedManyWithoutUserInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUserInput, ProcessedProductRecordUncheckedCreateWithoutUserInput> | ProcessedProductRecordCreateWithoutUserInput[] | ProcessedProductRecordUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUserInput | ProcessedProductRecordCreateOrConnectWithoutUserInput[]
-    createMany?: ProcessedProductRecordCreateManyUserInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-  }
-
   export type ProductUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput> | ProductCreateWithoutCreatedByInput[] | ProductUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutCreatedByInput | ProductCreateOrConnectWithoutCreatedByInput[]
@@ -28218,27 +26789,6 @@ export namespace Prisma {
     connectOrCreate?: ProductNotificationCreateOrConnectWithoutUserInput | ProductNotificationCreateOrConnectWithoutUserInput[]
     createMany?: ProductNotificationCreateManyUserInputEnvelope
     connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutCreatedByInput, ProcessedProductRecordUncheckedCreateWithoutCreatedByInput> | ProcessedProductRecordCreateWithoutCreatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutCreatedByInput | ProcessedProductRecordCreateOrConnectWithoutCreatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyCreatedByInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUpdatedByInput, ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput> | ProcessedProductRecordCreateWithoutUpdatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput | ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyUpdatedByInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUserInput, ProcessedProductRecordUncheckedCreateWithoutUserInput> | ProcessedProductRecordCreateWithoutUserInput[] | ProcessedProductRecordUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUserInput | ProcessedProductRecordCreateOrConnectWithoutUserInput[]
-    createMany?: ProcessedProductRecordCreateManyUserInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -28393,48 +26943,6 @@ export namespace Prisma {
     deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
   }
 
-  export type ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutCreatedByInput, ProcessedProductRecordUncheckedCreateWithoutCreatedByInput> | ProcessedProductRecordCreateWithoutCreatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutCreatedByInput | ProcessedProductRecordCreateOrConnectWithoutCreatedByInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutCreatedByInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutCreatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyCreatedByInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutCreatedByInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutCreatedByInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutCreatedByInput | ProcessedProductRecordUpdateManyWithWhereWithoutCreatedByInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
-  export type ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUpdatedByInput, ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput> | ProcessedProductRecordCreateWithoutUpdatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput | ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutUpdatedByInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutUpdatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyUpdatedByInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutUpdatedByInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutUpdatedByInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutUpdatedByInput | ProcessedProductRecordUpdateManyWithWhereWithoutUpdatedByInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
-  export type ProcessedProductRecordUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUserInput, ProcessedProductRecordUncheckedCreateWithoutUserInput> | ProcessedProductRecordCreateWithoutUserInput[] | ProcessedProductRecordUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUserInput | ProcessedProductRecordCreateOrConnectWithoutUserInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutUserInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ProcessedProductRecordCreateManyUserInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutUserInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutUserInput | ProcessedProductRecordUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
   export type ProductUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<ProductCreateWithoutCreatedByInput, ProductUncheckedCreateWithoutCreatedByInput> | ProductCreateWithoutCreatedByInput[] | ProductUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutCreatedByInput | ProductCreateOrConnectWithoutCreatedByInput[]
@@ -28575,48 +27083,6 @@ export namespace Prisma {
     deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
   }
 
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutCreatedByInput, ProcessedProductRecordUncheckedCreateWithoutCreatedByInput> | ProcessedProductRecordCreateWithoutCreatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutCreatedByInput | ProcessedProductRecordCreateOrConnectWithoutCreatedByInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutCreatedByInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutCreatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyCreatedByInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutCreatedByInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutCreatedByInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutCreatedByInput | ProcessedProductRecordUpdateManyWithWhereWithoutCreatedByInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUpdatedByInput, ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput> | ProcessedProductRecordCreateWithoutUpdatedByInput[] | ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput | ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutUpdatedByInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutUpdatedByInput[]
-    createMany?: ProcessedProductRecordCreateManyUpdatedByInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutUpdatedByInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutUpdatedByInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutUpdatedByInput | ProcessedProductRecordUpdateManyWithWhereWithoutUpdatedByInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutUserInput, ProcessedProductRecordUncheckedCreateWithoutUserInput> | ProcessedProductRecordCreateWithoutUserInput[] | ProcessedProductRecordUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutUserInput | ProcessedProductRecordCreateOrConnectWithoutUserInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutUserInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ProcessedProductRecordCreateManyUserInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutUserInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutUserInput | ProcessedProductRecordUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -28687,13 +27153,6 @@ export namespace Prisma {
     connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
   }
 
-  export type ProcessedProductRecordCreateNestedManyWithoutRecordInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutRecordInput, ProcessedProductRecordUncheckedCreateWithoutRecordInput> | ProcessedProductRecordCreateWithoutRecordInput[] | ProcessedProductRecordUncheckedCreateWithoutRecordInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutRecordInput | ProcessedProductRecordCreateOrConnectWithoutRecordInput[]
-    createMany?: ProcessedProductRecordCreateManyRecordInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-  }
-
   export type ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput = {
     create?: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput> | ProductRecordErrorCreateWithoutRecordInput[] | ProductRecordErrorUncheckedCreateWithoutRecordInput[]
     connectOrCreate?: ProductRecordErrorCreateOrConnectWithoutRecordInput | ProductRecordErrorCreateOrConnectWithoutRecordInput[]
@@ -28706,13 +27165,6 @@ export namespace Prisma {
     connectOrCreate?: ProductNotificationCreateOrConnectWithoutProductRecordInput | ProductNotificationCreateOrConnectWithoutProductRecordInput[]
     createMany?: ProductNotificationCreateManyProductRecordInputEnvelope
     connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutRecordInput, ProcessedProductRecordUncheckedCreateWithoutRecordInput> | ProcessedProductRecordCreateWithoutRecordInput[] | ProcessedProductRecordUncheckedCreateWithoutRecordInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutRecordInput | ProcessedProductRecordCreateOrConnectWithoutRecordInput[]
-    createMany?: ProcessedProductRecordCreateManyRecordInputEnvelope
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -28788,20 +27240,6 @@ export namespace Prisma {
     deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
   }
 
-  export type ProcessedProductRecordUpdateManyWithoutRecordNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutRecordInput, ProcessedProductRecordUncheckedCreateWithoutRecordInput> | ProcessedProductRecordCreateWithoutRecordInput[] | ProcessedProductRecordUncheckedCreateWithoutRecordInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutRecordInput | ProcessedProductRecordCreateOrConnectWithoutRecordInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutRecordInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutRecordInput[]
-    createMany?: ProcessedProductRecordCreateManyRecordInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutRecordInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutRecordInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutRecordInput | ProcessedProductRecordUpdateManyWithWhereWithoutRecordInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
   export type ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput = {
     create?: XOR<ProductRecordErrorCreateWithoutRecordInput, ProductRecordErrorUncheckedCreateWithoutRecordInput> | ProductRecordErrorCreateWithoutRecordInput[] | ProductRecordErrorUncheckedCreateWithoutRecordInput[]
     connectOrCreate?: ProductRecordErrorCreateOrConnectWithoutRecordInput | ProductRecordErrorCreateOrConnectWithoutRecordInput[]
@@ -28828,76 +27266,6 @@ export namespace Prisma {
     update?: ProductNotificationUpdateWithWhereUniqueWithoutProductRecordInput | ProductNotificationUpdateWithWhereUniqueWithoutProductRecordInput[]
     updateMany?: ProductNotificationUpdateManyWithWhereWithoutProductRecordInput | ProductNotificationUpdateManyWithWhereWithoutProductRecordInput[]
     deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput = {
-    create?: XOR<ProcessedProductRecordCreateWithoutRecordInput, ProcessedProductRecordUncheckedCreateWithoutRecordInput> | ProcessedProductRecordCreateWithoutRecordInput[] | ProcessedProductRecordUncheckedCreateWithoutRecordInput[]
-    connectOrCreate?: ProcessedProductRecordCreateOrConnectWithoutRecordInput | ProcessedProductRecordCreateOrConnectWithoutRecordInput[]
-    upsert?: ProcessedProductRecordUpsertWithWhereUniqueWithoutRecordInput | ProcessedProductRecordUpsertWithWhereUniqueWithoutRecordInput[]
-    createMany?: ProcessedProductRecordCreateManyRecordInputEnvelope
-    set?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    disconnect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    delete?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    connect?: ProcessedProductRecordWhereUniqueInput | ProcessedProductRecordWhereUniqueInput[]
-    update?: ProcessedProductRecordUpdateWithWhereUniqueWithoutRecordInput | ProcessedProductRecordUpdateWithWhereUniqueWithoutRecordInput[]
-    updateMany?: ProcessedProductRecordUpdateManyWithWhereWithoutRecordInput | ProcessedProductRecordUpdateManyWithWhereWithoutRecordInput[]
-    deleteMany?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-  }
-
-  export type UserCreateNestedOneWithoutCreatedProcessedProductRecordsInput = {
-    create?: XOR<UserCreateWithoutCreatedProcessedProductRecordsInput, UserUncheckedCreateWithoutCreatedProcessedProductRecordsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedProcessedProductRecordsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutUpdatedProcessedProductRecordsInput = {
-    create?: XOR<UserCreateWithoutUpdatedProcessedProductRecordsInput, UserUncheckedCreateWithoutUpdatedProcessedProductRecordsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUpdatedProcessedProductRecordsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type ProductRecordCreateNestedOneWithoutProcessedRecordsInput = {
-    create?: XOR<ProductRecordCreateWithoutProcessedRecordsInput, ProductRecordUncheckedCreateWithoutProcessedRecordsInput>
-    connectOrCreate?: ProductRecordCreateOrConnectWithoutProcessedRecordsInput
-    connect?: ProductRecordWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutProcessedProductRecordsInput = {
-    create?: XOR<UserCreateWithoutProcessedProductRecordsInput, UserUncheckedCreateWithoutProcessedProductRecordsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutProcessedProductRecordsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type UserUpdateOneRequiredWithoutCreatedProcessedProductRecordsNestedInput = {
-    create?: XOR<UserCreateWithoutCreatedProcessedProductRecordsInput, UserUncheckedCreateWithoutCreatedProcessedProductRecordsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedProcessedProductRecordsInput
-    upsert?: UserUpsertWithoutCreatedProcessedProductRecordsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedProcessedProductRecordsInput, UserUpdateWithoutCreatedProcessedProductRecordsInput>, UserUncheckedUpdateWithoutCreatedProcessedProductRecordsInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutUpdatedProcessedProductRecordsNestedInput = {
-    create?: XOR<UserCreateWithoutUpdatedProcessedProductRecordsInput, UserUncheckedCreateWithoutUpdatedProcessedProductRecordsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUpdatedProcessedProductRecordsInput
-    upsert?: UserUpsertWithoutUpdatedProcessedProductRecordsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUpdatedProcessedProductRecordsInput, UserUpdateWithoutUpdatedProcessedProductRecordsInput>, UserUncheckedUpdateWithoutUpdatedProcessedProductRecordsInput>
-  }
-
-  export type ProductRecordUpdateOneRequiredWithoutProcessedRecordsNestedInput = {
-    create?: XOR<ProductRecordCreateWithoutProcessedRecordsInput, ProductRecordUncheckedCreateWithoutProcessedRecordsInput>
-    connectOrCreate?: ProductRecordCreateOrConnectWithoutProcessedRecordsInput
-    upsert?: ProductRecordUpsertWithoutProcessedRecordsInput
-    connect?: ProductRecordWhereUniqueInput
-    update?: XOR<XOR<ProductRecordUpdateToOneWithWhereWithoutProcessedRecordsInput, ProductRecordUpdateWithoutProcessedRecordsInput>, ProductRecordUncheckedUpdateWithoutProcessedRecordsInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutProcessedProductRecordsNestedInput = {
-    create?: XOR<UserCreateWithoutProcessedProductRecordsInput, UserUncheckedCreateWithoutProcessedProductRecordsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutProcessedProductRecordsInput
-    upsert?: UserUpsertWithoutProcessedProductRecordsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProcessedProductRecordsInput, UserUpdateWithoutProcessedProductRecordsInput>, UserUncheckedUpdateWithoutProcessedProductRecordsInput>
   }
 
   export type ProductCreatedescriptionsInput = {
@@ -30122,7 +28490,6 @@ export namespace Prisma {
     product: ProductCreateNestedOneWithoutRecordsInput
     errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutCreatedByInput = {
@@ -30139,7 +28506,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutCreatedByInput = {
@@ -30166,7 +28532,6 @@ export namespace Prisma {
     product: ProductCreateNestedOneWithoutRecordsInput
     errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutUpdatedByInput = {
@@ -30183,7 +28548,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutUpdatedByInput = {
@@ -30448,90 +28812,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ProcessedProductRecordCreateWithoutCreatedByInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    updatedBy: UserCreateNestedOneWithoutUpdatedProcessedProductRecordsInput
-    record: ProductRecordCreateNestedOneWithoutProcessedRecordsInput
-    user: UserCreateNestedOneWithoutProcessedProductRecordsInput
-  }
-
-  export type ProcessedProductRecordUncheckedCreateWithoutCreatedByInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    updatedById: string
-    recordId: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordCreateOrConnectWithoutCreatedByInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    create: XOR<ProcessedProductRecordCreateWithoutCreatedByInput, ProcessedProductRecordUncheckedCreateWithoutCreatedByInput>
-  }
-
-  export type ProcessedProductRecordCreateManyCreatedByInputEnvelope = {
-    data: ProcessedProductRecordCreateManyCreatedByInput | ProcessedProductRecordCreateManyCreatedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProcessedProductRecordCreateWithoutUpdatedByInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedProcessedProductRecordsInput
-    record: ProductRecordCreateNestedOneWithoutProcessedRecordsInput
-    user: UserCreateNestedOneWithoutProcessedProductRecordsInput
-  }
-
-  export type ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    recordId: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordCreateOrConnectWithoutUpdatedByInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    create: XOR<ProcessedProductRecordCreateWithoutUpdatedByInput, ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput>
-  }
-
-  export type ProcessedProductRecordCreateManyUpdatedByInputEnvelope = {
-    data: ProcessedProductRecordCreateManyUpdatedByInput | ProcessedProductRecordCreateManyUpdatedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProcessedProductRecordCreateWithoutUserInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedProcessedProductRecordsInput
-    updatedBy: UserCreateNestedOneWithoutUpdatedProcessedProductRecordsInput
-    record: ProductRecordCreateNestedOneWithoutProcessedRecordsInput
-  }
-
-  export type ProcessedProductRecordUncheckedCreateWithoutUserInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    recordId: string
-  }
-
-  export type ProcessedProductRecordCreateOrConnectWithoutUserInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    create: XOR<ProcessedProductRecordCreateWithoutUserInput, ProcessedProductRecordUncheckedCreateWithoutUserInput>
-  }
-
-  export type ProcessedProductRecordCreateManyUserInputEnvelope = {
-    data: ProcessedProductRecordCreateManyUserInput | ProcessedProductRecordCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ProductUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: ProductWhereUniqueInput
     update: XOR<ProductUpdateWithoutCreatedByInput, ProductUncheckedUpdateWithoutCreatedByInput>
@@ -30769,67 +29049,6 @@ export namespace Prisma {
     data: XOR<ProductNotificationUpdateManyMutationInput, ProductNotificationUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type ProcessedProductRecordUpsertWithWhereUniqueWithoutCreatedByInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    update: XOR<ProcessedProductRecordUpdateWithoutCreatedByInput, ProcessedProductRecordUncheckedUpdateWithoutCreatedByInput>
-    create: XOR<ProcessedProductRecordCreateWithoutCreatedByInput, ProcessedProductRecordUncheckedCreateWithoutCreatedByInput>
-  }
-
-  export type ProcessedProductRecordUpdateWithWhereUniqueWithoutCreatedByInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    data: XOR<ProcessedProductRecordUpdateWithoutCreatedByInput, ProcessedProductRecordUncheckedUpdateWithoutCreatedByInput>
-  }
-
-  export type ProcessedProductRecordUpdateManyWithWhereWithoutCreatedByInput = {
-    where: ProcessedProductRecordScalarWhereInput
-    data: XOR<ProcessedProductRecordUpdateManyMutationInput, ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByInput>
-  }
-
-  export type ProcessedProductRecordScalarWhereInput = {
-    AND?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-    OR?: ProcessedProductRecordScalarWhereInput[]
-    NOT?: ProcessedProductRecordScalarWhereInput | ProcessedProductRecordScalarWhereInput[]
-    id?: UuidFilter<"ProcessedProductRecord"> | string
-    createdAt?: DateTimeFilter<"ProcessedProductRecord"> | Date | string
-    updatedAt?: DateTimeFilter<"ProcessedProductRecord"> | Date | string
-    createdById?: UuidFilter<"ProcessedProductRecord"> | string
-    updatedById?: UuidFilter<"ProcessedProductRecord"> | string
-    recordId?: UuidFilter<"ProcessedProductRecord"> | string
-    userId?: UuidFilter<"ProcessedProductRecord"> | string
-  }
-
-  export type ProcessedProductRecordUpsertWithWhereUniqueWithoutUpdatedByInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    update: XOR<ProcessedProductRecordUpdateWithoutUpdatedByInput, ProcessedProductRecordUncheckedUpdateWithoutUpdatedByInput>
-    create: XOR<ProcessedProductRecordCreateWithoutUpdatedByInput, ProcessedProductRecordUncheckedCreateWithoutUpdatedByInput>
-  }
-
-  export type ProcessedProductRecordUpdateWithWhereUniqueWithoutUpdatedByInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    data: XOR<ProcessedProductRecordUpdateWithoutUpdatedByInput, ProcessedProductRecordUncheckedUpdateWithoutUpdatedByInput>
-  }
-
-  export type ProcessedProductRecordUpdateManyWithWhereWithoutUpdatedByInput = {
-    where: ProcessedProductRecordScalarWhereInput
-    data: XOR<ProcessedProductRecordUpdateManyMutationInput, ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByInput>
-  }
-
-  export type ProcessedProductRecordUpsertWithWhereUniqueWithoutUserInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    update: XOR<ProcessedProductRecordUpdateWithoutUserInput, ProcessedProductRecordUncheckedUpdateWithoutUserInput>
-    create: XOR<ProcessedProductRecordCreateWithoutUserInput, ProcessedProductRecordUncheckedCreateWithoutUserInput>
-  }
-
-  export type ProcessedProductRecordUpdateWithWhereUniqueWithoutUserInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    data: XOR<ProcessedProductRecordUpdateWithoutUserInput, ProcessedProductRecordUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ProcessedProductRecordUpdateManyWithWhereWithoutUserInput = {
-    where: ProcessedProductRecordScalarWhereInput
-    data: XOR<ProcessedProductRecordUpdateManyMutationInput, ProcessedProductRecordUncheckedUpdateManyWithoutUserInput>
-  }
-
   export type ProductRecordCreateWithoutErrorsInput = {
     id?: string
     createdAt?: Date | string
@@ -30844,7 +29063,6 @@ export namespace Prisma {
     updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
     product: ProductCreateNestedOneWithoutRecordsInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutErrorsInput = {
@@ -30861,7 +29079,6 @@ export namespace Prisma {
     wasManuallyCreated?: boolean
     manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutErrorsInput = {
@@ -30894,7 +29111,6 @@ export namespace Prisma {
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutErrorsInput = {
@@ -30911,7 +29127,6 @@ export namespace Prisma {
     wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type UserCreateWithoutCreatedProductRecordsInput = {
@@ -30932,9 +29147,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductRecordsInput = {
@@ -30955,9 +29167,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductRecordsInput = {
@@ -30983,9 +29192,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUpdatedProductRecordsInput = {
@@ -31006,9 +29212,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUpdatedProductRecordsInput = {
@@ -31139,34 +29342,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ProcessedProductRecordCreateWithoutRecordInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedProcessedProductRecordsInput
-    updatedBy: UserCreateNestedOneWithoutUpdatedProcessedProductRecordsInput
-    user: UserCreateNestedOneWithoutProcessedProductRecordsInput
-  }
-
-  export type ProcessedProductRecordUncheckedCreateWithoutRecordInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordCreateOrConnectWithoutRecordInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    create: XOR<ProcessedProductRecordCreateWithoutRecordInput, ProcessedProductRecordUncheckedCreateWithoutRecordInput>
-  }
-
-  export type ProcessedProductRecordCreateManyRecordInputEnvelope = {
-    data: ProcessedProductRecordCreateManyRecordInput | ProcessedProductRecordCreateManyRecordInput[]
-    skipDuplicates?: boolean
-  }
-
   export type UserUpsertWithoutCreatedProductRecordsInput = {
     update: XOR<UserUpdateWithoutCreatedProductRecordsInput, UserUncheckedUpdateWithoutCreatedProductRecordsInput>
     create: XOR<UserCreateWithoutCreatedProductRecordsInput, UserUncheckedCreateWithoutCreatedProductRecordsInput>
@@ -31196,9 +29371,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductRecordsInput = {
@@ -31219,9 +29391,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutUpdatedProductRecordsInput = {
@@ -31253,9 +29422,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUpdatedProductRecordsInput = {
@@ -31276,9 +29442,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutRecordsInput = {
@@ -31382,430 +29545,6 @@ export namespace Prisma {
     data: XOR<ProductNotificationUpdateManyMutationInput, ProductNotificationUncheckedUpdateManyWithoutProductRecordInput>
   }
 
-  export type ProcessedProductRecordUpsertWithWhereUniqueWithoutRecordInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    update: XOR<ProcessedProductRecordUpdateWithoutRecordInput, ProcessedProductRecordUncheckedUpdateWithoutRecordInput>
-    create: XOR<ProcessedProductRecordCreateWithoutRecordInput, ProcessedProductRecordUncheckedCreateWithoutRecordInput>
-  }
-
-  export type ProcessedProductRecordUpdateWithWhereUniqueWithoutRecordInput = {
-    where: ProcessedProductRecordWhereUniqueInput
-    data: XOR<ProcessedProductRecordUpdateWithoutRecordInput, ProcessedProductRecordUncheckedUpdateWithoutRecordInput>
-  }
-
-  export type ProcessedProductRecordUpdateManyWithWhereWithoutRecordInput = {
-    where: ProcessedProductRecordScalarWhereInput
-    data: XOR<ProcessedProductRecordUpdateManyMutationInput, ProcessedProductRecordUncheckedUpdateManyWithoutRecordInput>
-  }
-
-  export type UserCreateWithoutCreatedProcessedProductRecordsInput = {
-    id?: string
-    clerkId: string
-    firstName: string
-    lastName: string
-    profileImageUrl?: string | null
-    emailAddress: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    updatedProducts?: ProductCreateNestedManyWithoutUpdatedByInput
-    createdProductRecords?: ProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProductRecords?: ProductRecordCreateNestedManyWithoutUpdatedByInput
-    createdProductSubscriptions?: ProductSubscriptionCreateNestedManyWithoutCreatedByInput
-    updatedProductSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUpdatedByInput
-    productSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUserInput
-    createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
-    updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
-    notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCreatedProcessedProductRecordsInput = {
-    id?: string
-    clerkId: string
-    firstName: string
-    lastName: string
-    profileImageUrl?: string | null
-    emailAddress: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProducts?: ProductUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProductRecords?: ProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductRecords?: ProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProductSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUpdatedByInput
-    productSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
-    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCreatedProcessedProductRecordsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCreatedProcessedProductRecordsInput, UserUncheckedCreateWithoutCreatedProcessedProductRecordsInput>
-  }
-
-  export type UserCreateWithoutUpdatedProcessedProductRecordsInput = {
-    id?: string
-    clerkId: string
-    firstName: string
-    lastName: string
-    profileImageUrl?: string | null
-    emailAddress: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    updatedProducts?: ProductCreateNestedManyWithoutUpdatedByInput
-    createdProductRecords?: ProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProductRecords?: ProductRecordCreateNestedManyWithoutUpdatedByInput
-    createdProductSubscriptions?: ProductSubscriptionCreateNestedManyWithoutCreatedByInput
-    updatedProductSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUpdatedByInput
-    productSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUserInput
-    createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
-    updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
-    notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutUpdatedProcessedProductRecordsInput = {
-    id?: string
-    clerkId: string
-    firstName: string
-    lastName: string
-    profileImageUrl?: string | null
-    emailAddress: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProducts?: ProductUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProductRecords?: ProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductRecords?: ProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProductSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUpdatedByInput
-    productSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
-    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutUpdatedProcessedProductRecordsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutUpdatedProcessedProductRecordsInput, UserUncheckedCreateWithoutUpdatedProcessedProductRecordsInput>
-  }
-
-  export type ProductRecordCreateWithoutProcessedRecordsInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    timestamp?: Date | string
-    price?: number | null
-    rawPrice?: string | null
-    status?: $Enums.ProductStatus | null
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
-    createdBy: UserCreateNestedOneWithoutCreatedProductRecordsInput
-    updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
-    product: ProductCreateNestedOneWithoutRecordsInput
-    errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
-    notifications?: ProductNotificationCreateNestedManyWithoutProductRecordInput
-  }
-
-  export type ProductRecordUncheckedCreateWithoutProcessedRecordsInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    timestamp?: Date | string
-    productId: string
-    price?: number | null
-    rawPrice?: string | null
-    status?: $Enums.ProductStatus | null
-    wasManuallyCreated?: boolean
-    manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
-    errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
-    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductRecordInput
-  }
-
-  export type ProductRecordCreateOrConnectWithoutProcessedRecordsInput = {
-    where: ProductRecordWhereUniqueInput
-    create: XOR<ProductRecordCreateWithoutProcessedRecordsInput, ProductRecordUncheckedCreateWithoutProcessedRecordsInput>
-  }
-
-  export type UserCreateWithoutProcessedProductRecordsInput = {
-    id?: string
-    clerkId: string
-    firstName: string
-    lastName: string
-    profileImageUrl?: string | null
-    emailAddress: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    updatedProducts?: ProductCreateNestedManyWithoutUpdatedByInput
-    createdProductRecords?: ProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProductRecords?: ProductRecordCreateNestedManyWithoutUpdatedByInput
-    createdProductSubscriptions?: ProductSubscriptionCreateNestedManyWithoutCreatedByInput
-    updatedProductSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUpdatedByInput
-    productSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUserInput
-    createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
-    updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
-    notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-  }
-
-  export type UserUncheckedCreateWithoutProcessedProductRecordsInput = {
-    id?: string
-    clerkId: string
-    firstName: string
-    lastName: string
-    profileImageUrl?: string | null
-    emailAddress: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProducts?: ProductUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProductRecords?: ProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductRecords?: ProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProductSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUpdatedByInput
-    productSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
-    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-  }
-
-  export type UserCreateOrConnectWithoutProcessedProductRecordsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutProcessedProductRecordsInput, UserUncheckedCreateWithoutProcessedProductRecordsInput>
-  }
-
-  export type UserUpsertWithoutCreatedProcessedProductRecordsInput = {
-    update: XOR<UserUpdateWithoutCreatedProcessedProductRecordsInput, UserUncheckedUpdateWithoutCreatedProcessedProductRecordsInput>
-    create: XOR<UserCreateWithoutCreatedProcessedProductRecordsInput, UserUncheckedCreateWithoutCreatedProcessedProductRecordsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutCreatedProcessedProductRecordsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCreatedProcessedProductRecordsInput, UserUncheckedUpdateWithoutCreatedProcessedProductRecordsInput>
-  }
-
-  export type UserUpdateWithoutCreatedProcessedProductRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    updatedProducts?: ProductUpdateManyWithoutUpdatedByNestedInput
-    createdProductRecords?: ProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProductRecords?: ProductRecordUpdateManyWithoutUpdatedByNestedInput
-    createdProductSubscriptions?: ProductSubscriptionUpdateManyWithoutCreatedByNestedInput
-    updatedProductSubscriptions?: ProductSubscriptionUpdateManyWithoutUpdatedByNestedInput
-    productSubscriptions?: ProductSubscriptionUpdateManyWithoutUserNestedInput
-    createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
-    updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
-    notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutCreatedProcessedProductRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProducts?: ProductUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProductRecords?: ProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductRecords?: ProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProductSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUpdatedByNestedInput
-    productSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
-    notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUpsertWithoutUpdatedProcessedProductRecordsInput = {
-    update: XOR<UserUpdateWithoutUpdatedProcessedProductRecordsInput, UserUncheckedUpdateWithoutUpdatedProcessedProductRecordsInput>
-    create: XOR<UserCreateWithoutUpdatedProcessedProductRecordsInput, UserUncheckedCreateWithoutUpdatedProcessedProductRecordsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutUpdatedProcessedProductRecordsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutUpdatedProcessedProductRecordsInput, UserUncheckedUpdateWithoutUpdatedProcessedProductRecordsInput>
-  }
-
-  export type UserUpdateWithoutUpdatedProcessedProductRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    updatedProducts?: ProductUpdateManyWithoutUpdatedByNestedInput
-    createdProductRecords?: ProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProductRecords?: ProductRecordUpdateManyWithoutUpdatedByNestedInput
-    createdProductSubscriptions?: ProductSubscriptionUpdateManyWithoutCreatedByNestedInput
-    updatedProductSubscriptions?: ProductSubscriptionUpdateManyWithoutUpdatedByNestedInput
-    productSubscriptions?: ProductSubscriptionUpdateManyWithoutUserNestedInput
-    createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
-    updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
-    notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutUpdatedProcessedProductRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProducts?: ProductUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProductRecords?: ProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductRecords?: ProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProductSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUpdatedByNestedInput
-    productSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
-    notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type ProductRecordUpsertWithoutProcessedRecordsInput = {
-    update: XOR<ProductRecordUpdateWithoutProcessedRecordsInput, ProductRecordUncheckedUpdateWithoutProcessedRecordsInput>
-    create: XOR<ProductRecordCreateWithoutProcessedRecordsInput, ProductRecordUncheckedCreateWithoutProcessedRecordsInput>
-    where?: ProductRecordWhereInput
-  }
-
-  export type ProductRecordUpdateToOneWithWhereWithoutProcessedRecordsInput = {
-    where?: ProductRecordWhereInput
-    data: XOR<ProductRecordUpdateWithoutProcessedRecordsInput, ProductRecordUncheckedUpdateWithoutProcessedRecordsInput>
-  }
-
-  export type ProductRecordUpdateWithoutProcessedRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
-    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
-    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
-    createdBy?: UserUpdateOneRequiredWithoutCreatedProductRecordsNestedInput
-    updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
-    product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
-    errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
-    notifications?: ProductNotificationUpdateManyWithoutProductRecordNestedInput
-  }
-
-  export type ProductRecordUncheckedUpdateWithoutProcessedRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    rawPrice?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus | null
-    wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
-    manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
-    errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
-    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductRecordNestedInput
-  }
-
-  export type UserUpsertWithoutProcessedProductRecordsInput = {
-    update: XOR<UserUpdateWithoutProcessedProductRecordsInput, UserUncheckedUpdateWithoutProcessedProductRecordsInput>
-    create: XOR<UserCreateWithoutProcessedProductRecordsInput, UserUncheckedCreateWithoutProcessedProductRecordsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutProcessedProductRecordsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutProcessedProductRecordsInput, UserUncheckedUpdateWithoutProcessedProductRecordsInput>
-  }
-
-  export type UserUpdateWithoutProcessedProductRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    updatedProducts?: ProductUpdateManyWithoutUpdatedByNestedInput
-    createdProductRecords?: ProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProductRecords?: ProductRecordUpdateManyWithoutUpdatedByNestedInput
-    createdProductSubscriptions?: ProductSubscriptionUpdateManyWithoutCreatedByNestedInput
-    updatedProductSubscriptions?: ProductSubscriptionUpdateManyWithoutUpdatedByNestedInput
-    productSubscriptions?: ProductSubscriptionUpdateManyWithoutUserNestedInput
-    createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
-    updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
-    notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutProcessedProductRecordsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProducts?: ProductUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProductRecords?: ProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductRecords?: ProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProductSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUpdatedByNestedInput
-    productSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
-    notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-  }
-
   export type UserCreateWithoutCreatedProductsInput = {
     id?: string
     clerkId: string
@@ -31824,9 +29563,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -31847,9 +29583,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -31875,9 +29608,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUpdatedProductsInput = {
@@ -31898,9 +29628,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUpdatedProductsInput = {
@@ -31922,7 +29649,6 @@ export namespace Prisma {
     updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
     errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutProductInput = {
@@ -31939,7 +29665,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductRecordInput
-    processedRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutProductInput = {
@@ -32065,9 +29790,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -32088,9 +29810,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutUpdatedProductsInput = {
@@ -32122,9 +29841,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUpdatedProductsInput = {
@@ -32145,9 +29861,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductRecordUpsertWithWhereUniqueWithoutProductInput = {
@@ -32216,9 +29929,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductSubscriptionsInput = {
@@ -32239,9 +29949,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductSubscriptionsInput = {
@@ -32267,9 +29974,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUpdatedProductSubscriptionsInput = {
@@ -32290,9 +29994,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUpdatedProductSubscriptionsInput = {
@@ -32318,9 +30019,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductSubscriptionsInput = {
@@ -32341,9 +30039,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductSubscriptionsInput = {
@@ -32503,9 +30198,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductSubscriptionsInput = {
@@ -32526,9 +30218,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutUpdatedProductSubscriptionsInput = {
@@ -32560,9 +30249,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUpdatedProductSubscriptionsInput = {
@@ -32583,9 +30269,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutProductSubscriptionsInput = {
@@ -32617,9 +30300,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductSubscriptionsInput = {
@@ -32640,9 +30320,6 @@ export namespace Prisma {
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutSubscriptionsInput = {
@@ -33004,9 +30681,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUserInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductNotificationsInput = {
@@ -33027,9 +30701,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUserInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductNotificationsInput = {
@@ -33055,9 +30726,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUserInput
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     notifications?: ProductNotificationCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUpdatedProductNotificationsInput = {
@@ -33078,9 +30746,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUserInput
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUpdatedProductNotificationsInput = {
@@ -33106,9 +30771,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionCreateNestedManyWithoutUserInput
     createdProductNotifications?: ProductNotificationCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationCreateNestedManyWithoutUpdatedByInput
-    createdProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -33129,9 +30791,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUncheckedCreateNestedManyWithoutUserInput
     createdProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutCreatedByInput
     updatedProductNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUpdatedByInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutCreatedByInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUpdatedByInput
-    processedProductRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -33153,7 +30812,6 @@ export namespace Prisma {
     updatedBy: UserCreateNestedOneWithoutUpdatedProductRecordsInput
     product: ProductCreateNestedOneWithoutRecordsInput
     errors?: ProductRecordErrorCreateNestedManyWithoutRecordInput
-    processedRecords?: ProcessedProductRecordCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordUncheckedCreateWithoutNotificationsInput = {
@@ -33170,7 +30828,6 @@ export namespace Prisma {
     wasManuallyCreated?: boolean
     manuallyChangedFields?: ProductRecordCreatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedCreateNestedManyWithoutRecordInput
-    processedRecords?: ProcessedProductRecordUncheckedCreateNestedManyWithoutRecordInput
   }
 
   export type ProductRecordCreateOrConnectWithoutNotificationsInput = {
@@ -33323,9 +30980,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUpdateManyWithoutUserNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductNotificationsInput = {
@@ -33346,9 +31000,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutUpdatedProductNotificationsInput = {
@@ -33380,9 +31031,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUpdateManyWithoutUserNestedInput
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     notifications?: ProductNotificationUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUpdatedProductNotificationsInput = {
@@ -33403,9 +31051,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -33437,9 +31082,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUpdateManyWithoutUserNestedInput
     createdProductNotifications?: ProductNotificationUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUpdateManyWithoutUpdatedByNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -33460,9 +31102,6 @@ export namespace Prisma {
     productSubscriptions?: ProductSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     createdProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     updatedProductNotifications?: ProductNotificationUncheckedUpdateManyWithoutUpdatedByNestedInput
-    createdProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    updatedProcessedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
-    processedProductRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductRecordUpsertWithoutNotificationsInput = {
@@ -33490,7 +31129,6 @@ export namespace Prisma {
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
     errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
-    processedRecords?: ProcessedProductRecordUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutNotificationsInput = {
@@ -33507,7 +31145,6 @@ export namespace Prisma {
     wasManuallyCreated?: BoolFieldUpdateOperationsInput | boolean
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
-    processedRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductUpsertWithoutNotificationsInput = {
@@ -33975,33 +31612,6 @@ export namespace Prisma {
     sentAt?: Date | string | null
   }
 
-  export type ProcessedProductRecordCreateManyCreatedByInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    updatedById: string
-    recordId: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordCreateManyUpdatedByInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    recordId: string
-    userId: string
-  }
-
-  export type ProcessedProductRecordCreateManyUserInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    recordId: string
-  }
-
   export type ProductUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34148,7 +31758,6 @@ export namespace Prisma {
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
     errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutCreatedByInput = {
@@ -34165,7 +31774,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateManyWithoutCreatedByInput = {
@@ -34196,7 +31804,6 @@ export namespace Prisma {
     product?: ProductUpdateOneRequiredWithoutRecordsNestedInput
     errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutUpdatedByInput = {
@@ -34213,7 +31820,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateManyWithoutUpdatedByInput = {
@@ -34503,87 +32109,6 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type ProcessedProductRecordUpdateWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedBy?: UserUpdateOneRequiredWithoutUpdatedProcessedProductRecordsNestedInput
-    record?: ProductRecordUpdateOneRequiredWithoutProcessedRecordsNestedInput
-    user?: UserUpdateOneRequiredWithoutProcessedProductRecordsNestedInput
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordUpdateWithoutUpdatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedProcessedProductRecordsNestedInput
-    record?: ProductRecordUpdateOneRequiredWithoutProcessedRecordsNestedInput
-    user?: UserUpdateOneRequiredWithoutProcessedProductRecordsNestedInput
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateWithoutUpdatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutUpdatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedProcessedProductRecordsNestedInput
-    updatedBy?: UserUpdateOneRequiredWithoutUpdatedProcessedProductRecordsNestedInput
-    record?: ProductRecordUpdateOneRequiredWithoutProcessedRecordsNestedInput
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    recordId?: StringFieldUpdateOperationsInput | string
-  }
-
   export type ProductRecordErrorCreateManyRecordInput = {
     id?: string
     errorId: string
@@ -34606,15 +32131,6 @@ export namespace Prisma {
     stateAsOf: Date | string
     failedAt?: Date | string | null
     sentAt?: Date | string | null
-  }
-
-  export type ProcessedProductRecordCreateManyRecordInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    updatedById: string
-    userId: string
   }
 
   export type ProductRecordErrorUpdateWithoutRecordInput = {
@@ -34693,33 +32209,6 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type ProcessedProductRecordUpdateWithoutRecordInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedProcessedProductRecordsNestedInput
-    updatedBy?: UserUpdateOneRequiredWithoutUpdatedProcessedProductRecordsNestedInput
-    user?: UserUpdateOneRequiredWithoutProcessedProductRecordsNestedInput
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateWithoutRecordInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProcessedProductRecordUncheckedUpdateManyWithoutRecordInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    updatedById?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-  }
-
   export type ProductRecordCreateManyProductInput = {
     id?: string
     createdAt?: Date | string
@@ -34775,7 +32264,6 @@ export namespace Prisma {
     updatedBy?: UserUpdateOneRequiredWithoutUpdatedProductRecordsNestedInput
     errors?: ProductRecordErrorUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateWithoutProductInput = {
@@ -34792,7 +32280,6 @@ export namespace Prisma {
     manuallyChangedFields?: ProductRecordUpdatemanuallyChangedFieldsInput | $Enums.ProductRecordDataField[]
     errors?: ProductRecordErrorUncheckedUpdateManyWithoutRecordNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductRecordNestedInput
-    processedRecords?: ProcessedProductRecordUncheckedUpdateManyWithoutRecordNestedInput
   }
 
   export type ProductRecordUncheckedUpdateManyWithoutProductInput = {
@@ -35077,10 +32564,6 @@ export namespace Prisma {
      * @deprecated Use ProductRecordDefaultArgs instead
      */
     export type ProductRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductRecordDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ProcessedProductRecordDefaultArgs instead
-     */
-    export type ProcessedProductRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProcessedProductRecordDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ProductDefaultArgs instead
      */

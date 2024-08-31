@@ -199,16 +199,6 @@ exports.Prisma.ProductRecordScalarFieldEnum = {
   manuallyChangedFields: 'manuallyChangedFields'
 };
 
-exports.Prisma.ProcessedProductRecordScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdById: 'createdById',
-  updatedById: 'updatedById',
-  recordId: 'recordId',
-  userId: 'userId'
-};
-
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -429,7 +419,6 @@ exports.Prisma.ModelName = {
   NonUniqueElementErrorData: 'NonUniqueElementErrorData',
   ProductRecordError: 'ProductRecordError',
   ProductRecord: 'ProductRecord',
-  ProcessedProductRecord: 'ProcessedProductRecord',
   Product: 'Product',
   ProductSubscription: 'ProductSubscription',
   StatusChangeSubscriptionCondition: 'StatusChangeSubscriptionCondition',

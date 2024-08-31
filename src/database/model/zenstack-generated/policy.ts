@@ -481,42 +481,6 @@ const policy: PolicyDef = {
                 ,
             }
             ,
-            processedProductRecord: {
-                modelLevel:{
-                    read:{
-                        guard: ProcessedProductRecord_read,
-                    }
-                    ,
-                    create:{
-                        guard: ProcessedProductRecord_create,inputChecker: ProcessedProductRecord_create_input,
-                    }
-                    ,
-                    update:{
-                        guard: ProcessedProductRecord_update,
-                    }
-                    ,
-                    postUpdate:{
-                        guard: ProcessedProductRecord_postUpdate,
-                    }
-                    ,
-                    delete:{
-                        guard: ProcessedProductRecord_delete,
-                    }
-                }
-                ,
-                fieldLevel:{
-                    read:
-                    {
-                    }
-                    ,
-                    update:
-                    {
-                    }
-                    ,
-                }
-                ,
-            }
-            ,
             product: {
                 modelLevel:{
                     read:{
@@ -857,10 +821,6 @@ const policy: PolicyDef = {
             }
             ,
             productRecord:{
-                hasValidation: false
-            }
-            ,
-            processedProductRecord:{
                 hasValidation: false
             }
             ,
@@ -1469,50 +1429,6 @@ function ProductRecord_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_ProductRecord_delete(input: any, context: QueryContext): any {
-    return false;
-}
-
-function ProcessedProductRecord_read(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_ProcessedProductRecord_read(input: any, context: QueryContext): any {
-    return false;
-}
-
-function ProcessedProductRecord_create(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_ProcessedProductRecord_create(input: any, context: QueryContext): any {
-    return false;
-}
-
-function ProcessedProductRecord_create_input(input: any, context: QueryContext): boolean {
-    return false;
-}
-
-function ProcessedProductRecord_update(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_ProcessedProductRecord_update(input: any, context: QueryContext): any {
-    return false;
-}
-
-function ProcessedProductRecord_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ProcessedProductRecord_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ProcessedProductRecord_delete(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
-}
-
-function $check_ProcessedProductRecord_delete(input: any, context: QueryContext): any {
     return false;
 }
 

@@ -200,13 +200,5 @@ export const processRecord = async (
         );
       }
     }
-    await tx.processedProductRecord.create({
-      data: {
-        recordId: record.id,
-        updatedById: ctx.user.id,
-        createdById: ctx.user.id,
-        userId: subscription.userId,
-      },
-    });
   });
 };

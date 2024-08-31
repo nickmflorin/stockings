@@ -100,9 +100,6 @@ model User {
   createdProductNotifications                           ProductNotification[]      @relation("createdProductNotifications")
   updatedProductNotifications                           ProductNotification[]      @relation("updatedProductNotifications")
   notifications                                         ProductNotification[]      @relation("notifications")
-  createdProcessedProductRecords                        ProcessedProductRecord[]   @relation("createdProcessedProductRecords")
-  updatedProcessedProductRecords                        ProcessedProductRecord[]   @relation("updatedProcessedProductRecords")
-  processedProductRecords                               ProcessedProductRecord[]   @relation("processedProductRecords")
   delegate_aux_User_createdProductSubscriptions_Statu_0 StatusChangeSubscription[] @relation("createdProductSubscriptions")
   delegate_aux_User_createdProductSubscriptions_Price_0 PriceChangeSubscription[]  @relation("createdProductSubscriptions")
   delegate_aux_User_updatedProductSubscriptions_Statu_0 StatusChangeSubscription[] @relation("updatedProductSubscriptions")
@@ -202,25 +199,8 @@ model ProductRecord {
   manuallyChangedFields                                 ProductRecordDataField[]   @default([])
   errors                                                ProductRecordError[]       @relation("errors")
   notifications                                         ProductNotification[]      @relation("notifications")
-  processedRecords                                      ProcessedProductRecord[]   @relation("processedRecords")
   delegate_aux_ProductRecord_notifications_PriceChang_0 PriceChangeNotification[]  @relation("notifications")
   delegate_aux_ProductRecord_notifications_StatusChan_0 StatusChangeNotification[] @relation("notifications")
-}
-
-model ProcessedProductRecord {
-  id          String        @id() @default(uuid()) @db.Uuid()
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  createdById String        @db.Uuid()
-  updatedById String        @db.Uuid()
-  createdBy   User          @relation("createdProcessedProductRecords", fields: [createdById], references: [id])
-  updatedBy   User          @relation("updatedProcessedProductRecords", fields: [updatedById], references: [id])
-  recordId    String        @db.Uuid()
-  record      ProductRecord @relation("processedRecords", fields: [recordId], references: [id])
-  user        User          @relation("processedProductRecords", fields: [userId], references: [id])
-  userId      String        @db.Uuid()
-
-  @@unique([userId, recordId])
 }
 
 model Product {

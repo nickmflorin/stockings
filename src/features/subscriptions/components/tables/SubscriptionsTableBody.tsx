@@ -32,11 +32,11 @@ import {
 import { Text } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 /* eslint-disable-next-line max-len */
-import { StatusChangeConditionsDropdown } from "~/features/products/components/StatusChangeConditionsDropdown";
 import {
   SubscriptionsTableColumns,
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
+import { StatusChangeConditionsDropdown } from "~/features/subscriptions/components/StatusChangeConditionsDropdown";
 
 import { SubscriptionTypeText } from "../SubscriptionTypeText";
 

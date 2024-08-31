@@ -7,6 +7,7 @@ import { LogLevel } from "~/internal/loggers/constants";
 
 import { isUuid } from "~/lib/typeguards";
 
+import { parseBooleanFlagCliArgument } from "~/scripts/cli";
 import { getScriptContext } from "~/scripts/context";
 import { seedRecords } from "~/scripts/seed/seed-records";
 
@@ -15,6 +16,10 @@ logger.level = LogLevel.INFO;
 const RECORDS_BATCH_SIZE = 200;
 
 async function main() {
+  if (process.env.NODE_ENV !== "development") {
+    throw new Error("Script can only be run in development mode!");
+  }
+
   const productIdentifier = process.argv.slice(2)[0];
   if (!productIdentifier) {
     return console.error(
@@ -30,6 +35,23 @@ async function main() {
     }
     return console.error(`A product with the slug '${productIdentifier}' does not exist!`);
   }
+
+  const clean = parseBooleanFlagCliArgument("clean");
+  if (clean) {
+    logger.info(`Deleting previously processed notifications for product '${product.slug}'...`);
+    await db.productNotification.deleteMany({
+      where: { productId: product.id },
+    });
+
+    logger.info(`Deleting previously processed records for product '${product.slug}'...`);
+    await db.processedProductRecord.deleteMany({
+      where: { record: { productId: product.id } },
+    });
+
+    logger.info(`Deleting product records for product '${product.slug}'...`);
+    await db.productRecord.deleteMany({ where: { productId: product.id } });
+  }
+
   const ctx = await getScriptContext({ upsertUser: true });
   const recs = seedRecords(product, ctx);
   const batches = chunk(recs, RECORDS_BATCH_SIZE);

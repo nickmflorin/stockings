@@ -1,6 +1,10 @@
 import type { ScriptContext } from "~/scripts/context";
 
-import { type ApiProductSubscription, type Product } from "~/database/model";
+import {
+  ProductSubscriptionTypes,
+  type ApiProductSubscription,
+  type Product,
+} from "~/database/model";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
@@ -16,20 +20,29 @@ export const processSubscription = async (
       AND: [
         {
           productId: product.id,
-          processedRecords: { none: { userId: subscription.userId } },
           timestamp: { gte: subscription.createdAt },
+          notifications: {
+            none: {
+              userId: subscription.userId,
+              notificationType: ProductSubscriptionTypes.getModel(subscription.subscriptionType)
+                .notificationType,
+            },
+          },
         },
         { OR: [{ price: { not: null } }, { status: { not: null } }] },
       ],
     },
-    include: { processedRecords: true },
   });
   if (records.length === 0) {
-    logger.info(`There are no records to process for subscription '${subscription.id}'.`);
+    logger.info(
+      `There are no records to process for subscription '${subscription.id}' ` +
+        `(type = '${subscription.subscriptionType}').`,
+    );
     return;
   }
   logger.info(
-    `There are ${records.length} records to process for subscription '${subscription.id}'.`,
+    `There are ${records.length} records to process for subscription '${subscription.id}'` +
+      `(type = '${subscription.subscriptionType}'.`,
   );
   for (let i = 0; i < records.length; i++) {
     const record = records[i];

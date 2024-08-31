@@ -2,7 +2,7 @@ import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-li
 import { uniq } from "lodash-es";
 import resolveConfig from "tailwindcss/resolveConfig";
 
-import type { BrandProduct, BrandProductRecord, BrandProcessedProductRecord } from "./brand";
+import type { BrandProduct, BrandProductRecord } from "./brand";
 import type { ApiStatusChangeSubscription } from "./subscription";
 import type { PriceChangeSubscription } from "./zenstack-generated/models";
 
@@ -17,18 +17,13 @@ import TailwindConfig from "../../tailwind.config";
 import { ProductStatus } from "./generated";
 import { type ConditionallyInclude } from "./inclusion";
 
-export const ProductRecordIncludesFields = enumeratedLiterals(["processedRecords"] as const, {});
-export type ProductRecordIncludesField = EnumeratedLiteralsMember<
-  typeof ProductRecordIncludesFields
->;
+export type ProductRecordIncludesField = never;
 
-export type ProductRecordIncludes = ["processedRecords"] | [];
+export type ProductRecordIncludes = [];
 
 export type ApiProductRecord<I extends ProductRecordIncludes = []> = ConditionallyInclude<
-  BrandProductRecord & {
-    readonly processedRecords: BrandProcessedProductRecord[];
-  },
-  ["processedRecords"],
+  BrandProductRecord,
+  [],
   I
 >;
 

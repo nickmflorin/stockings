@@ -301,29 +301,6 @@ const policy = {
                 update: {},
             },
         },
-        processedProductRecord: {
-            modelLevel: {
-                read: {
-                    guard: ProcessedProductRecord_read,
-                },
-                create: {
-                    guard: ProcessedProductRecord_create, inputChecker: ProcessedProductRecord_create_input,
-                },
-                update: {
-                    guard: ProcessedProductRecord_update,
-                },
-                postUpdate: {
-                    guard: ProcessedProductRecord_postUpdate,
-                },
-                delete: {
-                    guard: ProcessedProductRecord_delete,
-                }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         product: {
             modelLevel: {
                 read: {
@@ -547,9 +524,6 @@ const policy = {
             hasValidation: false
         },
         productRecord: {
-            hasValidation: false
-        },
-        processedProductRecord: {
             hasValidation: false
         },
         product: {
@@ -1005,39 +979,6 @@ function ProductRecord_delete(context, db) {
     return { OR: [] };
 }
 function $check_ProductRecord_delete(input, context) {
-    return false;
-}
-function ProcessedProductRecord_read(context, db) {
-    return { OR: [] };
-}
-function $check_ProcessedProductRecord_read(input, context) {
-    return false;
-}
-function ProcessedProductRecord_create(context, db) {
-    return { OR: [] };
-}
-function $check_ProcessedProductRecord_create(input, context) {
-    return false;
-}
-function ProcessedProductRecord_create_input(input, context) {
-    return false;
-}
-function ProcessedProductRecord_update(context, db) {
-    return { OR: [] };
-}
-function $check_ProcessedProductRecord_update(input, context) {
-    return false;
-}
-function ProcessedProductRecord_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ProcessedProductRecord_postUpdate(input, context) {
-    return true;
-}
-function ProcessedProductRecord_delete(context, db) {
-    return { OR: [] };
-}
-function $check_ProcessedProductRecord_delete(input, context) {
     return false;
 }
 function Product_read(context, db) {

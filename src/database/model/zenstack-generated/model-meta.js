@@ -105,27 +105,6 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
                     backLink: 'user',
-                }, createdProcessedProductRecords: {
-                    name: "createdProcessedProductRecords",
-                    type: "ProcessedProductRecord",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProcessedProductRecords" }] }],
-                    backLink: 'createdBy',
-                }, updatedProcessedProductRecords: {
-                    name: "updatedProcessedProductRecords",
-                    type: "ProcessedProductRecord",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProcessedProductRecords" }] }],
-                    backLink: 'updatedBy',
-                }, processedProductRecords: {
-                    name: "processedProductRecords",
-                    type: "ProcessedProductRecord",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "processedProductRecords" }] }],
-                    backLink: 'user',
                 },
             },
             uniqueConstraints: {
@@ -501,13 +480,6 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "value": "notifications" }] }],
                     backLink: 'productRecord',
-                }, processedRecords: {
-                    name: "processedRecords",
-                    type: "ProcessedProductRecord",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "processedRecords" }] }],
-                    backLink: 'record',
                 },
             },
             uniqueConstraints: {
@@ -516,90 +488,6 @@ const metadata = {
                     fields: ["id"]
                 },
             },
-        },
-        processedProductRecord: {
-            name: 'ProcessedProductRecord', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
-                }, createdById: {
-                    name: "createdById",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'createdBy',
-                }, updatedById: {
-                    name: "updatedById",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'updatedBy',
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "User",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "createdProcessedProductRecords" }] }],
-                    backLink: 'createdProcessedProductRecords',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "createdById" },
-                }, updatedBy: {
-                    name: "updatedBy",
-                    type: "User",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "updatedProcessedProductRecords" }] }],
-                    backLink: 'updatedProcessedProductRecords',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "updatedById" },
-                }, recordId: {
-                    name: "recordId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'record',
-                }, record: {
-                    name: "record",
-                    type: "ProductRecord",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "processedRecords" }] }],
-                    backLink: 'processedRecords',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "recordId" },
-                }, user: {
-                    name: "user",
-                    type: "User",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "processedProductRecords" }] }],
-                    backLink: 'processedProductRecords',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userId" },
-                }, userId: {
-                    name: "userId",
-                    type: "String",
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'user',
-                },
-            },
-            uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, userId_recordId: {
-                    name: "userId_recordId",
-                    fields: ["userId", "recordId"]
-                },
-            },
-            attributes: [{ "name": "@@unique", "args": [] }],
         },
         product: {
             name: 'Product', fields: {

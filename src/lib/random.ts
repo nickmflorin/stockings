@@ -7,7 +7,8 @@ const evaluateFrequency = (frequency = 0): boolean => {
   if (frequency > 1.0 || frequency < 0) {
     throw new TypeError("The frequency must be between 0 and 1.");
   }
-  return randomInt({ min: 0, max: 100 }) / 100.0 < frequency;
+  const control = randomInt({ min: 0, max: 100 }) / 100.0;
+  return control < frequency;
 };
 
 export const randomlyNull =

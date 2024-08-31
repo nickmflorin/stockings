@@ -20,27 +20,24 @@ plugin enhancer {
 }
 
 model User {
-  id                             String                   @id @default(uuid()) @db.Uuid
-  clerkId                        String                   @unique
-  firstName                      String
-  lastName                       String
-  profileImageUrl                String?
-  emailAddress                   String
-  createdAt                      DateTime                 @default(now())
-  updatedAt                      DateTime                 @updatedAt
-  createdProducts                Product[]                @relation("createdProducts")
-  updatedProducts                Product[]                @relation("updatedProducts")
-  createdProductRecords          ProductRecord[]          @relation("createdProductRecords")
-  updatedProductRecords          ProductRecord[]          @relation("updatedProductRecords")
-  createdProductSubscriptions    ProductSubscription[]    @relation("createdProductSubscriptions")
-  updatedProductSubscriptions    ProductSubscription[]    @relation("updatedProductSubscriptions")
-  productSubscriptions           ProductSubscription[]    @relation("productSubscriptions")
-  createdProductNotifications    ProductNotification[]    @relation("createdProductNotifications")
-  updatedProductNotifications    ProductNotification[]    @relation("updatedProductNotifications")
-  notifications                  ProductNotification[]    @relation("notifications")
-  createdProcessedProductRecords ProcessedProductRecord[] @relation("createdProcessedProductRecords")
-  updatedProcessedProductRecords ProcessedProductRecord[] @relation("updatedProcessedProductRecords")
-  processedProductRecords        ProcessedProductRecord[] @relation("processedProductRecords")
+  id                          String                @id @default(uuid()) @db.Uuid
+  clerkId                     String                @unique
+  firstName                   String
+  lastName                    String
+  profileImageUrl             String?
+  emailAddress                String
+  createdAt                   DateTime              @default(now())
+  updatedAt                   DateTime              @updatedAt
+  createdProducts             Product[]             @relation("createdProducts")
+  updatedProducts             Product[]             @relation("updatedProducts")
+  createdProductRecords       ProductRecord[]       @relation("createdProductRecords")
+  updatedProductRecords       ProductRecord[]       @relation("updatedProductRecords")
+  createdProductSubscriptions ProductSubscription[] @relation("createdProductSubscriptions")
+  updatedProductSubscriptions ProductSubscription[] @relation("updatedProductSubscriptions")
+  productSubscriptions        ProductSubscription[] @relation("productSubscriptions")
+  createdProductNotifications ProductNotification[] @relation("createdProductNotifications")
+  updatedProductNotifications ProductNotification[] @relation("updatedProductNotifications")
+  notifications               ProductNotification[] @relation("notifications")
 }
 
 abstract model Model {
@@ -159,24 +156,6 @@ model ProductRecord extends ModelMeta {
   manuallyChangedFields ProductRecordDataField[] @default([])
   errors                ProductRecordError[]     @relation("errors")
   notifications         ProductNotification[]    @relation("notifications")
-  processedRecords      ProcessedProductRecord[] @relation("processedRecords")
-}
-
-// An model that is used as an indicator to convey whether or not the ProductRecord has been
-// processed by the notifications system for a given user.  Once the ProductRecord is processed,
-// notifications will be created in "pending" states for the user that is subscribed to the events
-// that are associated with the changes that the ProductRecord represents relative to the last
-// record that was recorded.
-model ProcessedProductRecord extends ModelMeta {
-  createdBy User          @relation("createdProcessedProductRecords", fields: [createdById], references: [id])
-  updatedBy User          @relation("updatedProcessedProductRecords", fields: [updatedById], references: [id])
-  recordId  String        @db.Uuid
-  record    ProductRecord @relation("processedRecords", fields: [recordId], references: [id])
-  // The user that the record was processed for.
-  user      User          @relation("processedProductRecords", fields: [userId], references: [id])
-  userId    String        @db.Uuid
-
-  @@unique([userId, recordId])
 }
 
 enum ProductCategory {

@@ -21,7 +21,9 @@ import {
 import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
 import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
 /* eslint-disable-next-line max-len */
-import { StatusChangeConditionTransition } from "~/features/products/components/StatusChangeConditionTransition";
+import { PriceChangeConditionTransition } from "~/features/subscriptions/components/PriceChangeConditionTransition";
+/* eslint-disable-next-line max-len */
+import { StatusChangeConditionTransition } from "~/features/subscriptions/components/StatusChangeConditionTransition";
 
 export interface NotificationsTableBodyProps
   extends Omit<
@@ -60,7 +62,7 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
             );
           },
         },
-        transition: {
+        event: {
           cellRenderer(datum) {
             if (datum.notificationType === ProductNotificationType.StatusChangeNotification) {
               return (
@@ -69,8 +71,14 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
                   toStatus={datum.newStatus}
                 />
               );
+            } else if (datum.notificationType === ProductNotificationType.PriceChangeNotification) {
+              return (
+                <PriceChangeConditionTransition
+                  fromPrice={datum.previousPrice}
+                  toPrice={datum.newPrice}
+                />
+              );
             }
-            return <></>;
           },
         },
         type: {

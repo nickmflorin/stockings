@@ -47,7 +47,7 @@ export const StatusChangeConditionsDropdown = ({
       content={({ isOpen }) =>
         isOpen ? (
           <div
-            className="flex flex-col relative p-2"
+            className="flex flex-col relative p-2 min-h-[160px]"
             style={{ minHeight: groupStatusChangeSubscriptionConditions(conditions).length * 32 }}
           >
             <StatusChangeConditionTransitions conditions={conditions} grouped />

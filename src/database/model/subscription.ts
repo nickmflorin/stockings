@@ -10,6 +10,7 @@ import {
   type Product,
   type ProductStatus,
   PriceChangeCondition,
+  ProductNotificationType,
 } from "./generated";
 import {
   type StatusChangeSubscription,
@@ -51,17 +52,20 @@ export const ProductSubscriptionTypes = enumeratedLiterals(
     {
       value: ProductSubscriptionType.PriceChangeSubscription,
       label: "Price Change",
+      notificationType: ProductNotificationType.PriceChangeNotification,
       description:
         "A subscription that will issue notifications when the price of a product changes.",
     },
     {
       value: ProductSubscriptionType.StatusChangeSubscription,
       label: "Status Change",
+      notificationType: ProductNotificationType.StatusChangeNotification,
       description:
         "A subscription that will issue notifications when the status of a product changes.",
     },
   ] as const satisfies {
     value: ProductSubscriptionType;
+    notificationType: ProductNotificationType;
     description: string;
     label: string;
   }[],

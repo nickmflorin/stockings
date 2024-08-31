@@ -18,8 +18,8 @@ export const ProductNotificationsTableColumns = [
     maxWidth: 240,
   },
   {
-    id: "transition",
-    label: "Transition",
+    id: "event",
+    label: "Event",
     // minWidth: 240,
     maxWidth: 240,
   },

@@ -14,20 +14,11 @@ import { randomBoolean } from "~/lib/random";
 
 import { type ScriptContext } from "../context";
 
-import { seedRecords, type RecordDatum } from "./seed-records";
 import { seedSubscription } from "./seed-subscriptions";
 
 const BATCH_SIZE = 50;
-const RECORDS_BATCH_SIZE = 500;
 
 const SubscriptionFrequency = 0.4;
-
-const seedRecordsBatch = async (records: RecordDatum[]) => {
-  const result = await db.productRecord.createMany({
-    data: records.map(r => ({ ...r, createdAt: r.createdAt.toJSDate() })),
-  });
-  return result.count;
-};
 
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
@@ -45,23 +36,8 @@ const seedProductBatch = async (
     ),
   );
 
-  /* let totalRecordsCount = 0;
-     for (let i = 0; i < products.length; i++) {
-       const product = products[i];
-       const recs = seedRecords(product, ctx);
-       const batches = chunk(recs, RECORDS_BATCH_SIZE);
-       for (let b = 0; b < batches.length; b++) {
-         logger.info(
-           `Creating '${recs.length}' records for product '${product.slug}' in batch ` +
-             `'${b + 1}/${batches.length}'...`,
-         );
-         totalRecordsCount += await seedRecordsBatch(batches[b]);
-       }
-     } */
-
   return [
     products,
-    // totalRecordsCount,
     (
       await Promise.all(
         products.reduce(

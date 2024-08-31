@@ -46,7 +46,7 @@ export const NotificationStates = enumeratedLiterals(
     },
     {
       value: NotificationState.Sent,
-      label: "Out of Stock",
+      label: "Sent",
       description: "The notification was successfully sent.",
     },
   ] as const satisfies {
