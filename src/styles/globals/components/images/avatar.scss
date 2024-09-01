@@ -5,10 +5,7 @@
   // The reasoning is unclear, but it appears that the border-radius property must be applied
   // to work on Safari or iOS devices, whereas the clip-path property must be defined to
   // work on Chrome.
-  -o-clip-path: inset(0px round $value);
-  -moz-clip-path: inset(0px round $value);
-  -webkit-clip-path: inset(0px round $value);
-  clip-path: inset(0px round $value);
+  @include partials.clip-path-radius($value);
 }
 
 .avatar {

@@ -18,10 +18,7 @@ export interface ChooseNotificationTypesFormProps
 }
 
 const TooltipDescriptions: {
-  [key in Exclude<
-    ProductNotificationType,
-    typeof ProductNotificationType.NewProductNotification
-  >]: ReactNode;
+  [key in ProductNotificationType]: ReactNode;
 } = {
   [ProductNotificationType.PriceChangeNotification]: (
     <Text inherit>

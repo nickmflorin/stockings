@@ -1,4 +1,5 @@
 "use client";
+import RouterLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
 
@@ -9,15 +10,18 @@ import {
   type FullProductSubscription,
   type PriceChangeCondition,
   type StatusChangeSubscriptionCondition,
+  ProductSubscriptionTypes,
 } from "~/database/model";
 import { ProductSubscriptionType } from "~/database/model";
 import { logger } from "~/internal/logger";
 
+import { addQueryParamsToUrl } from "~/integrations/http";
 import { arraysHaveSameElements } from "~/lib/arrays";
 
 import { updateProductSubscription, deleteProductSubscription } from "~/actions/subscriptions";
 
 import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
+import { Link } from "~/components/buttons";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
 import { useDrawers } from "~/components/drawers/hooks";
@@ -31,11 +35,12 @@ import {
 } from "~/components/tables/data-tables/DataTableBody";
 import { Text } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
-/* eslint-disable-next-line max-len */
+import { HorizontallyCentered } from "~/components/util";
 import {
   SubscriptionsTableColumns,
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
+/* eslint-disable-next-line max-len */
 import { StatusChangeConditionsDropdown } from "~/features/subscriptions/components/StatusChangeConditionsDropdown";
 
 import { SubscriptionTypeText } from "../SubscriptionTypeText";
@@ -307,9 +312,28 @@ export const SubscriptionsTableBody = ({
                 );
               },
             },
-            notificationsCount: {
+            notifications: {
               cellRenderer(datum) {
-                return datum.notificationsCount;
+                if (datum.notificationsCount === 0) {
+                  return "-";
+                }
+                return (
+                  <HorizontallyCentered>
+                    <Link
+                      component={RouterLink}
+                      element="a"
+                      href={addQueryParamsToUrl("/notifications", {
+                        products: [datum.product.id],
+                        types: [
+                          ProductSubscriptionTypes.getModel(datum.subscriptionType)
+                            .notificationType,
+                        ],
+                      })}
+                    >
+                      {datum.notificationsCount}
+                    </Link>
+                  </HorizontallyCentered>
+                );
               },
             },
             createdAt: {

@@ -46,6 +46,7 @@ const INTERNAL_BUTTON_PROPS = {
   loadingClassName: true,
   activeClassName: true,
   disabledClassName: true,
+  openInNewTab: true,
 } as const satisfies { [key in InternalPropName]: true };
 
 const toNativeButtonProps = <
@@ -92,6 +93,7 @@ export const AbstractButton = forwardRef(
 
     switch (props.element) {
       case "a": {
+        const inNewTab = props.openInNewTab ?? false;
         const Component =
           (props.component as
             | types.ButtonComponent<"a", types.ButtonComponentProps<"a">>
@@ -101,6 +103,12 @@ export const AbstractButton = forwardRef(
             {...(nativeProps as types.ButtonComponentProps<"a">)}
             className={className}
             style={style}
+            target={inNewTab ? "_blank" : (nativeProps as types.ButtonComponentProps<"a">).target}
+            rel={
+              inNewTab
+                ? "noopener noreferrer"
+                : (nativeProps as types.ButtonComponentProps<"a">).rel
+            }
             ref={ref as types.PolymorphicButtonRef<"a">}
           />
         );

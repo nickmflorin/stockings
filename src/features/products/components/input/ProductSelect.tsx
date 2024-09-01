@@ -53,6 +53,7 @@ export const ProductSelect = forwardRef<SelectInstance, ProductSelectProps<Selec
         onError?.(e);
       },
     });
+
     return (
       <DataSelect<ApiProduct<[]>, { behavior: B; getItemValue: typeof getItemValue }>
         {...props}

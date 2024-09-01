@@ -40,6 +40,7 @@ export interface DataSelectBaseProps<
     > {
   readonly options: O;
   readonly value?: types.DataSelectValue<M, O>;
+  readonly strictValueLookup?: boolean;
   readonly initialValue?: types.DataSelectValue<M, O>;
   readonly menuClassName?: ComponentProps["className"];
   readonly inputClassName?: ComponentProps["className"];
@@ -79,6 +80,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
       isClearable,
       chipsCanDeselect: _chipsCanDeselect,
       showIconsInChips = true,
+      strictValueLookup = true,
       getItemValueLabel,
       children,
       content,
@@ -97,6 +99,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
     const { value, clear, ...managed } = useSelectModelValue<M, O>({
       initialValue,
       __private_controlled_value__: _propValue,
+      strictValueLookup,
       options,
       data,
       isReady,

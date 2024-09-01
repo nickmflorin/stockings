@@ -50,6 +50,9 @@ export const NotificationsTableFilterBar = ({
       <ShowHide show={!excludeProducts}>
         <ProductSelect
           ref={productSelectRef}
+          /* The product value is coming from a query parameter, so we have to account for invalid
+             product IDs that may sneak in. */
+          strictValueLookup={false}
           behavior="multi"
           filters={{ notified: true }}
           dynamicHeight={false}

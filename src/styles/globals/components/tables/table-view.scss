@@ -1,3 +1,6 @@
+@use "partials" as partials;
+@use "./constants" as constants;
+
 @mixin control-bar-flex() {
   display: flex;
   flex-direction: row;
@@ -68,6 +71,15 @@
     min-height: 0;
     flex-direction: column;
     display: flex;
+
+    > .MuiTableContainer-root {
+      border: 1px solid constants.$table-header-bg-color;
+      @include partials.border-radius(theme("borderRadius.sm"));
+      // The reasoning is unclear, but it appears that the border-radius property must be applied
+      // to work on Safari or iOS devices, whereas the clip-path property must be defined to
+      // work on Chrome.
+      @include partials.clip-path-radius(theme("borderRadius.sm"));
+    }
   }
 
   > .table-view__footer {

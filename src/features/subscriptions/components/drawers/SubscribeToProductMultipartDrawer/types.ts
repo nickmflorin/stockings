@@ -17,7 +17,7 @@ export const StepNames = enumeratedLiterals(
 export type StepName = EnumeratedLiteralsMember<typeof StepNames>;
 
 export type StepData<N extends StepName> = {
-  [StepNames.CONFIGURE]: Exclude<ProductNotificationType, "NewProductNotification">[];
+  [StepNames.CONFIGURE]: ProductNotificationType[];
   [StepNames.STATUSCHANGE]: StatusChangeSubscriptionFormValues;
   [StepNames.PRICECHANGE]: PriceChangeSubscriptionFormValues;
 }[N];

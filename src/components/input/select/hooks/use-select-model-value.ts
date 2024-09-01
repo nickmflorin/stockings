@@ -19,6 +19,7 @@ export interface UseSelectModelValueParams<
   readonly data: M[];
   readonly options: O;
   readonly isReady?: boolean;
+  readonly strictValueLookup?: boolean;
   readonly onChange?: types.DataSelectChangeHandler<M, O>;
 }
 
@@ -34,7 +35,7 @@ const getInitialModelValue = <
 }: Pick<
   UseSelectModelValueParams<M, O>,
   "options" | "initialValue" | "__private_controlled_value__" | "isReady"
-> & { readonly getModel: (v: types.InferredDataSelectV<M, O>) => M }):
+> & { readonly getModel: (v: types.InferredDataSelectV<M, O>) => M | null }):
   | types.DataSelectModelValue<M, O>
   | types.NotSet => {
   // Distribute/flatten the conditional type to a union of its potential values.
@@ -70,29 +71,76 @@ const getInitialModelValue = <
         "For a single, non-nullable select with, the 'initialValue' prop must be defined!",
       );
     } else if (Array.isArray(initial)) {
-      return initial.map(v => getModel(v)) as types.DataSelectModelValue<M, O>;
+      return initial.reduce((prev, v) => {
+        const m = getModel(v);
+        if (m !== null) {
+          return [...prev, m];
+        }
+        /* This occurs if there is no model associated with the value and the 'strictValueLookup'
+           option is 'false' - we have to take some form of recourse. */
+        return prev;
+      }, [] as M[]) as types.DataSelectModelValue<M, O>;
     } else if (initial !== null) {
-      return getModel(initial) as types.DataSelectModelValue<M, O>;
+      const m = getModel(initial);
+      if (m === null) {
+        /* This occurs if there is no model associated with the value and the 'strictValueLookup'
+           option is 'false' - we have to take some form of recourse. */
+        if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
+          return null as types.DataSelectModelValue<M, O>;
+        }
+        return types.NOTSET;
+      }
     }
     return null as types.DataSelectModelValue<M, O>;
   } else if (Array.isArray(value)) {
-    return value.map(v => getModel(v)) as types.DataSelectModelValue<M, O>;
+    return value.reduce((prev, v) => {
+      const m = getModel(v);
+      if (m !== null) {
+        return [...prev, m];
+      }
+      /* This occurs if there is no model associated with the value and the 'strictValueLookup'
+         option is 'false' - we have to take some form of recourse. */
+      return prev;
+    }, [] as M[]) as types.DataSelectModelValue<M, O>;
   } else if (value !== null) {
-    return getModel(value) as types.DataSelectModelValue<M, O>;
+    const m = getModel(value);
+    if (m === null) {
+      /* This occurs if there is no model associated with the value and the 'strictValueLookup'
+         option is 'false' - we have to take some form of recourse. */
+      if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
+        return null as types.DataSelectModelValue<M, O>;
+      }
+      return types.NOTSET;
+    }
   }
   return null as types.DataSelectModelValue<M, O>;
 };
 
 const getModel = <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
   v: types.InferredDataSelectV<M, O>,
-  { data, getItemValue }: { getItemValue: (m: M) => types.InferredDataSelectV<M, O>; data: M[] },
-): M => {
+  {
+    data,
+    strictValueLookup,
+    getItemValue,
+  }: {
+    strictValueLookup: boolean;
+    getItemValue: (m: M) => types.InferredDataSelectV<M, O>;
+    data: M[];
+  },
+): M | null => {
   const ms = data.filter(m => isEqual(getItemValue(m), v));
   if (ms.length === 0) {
-    throw new Error(
+    if (strictValueLookup) {
+      throw new Error(
+        `The value, '${v}', does not match any of the models in the data. ` +
+          "Did you forget to set the 'isReady' flag to false, until the data has been loaded?",
+      );
+    }
+    logger.warn(
       `The value, '${v}', does not match any of the models in the data. ` +
         "Did you forget to set the 'isReady' flag to false, until the data has been loaded?",
     );
+    return null;
   } else if (ms.length > 1) {
     logger.error(
       `The value, '${v}', points to multiple models in the Select's data.  This is ` +
@@ -103,15 +151,41 @@ const getModel = <M extends types.DataSelectModel, O extends types.DataSelectOpt
   return ms[0];
 };
 
+type ReducedModelValue<M extends types.DataSelectModel, O extends types.DataSelectOptions<M>> =
+  | {
+      readonly value?: never;
+      readonly noop?: never;
+      readonly autocorrect: {
+        readonly modelValue: types.DataSelectModelValue<M, O>;
+        readonly sanitizedValue: types.DataSelectValue<M, O>;
+      };
+    }
+  | {
+      readonly noop?: never;
+      readonly value: types.DataSelectModelValue<M, O> | types.NotSet;
+      readonly autocorrect?: never;
+    }
+  | {
+      readonly noop: true;
+      readonly value?: never;
+      readonly autocorrect?: never;
+    };
+
 const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
   curr: types.DataSelectModelValue<M, O> | types.NotSet,
   value: types.DataSelectValue<M, O>,
   {
     getItemValue,
+    strictValueLookup,
     options,
     data,
-  }: { getItemValue: (m: M) => types.InferredDataSelectV<M, O>; options: O; data: M[] },
-): types.DataSelectModelValue<M, O> | types.NotSet => {
+  }: {
+    strictValueLookup: boolean;
+    getItemValue: (m: M) => types.InferredDataSelectV<M, O>;
+    options: O;
+    data: M[];
+  },
+): ReducedModelValue<M, O> => {
   // Distribute/flatten the conditional type to a union of its potential values.
   const selectValue = value as
     | types.InferredDataSelectV<M, O>
@@ -129,21 +203,39 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
             "The select's behavior may be compromised.",
           { value: selectValue },
         );
-        return curr;
+        // Here, we have to reset the state because it cannot be recovered.
+        return {
+          autocorrect: {
+            modelValue: [] as M[] as types.DataSelectModelValue<M, O>,
+            sanitizedValue: [] as types.InferredDataSelectV<M, O>[] as types.DataSelectValue<M, O>,
+          },
+        };
       } else if (curr === types.NOTSET) {
         logger.error(
           "Corrupted State: Detected an unset model value for an initialized select!" +
             "The select's model value should be set if the select has been initialized.",
           { curr },
         );
-        return curr;
+        // Here, we have to reset the state because it cannot be recovered.
+        return {
+          autocorrect: {
+            modelValue: [] as M[] as types.DataSelectModelValue<M, O>,
+            sanitizedValue: [] as types.InferredDataSelectV<M, O>[] as types.DataSelectValue<M, O>,
+          },
+        };
       } else if (!Array.isArray(curr)) {
         logger.error(
           "Corrupted State: Detected non-array state model value for multi-select! " +
             "The select's behavior may be compromised.",
           { curr },
         );
-        return curr;
+        // Here, we have to reset the state because it cannot be recovered.
+        return {
+          autocorrect: {
+            modelValue: [] as M[] as types.DataSelectModelValue<M, O>,
+            sanitizedValue: [] as types.InferredDataSelectV<M, O>[] as types.DataSelectValue<M, O>,
+          },
+        };
       }
       /* Lookup the model in the combined set of models provided to the Select via the 'data'
          prop and the models corresponding to the previous Select's value that are already
@@ -151,9 +243,31 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
          the case that the data provided to the Select is filtered.
 
          See the docstring on the hook for more information. */
-      return selectValue.map(vi =>
-        getModel(vi, { data: uniqBy([...data, ...curr], m => getItemValue(m)), getItemValue }),
-      ) as types.DataSelectModelValue<M, O>;
+
+      let validValueElements: types.InferredDataSelectV<M, O>[] = [];
+      const modelValue = selectValue.reduce((prev, vi) => {
+        const m = getModel(vi, {
+          strictValueLookup,
+          data: uniqBy([...data, ...curr], m => getItemValue(m)),
+          getItemValue,
+        });
+        /* The model, 'm', will be 'null' if the value does not match any of the models in the data
+           and 'strictValueLookup' is not 'false'. */
+        if (m !== null) {
+          validValueElements = [...validValueElements, vi];
+          return [...prev, m];
+        }
+        return prev;
+      }, [] as M[]) as types.DataSelectModelValue<M, O>;
+      if (validValueElements.length !== selectValue.length) {
+        return {
+          autocorrect: {
+            modelValue,
+            sanitizedValue: validValueElements as types.DataSelectValue<M, O>,
+          },
+        };
+      }
+      return { value: modelValue };
     }
     case types.SelectBehaviorTypes.SINGLE: {
       if (Array.isArray(selectValue)) {
@@ -162,35 +276,45 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
             "The select's behavior may be compromised.",
           { value: selectValue },
         );
-        return curr;
+        /* Here, we cannot reset the state to a null value because the select is not nullable.
+           Our only form of recourse is to ignore the change. */
+        return { noop: true };
       } else if (selectValue === null) {
         logger.error(
           "Corrupted State: Detected a null state value for a non-nullable single-select! " +
             "The select's behavior may be compromised.",
           { value: selectValue },
         );
-        return curr;
+        /* Here, we cannot reset the state to a null value because the select is not nullable.
+           Our only form of recourse is to ignore the change. */
+        return { noop: true };
       } else if (existing === types.NOTSET) {
         logger.error(
           "Corrupted State: Detected an unset model value for an initialized select!" +
             "The select's model value should be set if the select has been initialized.",
           { existing },
         );
-        return curr;
+        /* Here, we cannot reset the state to a null value because the select is not nullable.
+           Our only form of recourse is to ignore the change. */
+        return { noop: true };
       } else if (Array.isArray(existing)) {
         logger.error(
           "Corrupted State: Detected an array state model value for a single-select! " +
             "The select's behavior may be compromised.",
           { existing },
         );
-        return curr;
+        /* Here, we cannot reset the state to a null value because the select is not nullable.
+           Our only form of recourse is to ignore the change. */
+        return { noop: true };
       } else if (existing === null) {
         logger.error(
           "Corrupted State: Detected a null state model value for a non-nullable " +
             "single-select! The select's behavior may be compromised.",
           { existing },
         );
-        return curr;
+        /* Here, we cannot reset the state to a null value because the select is not nullable.
+           Our only form of recourse is to ignore the change. */
+        return { noop: true };
       }
       /* Lookup the model in the combined set of models provided to the Select via the 'data'
          prop and the models corresponding to the previous Select's value that are already
@@ -198,10 +322,18 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
          the case that the data provided to the Select is filtered.
 
          See the docstring on the hook for more information. */
-      return getModel(selectValue, {
+      const m = getModel(selectValue, {
+        strictValueLookup,
         data: uniqBy([...data, existing], m => getItemValue(m)),
         getItemValue,
-      }) as types.DataSelectModelValue<M, O>;
+      });
+      // If the model, 'm', cannot be found in the data -
+      if (m === null) {
+        /* Here, we cannot reset the state to a null value because the select is not nullable.
+           Our only form of recourse is to ignore the change. */
+        return { noop: true };
+      }
+      return { value: m as types.DataSelectModelValue<M, O> };
     }
     case types.SelectBehaviorTypes.SINGLE_NULLABLE: {
       if (Array.isArray(selectValue)) {
@@ -210,23 +342,38 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
             "The select's behavior may be compromised.",
           { value: selectValue },
         );
-        return curr;
+        return {
+          autocorrect: {
+            modelValue: null as types.DataSelectModelValue<M, O>,
+            sanitizedValue: null as types.DataSelectValue<M, O>,
+          },
+        };
       } else if (existing === types.NOTSET) {
         logger.error(
           "Corrupted State: Detected an unset model value for an initialized select!" +
             "The select's model value should be set if the select has been initialized.",
           { existing },
         );
-        return curr;
+        return {
+          autocorrect: {
+            modelValue: null as types.DataSelectModelValue<M, O>,
+            sanitizedValue: null as types.DataSelectValue<M, O>,
+          },
+        };
       } else if (Array.isArray(existing)) {
         logger.error(
           "Corrupted State: Detected an array state model value for a single-select! " +
             "The select's behavior may be compromised.",
           { existing },
         );
-        return curr;
+        return {
+          autocorrect: {
+            modelValue: null as types.DataSelectModelValue<M, O>,
+            sanitizedValue: null as types.DataSelectValue<M, O>,
+          },
+        };
       } else if (selectValue === null) {
-        return null as types.DataSelectModelValue<M, O>;
+        return { value: null as types.DataSelectModelValue<M, O> };
       }
       /* Lookup the model in the combined set of models provided to the Select via the 'data'
          prop and the models corresponding to the previous Select's value that are already
@@ -234,10 +381,20 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
          the case that the data provided to the Select is filtered.
 
          See the docstring on the hook for more information. */
-      return getModel(selectValue, {
+      const model = getModel(selectValue, {
+        strictValueLookup,
         data: existing ? uniqBy([...data, existing], m => getItemValue(m)) : data,
         getItemValue,
-      }) as types.DataSelectModelValue<M, O>;
+      });
+      if (!model) {
+        return {
+          autocorrect: {
+            modelValue: null as types.DataSelectModelValue<M, O>,
+            sanitizedValue: null as types.DataSelectValue<M, O>,
+          },
+        };
+      }
+      return { value: model as types.DataSelectModelValue<M, O> };
     }
     default:
       throw new UnreachableCaseError();
@@ -347,6 +504,7 @@ export const useSelectModelValue = <
   data,
   options,
   isReady = true,
+  strictValueLookup = true,
   onChange,
   onSelect,
   onDeselect,
@@ -383,7 +541,7 @@ export const useSelectModelValue = <
       getInitialModelValue({
         options,
         isReady,
-        getModel: v => getModel(v, { data, getItemValue }),
+        getModel: v => getModel(v, { strictValueLookup, data, getItemValue }),
         ...params,
       }),
   );
@@ -394,12 +552,22 @@ export const useSelectModelValue = <
   >({
     ...params,
     behavior: options.behavior,
-    onChange: v => {
-      const mv = reduceModelValue(modelValue, v, { getItemValue, options, data });
-      /* This should only be called if the Select's model value is not "NOTSET" to begin with,
-         because the Select will disable selection if it is not in a "ready" state. */
-      if (mv !== types.NOTSET) {
-        onChange?.(v, { modelValue: mv });
+    onChange: (v, __resetValueOnError__) => {
+      const { autocorrect, value, noop } = reduceModelValue(modelValue, v, {
+        strictValueLookup,
+        options,
+        data,
+        getItemValue,
+      });
+      if (noop) {
+        return;
+      } else if (autocorrect) {
+        __resetValueOnError__(autocorrect.sanitizedValue);
+        onChange?.(v, { modelValue: autocorrect.modelValue });
+      } else if (value !== types.NOTSET) {
+        /* This should only be called if the Select's model value is not "NOTSET" to begin with,
+           because the Select will disable selection if it is not in a "ready" state. */
+        onChange?.(v, { modelValue: value });
       } else {
         logger.warn("The Select should not allow change events if the model value is not set!");
       }
@@ -414,9 +582,26 @@ export const useSelectModelValue = <
        should wait until the Select's model value has been initialized, which occurs when it is
        set in a "ready" state. */
     if (wasInitialized.current) {
-      setModelValue(curr => reduceModelValue(curr, value, { getItemValue, options, data }));
+      setModelValue(curr => {
+        const {
+          autocorrect,
+          value: _value,
+          noop,
+        } = reduceModelValue(curr, value, {
+          getItemValue,
+          strictValueLookup,
+          options,
+          data,
+        });
+        if (noop) {
+          return curr;
+        } else if (autocorrect) {
+          return autocorrect.modelValue;
+        }
+        return _value;
+      });
     }
-  }, [value, options, data, getItemValue]);
+  }, [value, options, data, strictValueLookup, getItemValue]);
 
   useEffect(() => {
     /* If the Select was not initially in a "ready" state, the model value has to be set after it
@@ -426,7 +611,7 @@ export const useSelectModelValue = <
         getInitialModelValue({
           options,
           isReady,
-          getModel: v => getModel(v, { data, getItemValue }),
+          getModel: v => getModel(v, { data, strictValueLookup, getItemValue }),
           ...params,
         }),
       );

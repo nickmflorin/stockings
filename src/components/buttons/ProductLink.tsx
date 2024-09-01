@@ -21,13 +21,7 @@ export const ProductLink = ({
   ...props
 }: ProductLinkProps): JSX.Element =>
   location === "external" ? (
-    <Link
-      {...props}
-      href={getProductDetailPageUrl(product.slug)}
-      element="a"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <Link {...props} href={getProductDetailPageUrl(product.slug)} element="a" openInNewTab>
       {product.name}
     </Link>
   ) : (

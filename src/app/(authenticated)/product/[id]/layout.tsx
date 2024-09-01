@@ -74,7 +74,7 @@ export default async function ProductLayout({
             </Module.Header>
             <Module.Content>{subscriptions}</Module.Content>
           </Module>
-          <Module component="paper" className="grow shrink-0 max-h-[800px]">
+          <Module component="paper" className="grow min-h-[400px]">
             <Module.Header title="Notifications">
               Notifications you have received for the product.
             </Module.Header>

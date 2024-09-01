@@ -1,41 +1,5 @@
 @use "partials";
-
-$table-header-bg-color: theme("colors.gray.50");
-$table-row-highlighted-color: theme("colors.gray.50");
-$table-border-color: theme("colors.border");
-$table-border: 1px solid $table-border-color;
-$table-color: theme("colors.body");
-$table-body-bg-color: theme("colors.white");
-
-$table-sizes: ("small", "medium", "large");
-$table-default-size: "medium";
-
-$table-size-properties: (
-  "small": (
-    "td": (
-      padding: 10px 12px,
-    ),
-    "th": (
-      padding: 10px 12px,
-    ),
-  ),
-  "medium": (
-    "td": (
-      padding: 10px 12px,
-    ),
-    "th": (
-      padding: 10px 12px,
-    ),
-  ),
-  "large": (
-    "td": (
-      padding: 10px 12px,
-    ),
-    "th": (
-      padding: 10px 12px,
-    ),
-  ),
-);
+@use "./constants" as constants;
 
 @mixin table-head() {
   > thead.table__head {
@@ -91,44 +55,46 @@ $table-size-properties: (
   }
 }
 
-@mixin table-body-cell-borders($bordered: false) {
+@mixin table-body-cell-borders($bordered: false, $last-row: false) {
   @if $bordered {
     // These important flags are only to work around MUI's default application of bottom
     // borders.
-    border-bottom: $table-border !important;
-
-    &:first-of-type {
-      border-left: $table-border !important;
+    @if not $last-row {
+      border-bottom: constants.$table-border !important;
     }
 
-    &:last-of-type {
-      border-right: $table-border !important;
-    }
+    // &:first-of-type {
+    //   border-left: constants.$table-border !important;
+    // }
+
+    // &:last-of-type {
+    //   border-right: constants.$table-border !important;
+    // }
   }
 }
 
-@mixin table-body-cell($direct: false, $bordered: false) {
+@mixin table-body-cell($direct: false, $bordered: false, $last-row: false) {
   @if $direct {
     > td.table__body-cell {
       @content;
-      @include table-body-cell-borders($bordered);
+      @include table-body-cell-borders($bordered, $last-row: $last-row);
     }
   } @else {
     @include table-body-row($direct: false) {
       > td.table__body-cell {
         @content;
-        @include table-body-cell-borders($bordered);
+        @include table-body-cell-borders($bordered, $last-row: $last-row);
       }
     }
   }
 }
 
 @mixin table-size($size) {
-  $td: partials.mapget($table-size-properties, $size, "td");
+  $td: partials.mapget(constants.$table-size-properties, $size, "td");
   @include table-body-cell() {
     @include partials.mapped-properties($td);
   }
-  $th: partials.mapget($table-size-properties, $size, "th");
+  $th: partials.mapget(constants.$table-size-properties, $size, "th");
   @include table-header-cell() {
     @include partials.mapped-properties($th);
   }
@@ -137,15 +103,15 @@ $table-size-properties: (
 .table {
   height: 100%;
 
-  @include table-size($table-default-size);
-  @each $size in $table-sizes {
+  @include table-size(constants.$table-default-size);
+  @each $size in constants.$table-sizes {
     &.table--#{$size} {
       @include table-size($size);
     }
   }
 
   @include table-head {
-    color: $table-color;
+    color: constants.$table-color;
 
     @include table-header-row($direct: true) {
       color: inherit;
@@ -154,14 +120,14 @@ $table-size-properties: (
         border-bottom: none;
         color: inherit;
         font-size: 13px;
-        background-color: $table-header-bg-color;
+        background-color: constants.$table-header-bg-color;
       }
     }
   }
 
   @include table-body {
-    color: $table-color;
-    background-color: $table-body-bg-color;
+    color: constants.$table-color;
+    background-color: constants.$table-body-bg-color;
     position: relative;
 
     @include table-body-row($direct: true) {
@@ -175,7 +141,7 @@ $table-size-properties: (
 
       &--highlighted {
         &:not(.tr--loading, .tr--feedback) {
-          background-color: $table-row-highlighted-color;
+          background-color: constants.$table-row-highlighted-color;
         }
       }
 
@@ -184,7 +150,12 @@ $table-size-properties: (
       }
 
       &--bordered {
-        @include table-body-cell($direct: true, $bordered: true);
+        &:not(:last-child) {
+          @include table-body-cell($direct: true, $bordered: true);
+        }
+        &:last-child {
+          @include table-body-cell($direct: true, $bordered: true, $last-row: true);
+        }
       }
     }
 
@@ -199,13 +170,20 @@ $table-size-properties: (
     @include table-body-row($direct: false) {
       &:hover {
         &:not(.tr--loading, .tr--feedback) {
-          background-color: $table-row-highlighted-color;
+          background-color: constants.$table-row-highlighted-color;
         }
       }
     }
   }
 
   &--bordered {
-    @include table-body-cell($direct: false, $bordered: true);
+    @include table-body-row($direct: true) {
+      &:not(:last-child) {
+        @include table-body-cell($direct: true, $bordered: true);
+      }
+      &:last-child {
+        @include table-body-cell($direct: true, $bordered: true, $last-row: true);
+      }
+    }
   }
 }

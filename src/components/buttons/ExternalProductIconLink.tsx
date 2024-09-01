@@ -19,14 +19,13 @@ export const ExternalProductIconLink = ({
 }: ExternalProductIconLinkProps): JSX.Element => (
   <Tooltip content="View on Lie-Nielsen.com" className="text-sm" placement="top-start">
     <IconButton.Transparent
+      openInNewTab
       size="xsmall"
       scheme="light"
       {...props}
       href={getProductDetailPageUrl(product.slug)}
       tight
       element="a"
-      target="_blank"
-      rel="noopener noreferrer"
       icon={{ name: "arrow-up-right-from-square", iconStyle: "solid" }}
     />
   </Tooltip>

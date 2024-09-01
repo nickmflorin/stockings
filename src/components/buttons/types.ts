@@ -176,6 +176,8 @@ type IfNotInlineLink<V, T extends ButtonType, R = never> = T extends
   ? V
   : R;
 
+type IfAnchorElement<E extends ButtonElement> = E extends "a" ? boolean : never;
+
 export type AbstractInternalProps<
   T extends ButtonType,
   E extends ButtonElement,
@@ -186,6 +188,7 @@ export type AbstractInternalProps<
   readonly component?: ButtonComponent<E, P>;
   readonly scheme?: ButtonColorScheme;
   readonly variant?: ButtonVariant<T>;
+  readonly openInNewTab?: IfAnchorElement<E>;
   readonly fontFamily?: IfNotIconButton<TypographyCharacteristics["fontFamily"], T, never>;
   readonly fontWeight?: IfNotIconButton<TypographyCharacteristics["fontWeight"], T, never>;
   readonly transform?: IfNotIconButton<TypographyCharacteristics["transform"], T, never>;
