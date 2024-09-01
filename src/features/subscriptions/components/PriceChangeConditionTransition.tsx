@@ -15,17 +15,14 @@ export const PriceChangeConditionTransition = ({
   textProps,
   ...props
 }: PriceChangeConditionTransitionProps): JSX.Element => (
-  <div
-    {...props}
-    className={classNames("w-full flex flex-row items-center gap-2", props.className)}
-  >
-    <div className="flex flex-row items-center justify-start w-[66px]">
+  <div {...props} className={classNames("flex flex-row items-center gap-2", props.className)}>
+    <div className="flex flex-row items-center justify-start w-[55px]">
       <CurrencyText fontWeight="medium" fontSize="sm" {...textProps}>
         {fromPrice}
       </CurrencyText>
     </div>
     <Icon icon="arrow-right" className="text-gray-600" size="14px" />
-    <div className="flex flex-row items-center justify-end w-[66px]">
+    <div className="flex flex-row items-center justify-end w-[55px]">
       <CurrencyText fontWeight="medium" fontSize="sm" {...textProps}>
         {toPrice}
       </CurrencyText>

@@ -53,6 +53,7 @@ export const StatusChangeConditionTransitions = ({
             key={index}
             fromStatus={fromStatus}
             toStatus={toStatus}
+            justified
           />
         ))}
       </div>

@@ -1,3 +1,5 @@
+import { chunk } from "lodash-es";
+
 import type { ScriptContext } from "~/scripts/context";
 
 import { enhance, type ApiProduct } from "~/database/model";
@@ -5,6 +7,10 @@ import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
 import { processSubscription } from "./process-subscription";
+
+logger.modify({ includeContext: false, level: "info" });
+
+const DELETE_NOTIFICATIONS_BATCH_SIZE = 100;
 
 export const processProductSubscriptions = async (
   product: ApiProduct<["records"]>,
@@ -16,10 +22,24 @@ export const processProductSubscriptions = async (
     if (process.env.NODE_ENV !== "development") {
       throw new Error("Can only clean subscriptions in development mode!");
     }
-    logger.info("Deleting previously processed records so they can be reprocessed.");
-    await enhanced.productNotification.deleteMany({
+    logger.info("Deleting all product notifications so they can be regenerated.");
+
+    const ids = await enhanced.productNotification.findMany({
       where: { productId: product.id },
+      select: { id: true },
     });
+    /* We have to chunk out the delete of the product notifications because we occasionally get
+       transaction timeout errors due to the number of deletes that are occurring when we try to
+       delete all notifications at once. */
+    const chunks = chunk(
+      ids.map(({ id }) => id),
+      DELETE_NOTIFICATIONS_BATCH_SIZE,
+    );
+    for (const chunk of chunks) {
+      await enhanced.productNotification.deleteMany({
+        where: { id: { in: chunk } },
+      });
+    }
   }
 
   const subscriptions = [

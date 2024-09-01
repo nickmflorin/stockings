@@ -5,7 +5,7 @@ import { type HttpError, isHttpError } from "~/integrations/http";
 
 import { type ApiClientErrorJson } from "~/api";
 
-import { type LogLevel } from "./constants";
+import { LogLevel } from "~/environment/constants";
 
 export type NextLoggerTransport = "sentry" | "browser";
 
@@ -14,6 +14,7 @@ export interface AbstractLoggerConfig {
   readonly level?: LogLevel;
   readonly globalContext?: Record<string, unknown>;
   readonly vercelEnvironment?: VercelEnvironmentName;
+  readonly includeContext?: boolean;
 }
 
 export interface NextLoggerConfig extends AbstractLoggerConfig {

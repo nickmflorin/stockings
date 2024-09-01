@@ -3,8 +3,8 @@ import { uniq } from "lodash-es";
 import resolveConfig from "tailwindcss/resolveConfig";
 
 import type { BrandProduct, BrandProductRecord } from "./brand";
+import type { PriceChangeSubscription } from "./models";
 import type { ApiStatusChangeSubscription } from "./subscription";
-import type { PriceChangeSubscription } from "./zenstack-generated/models";
 
 import {
   type TailwindTextColorClassName,
@@ -14,8 +14,8 @@ import {
 
 import TailwindConfig from "../../tailwind.config";
 
-import { ProductStatus } from "./generated";
 import { type ConditionallyInclude } from "./inclusion";
+import { ProductStatus } from "./models";
 
 export type ProductRecordIncludesField = never;
 

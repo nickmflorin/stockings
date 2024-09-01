@@ -5,6 +5,7 @@ import { type EnvironmentName } from "~/environment/constants";
 import {
   VercelEnvironmentNames,
   EnvironmentNames,
+  LogLevels,
   getEnvironmentName,
 } from "~/environment/constants";
 
@@ -18,7 +19,6 @@ import {
   DEFAULT_PRETTY_LOGGING,
   DEFAULT_LOGGING_TRANSPORTS,
   LevelSeverityLevelMap,
-  LogLevel,
 } from "./constants";
 import * as types from "./types";
 
@@ -193,7 +193,7 @@ export abstract class BaseNextLogger extends AbstractLogger {
 
   public captureError(error: types.LoggerError, context?: types.SentryCaptureContext) {
     if (this.hasTransport("sentry")) {
-      const { level = LogLevel.ERROR, ...rest } = context ?? {};
+      const { level = LogLevels.ERROR, ...rest } = context ?? {};
       Sentry.captureException(error, {
         level: LevelSeverityLevelMap[level],
         extra: { ...this.context, ...rest },
@@ -203,7 +203,7 @@ export abstract class BaseNextLogger extends AbstractLogger {
 
   public captureMessage(message: string, context?: types.SentryCaptureContext) {
     if (this.hasTransport("sentry")) {
-      const { level = LogLevel.ERROR, ...rest } = context ?? {};
+      const { level = LogLevels.ERROR, ...rest } = context ?? {};
       Sentry.captureMessage(message, {
         level: LevelSeverityLevelMap[level],
         extra: { ...this.context, ...rest },
@@ -318,11 +318,11 @@ export abstract class BaseNextLogger extends AbstractLogger {
        provided) or send the message to Sentry. */
     if (options.capture) {
       if (error && message) {
-        this.captureError(error, { ...context, message, level: LogLevel.WARN });
+        this.captureError(error, { ...context, message, level: LogLevels.WARN });
       } else if (error) {
-        this.captureError(error, { ...context, message, level: LogLevel.WARN });
+        this.captureError(error, { ...context, message, level: LogLevels.WARN });
       } else if (message) {
-        this.captureMessage(message, { ...context, message, level: LogLevel.WARN });
+        this.captureMessage(message, { ...context, message, level: LogLevels.WARN });
       }
     }
   }
@@ -413,11 +413,11 @@ export abstract class BaseNextLogger extends AbstractLogger {
        provided) or send the message to Sentry. */
     if (options.capture) {
       if (error && message) {
-        this.captureError(error, { ...context, message, level: LogLevel.ERROR });
+        this.captureError(error, { ...context, message, level: LogLevels.ERROR });
       } else if (error) {
-        this.captureError(error, { ...context, level: LogLevel.ERROR });
+        this.captureError(error, { ...context, level: LogLevels.ERROR });
       } else if (message) {
-        this.captureMessage(message, { ...context, level: LogLevel.ERROR });
+        this.captureMessage(message, { ...context, level: LogLevels.ERROR });
       }
     }
   }

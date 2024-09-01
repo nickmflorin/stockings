@@ -12,6 +12,8 @@ import { pluralizeBrandModel } from "~/database/model";
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
+logger.modify({ includeContext: false, level: "info" });
+
 type ParsedArgs = { [key in string]: string | boolean | number };
 
 const parseArgumentValue = (val: string): string | boolean | number => {

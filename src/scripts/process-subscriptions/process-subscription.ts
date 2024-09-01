@@ -10,6 +10,8 @@ import { logger } from "~/internal/logger";
 
 import { processRecord } from "./process-record";
 
+logger.modify({ includeContext: false, level: "info" });
+
 export const processSubscription = async (
   subscription: ApiProductSubscription,
   product: Product,

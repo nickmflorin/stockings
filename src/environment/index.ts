@@ -1,7 +1,7 @@
 import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 import { z } from "zod";
 
-import { getEnvironmentNameUnsafe, LogLevel, EnvironmentNames } from "./constants";
+import { getEnvironmentNameUnsafe, LogLevels, EnvironmentNames, type LogLevel } from "./constants";
 import { NextEnvironment } from "./next-environment";
 import { StringBooleanFlagSchema, createCommaSeparatedArraySchema } from "./util";
 
@@ -91,11 +91,11 @@ export const environment = NextEnvironment.create(
       NEXT_PUBLIC_PRETTY_LOGGING: StringBooleanFlagSchema.optional(),
       NEXT_PUBLIC_LOG_LEVEL: z
         .union([
-          z.literal(LogLevel.DEBUG),
-          z.literal(LogLevel.ERROR),
-          z.literal(LogLevel.INFO),
-          z.literal(LogLevel.SILENT),
-          z.literal(LogLevel.WARN),
+          z.literal(LogLevels.DEBUG),
+          z.literal(LogLevels.ERROR),
+          z.literal(LogLevels.INFO),
+          z.literal(LogLevels.SILENT),
+          z.literal(LogLevels.WARN),
         ] as [z.ZodLiteral<LogLevel>, z.ZodLiteral<LogLevel>, ...z.ZodLiteral<LogLevel>[]])
         .optional(),
       NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: z.string().optional(),

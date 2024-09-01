@@ -1,10 +1,17 @@
 import { type User as ClerkUser } from "@clerk/clerk-sdk-node";
 import clerk from "@clerk/clerk-sdk-node";
 
-import { type PrismaClient, type User } from "~/database/model";
+import { type PrismaClient, type Product, type User } from "~/database/model";
 import { upsertUserFromClerk } from "~/database/model/user";
 import { db, type Transaction } from "~/database/prisma";
 import { environment } from "~/environment";
+import { logger } from "~/internal/logger";
+
+import { isUuid } from "~/lib/typeguards";
+
+import { InvalidCommandLineArgumentError, MissingCommandLineArgumentError } from "~/scripts/cli";
+
+logger.modify({ includeContext: false, level: "info" });
 
 export type ScriptContext = {
   readonly clerkUser: ClerkUser;
@@ -20,10 +27,10 @@ export async function getScriptContext(
   opts: ScriptContextOptions,
 ): Promise<ScriptContext>;
 
-export async function getScriptContext(opts: ScriptContextOptions): Promise<ScriptContext>;
+export async function getScriptContext(opts?: ScriptContextOptions): Promise<ScriptContext>;
 
 export async function getScriptContext(
-  arg0: Transaction | ScriptContextOptions,
+  arg0?: Transaction | ScriptContextOptions,
   arg1?: ScriptContextOptions,
 ): Promise<ScriptContext> {
   let tx: Transaction | PrismaClient;
@@ -114,4 +121,54 @@ export async function getScriptContext(
     clerkUser,
     user: await tx.user.findUniqueOrThrow({ where: { clerkId: clerkUser.id } }),
   };
+}
+
+export interface ProductScriptContextOptions extends ScriptContextOptions {
+  readonly productOptional?: boolean;
+}
+
+export type ProductScriptContext<O extends ProductScriptContextOptions> = O extends {
+  productOptional: true;
+}
+  ? {
+      readonly clerkUser: ClerkUser;
+      readonly user: User;
+      readonly product?: Product;
+    }
+  : {
+      readonly clerkUser: ClerkUser;
+      readonly user: User;
+      readonly product: Product;
+    };
+
+export async function getProductScriptContext<O extends ProductScriptContextOptions>(
+  options?: O,
+): Promise<ProductScriptContext<O>> {
+  const context = await getScriptContext(options);
+
+  const productIdentifier = process.argv.slice(2)[0];
+  if (!productIdentifier) {
+    if (options?.productOptional) {
+      return context as ProductScriptContext<O>;
+    }
+    throw new MissingCommandLineArgumentError("product");
+  }
+  const product = await db.product.findUnique({
+    where: isUuid(productIdentifier) ? { id: productIdentifier } : { slug: productIdentifier },
+  });
+  if (!product) {
+    if (isUuid(productIdentifier)) {
+      throw new InvalidCommandLineArgumentError(
+        "product",
+        productIdentifier,
+        `A product with the ID '${productIdentifier}' does not exist!`,
+      );
+    }
+    throw new InvalidCommandLineArgumentError(
+      "product",
+      productIdentifier,
+      `A product with the slug '${productIdentifier}' does not exist!`,
+    );
+  }
+  return { ...context, product };
 }

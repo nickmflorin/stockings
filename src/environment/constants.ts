@@ -21,22 +21,17 @@ export const EnvironmentNames = enumeratedLiterals(
 
 export type EnvironmentName = EnumeratedLiteralsMember<typeof EnvironmentNames>;
 
-export enum LogLevel {
-  ERROR = "error",
-  INFO = "info",
-  WARN = "warn",
-  DEBUG = "debug",
-  SILENT = "silent",
-}
-
-export const isLogLevel = (v: unknown): v is LogLevel =>
-  typeof v === "string" && Object.values(LogLevel).includes(v as LogLevel);
+export const LogLevels = enumeratedLiterals(
+  ["error", "warn", "info", "debug", "silent"] as const,
+  {},
+);
+export type LogLevel = EnumeratedLiteralsMember<typeof LogLevels>;
 
 export const DEFAULT_LOG_LEVELS: { [key in EnvironmentName]: LogLevel } = {
-  [EnvironmentNames.PRODUCTION]: LogLevel.INFO,
-  [EnvironmentNames.TEST]: LogLevel.DEBUG,
-  [EnvironmentNames.LOCAL]: LogLevel.DEBUG,
-  [EnvironmentNames.PREVIEW]: LogLevel.INFO,
+  [EnvironmentNames.PRODUCTION]: LogLevels.INFO,
+  [EnvironmentNames.TEST]: LogLevels.DEBUG,
+  [EnvironmentNames.LOCAL]: LogLevels.DEBUG,
+  [EnvironmentNames.PREVIEW]: LogLevels.INFO,
 };
 
 export const getEnvironmentName = ({

@@ -16,6 +16,8 @@ import {
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
+logger.modify({ includeContext: false, level: "info" });
+
 interface ProcessRecordParams {
   readonly product: Product;
   readonly subscription: ApiProductSubscription;
@@ -61,10 +63,10 @@ export const processRecord = async (
         { previousPrice: prices.previous, currentPrice: prices.current },
       );
     }
-    logger.info(`Creating price change notification for subscription '${sub.id}'.`, {
-      previousPrice: prices.previous,
-      currentPrice: prices.current,
-    });
+    // This is a sanity check.
+    if (prices.previous === prices.current) {
+      throw new Error("Unexpected Condition: Prices should not be equal!");
+    }
     return await tx.priceChangeNotification.create({
       data: {
         createdBy: { connect: { id: ctx.user.id } },
@@ -99,6 +101,10 @@ export const processRecord = async (
           condition.toStatus.includes(statuses.current),
       )
     ) {
+      // This is a sanity check.
+      if (statuses.previous === statuses.current) {
+        throw new Error("Unexpected Condition: Statuses should not be equal!");
+      }
       await tx.statusChangeNotification.create({
         data: {
           createdBy: { connect: { id: ctx.user.id } },
@@ -122,6 +128,7 @@ export const processRecord = async (
         if (record.price) {
           const previousRecordsWithPrices = await tx.productRecord.findMany({
             where: {
+              id: { not: record.id },
               productId: product.id,
               price: { not: null },
               timestamp: { lt: record.timestamp },
@@ -144,7 +151,11 @@ export const processRecord = async (
             throw new Error(
               "Unexpected Condition: The record should have a price based on the Prisma query!",
             );
-          } else {
+            /* It is possible that you have two consecutive records with the same price.  This
+               can happen if there are error records between them (and there was an error scraping
+               the price on one of them) or if the records represent a change in status, not
+               price. */
+          } else if (prevRecordWithPrice.price !== record.price) {
             await processPriceChange(tx, subscription as PriceChangeSubscription, {
               previous: prevRecordWithPrice.price,
               current: record.price,
@@ -161,6 +172,7 @@ export const processRecord = async (
         if (record.status) {
           const previousRecordsWithStatuses = await tx.productRecord.findMany({
             where: {
+              id: { not: record.id },
               productId: product.id,
               status: { not: null },
               timestamp: { lt: record.timestamp },
@@ -183,7 +195,11 @@ export const processRecord = async (
             throw new Error(
               "Unexpected Condition: The record should have a status based on the Prisma query!",
             );
-          } else {
+            /* It is possible that you have two consecutive records with the same status.  This
+               can happen if there are error records between them (and there was an error scraping
+               the status on one of them) or if the records represent a change in price, not
+               status. */
+          } else if (prevRecordWithStatus.status !== record.status) {
             await processStatusChange(tx, subscription as ApiStatusChangeSubscription, {
               previous: prevRecordWithStatus.status,
               current: record.status,

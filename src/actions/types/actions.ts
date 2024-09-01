@@ -2,7 +2,7 @@ import { clamp } from "lodash-es";
 
 import { logger } from "~/internal/logger";
 
-import { type ApiClientError, type ApiClientErrorJson } from "~/api";
+import { convertToPlainObject, type ApiClientError, type ApiClientErrorJson } from "~/api";
 
 export type ServerSidePaginationParams = {
   readonly page: number;
@@ -76,4 +76,4 @@ export const dataInFetchContext = <T, C extends FetchActionContext>(
   data: T,
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   context: C,
-): FetchActionResponse<T, C> => ({ data }) as FetchActionResponse<T, C>;
+): FetchActionResponse<T, C> => ({ data: convertToPlainObject(data) }) as FetchActionResponse<T, C>;

@@ -2,7 +2,7 @@ import { enumeratedLiterals } from "enumerated-literals";
 
 import { type TailwindBgColorClassName, type TailwindTextColorClassName } from "~/components/types";
 
-import { ProductCategory, ProductSubCategory } from "./generated";
+import { ProductCategory, ProductSubCategory } from "./models";
 
 export const ProductCategories = enumeratedLiterals(
   [

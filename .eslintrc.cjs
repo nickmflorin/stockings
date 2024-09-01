@@ -153,8 +153,6 @@ module.exports = {
     "package-lock.json",
     "src/database/prisma/migrations/*",
     "src/database/model/generated/*",
-    "src/database/schemas/**",
-    "src/database/model/zenstack-generated/**",
     "/node_modules/**",
     ".next/*",
   ],

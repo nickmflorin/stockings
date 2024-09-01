@@ -45,10 +45,6 @@ export class NextLogger extends BaseNextLogger {
   protected get stream() {
     // Multi-stream only works on the server.
     if (typeof window === "undefined" && this.prettyStream) {
-      if (this.environment !== EnvironmentNames.TEST) {
-        /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
-        console.info("Configuring logger for pretty logging...");
-      }
       return multistream([this.prettyStream]);
     }
     return null;

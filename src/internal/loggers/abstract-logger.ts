@@ -1,9 +1,9 @@
 import pino, { type LoggerOptions, type DestinationStream } from "pino";
 import { v4 as uuid } from "uuid";
 
-import { type VercelEnvironmentName, type EnvironmentName } from "~/environment/constants";
+import { type VercelEnvironmentName, type EnvironmentName, LogLevel } from "~/environment/constants";
 
-import { DEFAULT_LOG_LEVELS, type LogLevel } from "./constants";
+import { DEFAULT_LOG_LEVELS } from "./constants";
 import { type AbstractLoggerConfig } from "./types";
 
 type LogMethodType = "warn" | "error" | "info" | "debug";
@@ -19,10 +19,11 @@ export abstract class AbstractLogger {
 
   private readonly _vercelEnvironment: VercelEnvironmentName | undefined = undefined;
   private readonly _environment: EnvironmentName;
+  private _includeContext: boolean | undefined;
 
   constructor(
     name: string,
-    { environment, level, globalContext, vercelEnvironment }: AbstractLoggerConfig,
+    { environment, level, globalContext, vercelEnvironment, includeContext }: AbstractLoggerConfig,
   ) {
     this.instance = uuid();
     this._environment = environment;
@@ -30,6 +31,7 @@ export abstract class AbstractLogger {
     this._level = level;
     this.globalContext = globalContext;
     this.name = name;
+    this._includeContext = includeContext;
   }
 
   protected abstract get stream(): DestinationStream | null;
@@ -44,25 +46,77 @@ export abstract class AbstractLogger {
     return this._vercelEnvironment;
   }
 
+  public modify({
+    includeContext,
+    level,
+  }: Pick<AbstractLoggerConfig, "includeContext" | "level">): void {
+    let reset = false;
+
+    if (includeContext !== undefined) {
+      if (includeContext && !this.includeContext) {
+        this._includeContext = includeContext;
+        /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
+        console.info("Resetting logger to include context...");
+        reset = true;
+      } else if (!includeContext && this.includeContext) {
+        this._includeContext = includeContext;
+        /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
+        console.info("Resetting logger to exclude context...");
+        reset = true;
+      }
+    }
+
+    if (includeContext && !this.includeContext) {
+      this._includeContext = includeContext;
+      /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
+      console.info("Resetting logger to include context...");
+      this.reset();
+    } else if (!includeContext && this.includeContext) {
+      this._includeContext = includeContext;
+      /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
+      console.info("Resetting logger to exclude context...");
+      this.reset();
+    }
+    if (level !== this.level) {
+      this._level = level;
+      /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
+      console.info(`Resetting logger with level '${level}'...`);
+      reset = true;
+    }
+    if (reset) {
+      this.reset();
+    }
+  }
+
+  public get includeContext() {
+    return this._includeContext ?? true;
+  }
+
+  public set includeContext(includeContext: boolean) {
+    this.modify({ includeContext });
+  }
+
   public get level() {
     return this._level ?? DEFAULT_LOG_LEVELS[this.environment];
   }
 
   public set level(level: LogLevel) {
-    this._level = level;
-    /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
-    console.info(`Resetting logger with level '${level}'...`);
-    this.reset();
+    this.modify({ level });
   }
 
   protected get context() {
-    const ctx: Record<string, unknown> = {
-      ...this.globalContext,
-      environment: this.environment,
-      instance: this.instance,
-      vercelEnvironment: this.vercelEnvironment,
+    let ctx: Record<string, unknown> = {
       name: this.name,
     };
+    if (this.includeContext) {
+      ctx = {
+        ...ctx,
+        ...this.globalContext,
+        environment: this.environment,
+        instance: this.instance,
+        vercelEnvironment: this.vercelEnvironment,
+      };
+    }
     return Object.keys(ctx).reduce(
       (prev, key) => (ctx[key] !== undefined ? { ...prev, [key]: ctx[key] } : prev),
       {} as Record<string, unknown>,

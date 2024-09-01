@@ -1,13 +1,9 @@
 import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
-import {
-  type BrandPriceChangeNotification,
-  type BrandStatusChangeNotification,
-} from "~/database/model";
-
-import { NotificationState, ProductNotificationType } from "./generated";
+import { type BrandPriceChangeNotification, type BrandStatusChangeNotification } from "./brand";
 import { type ConditionallyInclude } from "./inclusion";
-import { type Product } from "./zenstack-generated/models";
+import { NotificationState, ProductNotificationType } from "./models";
+import { type Product } from "./models";
 
 export const ProductNotificationIncludesFields = enumeratedLiterals(["product"] as const, {});
 export type ProductNotificationIncludesField = EnumeratedLiteralsMember<

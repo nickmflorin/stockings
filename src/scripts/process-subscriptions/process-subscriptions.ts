@@ -6,6 +6,8 @@ import { logger } from "~/internal/logger";
 
 import { processSubscription } from "./process-subscription";
 
+logger.modify({ includeContext: false, level: "info" });
+
 export const processSubscriptions = async (ctx: ScriptContext) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 

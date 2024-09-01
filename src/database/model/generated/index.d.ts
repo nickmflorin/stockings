@@ -110,12 +110,12 @@ export type PriceChangeSubscription = $Result.DefaultSelection<Prisma.$PriceChan
 export type ProductNotification = $Result.DefaultSelection<Prisma.$ProductNotificationPayload>
 /**
  * Model PriceChangeNotification
- * 
+ * @@validate(previousPrice != newPrice, 'The previous and new prices for a notification must not be the same.')
  */
 export type PriceChangeNotification = $Result.DefaultSelection<Prisma.$PriceChangeNotificationPayload>
 /**
  * Model StatusChangeNotification
- * 
+ * @@validate(previousStatus != newStatus, 'The previous and new statuses for a notification must not be the same.')
  */
 export type StatusChangeNotification = $Result.DefaultSelection<Prisma.$StatusChangeNotificationPayload>
 

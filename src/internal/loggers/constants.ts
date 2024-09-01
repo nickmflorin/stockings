@@ -1,24 +1,18 @@
 import type * as types from "./types";
 import type * as Sentry from "@sentry/nextjs";
 
-import { type EnvironmentName, EnvironmentNames } from "~/environment/constants";
-
-export enum LogLevel {
-  ERROR = "error",
-  INFO = "info",
-  WARN = "warn",
-  DEBUG = "debug",
-  SILENT = "silent",
-}
-
-export const isLogLevel = (v: unknown): v is LogLevel =>
-  typeof v === "string" && Object.values(LogLevel).includes(v as LogLevel);
+import {
+  LogLevels,
+  type EnvironmentName,
+  EnvironmentNames,
+  type LogLevel,
+} from "~/environment/constants";
 
 export const DEFAULT_LOG_LEVELS: { [key in EnvironmentName]: LogLevel } = {
-  [EnvironmentNames.PRODUCTION]: LogLevel.INFO,
-  [EnvironmentNames.TEST]: LogLevel.DEBUG,
-  [EnvironmentNames.LOCAL]: LogLevel.DEBUG,
-  [EnvironmentNames.PREVIEW]: LogLevel.INFO,
+  [EnvironmentNames.PRODUCTION]: LogLevels.INFO,
+  [EnvironmentNames.TEST]: LogLevels.DEBUG,
+  [EnvironmentNames.LOCAL]: LogLevels.DEBUG,
+  [EnvironmentNames.PREVIEW]: LogLevels.INFO,
 };
 
 export const DEFAULT_PRETTY_LOGGING: Record<EnvironmentName, boolean> = {

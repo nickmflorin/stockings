@@ -7,16 +7,14 @@ import { type TailwindTextColorClassName, type TailwindBgColorClassName } from "
 
 import {
   ProductSubscriptionType,
-  type Product,
   type ProductStatus,
   PriceChangeCondition,
   ProductNotificationType,
-} from "./generated";
-import {
+  type Product,
   type StatusChangeSubscription,
   type StatusChangeSubscriptionCondition,
   type PriceChangeSubscription,
-} from "./zenstack-generated/models";
+} from "./models";
 
 export const PriceChangeConditions = enumeratedLiterals(
   [

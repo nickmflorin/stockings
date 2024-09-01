@@ -1,4 +1,4 @@
-import { ElementAttribute } from "./generated";
+import { ElementAttribute } from "./models";
 
 const _ElementAttributeKeys = {
   [ElementAttribute.HREF]: "href",

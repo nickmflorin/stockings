@@ -2,10 +2,13 @@ import { DateTime } from "luxon";
 import { levels } from "pino";
 import { z } from "zod";
 
-import { EnvironmentNames, type EnvironmentName } from "~/environment/constants";
+import {
+  EnvironmentNames,
+  type EnvironmentName,
+  type LogLevel,
+  LogLevels,
+} from "~/environment/constants";
 import { terminal } from "~/support";
-
-import { isLogLevel, type LogLevel } from "./constants";
 
 export const LogLevelColors: { [key in LogLevel | "log"]: terminal.TerminalColor } = {
   error: "red",
@@ -30,7 +33,7 @@ export const ConsoleWriters: { [key in LogLevel | "log"]: typeof console.log } =
 const _parseLevel = (o: object): LogLevel | "log" | null => {
   if ("level" in o && typeof o.level === "number") {
     const l = levels.labels[o.level];
-    if (isLogLevel(l) || l === "log") {
+    if (LogLevels.contains(l) || l === "log") {
       return l;
     }
   }

@@ -16,18 +16,21 @@ export const ProductNotificationsTableColumns = [
     label: "Type",
     // minWidth: 240,
     maxWidth: 240,
+    align: "center",
   },
   {
     id: "event",
     label: "Event",
     // minWidth: 240,
     maxWidth: 240,
+    align: "center",
   },
   {
     id: "state",
     label: "State",
     // minWidth: 240,
     maxWidth: 240,
+    align: "left",
   },
   {
     id: "sentAt",

@@ -1,7 +1,25 @@
-export class CommandLineArgumentError extends Error {
+export abstract class CommandLineArgumentError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "CommandLineArgumentError";
+  }
+}
+
+export class InvalidCommandLineArgumentError extends Error {
+  constructor(name: string, value: string, context?: string) {
+    super(
+      context
+        ? `Invalid value for argument '${name}': ${value}. ${context}`
+        : `Invalid value for argument '${name}': ${value}.`,
+    );
+    this.name = "InvalidCommandLineArgumentError";
+  }
+}
+
+export class MissingCommandLineArgumentError extends Error {
+  constructor(name: string) {
+    super(`Missing value for argument '${name}'.`);
+    this.name = "MissingCommandLineArgumentError";
   }
 }
 
@@ -12,7 +30,7 @@ export const parseBooleanFlagCliArgument = (name: string, defaultValue = false) 
   } else if (value.includes("=")) {
     const parsed = value.split("=")[1];
     if (!["true", "false"].includes(parsed.trim().toLowerCase())) {
-      throw new CommandLineArgumentError(`Invalid value for argument '${name}': ${value}`);
+      throw new InvalidCommandLineArgumentError(name, value);
     }
     return parsed.trim().toLowerCase() === "true";
   }

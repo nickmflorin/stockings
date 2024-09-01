@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
-import { LogLevel } from "~/internal/loggers/constants";
 
 import { client } from "~/integrations/lie-nielsen";
 
@@ -9,7 +8,7 @@ import { getScriptContext } from "~/scripts/context";
 
 import { parseBooleanFlagCliArgument } from "./cli";
 
-logger.level = LogLevel.INFO;
+logger.modify({ includeContext: false, level: "info" });
 
 async function main() {
   const productSlug = process.argv.slice(2)[0];

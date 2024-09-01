@@ -3,15 +3,12 @@ import { chunk } from "lodash-es";
 
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
-import { LogLevel } from "~/internal/loggers/constants";
-
-import { isUuid } from "~/lib/typeguards";
 
 import { parseBooleanFlagCliArgument } from "~/scripts/cli";
-import { getScriptContext } from "~/scripts/context";
+import { getProductScriptContext } from "~/scripts/context";
 import { seedRecords } from "~/scripts/seed/seed-records";
 
-logger.level = LogLevel.INFO;
+logger.modify({ includeContext: false, level: "info" });
 
 const RECORDS_BATCH_SIZE = 200;
 
@@ -20,21 +17,7 @@ async function main() {
     throw new Error("Script can only be run in development mode!");
   }
 
-  const productIdentifier = process.argv.slice(2)[0];
-  if (!productIdentifier) {
-    return console.error(
-      "A valid product slug or ID must be provided as the first positional argument.",
-    );
-  }
-  const product = await db.product.findUnique({
-    where: isUuid(productIdentifier) ? { id: productIdentifier } : { slug: productIdentifier },
-  });
-  if (!product) {
-    if (isUuid(productIdentifier)) {
-      return console.error(`A product with the ID '${productIdentifier}' does not exist!`);
-    }
-    return console.error(`A product with the slug '${productIdentifier}' does not exist!`);
-  }
+  const { product, ...ctx } = await getProductScriptContext({ upsertUser: false });
 
   const clean = parseBooleanFlagCliArgument("clean");
   if (clean) {
@@ -43,16 +26,10 @@ async function main() {
       where: { productId: product.id },
     });
 
-    logger.info(`Deleting previously processed records for product '${product.slug}'...`);
-    await db.processedProductRecord.deleteMany({
-      where: { record: { productId: product.id } },
-    });
-
     logger.info(`Deleting product records for product '${product.slug}'...`);
     await db.productRecord.deleteMany({ where: { productId: product.id } });
   }
 
-  const ctx = await getScriptContext({ upsertUser: true });
   const recs = seedRecords(product, ctx);
   const batches = chunk(recs, RECORDS_BATCH_SIZE);
   for (let b = 0; b < batches.length; b++) {

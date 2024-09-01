@@ -7,6 +7,8 @@ import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 
 import { type ScriptContext } from "../context";
 
+logger.modify({ includeContext: false, level: "info" });
+
 /* The minimum/maximum number of days to look backwards when determining the time horizon over which
    the the records will be generated.  For each product, a lookback horizon will be randomly chosen
    between these two bounds, and records will be generated for each day in the time horizon dictated

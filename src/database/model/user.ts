@@ -4,7 +4,7 @@ import { type Transaction } from "~/database/prisma";
 
 import { humanizeList } from "~/lib/formatters";
 
-import { type User } from "./generated";
+import { type User } from "./models";
 
 type RequiredClerkField = "emailAddress" | "firstName" | "lastName";
 type ClerkField = RequiredClerkField | "imageUrl";

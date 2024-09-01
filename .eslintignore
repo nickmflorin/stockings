@@ -3,5 +3,3 @@
 /build/**
 src/database/model/generated/**
 src/database/prisma/migrations/**
-src/database/schemas/**
-src/database/model/zenstack-generated/**

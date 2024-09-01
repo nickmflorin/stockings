@@ -1,13 +1,12 @@
-import { type ProductNotificationType } from "./generated";
 import {
+  type ProductNotificationType,
   type ProductNotification,
   type Product,
   type ProductSubscription,
   type ProductRecord,
-  type ProcessedProductRecord,
   type PriceChangeNotification,
   type StatusChangeNotification,
-} from "./zenstack-generated/models";
+} from "./models";
 
 export type ToBrandedModel<M, T extends string> = M & {
   readonly $kind: T;
@@ -18,7 +17,6 @@ export type Brands = {
   notification: Notification;
   productSubscription: ProductSubscription;
   productRecord: ProductRecord;
-  processedProductRecord: ProcessedProductRecord;
   statusChangeNotification: Omit<StatusChangeNotification, "notificationType"> & {
     readonly notificationType: typeof ProductNotificationType.StatusChangeNotification;
   };
@@ -37,7 +35,6 @@ export type BrandProduct = BrandModel<"product">;
 export type BrandNotification = BrandModel<"notification">;
 export type BrandProductSubscription = BrandModel<"productSubscription">;
 export type BrandProductRecord = BrandModel<"productRecord">;
-export type BrandProcessedProductRecord = BrandModel<"processedProductRecord">;
 export type BrandPriceChangeNotification = BrandModel<"priceChangeNotification">;
 export type BrandStatusChangeNotification = BrandModel<"statusChangeNotification">;
 export type BrandProductNotification = BrandModel<"productNotification">;

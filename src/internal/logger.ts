@@ -1,14 +1,6 @@
-import { environment } from "~/environment";
-
 import { NextLogger } from "./loggers/next-logger";
 
-const initializeLogger = () => {
-  if (!environment.isTest) {
-    /* eslint-disable-next-line no-console -- The logger is not yet configured here. */
-    console.info("Configuring logger...");
-  }
-  return NextLogger.create("main");
-};
+const initializeLogger = () => NextLogger.create("main");
 
 let _logger: NextLogger;
 if (process.env.NODE_ENV === "production") {

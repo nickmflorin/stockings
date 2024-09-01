@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
-import { LogLevel } from "~/internal/loggers/constants";
 
 import { isUuid } from "~/lib/typeguards";
 
@@ -11,11 +10,10 @@ import { getScriptContext } from "~/scripts/context";
 import { processProductSubscriptions } from "./process-product-subscriptions";
 import { processSubscriptions } from "./process-subscriptions";
 
-logger.level = LogLevel.INFO;
+logger.modify({ includeContext: false, level: "info" });
 
 async function main() {
-  const ctx = await getScriptContext({ upsertUser: true });
-
+  const ctx = await getScriptContext({ upsertUser: false });
   const productIdentifier = process.argv.slice(2)[0];
   if (!productIdentifier) {
     return await processSubscriptions(ctx);

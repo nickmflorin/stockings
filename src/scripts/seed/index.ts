@@ -1,12 +1,12 @@
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
-import { LogLevel } from "~/internal/loggers/constants";
+import { LogLevels } from "~/environment/constants";
 
 import { getScriptContext } from "../context";
 
 import { seedProducts } from "./seed-products";
 
-logger.level = LogLevel.INFO;
+logger.modify({ includeContext: false, level: "info" });
 
 async function main() {
   logger.info("Seeding Products...");

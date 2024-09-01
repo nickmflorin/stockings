@@ -14,7 +14,7 @@ import {
   type InvalidAttributeErrorData,
   type InvalidTextErrorData,
   ScrapingErrorCode,
-} from "./generated";
+} from "./models";
 
 export type ScrapingDomErrorCode = Exclude<
   ScrapingErrorCode,

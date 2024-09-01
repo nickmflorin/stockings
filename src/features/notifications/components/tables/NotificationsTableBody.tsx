@@ -14,6 +14,7 @@ import {
 } from "~/components/tables/data-tables/DataTableBody";
 import { Text, Description } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
+import { HorizontallyCentered } from "~/components/util";
 import {
   ProductNotificationsTableColumns,
   type ProductNotificationsTableColumnId,
@@ -66,17 +67,21 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
           cellRenderer(datum) {
             if (datum.notificationType === ProductNotificationType.StatusChangeNotification) {
               return (
-                <StatusChangeConditionTransition
-                  fromStatus={datum.previousStatus}
-                  toStatus={datum.newStatus}
-                />
+                <HorizontallyCentered>
+                  <StatusChangeConditionTransition
+                    fromStatus={datum.previousStatus}
+                    toStatus={datum.newStatus}
+                  />
+                </HorizontallyCentered>
               );
             } else if (datum.notificationType === ProductNotificationType.PriceChangeNotification) {
               return (
-                <PriceChangeConditionTransition
-                  fromPrice={datum.previousPrice}
-                  toPrice={datum.newPrice}
-                />
+                <HorizontallyCentered>
+                  <PriceChangeConditionTransition
+                    fromPrice={datum.previousPrice}
+                    toPrice={datum.newPrice}
+                  />
+                </HorizontallyCentered>
               );
             }
           },
@@ -84,11 +89,13 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
         type: {
           cellRenderer(datum) {
             return (
-              <NotificationTypeText
-                fontWeight="medium"
-                fontSize="sm"
-                notificationType={datum.notificationType}
-              />
+              <HorizontallyCentered>
+                <NotificationTypeText
+                  fontWeight="medium"
+                  fontSize="sm"
+                  notificationType={datum.notificationType}
+                />
+              </HorizontallyCentered>
             );
           },
         },

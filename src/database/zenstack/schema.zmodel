@@ -16,7 +16,6 @@ plugin prisma {
 
 plugin enhancer {
   provider = '@core/enhancer'
-  output = '../model/zenstack-generated'
 }
 
 model User {

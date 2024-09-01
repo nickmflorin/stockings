@@ -20,6 +20,8 @@ const BATCH_SIZE = 50;
 
 const SubscriptionFrequency = 0.4;
 
+logger.modify({ includeContext: false, level: "info" });
+
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
   ctx: ScriptContext,
