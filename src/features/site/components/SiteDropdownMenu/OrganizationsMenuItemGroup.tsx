@@ -28,7 +28,7 @@ export const OrganizationsMenuItemGroup = (props: OrganizationsMenuItemGroupProp
       {...props}
       label="Organizations"
       isLoading={!isLoaded || !orgIsLoaded}
-      labelContainerClassName="px-[18px] py-[6px]"
+      labelContainerClassName="px-[18px] py-[12px]"
     >
       {(userMemberships.data ?? [])?.map(mem => (
         <MenuItem

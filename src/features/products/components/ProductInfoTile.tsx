@@ -13,7 +13,6 @@ import { ProductCategoryText } from "~/features/products/components/ProductCateg
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 import { ProductSubCategoryText } from "~/features/products/components/ProductSubCategoryText";
 
-
 const InfoItem = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="flex flex-row gap-2 justify-between">
     <Label className="w-[30%] min-w-[120px] max-w-[30%]">{label}</Label>

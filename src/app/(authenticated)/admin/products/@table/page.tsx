@@ -1,0 +1,59 @@
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+import { z } from "zod";
+
+import { parseFilters } from "~/lib/filters";
+import { parseOrdering } from "~/lib/ordering";
+
+import { ProductsDefaultOrdering, ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
+
+import { Loading } from "~/components/loading/Loading";
+import { OrderableProductsTableColumnIds } from "~/features/products";
+/* eslint-disable-next-line max-len */
+import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
+
+import { ProductsTableBody } from "./ProductsTableBody";
+import { ProductsTablePaginator } from "./ProductsTablePaginator";
+
+const ProductsTableView = dynamic(
+  () => import("~/features/products/components/tables/ProductsTableView"),
+  { loading: () => <Loading isLoading /> },
+);
+
+export interface ProductsTablePageProps {
+  readonly searchParams: Record<string, string>;
+}
+
+export default function ProductsTablePage({ searchParams }: ProductsTablePageProps) {
+  const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
+
+  const filters = parseFilters(searchParams, ProductsFiltersSchemas, ProductsFiltersOptions);
+
+  const ordering = parseOrdering(searchParams, {
+    defaultOrdering: ProductsDefaultOrdering,
+    fields: OrderableProductsTableColumnIds,
+  });
+
+  return (
+    <ProductsTableView
+      filterBar={
+        <Suspense>
+          <ProductsTableFilterBar />
+        </Suspense>
+      }
+      pagination={
+        <Suspense key={JSON.stringify(filters) + String(page)}>
+          <ProductsTablePaginator filters={filters} page={page} />
+        </Suspense>
+      }
+    >
+      <Suspense
+        key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
+        fallback={<Loading isLoading component="tbody" />}
+      >
+        <ProductsTableBody filters={filters} page={page} ordering={ordering} />
+      </Suspense>
+    </ProductsTableView>
+  );
+}

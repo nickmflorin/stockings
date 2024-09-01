@@ -18,3 +18,7 @@ export interface NavItem {
   readonly path: LeadingPath;
   readonly activePaths: PathActive;
 }
+
+export interface LabeledNavItem extends NavItem {
+  readonly label: string;
+}

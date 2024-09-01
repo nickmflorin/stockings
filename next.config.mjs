@@ -80,6 +80,11 @@ let nextConfig = {
       destination: "/dashboard",
       permanent: false,
     },
+    {
+      source: "/admin",
+      destination: "/admin/products",
+      permanent: false,
+    },
   ],
 };
 

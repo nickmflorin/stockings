@@ -1,12 +1,17 @@
 import { type ReactNode } from "react";
 
+import { auth } from "@clerk/nextjs/server";
+
+import { SITE_ADMIN_ORG_SLUG } from "~/application/auth/constants";
+
 import { Layout } from "~/components/layout/Layout";
 
 interface AuthenticatedLayoutProps {
   readonly children: ReactNode;
 }
 
-export default function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+export default async function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+  const { orgSlug } = auth();
   return (
     <Layout
       nav={[
@@ -33,6 +38,13 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           icon: "envelope",
           path: "/notifications",
           activePaths: [{ leadingPath: "/notifications" }],
+        },
+        {
+          tooltipLabel: "Admin",
+          icon: "gear",
+          path: "/admin",
+          visible: orgSlug === SITE_ADMIN_ORG_SLUG,
+          activePaths: [{ leadingPath: "/admin", endPath: false }],
         },
       ]}
     >

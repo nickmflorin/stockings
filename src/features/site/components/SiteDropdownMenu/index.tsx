@@ -23,14 +23,16 @@ export const SiteDropdownMenu = (props: SiteDropdownMenuProps) => {
       content={
         <div className="flex flex-col">
           <Menu>
-            {isSignedIn ? <OrganizationsMenuItemGroup /> : <></>}
-            <div className="flex flex-row items-center px-[8px] py-[6px]">
-              {isSignedIn ? (
-                <SignOutButton className="w-full" />
-              ) : (
-                <SignInButton className="w-full" />
-              )}
-            </div>
+            <Menu.Content>
+              {isSignedIn ? <OrganizationsMenuItemGroup /> : <></>}
+              <div className="flex flex-row items-center px-[8px] py-[6px]">
+                {isSignedIn ? (
+                  <SignOutButton className="w-full" />
+                ) : (
+                  <SignInButton className="w-full" />
+                )}
+              </div>
+            </Menu.Content>
           </Menu>
         </div>
       }
