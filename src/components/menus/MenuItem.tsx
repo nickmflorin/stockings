@@ -25,7 +25,7 @@ type MenuItemRenderCallback<V> = V | ((params: types.MenuItemRenderProps) => V);
 
 export interface MenuItemProps
   extends ComponentProps,
-    Omit<HTMLElementProps<"div">, "children" | "onClick"> {
+    Omit<HTMLElementProps<"div">, "children" | "onClick" | "ref"> {
   readonly icon?: MenuItemRenderCallback<IconProp | IconName | JSX.Element | undefined>;
   readonly description?: MenuItemRenderCallback<ReactNode>;
   readonly iconClassName?: ComponentProps["className"];
@@ -38,6 +38,7 @@ export interface MenuItemProps
   readonly isSelected?: boolean;
   readonly isDisabled?: boolean;
   readonly isCurrentNavigation?: boolean;
+  readonly highlightOnHover?: boolean;
   readonly isVisible?: boolean;
   readonly loadingText?: string;
   readonly actions?: Action[];
@@ -220,6 +221,7 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
       isDisabled: propIsDisabled,
       selectionIndicator,
       loadingText,
+      highlightOnHover = true,
       ...props
     }: MenuItemProps,
     ref,
@@ -257,6 +259,7 @@ export const MenuItem = forwardRef<types.MenuItemInstance, MenuItemProps>(
           }}
           className={classNames(
             "menu__item",
+            { "menu__item--highlight-on-hover": highlightOnHover },
             { "pointer-events-auto cursor-pointer": props.onClick !== undefined },
             {
               "menu__item--selected":

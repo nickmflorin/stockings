@@ -71,6 +71,11 @@ let nextConfig = {
         hostname: "images.clerk.dev",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+        port: "",
+      },
       { protocol: "https", hostname: "lie-nielsen.imgix.net", port: "" },
     ],
   },
