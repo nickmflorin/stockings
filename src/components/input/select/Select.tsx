@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useRef, forwardRef, type ForwardedRef } from "react";
+import React, { useMemo, useRef, forwardRef, type ForwardedRef, useImperativeHandle } from "react";
 
 import { useSelectValue } from "~/components/input/select/hooks";
 import * as types from "~/components/input/select/types";
@@ -23,10 +23,7 @@ export interface SelectProps<V extends types.AllowedSelectValue, B extends types
   readonly content: types.SelectManagedCallback<JSX.Element, V, B>;
 }
 
-const LocalSelect = forwardRef<
-  types.SelectInstance,
-  SelectProps<types.AllowedSelectValue, types.SelectBehaviorType>
->(
+const LocalSelect = forwardRef(
   <V extends types.AllowedSelectValue, B extends types.SelectBehaviorType>(
     {
       behavior,
@@ -53,9 +50,9 @@ const LocalSelect = forwardRef<
       onOpenChange,
       ...props
     }: SelectProps<V, B>,
-    ref: ForwardedRef<types.SelectInstance>,
+    ref: ForwardedRef<types.SelectInstance<V, B>>,
   ): JSX.Element => {
-    const internalInstance = useRef<types.SelectInstance | null>(null);
+    const internalInstance = useRef<types.BasicSelectInstance | null>(null);
 
     const { value, clear, ...managed } = useSelectValue<V, B>({
       initialValue,
@@ -82,18 +79,17 @@ const LocalSelect = forwardRef<
       return undefined;
     }, [_onClear, isClearable, clear]);
 
+    useImperativeHandle(ref, () => ({
+      clear,
+      setValue: v => managed.set(v),
+      focusInput: () => internalInstance.current?.focusInput(),
+      setOpen: v => internalInstance.current?.setOpen(v),
+      setLoading: v => internalInstance.current?.setLoading(v),
+    }));
+
     return (
       <BasicSelect
-        ref={instance => {
-          if (instance) {
-            internalInstance.current = instance;
-            if (typeof ref === "function") {
-              ref(instance);
-            } else if (ref) {
-              ref.current = instance;
-            }
-          }
-        }}
+        ref={internalInstance}
         maxHeight={maxHeight}
         isReady={isReady}
         isLoading={isLoading}
@@ -130,7 +126,7 @@ const LocalSelect = forwardRef<
 export const Select = LocalSelect as {
   <V extends types.AllowedSelectValue, B extends types.SelectBehaviorType>(
     props: SelectProps<V, B> & {
-      readonly ref?: ForwardedRef<types.SelectInstance>;
+      readonly ref?: ForwardedRef<types.SelectInstance<V, B>>;
     },
   ): JSX.Element;
 };

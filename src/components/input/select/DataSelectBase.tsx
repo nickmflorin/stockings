@@ -58,8 +58,12 @@ export interface DataSelectBaseProps<
   readonly content: types.DataSelectManagedCallback<JSX.Element, M, O>;
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps<any, any>>(
+const LocalDataSelectBase = forwardRef<
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  types.DataSelectInstance<any, any>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  DataSelectBaseProps<any, any>
+>(
   <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
     {
       options,
@@ -91,9 +95,9 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
       getBadgeIcon,
       ...props
     }: DataSelectBaseProps<M, O>,
-    ref: ForwardedRef<types.SelectInstance>,
+    ref: ForwardedRef<types.DataSelectInstance<M, O>>,
   ): JSX.Element => {
-    const innerRef = useRef<Omit<types.SelectInstance, "clear"> | null>(null);
+    const innerRef = useRef<Omit<types.DataSelectInstance<M, O>, "clear"> | null>(null);
     const innerInputRef = useRef<BasicSelectInputInstance | null>(null);
 
     const { value, clear, ...managed } = useSelectModelValue<M, O>({
@@ -116,6 +120,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
 
     useImperativeHandle(ref, () => ({
       clear,
+      setValue: v => managed.set(v),
       focusInput: () => innerInputRef.current?.focus(),
       setOpen: (v: boolean) => innerRef.current?.setOpen(v),
       setLoading: (v: boolean) => innerRef.current?.setLoading(v),
@@ -182,7 +187,7 @@ const LocalDataSelectBase = forwardRef<types.SelectInstance, DataSelectBaseProps
 export const DataSelectBase = LocalDataSelectBase as {
   <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
     props: DataSelectBaseProps<M, O> & {
-      readonly ref?: ForwardedRef<types.SelectInstance>;
+      readonly ref?: ForwardedRef<types.DataSelectInstance<M, O>>;
     },
   ): JSX.Element;
 };

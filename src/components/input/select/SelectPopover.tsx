@@ -31,7 +31,7 @@ export interface SelectPopoverProps
 }
 
 export const SelectPopover = forwardRef<
-  Omit<types.SelectInstance, "focusInput" | "clear">,
+  Omit<types.BasicSelectInstance, "focusInput">,
   SelectPopoverProps
 >(
   (
@@ -48,7 +48,7 @@ export const SelectPopover = forwardRef<
       onOpenChange,
       ...props
     }: SelectPopoverProps,
-    ref: ForwardedRef<Omit<types.SelectInstance, "focusInput" | "clear">>,
+    ref: ForwardedRef<Omit<types.BasicSelectInstance, "focusInput">>,
   ): JSX.Element => {
     const [_isLoading, setLoading] = useState(false);
     const [isOpen, setOpen] = useState(false);

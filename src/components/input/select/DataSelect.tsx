@@ -39,8 +39,7 @@ export interface DataSelectProps<
   readonly itemRenderer?: (model: M, params: MenuItemRenderProps) => ReactNode;
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, any>>(
+export const DataSelect = forwardRef(
   <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
     {
       menuClassName,
@@ -76,9 +75,9 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
       children,
       ...props
     }: DataSelectProps<M, O>,
-    ref: ForwardedRef<types.SelectInstance>,
+    ref: ForwardedRef<types.DataSelectInstance<M, O>>,
   ): JSX.Element => {
-    const innerRef = useRef<types.SelectInstance | null>(null);
+    const innerRef = useRef<types.DataSelectInstance<M, O> | null>(null);
     const menuContentRef = useRef<DataMenuContentInstance>(null);
 
     const getItemValue = useCallback(
@@ -170,6 +169,6 @@ export const DataSelect = forwardRef<types.SelectInstance, DataSelectProps<any, 
   },
 ) as {
   <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
-    props: DataSelectProps<M, O> & { readonly ref?: ForwardedRef<types.SelectInstance> },
+    props: DataSelectProps<M, O> & { readonly ref?: ForwardedRef<types.DataSelectInstance<M, O>> },
   ): JSX.Element;
 };

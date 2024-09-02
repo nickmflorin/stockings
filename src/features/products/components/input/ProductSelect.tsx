@@ -7,7 +7,7 @@ import { type HttpNetworkError, type HttpSerializationError } from "~/integratio
 
 import type { ProductsControls } from "~/actions";
 
-import type { SelectBehaviorType, SelectInstance } from "~/components/input/select";
+import type { SelectBehaviorType, DataSelectInstance } from "~/components/input/select";
 import { DataSelect, type DataSelectProps } from "~/components/input/select/DataSelect";
 import { useProducts } from "~/hooks/api/use-products";
 
@@ -26,7 +26,7 @@ export interface ProductSelectProps<B extends SelectBehaviorType>
   readonly onError?: (e: ApiClientError | HttpNetworkError | HttpSerializationError) => void;
 }
 
-export const ProductSelect = forwardRef<SelectInstance, ProductSelectProps<SelectBehaviorType>>(
+export const ProductSelect = forwardRef(
   <B extends SelectBehaviorType>(
     {
       behavior,
@@ -35,7 +35,9 @@ export const ProductSelect = forwardRef<SelectInstance, ProductSelectProps<Selec
       onError,
       ...props
     }: ProductSelectProps<B>,
-    ref: ForwardedRef<SelectInstance>,
+    ref: ForwardedRef<
+      DataSelectInstance<ApiProduct<[]>, { behavior: B; getItemValue: typeof getItemValue }>
+    >,
   ): JSX.Element => {
     const [search, setSearch] = useState<string>("");
 
@@ -73,6 +75,10 @@ export const ProductSelect = forwardRef<SelectInstance, ProductSelectProps<Selec
   },
 ) as {
   <B extends SelectBehaviorType>(
-    props: ProductSelectProps<B> & { readonly ref?: ForwardedRef<SelectInstance> },
+    props: ProductSelectProps<B> & {
+      readonly ref?: ForwardedRef<
+        DataSelectInstance<ApiProduct<[]>, { behavior: B; getItemValue: typeof getItemValue }>
+      >;
+    },
   ): JSX.Element;
 };

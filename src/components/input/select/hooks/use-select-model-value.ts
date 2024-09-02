@@ -546,13 +546,18 @@ export const useSelectModelValue = <
       }),
   );
 
-  const { isSelected, toggle, select, deselect, value, ...rest } = useSelectValue<
-    types.InferredDataSelectV<M, O>,
-    O["behavior"]
-  >({
+  const {
+    isSelected,
+    toggle,
+    select,
+    deselect,
+    value,
+    set: _set,
+    ...rest
+  } = useSelectValue<types.InferredDataSelectV<M, O>, O["behavior"]>({
     ...params,
     behavior: options.behavior,
-    onChange: (v, __resetValueOnError__) => {
+    onChange: v => {
       const { autocorrect, value, noop } = reduceModelValue(modelValue, v, {
         strictValueLookup,
         options,
@@ -562,7 +567,7 @@ export const useSelectModelValue = <
       if (noop) {
         return;
       } else if (autocorrect) {
-        __resetValueOnError__(autocorrect.sanitizedValue);
+        _set(autocorrect.sanitizedValue);
         onChange?.(v, { modelValue: autocorrect.modelValue });
       } else if (value !== types.NOTSET) {
         /* This should only be called if the Select's model value is not "NOTSET" to begin with,
@@ -576,6 +581,27 @@ export const useSelectModelValue = <
     onClear,
     onDeselect,
   });
+
+  const set = useCallback(
+    (v: types.DataSelectValue<M, O>) => {
+      const { autocorrect, value, noop } = reduceModelValue(modelValue, v, {
+        strictValueLookup,
+        options,
+        data,
+        getItemValue,
+      });
+      if (noop) {
+        return;
+      } else if (autocorrect) {
+        _set(autocorrect.sanitizedValue);
+        setModelValue(autocorrect.modelValue);
+      } else {
+        _set(v);
+        setModelValue(value);
+      }
+    },
+    [modelValue, data, options, strictValueLookup, _set, getItemValue],
+  );
 
   useEffect(() => {
     /* If the Select's model value has not yet been initialized, do not update it.  The effect
@@ -624,6 +650,7 @@ export const useSelectModelValue = <
     ...rest,
     value,
     modelValue,
+    set,
     isSelected,
     select,
     toggle,

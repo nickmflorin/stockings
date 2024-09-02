@@ -55,12 +55,21 @@ export type IfDeselectable<B extends SelectBehaviorType, T, F = never> = B exten
   ? T
   : F;
 
-export type SelectInstance = {
-  readonly clear: () => void;
+export type BasicSelectInstance = {
   readonly focusInput: () => void;
   readonly setOpen: (v: boolean) => void;
   readonly setLoading: (v: boolean) => void;
 };
+
+export type SelectInstance<V, B extends SelectBehaviorType> = BasicSelectInstance & {
+  readonly setValue: (v: SelectValue<V, B>) => void;
+  readonly clear: () => void;
+};
+
+export type DataSelectInstance<
+  M extends DataSelectModel,
+  O extends DataSelectOptions<M>,
+> = SelectInstance<InferredDataSelectV<M, O>, InferredDataSelectB<M, O>>;
 
 export type AllowedSelectValue = string | number | Record<string, unknown>;
 
@@ -123,6 +132,7 @@ export type NotSet = typeof NOTSET;
 
 export interface ManagedSelectValue<V extends AllowedSelectValue, B extends SelectBehaviorType> {
   readonly value: SelectValue<V, B>;
+  readonly set: (value: SelectValue<V, B>) => void;
   readonly clear: () => void;
   readonly isSelected: (v: V) => boolean;
   readonly deselect: IfDeselectable<B, (value: V) => void, never>;

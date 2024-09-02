@@ -23,10 +23,7 @@ export interface UseSelectValueParams<V extends AllowedSelectValue, B extends Se
      provided to this hook directly when it is used outside of the Select or DataSelect's
      internals. */
   readonly __private_controlled_value__?: SelectValue<V, B>;
-  readonly onChange?: (
-    value: SelectValue<V, B>,
-    __resetValueOnError__: (v: SelectValue<V, B>) => void,
-  ) => void;
+  readonly onChange?: (value: SelectValue<V, B>) => void;
   readonly onSelect?: (value: SelectValue<V, B>, params: SelectEventParams<"select", V>) => void;
   readonly onDeselect?: (
     value: SelectValue<V, B>,
@@ -156,7 +153,7 @@ export const useSelectValue = <V extends AllowedSelectValue, B extends SelectBeh
       if (!isControlled) {
         _setValue(updated);
       }
-      onChange?.(updated, vi => _setValue(vi));
+      onChange?.(updated);
       return onAction(event, updated, params);
     },
     [value, isControlled, _setValue, onAction, onChange],
@@ -368,6 +365,7 @@ export const useSelectValue = <V extends AllowedSelectValue, B extends SelectBeh
 
   return {
     value,
+    set: _setValue,
     clear,
     isSelected,
     deselect: deselect as IfDeselectable<B, (value: V) => void, never>,

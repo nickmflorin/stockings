@@ -1,9 +1,13 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { type ProductNotificationType, type NotificationState } from "~/database/model";
 
-import { ProductNotificationsFiltersOptions, ProductNotificationsFiltersSchemas } from "~/actions";
+import {
+  ProductNotificationsFiltersOptions,
+  ProductNotificationsFiltersSchemas,
+  type ProductNotificationsFilters,
+} from "~/actions";
 
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
@@ -19,24 +23,38 @@ import { useFilters } from "~/hooks/use-filters";
 export interface NotificationsTableFilterBarProps extends ComponentProps {
   readonly excludeProducts?: boolean;
   readonly isSearchable?: boolean;
+  readonly filters: ProductNotificationsFilters;
 }
 
 export const NotificationsTableFilterBar = ({
   excludeProducts = false,
+  filters,
   ...props
 }: NotificationsTableFilterBarProps): JSX.Element => {
-  const stateSelectRef = useRef<SelectInstance | null>(null);
-  const typeSelectRef = useRef<SelectInstance | null>(null);
-  const productSelectRef = useRef<SelectInstance | null>(null);
+  const stateSelectRef = useRef<SelectInstance<NotificationState, "multi"> | null>(null);
+  const typeSelectRef = useRef<SelectInstance<ProductNotificationType, "multi"> | null>(null);
+  const productSelectRef = useRef<SelectInstance<string, "multi"> | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [filters, updateFilters] = useFilters({
+  const [, updateFilters] = useFilters({
     schemas: ProductNotificationsFiltersSchemas,
     options: ProductNotificationsFiltersOptions,
   });
 
+  useEffect(() => {
+    typeSelectRef.current?.setValue(filters.types);
+    stateSelectRef.current?.setValue(filters.states);
+    productSelectRef.current?.setValue(filters.products);
+
+    if (searchInputRef.current) {
+      searchInputRef.current.value = filters.search;
+    }
+  }, [filters]);
+
   return (
     <TableView.FilterBar
       {...props}
+      searchInputRef={searchInputRef}
       searchPlaceholder="Search notifications..."
       onSearch={v => updateFilters({ search: v })}
       search={filters.search}

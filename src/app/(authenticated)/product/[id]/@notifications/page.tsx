@@ -26,15 +26,15 @@ const NotificationsTableView = dynamic(
   { loading: () => <Loading isLoading /> },
 );
 
-export interface SubscriptionsTablePageProps {
+export interface ProductNotificationsPageProps {
   readonly searchParams: Record<string, string>;
   readonly params: { id: string };
 }
 
-export default async function SubscriptionsPage({
+export default async function ProductNotificationsPage({
   searchParams,
   params,
-}: SubscriptionsTablePageProps) {
+}: ProductNotificationsPageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
   const filters = parseFilters(
@@ -53,7 +53,7 @@ export default async function SubscriptionsPage({
       excludeColumns={["product"]}
       filterBar={
         <Suspense>
-          <NotificationsTableFilterBar excludeProducts isSearchable={false} />
+          <NotificationsTableFilterBar excludeProducts isSearchable={false} filters={filters} />
         </Suspense>
       }
       pagination={

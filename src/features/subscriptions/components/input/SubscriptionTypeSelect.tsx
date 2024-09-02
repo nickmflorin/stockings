@@ -2,7 +2,7 @@ import { forwardRef, type ForwardedRef } from "react";
 
 import { ProductSubscriptionTypes, type ProductSubscriptionType } from "~/database/model";
 
-import type { SelectBehaviorType, SelectInstance } from "~/components/input/select";
+import type { SelectBehaviorType, DataSelectInstance } from "~/components/input/select";
 import { DataSelect, type DataSelectProps } from "~/components/input/select/DataSelect";
 import { SubscriptionTypeText } from "~/features/subscriptions/components/SubscriptionTypeText";
 
@@ -18,13 +18,10 @@ export interface SubscriptionTypeSelectProps<B extends SelectBehaviorType>
   readonly behavior: B;
 }
 
-export const SubscriptionTypeSelect = forwardRef<
-  SelectInstance,
-  SubscriptionTypeSelectProps<SelectBehaviorType>
->(
+export const SubscriptionTypeSelect = forwardRef(
   <B extends SelectBehaviorType>(
     { behavior, ...props }: SubscriptionTypeSelectProps<B>,
-    ref: ForwardedRef<SelectInstance>,
+    ref: ForwardedRef<DataSelectInstance<M, { behavior: B; getItemValue: typeof getItemValue }>>,
   ): JSX.Element => (
     <DataSelect<M, { behavior: B; getItemValue: typeof getItemValue }>
       {...props}
@@ -38,6 +35,10 @@ export const SubscriptionTypeSelect = forwardRef<
   ),
 ) as {
   <B extends SelectBehaviorType>(
-    props: SubscriptionTypeSelectProps<B> & { readonly ref?: ForwardedRef<SelectInstance> },
+    props: SubscriptionTypeSelectProps<B> & {
+      readonly ref?: ForwardedRef<
+        DataSelectInstance<M, { behavior: B; getItemValue: typeof getItemValue }>
+      >;
+    },
   ): JSX.Element;
 };

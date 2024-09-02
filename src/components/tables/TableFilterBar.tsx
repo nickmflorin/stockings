@@ -1,5 +1,5 @@
 "use client";
-import { type ReactNode, useRef } from "react";
+import { type ReactNode, useRef, type MutableRefObject } from "react";
 
 import { IconButton } from "~/components/buttons";
 import { TextInput } from "~/components/input/TextInput";
@@ -13,6 +13,8 @@ export interface TableFilterBarProps extends ComponentProps {
   readonly searchPlaceholder?: string;
   readonly searchDebounceInterval?: number;
   readonly search?: string;
+  readonly isControlled?: boolean;
+  readonly searchInputRef?: MutableRefObject<HTMLInputElement | null>;
   readonly onSearch?: (search: string) => void;
   readonly onClear?: () => void;
 }
@@ -23,11 +25,15 @@ export const TableFilterBar = ({
   searchPlaceholder = "Search...",
   searchDebounceInterval = 0,
   search = "",
+  isControlled = false,
+  searchInputRef,
   onSearch: _onSearch,
   onClear,
   ...props
 }: TableFilterBarProps): JSX.Element => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const _inputRef = useRef<HTMLInputElement | null>(null);
+
+  const inputRef = searchInputRef ?? _inputRef;
 
   const onSearch = useDebounceCallback((search: string) => {
     _onSearch?.(search);
@@ -38,12 +44,13 @@ export const TableFilterBar = ({
       {isSearchable && (
         <TextInput
           ref={inputRef}
-          defaultValue={search}
+          defaultValue={!isControlled ? search : undefined}
+          value={isControlled ? search : undefined}
           onChange={e => onSearch(e.target.value)}
           placeholder={searchPlaceholder}
           className="grow"
           onClear={() => {
-            if (inputRef.current) {
+            if (inputRef.current && !isControlled) {
               inputRef.current.value = "";
             }
             _onSearch?.("");
@@ -57,7 +64,7 @@ export const TableFilterBar = ({
         element="button"
         className="text-gray-400 h-full aspect-square w-auto p-[4px] hover:text-gray-500"
         onClick={() => {
-          if (inputRef.current) {
+          if (inputRef.current && !isControlled) {
             inputRef.current.value = "";
           }
           onClear?.();

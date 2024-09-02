@@ -21,9 +21,9 @@ import { useFilters } from "~/hooks/use-filters";
 export interface ProductsTableFilterBarProps extends ComponentProps {}
 
 export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.Element => {
-  const statusesSelectRef = useRef<SelectInstance | null>(null);
-  const categoriesSelectRef = useRef<SelectInstance | null>(null);
-  const subCategoriesSelectRef = useRef<SelectInstance | null>(null);
+  const statusSelectRef = useRef<SelectInstance<ProductStatus, "multi"> | null>(null);
+  const categorySelectRef = useRef<SelectInstance<ProductCategory, "multi"> | null>(null);
+  const subCategorySelectRef = useRef<SelectInstance<ProductSubCategory, "multi"> | null>(null);
 
   const [filters, updateFilters] = useFilters({
     schemas: ProductsFiltersSchemas,
@@ -37,14 +37,14 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
       onSearch={v => updateFilters({ search: v })}
       search={filters.search}
       onClear={() => {
-        for (const r of [statusesSelectRef, categoriesSelectRef, subCategoriesSelectRef]) {
+        for (const r of [statusSelectRef, categorySelectRef, subCategorySelectRef]) {
           r.current?.clear();
         }
         updateFilters({ subCategories: [], categories: [], search: "", statuses: [] });
       }}
     >
       <ProductStatusSelect
-        ref={statusesSelectRef}
+        ref={statusSelectRef}
         dynamicHeight={false}
         placeholder="Statuses"
         behavior="multi"
@@ -54,7 +54,7 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
         onClear={() => updateFilters({ statuses: [] })}
       />
       <ProductCategorySelect
-        ref={categoriesSelectRef}
+        ref={categorySelectRef}
         dynamicHeight={false}
         placeholder="Categories"
         behavior="multi"
@@ -64,7 +64,7 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
         onClear={() => updateFilters({ categories: [] })}
       />
       <ProductSubCategorySelect
-        ref={subCategoriesSelectRef}
+        ref={subCategorySelectRef}
         dynamicHeight={false}
         placeholder="Subcategories"
         behavior="multi"

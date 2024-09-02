@@ -18,8 +18,8 @@ export interface SubscriptionsTableFilterBarProps extends ComponentProps {}
 export const SubscriptionsTableFilterBar = (
   props: SubscriptionsTableFilterBarProps,
 ): JSX.Element => {
-  const typeSelectRef = useRef<SelectInstance | null>(null);
-  const productSelectRef = useRef<SelectInstance | null>(null);
+  const typeSelectRef = useRef<SelectInstance<ProductSubscriptionType, "multi"> | null>(null);
+  const productSelectRef = useRef<SelectInstance<string, "multi"> | null>(null);
 
   const [filters, updateFilters] = useFilters({
     schemas: SubscriptionsFiltersSchemas,
