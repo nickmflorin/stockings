@@ -48,7 +48,7 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
     <NotificationsTableView
       filterBar={
         <Suspense>
-          <NotificationsTableFilterBar />
+          <NotificationsTableFilterBar filters={filters} />
         </Suspense>
       }
       pagination={
