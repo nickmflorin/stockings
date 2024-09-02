@@ -16,7 +16,9 @@ export type TableBodyProps = MuiComponentProps<RootTableBodyProps<"tbody">> & {
   readonly isLoading?: boolean;
   readonly isEmpty?: boolean;
   readonly isError?: boolean;
+  readonly isNoResults?: boolean;
   readonly emptyContent?: string | JSX.Element;
+  readonly noResultsContent?: string | JSX.Element;
   readonly errorTitle?: string;
   readonly errorMessage?: string;
   readonly errorContent?: string | JSX.Element;
@@ -32,6 +34,8 @@ export const TableBody = ({
   isEmpty,
   isError,
   emptyContent,
+  noResultsContent,
+  isNoResults,
   errorMessage,
   errorTitle,
   errorContent,
@@ -77,6 +81,8 @@ export const TableBody = ({
             errorTitle={errorTitle}
             errorMessage={errorMessage}
           />
+        ) : isNoResults ? (
+          <TableFeedbackState stateType="no-results" noResultsContent={noResultsContent} as="tr" />
         ) : isEmpty ? (
           <TableFeedbackState stateType="empty" emptyContent={emptyContent} as="tr" />
         ) : (

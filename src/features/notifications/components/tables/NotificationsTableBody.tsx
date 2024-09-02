@@ -46,6 +46,7 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
         </Description>
       </div>
     }
+    noResultsContent="No notifications found for search criteria."
     {...props}
     columns={convertConfigsToColumns(
       [...ProductNotificationsTableColumns] as DataTableColumnConfig<

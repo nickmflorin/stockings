@@ -31,11 +31,11 @@ export const addFilter = <S extends FiltersSchemas, K extends keyof S>(
   return f;
 };
 
-export const pruneFilters = <S extends FiltersSchemas>(
-  filters: ParsedFilters<S>,
+export const pruneFilters = <F extends Partial<ParsedFilters<S>>, S extends FiltersSchemas>(
+  filters: F,
   options: ParseFiltersOptions<S>,
-) => {
-  let pruned: Partial<ParsedFilters<S>> = {};
+): Partial<F> => {
+  let pruned: Partial<F> = {};
   for (const [field, value] of Object.entries(filters)) {
     const excl = options[field].excludeWhen;
     if (!excl || excl(value) === false) {

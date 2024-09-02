@@ -1,3 +1,5 @@
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
+
 import { ErrorView } from "~/components/errors/ErrorView";
 import { EmptyMessage } from "~/components/feedback/EmptyMessage";
 import { Table } from "~/components/tables/generic/Table";
@@ -5,7 +7,11 @@ import { type TableBodyProps } from "~/components/tables/generic/TableBody";
 import { type TableBodyRowProps } from "~/components/tables/generic/TableBodyRow";
 import { classNames } from "~/components/types";
 
-export type TableFeedbackStateType = "error" | "empty";
+export const TableFeedbackStateTypes = enumeratedLiterals(
+  ["error", "empty", "no-results"] as const,
+  {},
+);
+export type TableFeedbackStateType = EnumeratedLiteralsMember<typeof TableFeedbackStateTypes>;
 
 export interface TableFeedbackStateRowProps extends TableBodyRowProps {
   readonly as: "tr";
@@ -14,6 +20,7 @@ export interface TableFeedbackStateRowProps extends TableBodyRowProps {
   readonly errorTitle?: string;
   readonly errorMessage?: string;
   readonly emptyContent?: string | JSX.Element;
+  readonly noResultsContent?: string | JSX.Element;
 }
 
 export interface TableFeedbackStateBodyProps extends TableBodyProps {
@@ -23,6 +30,7 @@ export interface TableFeedbackStateBodyProps extends TableBodyProps {
   readonly errorTitle?: string;
   readonly errorMessage?: string;
   readonly emptyContent?: string | JSX.Element;
+  readonly noResultsContent?: string | JSX.Element;
 }
 
 export type TableFeedbackStateProps = TableFeedbackStateBodyProps | TableFeedbackStateRowProps;
@@ -32,13 +40,19 @@ const TableFeedbackStates: {
     props: Omit<TableFeedbackStateProps, "as" | "stateType">,
   ) => JSX.Element;
 } = {
-  empty: ({ emptyContent }) => {
+  [TableFeedbackStateTypes.EMPTY]: ({ emptyContent }) => {
     if (emptyContent) {
       return <EmptyMessage>{emptyContent}</EmptyMessage>;
     }
-    return <EmptyMessage>No data.</EmptyMessage>;
+    return <EmptyMessage>No data exists.</EmptyMessage>;
   },
-  error: ({ errorMessage, errorTitle, errorContent }) => {
+  [TableFeedbackStateTypes.NO_RESULTS]: ({ noResultsContent }) => {
+    if (noResultsContent) {
+      return <EmptyMessage>{noResultsContent}</EmptyMessage>;
+    }
+    return <EmptyMessage>No data exists for the search criteria.</EmptyMessage>;
+  },
+  [TableFeedbackStateTypes.ERROR]: ({ errorMessage, errorTitle, errorContent }) => {
     if (errorContent) {
       if (typeof errorContent === "string") {
         return <ErrorView title={errorTitle ?? "Error"}>{errorContent}</ErrorView>;
@@ -71,6 +85,7 @@ export const TableFeedbackState = ({
   errorMessage,
   errorTitle,
   emptyContent,
+  noResultsContent,
   ...props
 }: TableFeedbackStateProps) =>
   as === "tbody" ? (
@@ -83,6 +98,7 @@ export const TableFeedbackState = ({
           errorMessage={errorMessage}
           errorTitle={errorTitle}
           errorContent={errorContent}
+          noResultsContent={noResultsContent}
         />
       </Table.BodyRow>
     </Table.Body>
@@ -97,6 +113,7 @@ export const TableFeedbackState = ({
         errorMessage={errorMessage}
         errorTitle={errorTitle}
         errorContent={errorContent}
+        noResultsContent={noResultsContent}
       />
     </Table.BodyRow>
   );
