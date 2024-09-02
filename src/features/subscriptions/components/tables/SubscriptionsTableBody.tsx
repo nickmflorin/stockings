@@ -1,6 +1,6 @@
 "use client";
 import RouterLink from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
 
 import { uniq, uniqBy } from "lodash-es";
@@ -15,7 +15,7 @@ import {
 import { ProductSubscriptionType } from "~/database/model";
 import { logger } from "~/internal/logger";
 
-import { addQueryParamsToUrl } from "~/integrations/http";
+import { addQueryParamsToUrl, parseQueryParams } from "~/integrations/http";
 import { arraysHaveSameElements } from "~/lib/arrays";
 
 import { updateProductSubscription, deleteProductSubscription } from "~/actions/subscriptions";
@@ -52,6 +52,7 @@ export interface SubscriptionsTableBodyProps
     DataTableBodyProps<FullProductSubscription, SubscriptionsTableColumnId>,
     "rowIsSelected" | "onRowSelected" | "getRowActions" | "columns"
   > {
+  readonly scope?: "subscriptions" | "product";
   readonly controlBarTargetId: string;
   readonly controlBarTooltipsInPortal?: boolean;
   readonly actions?: Action[];
@@ -61,11 +62,14 @@ export const SubscriptionsTableBody = ({
   controlBarTargetId,
   controlBarTooltipsInPortal,
   actions,
+  scope = "subscriptions",
   ...props
 }: SubscriptionsTableBodyProps): JSX.Element => {
   const { ids, open } = useDrawers();
   const [selectedRows, setSelectedRows] = useState<FullProductSubscription[]>([]);
 
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { refresh } = useRouter();
 
   const [enablePending, enableTransition] = useTransition();
@@ -317,19 +321,23 @@ export const SubscriptionsTableBody = ({
                 if (datum.notificationsCount === 0) {
                   return "-";
                 }
+                let href = addQueryParamsToUrl("/notifications", {
+                  products: [datum.product.id],
+                  types: [
+                    ProductSubscriptionTypes.getModel(datum.subscriptionType).notificationType,
+                  ],
+                });
+                if (scope === "product") {
+                  href = addQueryParamsToUrl(pathname, {
+                    ...parseQueryParams(searchParams.toString()),
+                    types: [
+                      ProductSubscriptionTypes.getModel(datum.subscriptionType).notificationType,
+                    ],
+                  });
+                }
                 return (
                   <HorizontallyCentered>
-                    <Link
-                      component={RouterLink}
-                      element="a"
-                      href={addQueryParamsToUrl("/notifications", {
-                        products: [datum.product.id],
-                        types: [
-                          ProductSubscriptionTypes.getModel(datum.subscriptionType)
-                            .notificationType,
-                        ],
-                      })}
-                    >
+                    <Link component={RouterLink} element="a" href={href}>
                       {datum.notificationsCount}
                     </Link>
                   </HorizontallyCentered>

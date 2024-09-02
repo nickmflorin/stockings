@@ -1,5 +1,3 @@
-import qs from "querystring";
-
 import {
   usePathname,
   useSearchParams,
@@ -10,6 +8,7 @@ import { useCallback, useMemo } from "react";
 
 import { type z } from "zod";
 
+import { parseQueryParams, stringifyQueryParams } from "~/integrations/http";
 import {
   type FiltersSchemas,
   type ParseFiltersOptions,
@@ -56,11 +55,7 @@ export const useFilters = <S extends FiltersSchemas>({
     [options],
   );
 
-  const initialFilters = useMemo(
-    () => parseFilters(searchParams),
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-    [],
-  );
+  const initialFilters = useMemo(() => parseFilters(searchParams), [parseFilters, searchParams]);
 
   const setFilters = useReferentialCallback((update: FiltersUpdate<S>) => {
     let currentFilters = parseFilters(searchParams);
@@ -70,14 +65,14 @@ export const useFilters = <S extends FiltersSchemas>({
     let pruned = pruneFilters(currentFilters);
 
     if (maintainExisting) {
-      const all = qs.parse(searchParams.toString());
+      const all = parseQueryParams(searchParams.toString());
       for (const [field, value] of Object.entries(all)) {
         if (!Object.keys(schemas).includes(field)) {
           pruned = { ...pruned, [field]: value };
         }
       }
     }
-    replace(`${pathname}?${qs.stringify(pruned)}`);
+    replace(`${pathname}?${stringifyQueryParams(pruned)}`);
   });
 
   return [initialFilters, setFilters] as const;
