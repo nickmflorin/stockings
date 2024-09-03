@@ -38,6 +38,7 @@ export const NotificationMediums = enumeratedLiterals(
       description: "The notification will be sent to you in the application.",
       badgeTextColorClassName: "text-yellow-700",
       badgeBgColorClassName: "bg-yellow-200",
+      textClassName: "text-yellow-700",
     },
     {
       value: NotificationMedium.Email,
@@ -45,6 +46,7 @@ export const NotificationMediums = enumeratedLiterals(
       description: "The notification will be sent to your account email address.",
       badgeBgColorClassName: "bg-amber-200",
       badgeTextColorClassName: "text-amber-600",
+      textClassName: "text-amber-600",
     },
     {
       value: NotificationMedium.SMS,
@@ -52,6 +54,7 @@ export const NotificationMediums = enumeratedLiterals(
       description: "The notification will be sent via SMS to your configured phone number.",
       badgeBgColorClassName: "bg-green-200",
       badgeTextColorClassName: "text-green-600",
+      textClassName: "text-green-600",
     },
   ] as const satisfies {
     value: NotificationMedium;
@@ -59,6 +62,7 @@ export const NotificationMediums = enumeratedLiterals(
     label: string;
     badgeTextColorClassName: TailwindTextColorClassName;
     badgeBgColorClassName: TailwindBgColorClassName;
+    textClassName: TailwindTextColorClassName;
   }[],
   {},
 );

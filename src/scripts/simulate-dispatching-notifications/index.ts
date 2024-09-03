@@ -84,7 +84,7 @@ async function main() {
     });
   }
   if (toModify.send.length !== 0) {
-    cli.info(`Sending ${toModify.fail.length} notifications...`);
+    cli.info(`Sending ${toModify.send.length} notifications...`);
     await db.productNotification.updateMany({
       where: { id: { in: toModify.send } },
       data: {

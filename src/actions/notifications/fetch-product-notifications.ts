@@ -36,6 +36,9 @@ const filtersClause = (filters: Partial<ProductNotificationsControls["filters"]>
     filters.types && filters.types.length !== 0
       ? { notificationType: { in: filters.types } }
       : undefined,
+    filters.mediums && filters.mediums.length !== 0
+      ? { mediums: { hasSome: filters.mediums } }
+      : undefined,
     filters.products && filters.products.length !== 0
       ? { product: { id: { in: filters.products } } }
       : undefined,

@@ -1,9 +1,8 @@
 import type { ProductCategory } from "~/database/model";
 import { ProductCategories } from "~/database/model";
 
+import { Badge, type BadgeProps } from "~/components/badges/Badge";
 import { classNames } from "~/components/types";
-
-import { Badge, type BadgeProps } from "./Badge";
 
 export interface ProductCategoryBadgeProps extends Omit<BadgeProps, "children"> {
   readonly category: ProductCategory;

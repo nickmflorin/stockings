@@ -74,6 +74,7 @@ export const processRecord = async (
         state: NotificationState.Pending,
         stateAsOf: new Date(),
         product: { connect: { id: product.id } },
+        mediums: subscription.mediums,
         condition:
           prices.previous > prices.current
             ? PriceChangeCondition.PriceDecrease
@@ -110,6 +111,7 @@ export const processRecord = async (
           productRecord: { connect: { id: record.id } },
           product: { connect: { id: product.id } },
           subscription: { connect: { id: sub.id } },
+          mediums: subscription.mediums,
           state: NotificationState.Pending,
           stateAsOf: new Date(),
           previousStatus: statuses.previous,

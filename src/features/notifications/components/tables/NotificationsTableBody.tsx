@@ -4,7 +4,6 @@ import RouterLink from "next/link";
 import { type ApiProductNotification } from "~/database/model";
 import { ProductNotificationType } from "~/database/model";
 
-import { NotificationMediumBadge } from "~/components/badges/NotificationMediumBadge";
 import { InlineLink } from "~/components/buttons";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
@@ -20,6 +19,7 @@ import {
   ProductNotificationsTableColumns,
   type ProductNotificationsTableColumnId,
 } from "~/features/notifications";
+import { NotificationMediumBadge } from "~/features/notifications/components/badges";
 import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
 import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
 /* eslint-disable-next-line max-len */
@@ -91,13 +91,11 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
         type: {
           cellRenderer(datum) {
             return (
-              <HorizontallyCentered>
-                <NotificationTypeText
-                  fontWeight="medium"
-                  fontSize="sm"
-                  notificationType={datum.notificationType}
-                />
-              </HorizontallyCentered>
+              <NotificationTypeText
+                fontWeight="medium"
+                fontSize="sm"
+                notificationType={datum.notificationType}
+              />
             );
           },
         },

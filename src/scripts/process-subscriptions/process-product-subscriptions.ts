@@ -13,12 +13,13 @@ const DELETE_NOTIFICATIONS_BATCH_SIZE = 100;
 
 interface ProcessProductSubscriptionParams {
   readonly maximumLookback?: number | null;
+  readonly maximumRecords?: number | null;
   readonly clean?: boolean;
   readonly product: ApiProduct<["records"]>;
 }
 
 export const processProductSubscriptions = async (
-  { product, clean, maximumLookback }: ProcessProductSubscriptionParams,
+  { product, clean, maximumLookback, maximumRecords }: ProcessProductSubscriptionParams,
   ctx: ScriptContext,
 ) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
@@ -67,6 +68,6 @@ export const processProductSubscriptions = async (
       `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
         `(type = ${subscription.subscriptionType}).`,
     );
-    await processSubscription({ subscription, product, maximumLookback }, ctx);
+    await processSubscription({ subscription, product, maximumLookback, maximumRecords }, ctx);
   }
 };

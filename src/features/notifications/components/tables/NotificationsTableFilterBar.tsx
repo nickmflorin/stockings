@@ -1,7 +1,11 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-import { type ProductNotificationType, type NotificationState } from "~/database/model";
+import {
+  type ProductNotificationType,
+  type NotificationState,
+  type NotificationMedium,
+} from "~/database/model";
 
 import {
   ProductNotificationsFiltersOptions,
@@ -13,6 +17,8 @@ import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
 import { classNames, type ComponentProps } from "~/components/types";
 import { ShowHide } from "~/components/util";
+/* eslint-disable-next-line max-len */
+import { NotificationMediumSelect } from "~/features/notifications/components/input/NotificationMediumSelect";
 /* eslint-disable-next-line max-len */
 import { NotificationStateSelect } from "~/features/notifications/components/input/NotificationStateSelect";
 /* eslint-disable-next-line max-len */
@@ -33,6 +39,7 @@ export const NotificationsTableFilterBar = ({
 }: NotificationsTableFilterBarProps): JSX.Element => {
   const stateSelectRef = useRef<SelectInstance<NotificationState, "multi"> | null>(null);
   const typeSelectRef = useRef<SelectInstance<ProductNotificationType, "multi"> | null>(null);
+  const mediumSelectRef = useRef<SelectInstance<NotificationMedium, "multi"> | null>(null);
   const productSelectRef = useRef<SelectInstance<string, "multi"> | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -93,6 +100,19 @@ export const NotificationsTableFilterBar = ({
         initialValue={filters.states}
         onChange={(states: NotificationState[]) => updateFilters({ states })}
         onClear={() => updateFilters({ states: [] })}
+      />
+      <NotificationMediumSelect
+        ref={mediumSelectRef}
+        dynamicHeight={false}
+        placeholder="Mediums"
+        behavior="multi"
+        inputClassName={classNames({
+          "max-w-[260px]": props.isSearchable !== false,
+          "flex-1": props.isSearchable === false,
+        })}
+        initialValue={filters.mediums}
+        onChange={(mediums: NotificationMedium[]) => updateFilters({ mediums })}
+        onClear={() => updateFilters({ mediums: [] })}
       />
       <NotificationTypeSelect
         ref={typeSelectRef}

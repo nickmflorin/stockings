@@ -14,7 +14,7 @@ export const ProductNotificationsTableColumns = [
     id: "type",
     label: "Type",
     maxWidth: 240,
-    align: "center",
+    align: "left",
   },
   {
     id: "event",

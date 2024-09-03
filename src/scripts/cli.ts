@@ -78,6 +78,19 @@ export const parseIntegerCliArgument = (name: string): number | null => {
   return null;
 };
 
+export const getPositionalArgument = (index: number): string | undefined => {
+  const args = process.argv.slice(2);
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg.startsWith("--")) {
+      return undefined;
+    } else if (i === index) {
+      return arg;
+    }
+  }
+  return undefined;
+};
+
 export const error = (message: string) => {
   console.error(terminal.applyStyles(message, { foreground: "red" }));
 };

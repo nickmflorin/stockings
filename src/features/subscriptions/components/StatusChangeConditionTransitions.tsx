@@ -7,10 +7,10 @@ import { logger } from "~/internal/logger";
 
 import { type SingleOrArray } from "~/lib/types";
 
-import { ProductStatusBadge } from "~/components/badges/ProductStatusBadge";
 import type { IconName } from "~/components/icons";
 import { Icon } from "~/components/icons/Icon";
 import { classNames, type ComponentProps } from "~/components/types";
+import { ProductStatusBadge } from "~/features/products/components/badges";
 
 import { StatusChangeConditionTransition } from "./StatusChangeConditionTransition";
 
@@ -53,7 +53,7 @@ export const StatusChangeConditionTransitions = ({
             key={index}
             fromStatus={fromStatus}
             toStatus={toStatus}
-            justified
+            justified="outer"
           />
         ))}
       </div>

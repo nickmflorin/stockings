@@ -1,9 +1,8 @@
 import type { PriceChangeCondition } from "~/database/model";
 import { PriceChangeConditions } from "~/database/model";
 
+import { Badge, type BadgeProps } from "~/components/badges/Badge";
 import { classNames } from "~/components/types";
-
-import { Badge, type BadgeProps } from "./Badge";
 
 export interface PriceChangeConditionBadgeProps extends Omit<BadgeProps, "children"> {
   readonly condition: PriceChangeCondition;

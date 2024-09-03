@@ -9,6 +9,7 @@ import { processSubscription } from "./process-subscription";
 
 interface ProcessSubscriptionsParams {
   readonly maximumLookback?: number | null;
+  readonly maximumRecords?: number | null;
 }
 
 export const processSubscriptions = async (

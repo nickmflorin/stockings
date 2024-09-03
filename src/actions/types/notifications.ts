@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import {
+  type NotificationMedium,
   type NotificationState,
   type ProductNotificationType,
+  NotificationMediums,
   NotificationStates,
   ProductNotificationTypes,
   type ProductNotificationIncludes,
@@ -25,6 +27,7 @@ export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOr
 export interface ProductNotificationsFilters {
   readonly states: NotificationState[];
   readonly types: ProductNotificationType[];
+  readonly mediums: NotificationMedium[];
   readonly products: string[];
   readonly search: string;
 }
@@ -59,6 +62,15 @@ export const ProductNotificationsFiltersSchemas = {
       [] as ProductNotificationType[],
     );
   }),
+  mediums: z.union([z.string(), z.array(z.string())]).transform(value => {
+    if (typeof value === "string") {
+      return NotificationMediums.contains(value) ? [value] : [];
+    }
+    return value.reduce(
+      (prev, curr) => (NotificationMediums.contains(curr) ? [...prev, curr] : prev),
+      [] as NotificationMedium[],
+    );
+  }),
   products: z.union([z.string(), z.array(z.string())]).transform(value => {
     if (typeof value === "string") {
       return isUuid(value) ? [value] : [];
@@ -74,6 +86,7 @@ export const ProductNotificationsFiltersOptions: ParseFiltersOptions<
 > = {
   types: { defaultValue: [], excludeWhen: v => v.length === 0 },
   states: { defaultValue: [], excludeWhen: v => v.length === 0 },
+  mediums: { defaultValue: [], excludeWhen: v => v.length === 0 },
   products: { defaultValue: [], excludeWhen: v => v.length === 0 },
   search: { defaultValue: "", excludeWhen: v => v.length === 0 },
 };

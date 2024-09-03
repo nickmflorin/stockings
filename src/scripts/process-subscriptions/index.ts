@@ -10,15 +10,20 @@ import { processSubscriptions } from "./process-subscriptions";
 
 async function main() {
   const ctx = await getScriptContext({ upsertUser: false });
-  const productIdentifier = process.argv.slice(2)[0];
+  const productIdentifier = cli.getPositionalArgument(0);
 
   const maximumLookback = cli.parseIntegerCliArgument("max-lookback");
   if (maximumLookback !== null && process.env.NODE_ENV !== "development") {
     return cli.error("Can only specify a maximum lookback in development mode!");
   }
 
+  const maximumRecords = cli.parseIntegerCliArgument("max-records");
+  if (maximumRecords !== null && process.env.NODE_ENV !== "development") {
+    return cli.error("Can only specify a maximum records in development mode!");
+  }
+
   if (!productIdentifier) {
-    return await processSubscriptions({ maximumLookback }, ctx);
+    return await processSubscriptions({ maximumLookback, maximumRecords }, ctx);
   }
   const product = await db.product.findUnique({
     where: isUuid(productIdentifier) ? { id: productIdentifier } : { slug: productIdentifier },
@@ -34,7 +39,7 @@ async function main() {
   if (clean && process.env.NODE_ENV !== "development") {
     return cli.error("Can only clean subscriptions in development mode!");
   }
-  await processProductSubscriptions({ product, clean, maximumLookback }, ctx);
+  await processProductSubscriptions({ product, clean, maximumLookback, maximumRecords }, ctx);
 }
 
 cli.runScript(main);

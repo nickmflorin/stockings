@@ -3,8 +3,6 @@ import dynamic from "next/dynamic";
 
 import { type ApiProduct } from "~/database/model";
 
-import { ProductCategoryBadge } from "~/components/badges/ProductCategoryBadge";
-import { ProductSubCategoryBadge } from "~/components/badges/ProductSubCategoryBadge";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
 import { useDrawers } from "~/components/drawers/hooks";
@@ -14,6 +12,10 @@ import { Text } from "~/components/typography";
 import { CurrencyText } from "~/components/typography/CurrencyText";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 import { ProductsTableColumns, type ProductsTableColumnId } from "~/features/products";
+import {
+  ProductCategoryBadge,
+  ProductSubCategoryBadge,
+} from "~/features/products/components/badges";
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 
 const SubscriptionCell = dynamic(() => import("./cells/SubscriptionCell"));

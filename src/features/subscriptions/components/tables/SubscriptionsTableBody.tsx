@@ -20,7 +20,6 @@ import { arraysHaveSameElements } from "~/lib/arrays";
 
 import { updateProductSubscription, deleteProductSubscription } from "~/actions/subscriptions";
 
-import { PriceChangeConditionBadge } from "~/components/badges/PriceChangeConditionBadge";
 import { Link } from "~/components/buttons";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
@@ -40,6 +39,7 @@ import {
   SubscriptionsTableColumns,
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
+import { PriceChangeConditionBadge } from "~/features/subscriptions/components/badges";
 /* eslint-disable-next-line max-len */
 import { StatusChangeConditionsDropdown } from "~/features/subscriptions/components/StatusChangeConditionsDropdown";
 

@@ -1,9 +1,8 @@
 import type { ProductStatus } from "~/database/model";
 import { ProductStatuses } from "~/database/model";
 
+import { Badge, type BadgeProps } from "~/components/badges/Badge";
 import { classNames } from "~/components/types";
-
-import { Badge, type BadgeProps } from "./Badge";
 
 export interface ProductStatusBadgeProps extends Omit<BadgeProps, "children"> {
   readonly status: ProductStatus;

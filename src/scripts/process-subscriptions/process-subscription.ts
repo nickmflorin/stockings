@@ -19,10 +19,11 @@ interface ProcessSubscriptionParams {
   readonly subscription: ApiProductSubscription;
   readonly product: Product;
   readonly maximumLookback?: number | null;
+  readonly maximumRecords?: number | null;
 }
 
 export const processSubscription = async (
-  { product, subscription, maximumLookback }: ProcessSubscriptionParams,
+  { product, subscription, maximumLookback, maximumRecords }: ProcessSubscriptionParams,
   ctx: ScriptContext,
 ) => {
   if (
@@ -30,6 +31,11 @@ export const processSubscription = async (
     process.env.NODE_ENV !== "development"
   ) {
     return cli.error("Can only specify maximum lookback in development mode!");
+  } else if (
+    (maximumRecords !== undefined || maximumRecords !== null) &&
+    process.env.NODE_ENV !== "development"
+  ) {
+    return cli.error("Can only specify maximum records in development mode!");
   }
   const timestamp =
     maximumLookback !== null && maximumLookback !== undefined
@@ -37,6 +43,7 @@ export const processSubscription = async (
       : subscription.createdAt;
 
   const records = await db.productRecord.findMany({
+    take: maximumRecords ?? undefined,
     where: {
       AND: [
         {

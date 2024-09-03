@@ -1,9 +1,8 @@
 import type { NotificationMedium } from "~/database/model";
 import { NotificationMediums } from "~/database/model";
 
+import { Badge, type BadgeProps } from "~/components/badges/Badge";
 import { classNames } from "~/components/types";
-
-import { Badge, type BadgeProps } from "./Badge";
 
 export interface NotificationMediumBadgeProps extends Omit<BadgeProps, "children"> {
   readonly medium: NotificationMedium;
