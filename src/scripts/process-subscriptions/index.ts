@@ -4,7 +4,7 @@ import { logger } from "~/internal/logger";
 
 import { isUuid } from "~/lib/typeguards";
 
-import { parseBooleanFlagCliArgument } from "~/scripts/cli";
+import { cli } from "~/scripts";
 import { getScriptContext } from "~/scripts/context";
 
 import { processProductSubscriptions } from "./process-product-subscriptions";
@@ -15,8 +15,14 @@ logger.modify({ includeContext: false, level: "info" });
 async function main() {
   const ctx = await getScriptContext({ upsertUser: false });
   const productIdentifier = process.argv.slice(2)[0];
+
+  const maximumLookback = cli.parseIntegerCliArgument("max-lookback");
+  if (maximumLookback !== null && process.env.NODE_ENV !== "development") {
+    throw new Error("Can only clean subscriptions in development mode!");
+  }
+
   if (!productIdentifier) {
-    return await processSubscriptions(ctx);
+    return await processSubscriptions({ maximumLookback }, ctx);
   }
   const product = await db.product.findUnique({
     where: isUuid(productIdentifier) ? { id: productIdentifier } : { slug: productIdentifier },
@@ -28,21 +34,11 @@ async function main() {
     }
     return console.error(`A product with the slug '${productIdentifier}' does not exist!`);
   }
-  const clean = parseBooleanFlagCliArgument("clean");
+  const clean = cli.parseBooleanFlagCliArgument("clean");
   if (clean && process.env.NODE_ENV !== "development") {
     throw new Error("Can only clean subscriptions in development mode!");
   }
-
-  await processProductSubscriptions(product, { ...ctx, clean });
+  await processProductSubscriptions({ product, clean, maximumLookback }, ctx);
 }
 
-main()
-  .then(async () => {
-    await db.$disconnect();
-  })
-  .catch(async e => {
-    /* eslint-disable-next-line no-console */
-    console.error(e);
-    await db.$disconnect();
-    process.exit(1);
-  });
+cli.runScript(main);

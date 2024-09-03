@@ -10,18 +10,10 @@ export interface ModuleContentProps
     Pick<ViewProps, "component" | "centerChildren"> {
   readonly children: ReactNode;
   readonly isLoading?: boolean;
-  readonly isDisabled?: true;
 }
 
-export const ModuleContent = ({
-  children,
-  isDisabled,
-  isLoading,
-  ...props
-}: ModuleContentProps) => (
+export const ModuleContent = ({ children, isLoading, ...props }: ModuleContentProps) => (
   <View flex column grow {...props} className={classNames("gap-2", props.className)}>
-    <Loading isLoading={isLoading} isDisabled={isDisabled}>
-      {children}
-    </Loading>
+    <Loading isLoading={isLoading}>{children}</Loading>
   </View>
 );

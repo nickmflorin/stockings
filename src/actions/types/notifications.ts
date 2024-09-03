@@ -14,12 +14,12 @@ import type { ParseFiltersOptions } from "~/lib/filters";
 import { type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
-export const ProductNotificationOrderableFields = ["product", "sentAt"] as const;
+export const ProductNotificationOrderableFields = ["product", "state"] as const;
 export type ProductNotificationOrderableField = (typeof ProductNotificationOrderableFields)[number];
 
 export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOrderableField> = {
-  orderBy: "sentAt",
-  order: "asc",
+  orderBy: "state",
+  order: "desc",
 };
 
 export interface ProductNotificationsFilters {

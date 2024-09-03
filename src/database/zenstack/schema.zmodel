@@ -211,6 +211,7 @@ model ProductSubscription extends ModelMeta {
   productId        String                  @db.Uuid
   enabled          Boolean                 @default(true)
   notifications    ProductNotification[]   @relation("notifications")
+  mediums          NotificationMedium[]    @default([Application])
 
   @@delegate(subscriptionType)
   @@unique([userId, productId, subscriptionType])
@@ -242,6 +243,12 @@ enum NotificationState {
   Failed
 }
 
+enum NotificationMedium {
+  Email
+  SMS
+  Application
+}
+
 model ProductNotification extends ModelMeta {
   createdBy        User                    @relation("createdProductNotifications", fields: [createdById], references: [id])
   updatedBy        User                    @relation("updatedProductNotifications", fields: [updatedById], references: [id])
@@ -266,6 +273,7 @@ model ProductNotification extends ModelMeta {
   stateAsOf        DateTime
   failedAt         DateTime?
   sentAt           DateTime?
+  mediums          NotificationMedium[]    @default([Application])
 
   @@delegate(notificationType)
 }

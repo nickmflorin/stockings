@@ -12,9 +12,15 @@ logger.modify({ includeContext: false, level: "info" });
 
 const DELETE_NOTIFICATIONS_BATCH_SIZE = 100;
 
+interface ProcessProductSubscriptionParams {
+  readonly maximumLookback?: number | null;
+  readonly clean?: boolean;
+  readonly product: ApiProduct<["records"]>;
+}
+
 export const processProductSubscriptions = async (
-  product: ApiProduct<["records"]>,
-  { clean, ...ctx }: ScriptContext & { readonly clean?: boolean },
+  { product, clean, maximumLookback }: ProcessProductSubscriptionParams,
+  ctx: ScriptContext,
 ) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 
@@ -63,6 +69,6 @@ export const processProductSubscriptions = async (
       `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
         `(type = ${subscription.subscriptionType}).`,
     );
-    await processSubscription(subscription, product, ctx);
+    await processSubscription({ subscription, product, maximumLookback }, ctx);
   }
 };

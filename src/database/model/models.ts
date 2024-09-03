@@ -11,6 +11,7 @@ export {
   NotificationState,
   ProductNotificationType,
   ProductSubscriptionType,
+  NotificationMedium,
 } from "./generated";
 
 export type * from "@zenstackhq/runtime/models";

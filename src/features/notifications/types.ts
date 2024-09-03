@@ -6,7 +6,6 @@ export const ProductNotificationsTableColumns = [
   {
     id: "product",
     label: "Product",
-    // minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
     align: "left",
@@ -14,30 +13,26 @@ export const ProductNotificationsTableColumns = [
   {
     id: "type",
     label: "Type",
-    // minWidth: 240,
     maxWidth: 240,
     align: "center",
   },
   {
     id: "event",
     label: "Event",
-    // minWidth: 240,
     maxWidth: 240,
     align: "center",
   },
   {
     id: "state",
     label: "State",
-    // minWidth: 240,
     maxWidth: 240,
     align: "left",
+    isOrderable: true,
   },
   {
-    id: "sentAt",
-    label: "Sent At",
-    // minWidth: 240,
+    id: "mediums",
+    label: "Mediums",
     maxWidth: 240,
-    isOrderable: true,
   },
 ] as const satisfies DataTableColumnConfig<ApiProductNotification<["product"]>, string>[];
 

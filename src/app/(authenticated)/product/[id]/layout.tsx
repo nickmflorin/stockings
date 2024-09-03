@@ -17,6 +17,7 @@ interface ProductLayoutProps {
   readonly detail: ReactNode;
   readonly subscriptions: ReactNode;
   readonly notifications: ReactNode;
+  readonly notificationsModuleTitle: ReactNode;
   readonly params: { id: string };
 }
 
@@ -26,6 +27,7 @@ export default async function ProductLayout({
   subscriptions,
   notifications,
   params,
+  notificationsModuleTitle,
 }: ProductLayoutProps) {
   const { data: product, error } = await fetchProduct(
     params.id,
@@ -75,7 +77,7 @@ export default async function ProductLayout({
             <Module.Content>{subscriptions}</Module.Content>
           </Module>
           <Module component="paper" className="grow min-h-[400px]">
-            <Module.Header title="Notifications">
+            <Module.Header title={notificationsModuleTitle}>
               Notifications you have received for the product.
             </Module.Header>
             <Module.Content>{notifications}</Module.Content>

@@ -13,6 +13,8 @@ import { enhance, fieldIsIncluded } from "~/database/model";
 import { db } from "~/database/prisma";
 import { conditionalFilters, constructOrSearch } from "~/database/util";
 
+import type { Order } from "~/lib/ordering";
+
 import {
   PAGE_SIZES,
   type FetchActionContext,
@@ -22,6 +24,7 @@ import {
   dataInFetchContext,
   clampPagination,
   type ProductNotificationsControls,
+  type ProductNotificationOrderableField,
 } from "~/actions";
 
 const filtersClause = (filters: Partial<ProductNotificationsControls["filters"]>) =>
@@ -58,17 +61,23 @@ const whereClause = ({
 
 export const fetchProductNotificationsCount = cache(
   async <C extends FetchActionContext>(
+    { filters }: { filters: Partial<ProductNotificationsControls["filters"]> },
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>> => {
     const { user, error } = await getAuthedUser();
     if (error) {
       return errorInFetchContext(error, context);
     }
-    const count = await db.productNotification.count({ where: { userId: user.id } });
+    const count = await db.productNotification.count({
+      where: whereClause({ filters, user }),
+    });
     return dataInFetchContext({ count }, context);
   },
 ) as {
-  <C extends FetchActionContext>(context: C): Promise<FetchActionResponse<{ count: number }, C>>;
+  <C extends FetchActionContext>(
+    params: { filters: Partial<ProductNotificationsControls["filters"]> },
+    context: C,
+  ): Promise<FetchActionResponse<{ count: number }, C>>;
 };
 
 export const fetchProductNotificationsPagination = cache(
@@ -130,17 +139,19 @@ export const fetchProductNotifications = cache(
       ));
     }
 
+    const orderingMap = {
+      state: order => ({ stateAsOf: order }) as const,
+      product: order => ({ product: { name: order } }) as const,
+    } as const satisfies { [key in ProductNotificationOrderableField]: (order: Order) => unknown };
+
     const notifications = await enhanced.productNotification.findMany({
       where: whereClause({ filters, user }),
-      orderBy:
-        ordering.orderBy === "product"
-          ? [
-              { product: { name: ordering.order } },
-              { sentAt: "desc" },
-              { createdAt: "desc" },
-              { id: "desc" },
-            ]
-          : [{ [ordering.orderBy]: ordering.order }, { createdAt: "desc" }, { id: "desc" }],
+      orderBy: [
+        orderingMap[ordering.orderBy](ordering.order),
+        { stateAsOf: "desc" },
+        { createdAt: "desc" },
+        { id: "desc" },
+      ],
       skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
       take: pagination
         ? pagination.pageSize

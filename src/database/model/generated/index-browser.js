@@ -229,7 +229,8 @@ exports.Prisma.ProductSubscriptionScalarFieldEnum = {
   subscriptionType: 'subscriptionType',
   userId: 'userId',
   productId: 'productId',
-  enabled: 'enabled'
+  enabled: 'enabled',
+  mediums: 'mediums'
 };
 
 exports.Prisma.StatusChangeSubscriptionConditionScalarFieldEnum = {
@@ -264,7 +265,8 @@ exports.Prisma.ProductNotificationScalarFieldEnum = {
   state: 'state',
   stateAsOf: 'stateAsOf',
   failedAt: 'failedAt',
-  sentAt: 'sentAt'
+  sentAt: 'sentAt',
+  mediums: 'mediums'
 };
 
 exports.Prisma.PriceChangeNotificationScalarFieldEnum = {
@@ -343,6 +345,12 @@ exports.ProductSubCategory = exports.$Enums.ProductSubCategory = {
 exports.ProductSubscriptionType = exports.$Enums.ProductSubscriptionType = {
   PriceChangeSubscription: 'PriceChangeSubscription',
   StatusChangeSubscription: 'StatusChangeSubscription'
+};
+
+exports.NotificationMedium = exports.$Enums.NotificationMedium = {
+  Email: 'Email',
+  SMS: 'SMS',
+  Application: 'Application'
 };
 
 exports.PriceChangeCondition = exports.$Enums.PriceChangeCondition = {

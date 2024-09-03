@@ -10,14 +10,11 @@ import { ModuleHeader } from "./ModuleHeader";
 export interface ModuleProps extends ViewSizeProps, ComponentProps, Pick<ViewProps, "component"> {
   readonly children: ReactNode;
   readonly isLoading?: boolean;
-  readonly isDisabled?: true;
 }
 
-const LocalModule = ({ children, isDisabled, isLoading, ...props }: ModuleProps) => (
+const LocalModule = ({ children, isLoading, ...props }: ModuleProps) => (
   <View flex column {...props} className={classNames("gap-2", props.className)}>
-    <Loading isLoading={isLoading} isDisabled={isDisabled}>
-      {children}
-    </Loading>
+    <Loading isLoading={isLoading}>{children}</Loading>
   </View>
 );
 

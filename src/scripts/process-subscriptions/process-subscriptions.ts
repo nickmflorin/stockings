@@ -8,7 +8,14 @@ import { processSubscription } from "./process-subscription";
 
 logger.modify({ includeContext: false, level: "info" });
 
-export const processSubscriptions = async (ctx: ScriptContext) => {
+interface ProcessSubscriptionsParams {
+  readonly maximumLookback?: number | null;
+}
+
+export const processSubscriptions = async (
+  params: ProcessSubscriptionsParams,
+  ctx: ScriptContext,
+) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 
   const subscriptions = [
@@ -33,6 +40,6 @@ export const processSubscriptions = async (ctx: ScriptContext) => {
       `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
         `(type = ${subscription.subscriptionType}).`,
     );
-    await processSubscription(subscription, subscription.product, ctx);
+    await processSubscription({ ...params, subscription, product: subscription.product }, ctx);
   }
 };

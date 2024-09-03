@@ -81,6 +81,12 @@ enum NotificationState {
   Failed
 }
 
+enum NotificationMedium {
+  Email
+  SMS
+  Application
+}
+
 model User {
   id                          String                @id() @default(uuid()) @db.Uuid()
   clerkId                     String                @unique()
@@ -231,6 +237,7 @@ model ProductSubscription {
   productId                             String                    @db.Uuid()
   enabled                               Boolean                   @default(true)
   notifications                         ProductNotification[]     @relation("notifications")
+  mediums                               NotificationMedium[]      @default([Application])
   delegate_aux_statusChangeSubscription StatusChangeSubscription?
   delegate_aux_priceChangeSubscription  PriceChangeSubscription?
 
@@ -281,6 +288,7 @@ model ProductNotification {
   stateAsOf                             DateTime
   failedAt                              DateTime?
   sentAt                                DateTime?
+  mediums                               NotificationMedium[]      @default([Application])
   delegate_aux_priceChangeNotification  PriceChangeNotification?
   delegate_aux_statusChangeNotification StatusChangeNotification?
 }

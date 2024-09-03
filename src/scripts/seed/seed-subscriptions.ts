@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-import { enhance } from "~/database/model";
+import { enhance, NotificationMedium } from "~/database/model";
 import {
   type PriceChangeSubscription,
   type StatusChangeSubscription,
@@ -50,6 +50,10 @@ export const seedSubscription = async (
         updatedById: user.id,
         userId: user.id,
         productId: product.id,
+        mediums: selectAtRandom(Object.values(NotificationMedium), {
+          length: MinMax(1, 3),
+          unique: true,
+        }),
         conditions: {
           createMany: {
             data: Array.from({ length: ConditionsPerStatusChangeEvent.random() }).map(() => ({
@@ -77,6 +81,10 @@ export const seedSubscription = async (
         updatedById: user.id,
         userId: user.id,
         productId: product.id,
+        mediums: selectAtRandom(Object.values(NotificationMedium), {
+          length: MinMax(1, 3),
+          unique: true,
+        }),
         conditions: selectAtRandom(Object.values(PriceChangeCondition), {
           unique: true,
           length: ConditionsPerPriceChangeEvent,

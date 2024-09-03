@@ -4,6 +4,7 @@ import RouterLink from "next/link";
 import { type ApiProductNotification } from "~/database/model";
 import { ProductNotificationType } from "~/database/model";
 
+import { NotificationMediumBadge } from "~/components/badges/NotificationMediumBadge";
 import { InlineLink } from "~/components/buttons";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
@@ -115,8 +116,17 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
             );
           },
         },
-        sentAt: {
+        mediums: {
           cellRenderer(datum) {
+            if (datum.mediums.length > 0) {
+              return (
+                <div className="flex flex-row gap-2">
+                  {datum.mediums.map(medium => (
+                    <NotificationMediumBadge key={medium} medium={medium} />
+                  ))}
+                </div>
+              );
+            }
             return <div className="flex flex-col">Need to do</div>;
           },
         },

@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 import type { ScriptContext } from "~/scripts/context";
 
 import {
@@ -8,21 +10,39 @@ import {
 import { db } from "~/database/prisma";
 import { logger } from "~/internal/logger";
 
+import { maxDate } from "~/lib/dates";
+
 import { processRecord } from "./process-record";
 
 logger.modify({ includeContext: false, level: "info" });
 
+interface ProcessSubscriptionParams {
+  readonly subscription: ApiProductSubscription;
+  readonly product: Product;
+  readonly maximumLookback?: number | null;
+}
+
 export const processSubscription = async (
-  subscription: ApiProductSubscription,
-  product: Product,
+  { product, subscription, maximumLookback }: ProcessSubscriptionParams,
   ctx: ScriptContext,
 ) => {
+  if (
+    (maximumLookback !== undefined || maximumLookback !== null) &&
+    process.env.NODE_ENV !== "development"
+  ) {
+    throw new Error("Can only specify maximum lookback in development mode!");
+  }
+  const timestamp =
+    maximumLookback !== null && maximumLookback !== undefined
+      ? new Date(maxDate(DateTime.local().minus({ days: maximumLookback }), subscription.createdAt))
+      : subscription.createdAt;
+
   const records = await db.productRecord.findMany({
     where: {
       AND: [
         {
           productId: product.id,
-          timestamp: { gte: subscription.createdAt },
+          timestamp: { gte: timestamp },
           notifications: {
             none: {
               userId: subscription.userId,
