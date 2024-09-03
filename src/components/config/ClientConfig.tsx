@@ -9,6 +9,9 @@ const DrawersProvider = dynamic(() => import("~/components/drawers/DrawersProvid
 });
 const MantineProvider = dynamic(() => import("./MantineProvider"), { ssr: false });
 const StylesProvider = dynamic(() => import("./StylesProvider"), { ssr: false });
+const GlobalNavigatableProvider = dynamic(() => import("./GlobalNavigatableProvider"), {
+  ssr: false,
+});
 
 export interface ClientConfigProps {
   readonly children: ReactNode;
@@ -18,7 +21,9 @@ export const ClientConfig = (props: ClientConfigProps) => (
   <SWRConfig>
     <MantineProvider>
       <StylesProvider>
-        <DrawersProvider>{props.children}</DrawersProvider>
+        <GlobalNavigatableProvider>
+          <DrawersProvider>{props.children}</DrawersProvider>
+        </GlobalNavigatableProvider>
       </StylesProvider>
     </MantineProvider>
   </SWRConfig>

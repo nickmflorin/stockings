@@ -1,4 +1,6 @@
 "use client";
+import RouterLink from "next/link";
+
 import { type LabeledNavItem } from "~/application/pages/types";
 
 import { TabButton } from "~/components/buttons/TabButton";
@@ -9,12 +11,16 @@ export interface TabProps {
 }
 
 export const Tab = ({ item }: TabProps) => {
-  const { isActive, isPending, setActiveOptimistically, href } = useNavigatable({ item });
+  const { isActive, isPending, setActiveOptimistically, href } = useNavigatable({
+    id: item.path,
+    item,
+  });
   return (
     <TabButton
       href={href}
-      as="link"
+      element="a"
       icon={item.icon}
+      component={RouterLink}
       isPending={isPending}
       isActive={isActive}
       onClick={() => setActiveOptimistically()}

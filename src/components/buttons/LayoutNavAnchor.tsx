@@ -30,7 +30,10 @@ export const LayoutNavAnchor = forwardRef<
   types.PolymorphicButtonElement<"a">,
   LayoutNavAnchorProps
 >(({ item, ...props }: LayoutNavAnchorProps, forwardedRef: types.PolymorphicButtonRef<"a">) => {
-  const { isActive, href, isPending, setActiveOptimistically } = useNavigatable({ item });
+  const { isActive, href, isPending, setActiveOptimistically } = useNavigatable({
+    id: item.path,
+    item,
+  });
   return (
     <Tooltip content={item.tooltipLabel} placement="right" inPortal>
       {({ ref, params }) => (

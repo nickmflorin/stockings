@@ -6,7 +6,6 @@ import { logger } from "~/internal/logger";
 
 import { parseBooleanFlagCliArgument } from "~/scripts/cli";
 import { getProductScriptContext } from "~/scripts/context";
-import { seedRecords } from "~/scripts/seed/seed-records";
 
 logger.modify({ includeContext: false, level: "info" });
 
@@ -30,7 +29,7 @@ async function main() {
     await db.productRecord.deleteMany({ where: { productId: product.id } });
   }
 
-  const recs = seedRecords(product, ctx);
+  const recs = simulateProductRecordsData(product, ctx);
   const batches = chunk(recs, RECORDS_BATCH_SIZE);
   for (let b = 0; b < batches.length; b++) {
     console.info(

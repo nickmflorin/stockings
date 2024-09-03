@@ -13,7 +13,7 @@ logger.modify({ includeContext: false, level: "info" });
    the the records will be generated.  For each product, a lookback horizon will be randomly chosen
    between these two bounds, and records will be generated for each day in the time horizon dictated
    by the randomly chosen lookback period. */
-export const TimeHorizon = MinMax(100, 200);
+const TimeHorizon = MinMax(100, 200);
 
 const RecordsPerHour = MinMax(10, 20);
 const Price = MinMax(100, 750);
@@ -95,7 +95,10 @@ export type RecordDatum = Pick<
   readonly createdAt: DateTime;
 };
 
-export const seedRecords = (product: Product, { user }: ScriptContext): RecordDatum[] => {
+export const simulateProductRecordsData = (
+  product: Product,
+  { user }: ScriptContext,
+): RecordDatum[] => {
   const initialDatum: RecordDatum = {
     createdAt: DateTime.fromJSDate(product.createdAt),
     price: product.price,

@@ -39,7 +39,7 @@
     "format-json-fixtures": "npx prettier ./src/database/fixtures/json/*.json --write --ignore-path=./.prettierignore",
     "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape.ts",
     "scrape-product": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape-product.ts",
-    "simulate-product-records": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-product-records.ts",
+    "simulate-product-records": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-product-records/index.ts",
     "process-subscriptions": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/process-subscriptions/index.ts"
   },
   "dependencies": {

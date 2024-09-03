@@ -14,7 +14,11 @@ import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 
 import { type ScriptContext } from "../context";
 
-import { TimeHorizon } from "./seed-records";
+/* The minimum/maximum number of days to look backwards when determining the time horizon over which
+   the the records will be generated.  For each product, a lookback horizon will be randomly chosen
+   between these two bounds, and records will be generated for each day in the time horizon dictated
+   by the randomly chosen lookback period. */
+const TimeHorizon = MinMax(100, 200);
 
 const DisabledFrequency = 0.1;
 const ConditionsPerStatusChangeEvent = MinMax(1, 4);
