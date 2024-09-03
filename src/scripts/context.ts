@@ -5,13 +5,10 @@ import { type PrismaClient, type Product, type User } from "~/database/model";
 import { upsertUserFromClerk } from "~/database/model/user";
 import { db, type Transaction } from "~/database/prisma";
 import { environment } from "~/environment";
-import { logger } from "~/internal/logger";
 
 import { isUuid } from "~/lib/typeguards";
 
 import { InvalidCommandLineArgumentError, MissingCommandLineArgumentError } from "~/scripts/cli";
-
-logger.modify({ includeContext: false, level: "info" });
 
 export type ScriptContext = {
   readonly clerkUser: ClerkUser;

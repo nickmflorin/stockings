@@ -78,9 +78,20 @@ export const parseIntegerCliArgument = (name: string): number | null => {
   return null;
 };
 
-export const error = (message: string): never => {
+export const error = (message: string) => {
   console.error(terminal.applyStyles(message, { foreground: "red" }));
-  process.exit(1);
+};
+
+export const info = (message: string) => {
+  console.info(terminal.applyStyles(message, { foreground: "cyan" }));
+};
+
+export const warn = (message: string) => {
+  console.warn(terminal.applyStyles(message, { foreground: "yellow" }));
+};
+
+export const success = (message: string) => {
+  console.info(terminal.applyStyles(message, { foreground: "green" }));
 };
 
 export const runScript = (fn: () => Promise<void>) => {

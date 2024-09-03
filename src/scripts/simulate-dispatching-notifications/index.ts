@@ -1,14 +1,11 @@
-/* eslint-disable no-console */
 import { NotificationState } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
 
 import { MinMax, randomBoolean } from "~/lib/random";
 
+import { cli } from "~/scripts";
 import { parseBooleanFlagCliArgument } from "~/scripts/cli";
 import { getProductScriptContext } from "~/scripts/context";
-
-logger.modify({ includeContext: false, level: "info" });
 
 const FailedRate = MinMax(0.01, 0.1);
 const SentRate = MinMax(0.6, 0.7);
@@ -20,16 +17,14 @@ type ToModify = {
 
 async function main() {
   if (process.env.NODE_ENV !== "development") {
-    throw new Error("Script can only be run in development mode!");
+    return cli.error("Script can only be run in development mode!");
   }
 
   const { product, ...ctx } = await getProductScriptContext({ upsertUser: false });
 
   const clean = parseBooleanFlagCliArgument("clean");
   if (clean) {
-    logger.info(
-      `Resetting previously sent & failed notifications for product '${product.slug}'...`,
-    );
+    cli.info(`Resetting previously sent & failed notifications for product '${product.slug}'...`);
     await db.productNotification.updateMany({
       where: {
         productId: product.id,
@@ -55,8 +50,7 @@ async function main() {
     select: { id: true },
   });
   if (notifications.length === 0) {
-    logger.warn(`No pending notifications found for product '${product.slug}'!`);
-    return;
+    return cli.warn(`No pending notifications found for product '${product.slug}'!`);
   }
 
   const toModify: ToModify = notifications.reduce(
@@ -78,7 +72,7 @@ async function main() {
   );
 
   if (toModify.fail.length !== 0) {
-    logger.info(`Failing ${toModify.fail.length} notifications...`);
+    cli.info(`Failing ${toModify.fail.length} notifications...`);
     await db.productNotification.updateMany({
       where: { id: { in: toModify.fail } },
       data: {
@@ -90,7 +84,7 @@ async function main() {
     });
   }
   if (toModify.send.length !== 0) {
-    logger.info(`Sending ${toModify.fail.length} notifications...`);
+    cli.info(`Sending ${toModify.fail.length} notifications...`);
     await db.productNotification.updateMany({
       where: { id: { in: toModify.send } },
       data: {
@@ -103,13 +97,4 @@ async function main() {
   }
 }
 
-main()
-  .then(async () => {
-    console.info("Script Finished - Disconnecting from DB...");
-    await db.$disconnect();
-  })
-  .catch(async e => {
-    console.error(e);
-    await db.$disconnect();
-    process.exit(1);
-  });
+cli.runScript(main);

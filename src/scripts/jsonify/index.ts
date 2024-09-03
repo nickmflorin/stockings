@@ -1,7 +1,5 @@
 import fs from "fs";
 
-import qs from "qs";
-
 import {
   getModelJsonFixtureFilePath,
   type Jsonifier,
@@ -10,57 +8,27 @@ import {
 } from "~/database/fixtures";
 import { pluralizeBrandModel } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
 
-logger.modify({ includeContext: false, level: "info" });
-
-type ParsedArgs = { [key in string]: string | boolean | number };
-
-const parseArgumentValue = (val: string): string | boolean | number => {
-  const parsed = qs.parse(val);
-  if (typeof parsed === "string" || typeof parsed === "number" || typeof parsed === "boolean") {
-    return parsed;
-  }
-  throw new TypeError(`Encountered invalid argument value '${val}'.`);
-};
-
-const parseParameterizedArgs = (args: string[]) =>
-  args.reduce((prev: ParsedArgs, curr: string) => {
-    if (curr.includes("=")) {
-      const parts = curr
-        .split("=")
-        .map(a => a.trim())
-        .filter(a => a.length !== 0);
-      if (parts.length !== 2) {
-        throw new TypeError(`Encountered invalid argument '${curr}'.`);
-      } else if (!parts[0].startsWith("--")) {
-        throw new TypeError(`Encountered invalid argument '${curr}'.`);
-      }
-      return { ...prev, [parts[0]]: parseArgumentValue(parts[1]) };
-    } else if (curr.startsWith("--")) {
-      return { ...prev, [curr.slice(2)]: true };
-    }
-    return prev;
-  }, {} as ParsedArgs);
+import { cli } from "~/scripts";
 
 async function main() {
-  const args = parseParameterizedArgs(process.argv);
+  const live = cli.parseBooleanFlagCliArgument("live", false);
 
   await db.$transaction(async tx => {
     let key: JsonifiableModel;
     for (key in Jsonifiers) {
       const jsonifier = Jsonifiers[key] as Jsonifier<typeof key>;
 
-      logger.info(`Generating fixtures for model '${key}'...`);
+      cli.info(`Generating fixtures for model '${key}'...`);
       const data = await jsonifier.data(tx);
       const jsonified = data.map(d => jsonifier.jsonify(d));
 
       const [dir, filename] = getModelJsonFixtureFilePath(key, {
-        live: args.live === true,
+        live,
       });
 
       if (!fs.existsSync(dir)) {
-        logger.info(`Directory ${dir} does not exist, creating...`);
+        cli.info(`Directory ${dir} does not exist, creating...`);
         fs.mkdirSync(dir, { recursive: true });
       }
       fs.writeFile(
@@ -69,9 +37,9 @@ async function main() {
         "utf-8",
         err => {
           if (err) {
-            logger.error(`There was an error writing the fixtures to file ${filename}: \n${err}`);
+            cli.error(`There was an error writing the fixtures to file ${filename}: \n${err}`);
           } else {
-            logger.info(`Successfully saved products fixtures to file ${filename}.`);
+            cli.info(`Successfully saved products fixtures to file ${filename}.`);
           }
         },
       );
@@ -79,13 +47,4 @@ async function main() {
   });
 }
 
-main()
-  .then(async () => {
-    await db.$disconnect();
-  })
-  .catch(async e => {
-    /* eslint-disable-next-line no-console */
-    console.error(e);
-    await db.$disconnect();
-    process.exit(1);
-  });
+cli.runScript(main);

@@ -2,11 +2,10 @@ import type { ScriptContext } from "~/scripts/context";
 
 import { enhance } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
+
+import { cli } from "~/scripts";
 
 import { processSubscription } from "./process-subscription";
-
-logger.modify({ includeContext: false, level: "info" });
 
 interface ProcessSubscriptionsParams {
   readonly maximumLookback?: number | null;
@@ -30,13 +29,12 @@ export const processSubscriptions = async (
   ];
 
   if (subscriptions.length === 0) {
-    logger.info("No subscriptions to process.");
-    return;
+    return cli.info("No subscriptions to process.");
   }
 
   for (let i = 0; i < subscriptions.length; i++) {
     const subscription = subscriptions[i];
-    logger.info(
+    cli.info(
       `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
         `(type = ${subscription.subscriptionType}).`,
     );

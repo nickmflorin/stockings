@@ -14,9 +14,8 @@ import {
   type ProductStatus,
 } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
 
-logger.modify({ includeContext: false, level: "info" });
+import { cli } from "~/scripts";
 
 interface ProcessRecordParams {
   readonly product: Product;
@@ -41,26 +40,24 @@ export const processRecord = async (
     prices: { previous: number; current: number },
   ) => {
     if (!sub.enabled) {
-      return logger.info(
+      return cli.info(
         `Not processing price change for subscription '${sub.id}' because it is disabled.`,
       );
     } else if (
       prices.previous > prices.current &&
       !sub.conditions.includes(PriceChangeCondition.PriceDecrease)
     ) {
-      return logger.info(
+      return cli.info(
         `Not processing price change for subscription '${sub.id}' because the the price ` +
           "decrease condition is not included in the subscription.",
-        { previousPrice: prices.previous, currentPrice: prices.current },
       );
     } else if (
       prices.previous < prices.current &&
       !sub.conditions.includes(PriceChangeCondition.PriceIncrease)
     ) {
-      return logger.info(
+      return cli.info(
         `Not processing price change for subscription '${sub.id}' because the the price ` +
           "increase condition is not included in the subscription.",
-        { previousPrice: prices.previous, currentPrice: prices.current },
       );
     }
     // This is a sanity check.
@@ -143,7 +140,7 @@ export const processRecord = async (
              historical successfully scraped product records yet - it may happen in development, but
              should never happen in production, as long as we wait a sufficient amount of time
              before first users sign up (allowing the data to accumulate) - it is an edge case. */
-            logger.info(
+            cli.info(
               "Encountered a record with a price but no previous records with a price exist. " +
                 "Price notifications will not be issued for this record.",
             );
@@ -162,7 +159,7 @@ export const processRecord = async (
             });
           }
         } else {
-          logger.info(
+          cli.info(
             "Encountered a record without a price - cannot process price change subscription.",
           );
         }
@@ -187,7 +184,7 @@ export const processRecord = async (
                historical successfully scraped product records yet - it may happen in development,
                but should never happen in production, as long as we wait a sufficient amount of time
                before first users sign up (allowing the data to accumulate) - it is an edge case. */
-            logger.info(
+            cli.info(
               "Encountered a record with a status but no previous records with a status exist. " +
                 "Status notifications will not be issued for this record.",
             );
@@ -206,7 +203,7 @@ export const processRecord = async (
             });
           }
         } else {
-          logger.info(
+          cli.info(
             "Encountered a record without a status - cannot process status change subscription.",
           );
         }

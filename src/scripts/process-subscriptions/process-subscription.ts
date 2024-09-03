@@ -8,13 +8,12 @@ import {
   type Product,
 } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
 
 import { maxDate } from "~/lib/dates";
 
-import { processRecord } from "./process-record";
+import { cli } from "~/scripts";
 
-logger.modify({ includeContext: false, level: "info" });
+import { processRecord } from "./process-record";
 
 interface ProcessSubscriptionParams {
   readonly subscription: ApiProductSubscription;
@@ -30,7 +29,7 @@ export const processSubscription = async (
     (maximumLookback !== undefined || maximumLookback !== null) &&
     process.env.NODE_ENV !== "development"
   ) {
-    throw new Error("Can only specify maximum lookback in development mode!");
+    return cli.error("Can only specify maximum lookback in development mode!");
   }
   const timestamp =
     maximumLookback !== null && maximumLookback !== undefined
@@ -56,13 +55,12 @@ export const processSubscription = async (
     },
   });
   if (records.length === 0) {
-    logger.info(
+    return cli.info(
       `There are no records to process for subscription '${subscription.id}' ` +
         `(type = '${subscription.subscriptionType}').`,
     );
-    return;
   }
-  logger.info(
+  cli.info(
     `There are ${records.length} records to process for subscription '${subscription.id}'` +
       `(type = '${subscription.subscriptionType}'.`,
   );

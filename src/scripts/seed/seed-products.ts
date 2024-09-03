@@ -8,19 +8,17 @@ import {
   type ApiProductSubscription,
 } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
 
 import { randomBoolean } from "~/lib/random";
+
+import { cli } from "~/scripts";
 
 import { type ScriptContext } from "../context";
 
 import { seedSubscription } from "./seed-subscriptions";
 
 const BATCH_SIZE = 50;
-
 const SubscriptionFrequency = 0.4;
-
-logger.modify({ includeContext: false, level: "info" });
 
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
@@ -62,7 +60,7 @@ export const seedProducts = async (ctx: ScriptContext) => {
   const batches = chunk(fixtures.products, BATCH_SIZE);
   for (let i = 0; i < batches.length; i++) {
     const [products, subscriptions] = await seedProductBatch(batches[i], ctx);
-    logger.info(
+    cli.info(
       `Created '${products.length}' products and ` +
         `'${subscriptions.length}' subscriptions in batch '${i + 1}/${batches.length}'...`,
     );

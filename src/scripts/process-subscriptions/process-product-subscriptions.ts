@@ -4,11 +4,10 @@ import type { ScriptContext } from "~/scripts/context";
 
 import { enhance, type ApiProduct } from "~/database/model";
 import { db } from "~/database/prisma";
-import { logger } from "~/internal/logger";
+
+import { cli } from "~/scripts";
 
 import { processSubscription } from "./process-subscription";
-
-logger.modify({ includeContext: false, level: "info" });
 
 const DELETE_NOTIFICATIONS_BATCH_SIZE = 100;
 
@@ -26,9 +25,9 @@ export const processProductSubscriptions = async (
 
   if (clean) {
     if (process.env.NODE_ENV !== "development") {
-      throw new Error("Can only clean subscriptions in development mode!");
+      return cli.error("Can only clean subscriptions in development mode!");
     }
-    logger.info("Deleting all product notifications so they can be regenerated.");
+    cli.info("Deleting all product notifications so they can be regenerated.");
 
     const ids = await enhanced.productNotification.findMany({
       where: { productId: product.id },
@@ -59,13 +58,12 @@ export const processProductSubscriptions = async (
   ];
 
   if (subscriptions.length === 0) {
-    logger.info("No subscriptions to process.");
-    return;
+    return cli.info("No subscriptions to process.");
   }
 
   for (let i = 0; i < subscriptions.length; i++) {
     const subscription = subscriptions[i];
-    logger.info(
+    cli.info(
       `Processing subscription ${i + 1} out of ${subscriptions.length} ` +
         `(type = ${subscription.subscriptionType}).`,
     );

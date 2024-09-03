@@ -1,13 +1,12 @@
 import { DateTime } from "luxon";
 
 import { type Product, type ProductRecord, ProductStatus } from "~/database/model";
-import { logger } from "~/internal/logger";
 
 import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 
-import { type ScriptContext } from "../context";
+import { cli } from "~/scripts";
 
-logger.modify({ includeContext: false, level: "info" });
+import { type ScriptContext } from "../context";
 
 /* The minimum/maximum number of days to look backwards when determining the time horizon over which
    the the records will be generated.  For each product, a lookback horizon will be randomly chosen
@@ -109,7 +108,7 @@ export const simulateProductRecordsData = (
   };
 
   const [numIterations, delta] = getIterations();
-  logger.info(
+  cli.info(
     `Iterating '${numIterations}' times, with a delta of ${delta.minutes} minute(s) for ` +
       `record generation of product '${product.slug}'!`,
   );
