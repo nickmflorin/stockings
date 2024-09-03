@@ -29,15 +29,14 @@ const getInitialModelValue = <
 >({
   options,
   initialValue,
-  isReady = true,
   __private_controlled_value__,
   getModel,
 }: Pick<
   UseSelectModelValueParams<M, O>,
-  "options" | "initialValue" | "__private_controlled_value__" | "isReady"
-> & { readonly getModel: (v: types.InferredDataSelectV<M, O>) => M | null }):
-  | types.DataSelectModelValue<M, O>
-  | types.NotSet => {
+  "options" | "initialValue" | "__private_controlled_value__"
+> & {
+  readonly getModel: (v: types.InferredDataSelectV<M, O>) => M | null;
+}): types.DataSelectModelValue<M, O> => {
   // Distribute/flatten the conditional type to a union of its potential values.
   const value = __private_controlled_value__ as
     | types.InferredDataSelectV<M, O>
@@ -45,14 +44,7 @@ const getInitialModelValue = <
     | types.InferredDataSelectV<M, O>[]
     | undefined;
 
-  /* If the Select is not yet in a "ready" state, it means the data is still loading asynchronously.
-     Since the value of the Select will be present before the asynchronously loaded data is, and
-     we need the asynchronously loaded data to determine the model value, we have to consider the
-     Select's model value as being in an "unset" or indeterminate state.  Once the data finishes
-     asynchronously loading, the Select's model value can be determined. */
-  if (!isReady) {
-    return types.NOTSET;
-  } else if (value === undefined) {
+  if (value === undefined) {
     // Distribute/flatten the conditional type to a union of its potential values.
     const initial = initialValue as
       | types.InferredDataSelectV<M, O>
@@ -76,9 +68,10 @@ const getInitialModelValue = <
         if (m !== null) {
           return [...prev, m];
         }
+        throw new Error("");
         /* This occurs if there is no model associated with the value and the 'strictValueLookup'
            option is 'false' - we have to take some form of recourse. */
-        return prev;
+        // return prev;
       }, [] as M[]) as types.DataSelectModelValue<M, O>;
     } else if (initial !== null) {
       const m = getModel(initial);
@@ -88,7 +81,8 @@ const getInitialModelValue = <
         if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
           return null as types.DataSelectModelValue<M, O>;
         }
-        return types.NOTSET;
+        throw new Error("");
+        // return types.NOTSET;
       }
     }
     return null as types.DataSelectModelValue<M, O>;
@@ -98,9 +92,10 @@ const getInitialModelValue = <
       if (m !== null) {
         return [...prev, m];
       }
+      throw new Error("");
       /* This occurs if there is no model associated with the value and the 'strictValueLookup'
          option is 'false' - we have to take some form of recourse. */
-      return prev;
+      // return prev;
     }, [] as M[]) as types.DataSelectModelValue<M, O>;
   } else if (value !== null) {
     const m = getModel(value);
@@ -110,7 +105,8 @@ const getInitialModelValue = <
       if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
         return null as types.DataSelectModelValue<M, O>;
       }
-      return types.NOTSET;
+      // return types.NOTSET;
+      throw new Error("");
     }
   }
   return null as types.DataSelectModelValue<M, O>;
@@ -162,7 +158,7 @@ type ReducedModelValue<M extends types.DataSelectModel, O extends types.DataSele
     }
   | {
       readonly noop?: never;
-      readonly value: types.DataSelectModelValue<M, O> | types.NotSet;
+      readonly value: types.DataSelectModelValue<M, O>;
       readonly autocorrect?: never;
     }
   | {
@@ -172,7 +168,7 @@ type ReducedModelValue<M extends types.DataSelectModel, O extends types.DataSele
     };
 
 const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
-  curr: types.DataSelectModelValue<M, O> | types.NotSet,
+  curr: types.DataSelectModelValue<M, O>,
   value: types.DataSelectValue<M, O>,
   {
     getItemValue,
@@ -210,19 +206,6 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
             sanitizedValue: [] as types.InferredDataSelectV<M, O>[] as types.DataSelectValue<M, O>,
           },
         };
-      } else if (curr === types.NOTSET) {
-        logger.error(
-          "Corrupted State: Detected an unset model value for an initialized select!" +
-            "The select's model value should be set if the select has been initialized.",
-          { curr },
-        );
-        // Here, we have to reset the state because it cannot be recovered.
-        return {
-          autocorrect: {
-            modelValue: [] as M[] as types.DataSelectModelValue<M, O>,
-            sanitizedValue: [] as types.InferredDataSelectV<M, O>[] as types.DataSelectValue<M, O>,
-          },
-        };
       } else if (!Array.isArray(curr)) {
         logger.error(
           "Corrupted State: Detected non-array state model value for multi-select! " +
@@ -243,7 +226,6 @@ const reduceModelValue = <M extends types.DataSelectModel, O extends types.DataS
          the case that the data provided to the Select is filtered.
 
          See the docstring on the hook for more information. */
-
       let validValueElements: types.InferredDataSelectV<M, O>[] = [];
       const modelValue = selectValue.reduce((prev, vi) => {
         const m = getModel(vi, {
@@ -534,16 +516,28 @@ export const useSelectModelValue = <
     [options],
   );
 
-  /* Manage the Select's model value in state in parallel to the Select's value.  See docstring
-     on hook for more information. */
-  const [modelValue, setModelValue] = useState<types.DataSelectModelValue<M, O> | types.NotSet>(
+  const getInitializedModelValue = useCallback(
     () =>
       getInitialModelValue({
         options,
-        isReady,
-        getModel: v => getModel(v, { strictValueLookup, data, getItemValue }),
+        getModel: v => getModel(v, { data, strictValueLookup, getItemValue }),
         ...params,
       }),
+    [data, strictValueLookup, options, params, getItemValue],
+  );
+
+  const initializeModelValue = useCallback(() => {
+    if (!wasInitialized.current) {
+      const initial = getInitializedModelValue();
+      wasInitialized.current = true;
+      setModelValue(initial);
+    }
+  }, [getInitializedModelValue]);
+
+  /* Manage the Select's model value in state in parallel to the Select's value.  See docstring
+     on hook for more information. */
+  const [modelValue, setModelValue] = useState<types.DataSelectModelValue<M, O> | types.NotSet>(
+    () => getInitializedModelValue(),
   );
 
   const {
@@ -558,6 +552,12 @@ export const useSelectModelValue = <
     ...params,
     behavior: options.behavior,
     onChange: v => {
+      if (modelValue === types.NOTSET) {
+        logger.error(
+          "Detected a change event in the select when the model value has not yet been set!",
+        );
+        return;
+      }
       const { autocorrect, value, noop } = reduceModelValue(modelValue, v, {
         strictValueLookup,
         options,
@@ -568,13 +568,11 @@ export const useSelectModelValue = <
         return;
       } else if (autocorrect) {
         _set(autocorrect.sanitizedValue);
-        onChange?.(v, { modelValue: autocorrect.modelValue });
-      } else if (value !== types.NOTSET) {
+        onChange?.(autocorrect.sanitizedValue, { modelValue: autocorrect.modelValue });
+      } else {
         /* This should only be called if the Select's model value is not "NOTSET" to begin with,
            because the Select will disable selection if it is not in a "ready" state. */
         onChange?.(v, { modelValue: value });
-      } else {
-        logger.warn("The Select should not allow change events if the model value is not set!");
       }
     },
     onSelect,
@@ -584,7 +582,13 @@ export const useSelectModelValue = <
 
   const set = useCallback(
     (v: types.DataSelectValue<M, O>) => {
-      const { autocorrect, value, noop } = reduceModelValue(modelValue, v, {
+      /* If the 'modelValue' has not yet been set/initialized, then we need to initialize it before
+         we can apply the reducer to the value. */
+      const mv: types.DataSelectModelValue<M, O> =
+        modelValue === types.NOTSET ? getInitializedModelValue() : modelValue;
+      wasInitialized.current = true;
+
+      const { autocorrect, value, noop } = reduceModelValue(mv, v, {
         strictValueLookup,
         options,
         data,
@@ -600,7 +604,7 @@ export const useSelectModelValue = <
         setModelValue(value);
       }
     },
-    [modelValue, data, options, strictValueLookup, _set, getItemValue],
+    [modelValue, data, options, strictValueLookup, _set, getItemValue, getInitializedModelValue],
   );
 
   useEffect(() => {
@@ -608,40 +612,19 @@ export const useSelectModelValue = <
        should wait until the Select's model value has been initialized, which occurs when it is
        set in a "ready" state. */
     if (wasInitialized.current) {
-      setModelValue(curr => {
-        const {
-          autocorrect,
-          value: _value,
-          noop,
-        } = reduceModelValue(curr, value, {
-          getItemValue,
-          strictValueLookup,
-          options,
-          data,
-        });
-        if (noop) {
-          return curr;
-        } else if (autocorrect) {
-          return autocorrect.modelValue;
-        }
-        return _value;
-      });
+      set(value);
     }
-  }, [value, options, data, strictValueLookup, getItemValue]);
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [value]);
 
   useEffect(() => {
-    /* If the Select was not initially in a "ready" state, the model value has to be set after it
-       changes to a "ready" state. */
-    if (isReady && wasInitialized.current === false) {
-      setModelValue(
-        getInitialModelValue({
-          options,
-          isReady,
-          getModel: v => getModel(v, { data, strictValueLookup, getItemValue }),
-          ...params,
-        }),
-      );
-      wasInitialized.current = true;
+    /* If the Select is not yet in a "ready" state, it means the data is still loading
+       asynchronously.  Since the value of the Select will be present before the asynchronously
+       loaded data is, and we need the asynchronously loaded data to determine the model value, we
+       have to consider the Select's model value as being in an "unset" or indeterminate state.
+       Once the data finishes asynchronously loading, the Select's model value can be determined. */
+    if (isReady) {
+      initializeModelValue();
     }
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [isReady]);
