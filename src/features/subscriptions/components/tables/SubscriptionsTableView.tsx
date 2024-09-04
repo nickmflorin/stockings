@@ -1,8 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
 
-import TableContainer from "@mui/material/TableContainer";
-
 import { SubscriptionsDefaultOrdering } from "~/actions";
 
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
@@ -46,26 +44,24 @@ export const SubscriptionsTableView = ({
       controlBarTargetId={controlBarTargetId}
       className={classNames("@container/subscriptions-table-view", props.className)}
     >
-      <TableContainer sx={{ maxHeight: "100%", overflowX: "auto" }}>
-        <DataTableWrapper
-          ordering={ordering}
-          rowsAreSelectable
-          rowsHaveActions
-          excludeColumns={excludeColumns}
-          columns={SubscriptionsTableColumns}
-          onSort={(e, col) => {
-            if (
-              OrderableSubscriptionsTableColumnIds.includes(
-                col.id as OrderableSubscriptionsTableColumnId,
-              )
-            ) {
-              setOrdering({ field: col.id as OrderableSubscriptionsTableColumnId });
-            }
-          }}
-        >
-          {children}
-        </DataTableWrapper>
-      </TableContainer>
+      <DataTableWrapper
+        ordering={ordering}
+        rowsAreSelectable
+        rowsHaveActions
+        excludeColumns={excludeColumns}
+        columns={SubscriptionsTableColumns}
+        onSort={(e, col) => {
+          if (
+            OrderableSubscriptionsTableColumnIds.includes(
+              col.id as OrderableSubscriptionsTableColumnId,
+            )
+          ) {
+            setOrdering({ field: col.id as OrderableSubscriptionsTableColumnId });
+          }
+        }}
+      >
+        {children}
+      </DataTableWrapper>
     </TableView>
   );
 };

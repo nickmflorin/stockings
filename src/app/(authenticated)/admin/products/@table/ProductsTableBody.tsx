@@ -5,8 +5,8 @@ import { fetchProducts } from "~/actions/products";
 
 import { Loading } from "~/components/loading/Loading";
 
-const ClientProductsTableBody = dynamic(
-  () => import("~/features/products/components/tables/ProductsTableBody"),
+const ClientProductsAdminTableBody = dynamic(
+  () => import("~/features/products/components/tables/ProductsAdminTableBody"),
   { loading: () => <Loading isLoading component="tbody" /> },
 );
 
@@ -26,9 +26,9 @@ export const ProductsTableBody = async ({
       filters,
       ordering,
       page,
-      includes: ["priceChangeSubscription", "statusChangeSubscription"],
+      includes: [],
     },
     { strict: true },
   );
-  return <ClientProductsTableBody data={products} />;
+  return <ClientProductsAdminTableBody data={products} />;
 };

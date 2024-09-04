@@ -21,9 +21,14 @@ import { ProductSubCategorySelect } from "~/features/products/components/input/P
 import { SubscriptionTypeSelect } from "~/features/subscriptions/components/input/SubscriptionTypeSelect";
 import { useFilters } from "~/hooks/use-filters";
 
-export interface ProductsTableFilterBarProps extends ComponentProps {}
+export interface ProductsTableFilterBarProps extends ComponentProps {
+  readonly excludeSubscriptions?: boolean;
+}
 
-export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.Element => {
+export const ProductsTableFilterBar = ({
+  excludeSubscriptions = false,
+  ...props
+}: ProductsTableFilterBarProps): JSX.Element => {
   const statusSelectRef = useRef<SelectInstance<ProductStatus, "multi"> | null>(null);
   const categorySelectRef = useRef<SelectInstance<ProductCategory, "multi"> | null>(null);
   const subCategorySelectRef = useRef<SelectInstance<ProductSubCategory, "multi"> | null>(null);
@@ -70,18 +75,22 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
         onChange={(statuses: ProductStatus[]) => updateFilters({ statuses })}
         onClear={() => updateFilters({ statuses: [] })}
       />
-      <SubscriptionTypeSelect
-        ref={subscriptionTypeSelectRef}
-        dynamicHeight={false}
-        placeholder="Subscriptions"
-        behavior="multi"
-        inputClassName="max-w-[320px]"
-        initialValue={filters.subscriptionTypes}
-        onChange={(subscriptionTypes: ProductSubscriptionType[]) =>
-          updateFilters({ subscriptionTypes })
-        }
-        onClear={() => updateFilters({ subscriptionTypes: [] })}
-      />
+      {!excludeSubscriptions ? (
+        <SubscriptionTypeSelect
+          ref={subscriptionTypeSelectRef}
+          dynamicHeight={false}
+          placeholder="Subscriptions"
+          behavior="multi"
+          inputClassName="max-w-[320px]"
+          initialValue={filters.subscriptionTypes}
+          onChange={(subscriptionTypes: ProductSubscriptionType[]) =>
+            updateFilters({ subscriptionTypes })
+          }
+          onClear={() => updateFilters({ subscriptionTypes: [] })}
+        />
+      ) : (
+        <></>
+      )}
       <ProductCategorySelect
         ref={categorySelectRef}
         dynamicHeight={false}

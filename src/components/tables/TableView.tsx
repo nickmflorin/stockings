@@ -1,5 +1,7 @@
 import React from "react";
 
+import TableContainer from "@mui/material/TableContainer";
+
 import { Loading } from "~/components/loading/Loading";
 import type { ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
@@ -39,7 +41,11 @@ const LocalTableView = ({
       {header}
     </TableViewHeader>
     <div className={classNames("table-view__content", contentClassName)}>
-      <Loading isLoading={isLoading}>{children}</Loading>
+      <Loading isLoading={isLoading}>
+        <TableContainer sx={{ maxHeight: "100%", height: "100%", overflowX: "auto" }}>
+          {children}
+        </TableContainer>
+      </Loading>
     </div>
     <TableViewFooter {...footerProps}>{footer}</TableViewFooter>
   </div>

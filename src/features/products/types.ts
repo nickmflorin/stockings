@@ -53,3 +53,49 @@ export type OrderableProductsTableColumnId = Extract<
 export const OrderableProductsTableColumnIds = [...ProductsTableColumns]
   .filter(col => (col as { isOrderable?: boolean }).isOrderable)
   .map(col => col.id) as OrderableProductsTableColumnId[];
+
+export const ProductsAdminTableColumns = [
+  {
+    id: "name",
+    label: "Name",
+    isOrderable: true,
+  },
+  {
+    id: "status",
+    label: "Status",
+    minWidth: 240,
+    maxWidth: 240,
+  },
+  {
+    id: "price",
+    label: "Price",
+    isOrderable: true,
+    minWidth: 240,
+    maxWidth: 240,
+  },
+  {
+    id: "category",
+    label: "Category",
+    align: "center",
+  },
+  {
+    id: "subcategories",
+    label: "Sub Categories",
+    align: "center",
+  },
+  {
+    id: "actions",
+    label: "",
+  },
+] as const satisfies DataTableColumnConfig<Product, string>[];
+
+export type ProductsAdminTableColumnId = (typeof ProductsTableColumns)[number]["id"];
+
+export type OrderableProductsAdminTableColumnId = Extract<
+  (typeof ProductsTableColumns)[number],
+  { isOrderable: true }
+>["id"];
+
+export const OrderableProductsAdminTableColumnIds = [...ProductsTableColumns]
+  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
+  .map(col => col.id) as OrderableProductsTableColumnId[];

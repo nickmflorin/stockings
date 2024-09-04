@@ -72,7 +72,7 @@ export interface DataTableColumn<
   readonly cellRenderer?: (datum: D) => ReactNode;
 }
 
-type ColumnProperties<
+export type DataTableColumnProperties<
   D extends DataTableDatum,
   I extends string,
   // C extends DataTableColumnConfig<D, I>,
@@ -101,7 +101,7 @@ export const convertConfigsToColumns = <
   C extends DataTableColumnConfig<any, string>[],
 >(
   configs: C,
-  properties: ColumnProperties<InferColumnDatum<C>, InferColumnId<C>>,
+  properties: DataTableColumnProperties<InferColumnDatum<C>, InferColumnId<C>>,
 ): DataTableColumn<InferColumnDatum<C>, InferColumnId<C>>[] =>
   configs.map(
     (config): DataTableColumn<InferColumnDatum<C>, InferColumnId<C>> => ({

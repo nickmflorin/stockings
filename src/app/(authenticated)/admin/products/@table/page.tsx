@@ -16,8 +16,8 @@ import { ProductsTableFilterBar } from "~/features/products/components/tables/Pr
 import { ProductsTableBody } from "./ProductsTableBody";
 import { ProductsTablePaginator } from "./ProductsTablePaginator";
 
-const ProductsTableView = dynamic(
-  () => import("~/features/products/components/tables/ProductsTableView"),
+const ProductsAdminTableView = dynamic(
+  () => import("~/features/products/components/tables/ProductsAdminTableView"),
   { loading: () => <Loading isLoading /> },
 );
 
@@ -36,10 +36,10 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
   });
 
   return (
-    <ProductsTableView
+    <ProductsAdminTableView
       filterBar={
         <Suspense>
-          <ProductsTableFilterBar />
+          <ProductsTableFilterBar excludeSubscriptions />
         </Suspense>
       }
       pagination={
@@ -54,6 +54,6 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
       >
         <ProductsTableBody filters={filters} page={page} ordering={ordering} />
       </Suspense>
-    </ProductsTableView>
+    </ProductsAdminTableView>
   );
 }

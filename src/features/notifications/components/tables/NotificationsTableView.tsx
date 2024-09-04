@@ -1,8 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
 
-import TableContainer from "@mui/material/TableContainer";
-
 import { ProductNotificationsDefaultOrdering } from "~/actions";
 
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
@@ -35,24 +33,22 @@ export const NotificationsTableView = ({
   });
   return (
     <TableView header={filterBar} footer={pagination}>
-      <TableContainer sx={{ maxHeight: "100%", height: "100%" }}>
-        <DataTableWrapper
-          columns={ProductNotificationsTableColumns}
-          excludeColumns={excludeColumns}
-          ordering={ordering}
-          onSort={(e, col) => {
-            if (
-              OrderableProductNotificationsTableColumnIds.includes(
-                col.id as OrderableProductNotificationsTableColumnId,
-              )
-            ) {
-              setOrdering({ field: col.id as OrderableProductNotificationsTableColumnId });
-            }
-          }}
-        >
-          {children}
-        </DataTableWrapper>
-      </TableContainer>
+      <DataTableWrapper
+        columns={ProductNotificationsTableColumns}
+        excludeColumns={excludeColumns}
+        ordering={ordering}
+        onSort={(e, col) => {
+          if (
+            OrderableProductNotificationsTableColumnIds.includes(
+              col.id as OrderableProductNotificationsTableColumnId,
+            )
+          ) {
+            setOrdering({ field: col.id as OrderableProductNotificationsTableColumnId });
+          }
+        }}
+      >
+        {children}
+      </DataTableWrapper>
     </TableView>
   );
 };

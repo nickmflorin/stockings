@@ -4,10 +4,10 @@ import { ProductsDefaultOrdering } from "~/actions";
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
 import {
-  OrderableProductsTableColumnIds,
-  ProductsTableColumns,
-  type OrderableProductsTableColumnId,
-  type ProductsTableColumnId,
+  OrderableProductsAdminTableColumnIds,
+  ProductsAdminTableColumns,
+  type OrderableProductsAdminTableColumnId,
+  type ProductsAdminTableColumnId,
 } from "~/features/products/types";
 import { useOrdering } from "~/hooks/use-ordering";
 
@@ -15,30 +15,34 @@ export interface ProductsTableViewProps {
   readonly children: JSX.Element;
   readonly filterBar?: JSX.Element;
   readonly pagination?: JSX.Element;
-  readonly excludeColumns?: ProductsTableColumnId[];
+  readonly excludeColumns?: ProductsAdminTableColumnId[];
 }
 
-export const ProductsTableView = ({
+export const ProductsAdminTableView = ({
   children,
   filterBar,
   pagination,
   excludeColumns,
 }: ProductsTableViewProps) => {
-  const [ordering, setOrdering] = useOrdering<OrderableProductsTableColumnId>({
+  const [ordering, setOrdering] = useOrdering<OrderableProductsAdminTableColumnId>({
     useQueryParams: true,
-    fields: OrderableProductsTableColumnIds,
+    fields: OrderableProductsAdminTableColumnIds,
     defaultOrdering: ProductsDefaultOrdering,
   });
   return (
     <TableView header={filterBar} footer={pagination}>
       <DataTableWrapper
-        rowsHaveActions
+        rowsHaveActions={false}
         excludeColumns={excludeColumns}
-        columns={ProductsTableColumns}
+        columns={ProductsAdminTableColumns}
         ordering={ordering}
         onSort={(e, col) => {
-          if (OrderableProductsTableColumnIds.includes(col.id as OrderableProductsTableColumnId)) {
-            setOrdering({ field: col.id as OrderableProductsTableColumnId });
+          if (
+            OrderableProductsAdminTableColumnIds.includes(
+              col.id as OrderableProductsAdminTableColumnId,
+            )
+          ) {
+            setOrdering({ field: col.id as OrderableProductsAdminTableColumnId });
           }
         }}
       >
@@ -48,4 +52,4 @@ export const ProductsTableView = ({
   );
 };
 
-export default ProductsTableView;
+export default ProductsAdminTableView;

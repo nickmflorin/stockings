@@ -6,7 +6,7 @@ interface AdminLayoutProps {
 
 export default async function AdminLayout({ children }: AdminLayoutProps): Promise<JSX.Element> {
   return (
-    <div className="flex flex-col gap-[15px] w-full h-full max-h-full overflow-hidden">
+    <div className="flex flex-col gap-6 w-full h-full max-h-full overflow-hidden">
       <Tabs
         items={[
           {
