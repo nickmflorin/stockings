@@ -32,6 +32,13 @@ const filtersClause = (filters: Partial<ProductsControls["filters"]>, user: User
     filters.search ? constructTableSearchClause("product", filters.search) : undefined,
     filters.subscribed ? { subscriptions: { some: { userId: user.id } } } : undefined,
     filters.notified ? { notifications: { some: { userId: user.id } } } : undefined,
+    filters.subscriptionTypes && filters.subscriptionTypes.length !== 0
+      ? {
+          subscriptions: {
+            some: { userId: user.id, subscriptionType: { in: filters.subscriptionTypes } },
+          },
+        }
+      : undefined,
     filters.categories && filters.categories.length !== 0
       ? { category: { in: filters.categories } }
       : undefined,

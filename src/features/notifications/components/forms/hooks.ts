@@ -1,18 +1,10 @@
 import { z } from "zod";
 
-import { ProductNotificationType } from "~/database/model";
+import { ProductNotificationType, NotificationMedium } from "~/database/model";
 
 import { useForm } from "~/components/forms/hooks";
 
-export const useChooseNotificationTypesForm = () =>
-  useForm({
-    schema: ChooseNotificationTypesSchema,
-    defaultValues: {
-      notificationTypes: [],
-    },
-  });
-
-const ChooseNotificationTypesSchema = z.object({
+const NotificationTypesSchema = z.object({
   notificationTypes: z
     .array(
       z.union([
@@ -26,4 +18,38 @@ const ChooseNotificationTypesSchema = z.object({
     ),
 });
 
-export type ChooseNotificationTypesFormValues = z.infer<typeof ChooseNotificationTypesSchema>;
+export const useNotificationTypesForm = () =>
+  useForm({
+    schema: NotificationTypesSchema,
+    defaultValues: {
+      notificationTypes: [],
+    },
+  });
+
+export type NotificationTypesFormValues = z.infer<typeof NotificationTypesSchema>;
+
+const NotificationMediumsSchema = z.object({
+  mediums: z
+    .array(
+      z.union([
+        z.literal(NotificationMedium.Application),
+        z.literal(NotificationMedium.Email),
+        z.literal(NotificationMedium.SMS),
+      ]),
+    )
+    .min(
+      1,
+      "In order to subscribe, you must choose at least 1 event to medium over which " +
+        "your notifications will be sent.",
+    ),
+});
+
+export const useNotificationMediumsForm = () =>
+  useForm({
+    schema: NotificationMediumsSchema,
+    defaultValues: {
+      mediums: [NotificationMedium.Application],
+    },
+  });
+
+export type NotificationMediumsFormValues = z.infer<typeof NotificationMediumsSchema>;

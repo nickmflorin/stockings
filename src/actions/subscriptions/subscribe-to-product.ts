@@ -44,7 +44,7 @@ export const subscribeToProduct = async (
       error: ApiClientFormError.fromZodError({ error: parsed.error }).json,
     };
   }
-  const { priceChangeConditions, statusChangeConditions } = parsed.data;
+  const { priceChangeConditions, statusChangeConditions, mediums } = parsed.data;
   if (priceChangeConditions.length === 0 && statusChangeConditions.length === 0) {
     return {
       error: ApiClientGlobalError.BadRequest({
@@ -62,6 +62,7 @@ export const subscribeToProduct = async (
           createdById: user.id,
           updatedById: user.id,
           userId: user.id,
+          mediums: uniq(mediums),
           /* Uniqueness should be guaranteed by the schema, but we still ensure uniqueness
              here just in case. */
           conditions: uniq(priceChangeConditions),
@@ -77,6 +78,7 @@ export const subscribeToProduct = async (
           createdById: user.id,
           updatedById: user.id,
           userId: user.id,
+          mediums: uniq(mediums),
           conditions: {
             createMany: {
               data: statusChangeConditions.map(condition => {

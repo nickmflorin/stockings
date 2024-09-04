@@ -5,6 +5,7 @@ import {
   type ProductCategory,
   type ProductSubCategory,
   type ProductStatus,
+  type ProductSubscriptionType,
 } from "~/database/model";
 
 import { ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
@@ -16,6 +17,8 @@ import { ProductCategorySelect } from "~/features/products/components/input/Prod
 import { ProductStatusSelect } from "~/features/products/components/input/ProductStatusSelect";
 /* eslint-disable-next-line max-len */
 import { ProductSubCategorySelect } from "~/features/products/components/input/ProductSubCategorySelect";
+/* eslint-disable-next-line max-len */
+import { SubscriptionTypeSelect } from "~/features/subscriptions/components/input/SubscriptionTypeSelect";
 import { useFilters } from "~/hooks/use-filters";
 
 export interface ProductsTableFilterBarProps extends ComponentProps {}
@@ -24,6 +27,9 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
   const statusSelectRef = useRef<SelectInstance<ProductStatus, "multi"> | null>(null);
   const categorySelectRef = useRef<SelectInstance<ProductCategory, "multi"> | null>(null);
   const subCategorySelectRef = useRef<SelectInstance<ProductSubCategory, "multi"> | null>(null);
+  const subscriptionTypeSelectRef = useRef<SelectInstance<ProductSubscriptionType, "multi"> | null>(
+    null,
+  );
 
   const [filters, updateFilters] = useFilters({
     schemas: ProductsFiltersSchemas,
@@ -37,10 +43,21 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
       onSearch={v => updateFilters({ search: v })}
       search={filters.search}
       onClear={() => {
-        for (const r of [statusSelectRef, categorySelectRef, subCategorySelectRef]) {
+        for (const r of [
+          statusSelectRef,
+          categorySelectRef,
+          subCategorySelectRef,
+          subscriptionTypeSelectRef,
+        ]) {
           r.current?.clear();
         }
-        updateFilters({ subCategories: [], categories: [], search: "", statuses: [] });
+        updateFilters({
+          subCategories: [],
+          categories: [],
+          search: "",
+          statuses: [],
+          subscriptionTypes: [],
+        });
       }}
     >
       <ProductStatusSelect
@@ -52,6 +69,18 @@ export const ProductsTableFilterBar = (props: ProductsTableFilterBarProps): JSX.
         initialValue={filters.statuses}
         onChange={(statuses: ProductStatus[]) => updateFilters({ statuses })}
         onClear={() => updateFilters({ statuses: [] })}
+      />
+      <SubscriptionTypeSelect
+        ref={subscriptionTypeSelectRef}
+        dynamicHeight={false}
+        placeholder="Subscriptions"
+        behavior="multi"
+        inputClassName="max-w-[320px]"
+        initialValue={filters.subscriptionTypes}
+        onChange={(subscriptionTypes: ProductSubscriptionType[]) =>
+          updateFilters({ subscriptionTypes })
+        }
+        onClear={() => updateFilters({ subscriptionTypes: [] })}
       />
       <ProductCategorySelect
         ref={categorySelectRef}

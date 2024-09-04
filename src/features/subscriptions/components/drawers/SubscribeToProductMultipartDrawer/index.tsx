@@ -13,7 +13,10 @@ import { type ExtendingDrawerProps } from "~/components/drawers";
 import { Drawer } from "~/components/drawers/Drawer";
 import { CircleNumber } from "~/components/icons/CircleNumber";
 import { Description, Label } from "~/components/typography";
-import { useChooseNotificationTypesForm } from "~/features/notifications/components/forms";
+import {
+  useNotificationTypesForm,
+  useNotificationMediumsForm,
+} from "~/features/notifications/components/forms";
 
 import { usePriceChangeSubscriptionForm, useStatusChangeSubscriptionForm } from "../../forms";
 
@@ -42,6 +45,7 @@ export const SubscribeToProductMultipartDrawer = ({
   const [activeStep, setActiveStep] = useState<StepName>(StepNames.CONFIGURE);
   const [stepData, _setStepData] = useState<StepsData>({
     configure: null,
+    mediums: null,
     statusChange: null,
     priceChange: null,
   });
@@ -49,20 +53,24 @@ export const SubscribeToProductMultipartDrawer = ({
   /* The forms have to be managed outside the scope of the individual components to ensure that the
      data is maintained in state when transitioning from step to step. */
   const forms: StepsForms = {
-    configure: useChooseNotificationTypesForm(),
+    configure: useNotificationTypesForm(),
     statusChange: useStatusChangeSubscriptionForm(),
     priceChange: usePriceChangeSubscriptionForm(),
+    mediums: useNotificationMediumsForm(),
   };
 
   const submit = useCallback(
     async (data: StepsData) => {
       if (
-        (data.priceChange && data.priceChange.conditions.length !== 0) ||
-        (data.statusChange && data.statusChange.conditions.length !== 0)
+        ((data.priceChange && data.priceChange.conditions.length !== 0) ||
+          (data.statusChange && data.statusChange.conditions.length !== 0)) &&
+        data.mediums &&
+        data.mediums.length !== 0
       ) {
         let response: Awaited<ReturnType<typeof subscribeToProduct>> | null = null;
         try {
           response = await subscribeToProduct(product.id, {
+            mediums: data.mediums,
             statusChangeConditions: data.statusChange?.conditions ?? [],
             priceChangeConditions: data.priceChange?.conditions ?? [],
           });
@@ -102,8 +110,16 @@ export const SubscribeToProductMultipartDrawer = ({
           const d = data as StepData<"configure">;
           if (d.length !== 0) {
             _setStepData({ ...stepData, [StepNames.CONFIGURE]: d });
+            return setActiveStep(StepNames.MEDIUMS);
+          }
+          return;
+        }
+        case StepNames.MEDIUMS: {
+          const d = data as StepData<"mediums">;
+          if (d.length !== 0 && stepData.configure) {
+            _setStepData({ ...stepData, [StepNames.MEDIUMS]: d });
             return setActiveStep(
-              d.includes(ProductNotificationType.PriceChangeNotification)
+              stepData.configure.includes(ProductNotificationType.PriceChangeNotification)
                 ? StepNames.PRICECHANGE
                 : StepNames.STATUSCHANGE,
             );
@@ -140,8 +156,10 @@ export const SubscribeToProductMultipartDrawer = ({
       switch (step) {
         case StepNames.CONFIGURE:
           return onClose();
-        case StepNames.PRICECHANGE:
+        case StepNames.MEDIUMS:
           return setActiveStep(StepNames.CONFIGURE);
+        case StepNames.PRICECHANGE:
+          return setActiveStep(StepNames.MEDIUMS);
         case StepNames.STATUSCHANGE: {
           if (
             stepData.configure &&
@@ -172,11 +190,13 @@ export const SubscribeToProductMultipartDrawer = ({
               <CircleNumber isActive>
                 {activeStep === StepNames.CONFIGURE || !stepData.configure
                   ? 1
-                  : activeStep === StepNames.PRICECHANGE
+                  : activeStep === StepNames.MEDIUMS
                     ? 2
-                    : stepData.configure.includes(ProductNotificationType.PriceChangeNotification)
+                    : activeStep === StepNames.PRICECHANGE
                       ? 3
-                      : 2}
+                      : stepData.configure.includes(ProductNotificationType.PriceChangeNotification)
+                        ? 4
+                        : 3}
               </CircleNumber>
               <Label>{StepLabels[activeStep]}</Label>
             </div>

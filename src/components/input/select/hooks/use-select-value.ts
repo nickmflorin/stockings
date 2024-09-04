@@ -91,9 +91,15 @@ export const useSelectValue = <V extends AllowedSelectValue, B extends SelectBeh
   );
 
   const _setValue = useCallback(
-    (v: SelectValue<V, B> | ((curr: SelectValue<V, B>) => SelectValue<V, B>)) => {
+    (
+      v: SelectValue<V, B> | ((curr: SelectValue<V, B>) => SelectValue<V, B>),
+      options?: { __private_ignore_controlled_state__: boolean },
+    ) => {
       __setValue(curr => {
         if (curr === CONTROLLED) {
+          if (options?.__private_ignore_controlled_state__) {
+            return curr;
+          }
           throw new Error("Cannot set the value of a controlled select!");
         }
         return typeof v === "function" ? v(curr) : v;

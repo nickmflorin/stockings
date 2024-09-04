@@ -1,7 +1,12 @@
 import { intersection, uniq } from "lodash-es";
 import { z } from "zod";
 
-import { ProductStatus, PriceChangeCondition, productStatusesAreAny } from "~/database/model";
+import {
+  ProductStatus,
+  PriceChangeCondition,
+  NotificationMedium,
+  productStatusesAreAny,
+} from "~/database/model";
 
 export const BaseProductSubscriptionSchema = z.object({
   enabled: z.boolean(),
@@ -118,6 +123,9 @@ export const SubscribeToProductSchema = z
   .object({
     priceChangeConditions: z.array(z.nativeEnum(PriceChangeCondition)),
     statusChangeConditions: z.array(StatusChangeSubscriptionConditionSchema),
+    mediums: z
+      .array(z.nativeEnum(NotificationMedium))
+      .min(1, "At least one medium must be selected."),
   })
   .superRefine(({ priceChangeConditions, statusChangeConditions }, ctx: z.RefinementCtx) => {
     for (let i = 0; i < statusChangeConditions.length; i++) {

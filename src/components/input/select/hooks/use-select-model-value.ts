@@ -567,7 +567,7 @@ export const useSelectModelValue = <
       if (noop) {
         return;
       } else if (autocorrect) {
-        _set(autocorrect.sanitizedValue);
+        _set(autocorrect.sanitizedValue, { __private_ignore_controlled_state__: true });
         onChange?.(autocorrect.sanitizedValue, { modelValue: autocorrect.modelValue });
       } else {
         /* This should only be called if the Select's model value is not "NOTSET" to begin with,
@@ -597,10 +597,10 @@ export const useSelectModelValue = <
       if (noop) {
         return;
       } else if (autocorrect) {
-        _set(autocorrect.sanitizedValue);
+        _set(autocorrect.sanitizedValue, { __private_ignore_controlled_state__: true });
         setModelValue(autocorrect.modelValue);
       } else {
-        _set(v);
+        _set(v, { __private_ignore_controlled_state__: true });
         setModelValue(value);
       }
     },

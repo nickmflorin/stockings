@@ -6,12 +6,14 @@ import type {
   ProductSubCategory,
   ProductIncludes,
   ProductIncludesField,
+  ProductSubscriptionType,
 } from "~/database/model";
 import {
   ProductStatuses,
   ProductSubCategories,
   ProductCategories,
   ProductIncludesFields,
+  ProductSubscriptionTypes,
 } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
@@ -24,6 +26,7 @@ export type ProductsFilters = {
   readonly statuses: ProductStatus[];
   readonly subscribed: boolean;
   readonly notified: boolean;
+  readonly subscriptionTypes: ProductSubscriptionType[];
 };
 
 export type ProductsControls<I extends ProductIncludes = ProductIncludes> = {
@@ -64,6 +67,15 @@ export const ProductsFiltersSchemas = {
     }
     return value;
   }),
+  subscriptionTypes: z.union([z.string(), z.array(z.string())]).transform(value => {
+    if (typeof value === "string") {
+      return ProductSubscriptionTypes.contains(value) ? [value] : [];
+    }
+    return value.reduce(
+      (prev, curr) => (ProductSubscriptionTypes.contains(curr) ? [...prev, curr] : prev),
+      [] as ProductSubscriptionType[],
+    );
+  }),
   subCategories: z.union([z.string(), z.array(z.string())]).transform(value => {
     if (typeof value === "string") {
       return ProductSubCategories.contains(value) ? [value] : [];
@@ -102,6 +114,7 @@ export const ProductsFiltersOptions: ParseFiltersOptions<typeof ProductsFiltersS
   subscribed: { defaultValue: false, excludeWhen: v => !v },
   notified: { defaultValue: false, excludeWhen: v => !v },
   statuses: { defaultValue: [], excludeWhen: v => v.length === 0 },
+  subscriptionTypes: { defaultValue: [], excludeWhen: v => v.length === 0 },
 };
 
 export const ProductIncludesSchema = z.union([z.string(), z.array(z.string())]).transform(value => {

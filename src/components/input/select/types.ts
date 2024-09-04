@@ -132,7 +132,10 @@ export type NotSet = typeof NOTSET;
 
 export interface ManagedSelectValue<V extends AllowedSelectValue, B extends SelectBehaviorType> {
   readonly value: SelectValue<V, B>;
-  readonly set: (value: SelectValue<V, B>) => void;
+  readonly set: (
+    value: SelectValue<V, B>,
+    options?: { __private_ignore_controlled_state__: boolean },
+  ) => void;
   readonly clear: () => void;
   readonly isSelected: (v: V) => boolean;
   readonly deselect: IfDeselectable<B, (value: V) => void, never>;

@@ -26,6 +26,7 @@ export const ProductCategorySelect = forwardRef(
     <DataSelect<M, { behavior: B; getItemValue: typeof getItemValue }>
       {...props}
       ref={ref}
+      menuClassName="min-h-[30px]"
       data={[...ProductCategories.models]}
       options={{ behavior, getItemValue }}
       itemRenderer={(m, { isDisabled }) => (

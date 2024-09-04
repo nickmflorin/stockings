@@ -6,11 +6,11 @@ import { Form, type FormProps } from "~/components/forms/Form";
 import { MultiCheckbox } from "~/components/input/MultiCheckbox";
 import { Text } from "~/components/typography";
 
-import { type ChooseNotificationTypesFormValues } from "./hooks";
+import { type NotificationTypesFormValues } from "./hooks";
 
-export interface ChooseNotificationTypesFormProps
+export interface NotificationTypesFormProps
   extends Omit<
-    FormProps<ChooseNotificationTypesFormValues>,
+    FormProps<NotificationTypesFormValues>,
     "children" | "onSubmit" | "contentClassName"
   > {
   readonly withContext?: boolean;
@@ -40,11 +40,11 @@ const TooltipDescriptions: {
   ),
 };
 
-export const ChooseNotificationTypesForm = ({
+export const NotificationTypesForm = ({
   withContext = true,
   withTooltips = true,
   ...props
-}: ChooseNotificationTypesFormProps) => (
+}: NotificationTypesFormProps) => (
   <Form {...props} contentClassName="gap-[12px]">
     <Form.ControlledField
       name="notificationTypes"
@@ -54,7 +54,7 @@ export const ChooseNotificationTypesForm = ({
       label={withContext ? "Conditions" : undefined}
       description={
         withContext
-          ? "Select the specific price change conditions that you would like to be notified " +
+          ? "Select the specific types of events that you would like to be notified " +
             "about for this product. At least 1 must be selected."
           : undefined
       }
@@ -65,14 +65,14 @@ export const ChooseNotificationTypesForm = ({
           data={[
             {
               value: ProductNotificationType.PriceChangeNotification,
-              label: "Notifications when Price Changes",
+              label: "Notify me when the product's price changes.",
               tooltipDescription: withTooltips
                 ? TooltipDescriptions[ProductNotificationType.PriceChangeNotification]
                 : undefined,
             },
             {
               value: ProductNotificationType.StatusChangeNotification,
-              label: "Notifications when Inventory Changes",
+              label: "Notify me when the product's inventory changes.",
               tooltipDescription: withTooltips
                 ? TooltipDescriptions[ProductNotificationType.StatusChangeNotification]
                 : undefined,
@@ -85,4 +85,4 @@ export const ChooseNotificationTypesForm = ({
   </Form>
 );
 
-export default ChooseNotificationTypesForm;
+export default NotificationTypesForm;

@@ -7,10 +7,18 @@ import { ButtonFooter } from "~/components/structural/ButtonFooter";
 
 import { type StepsData, type StepName, StepNames, type StepData, type StepForms } from "./types";
 
-const ChooseNotificationTypesForm = dynamic(
+const NotificationMediumsForm = dynamic(
   () =>
-    import("~/features/notifications/components/forms/ChooseNotificationTypesForm").then(
-      mod => mod.ChooseNotificationTypesForm,
+    import("~/features/notifications/components/forms/NotificationMediumsForm").then(
+      mod => mod.NotificationMediumsForm,
+    ),
+  { loading: () => <Loading isLoading /> },
+);
+
+const NotificationTypesForm = dynamic(
+  () =>
+    import("~/features/notifications/components/forms/NotificationTypesForm").then(
+      mod => mod.NotificationTypesForm,
     ),
   { loading: () => <Loading isLoading /> },
 );
@@ -42,10 +50,25 @@ const Renderers: {
   [key in StepName]: (props: Omit<FormRendererProps<key>, "step">) => JSX.Element;
 } = {
   [StepNames.CONFIGURE]: ({ form, onCancel, onFinish }) => (
-    <ChooseNotificationTypesForm
+    <NotificationTypesForm
       withContext={false}
       form={form}
       action={data => onFinish(data.notificationTypes)}
+      footer={
+        <ButtonFooter
+          submitText="Next"
+          orientation="full-width"
+          cancelText="Cancel"
+          onCancel={onCancel}
+        />
+      }
+    />
+  ),
+  [StepNames.MEDIUMS]: ({ form, onCancel, onFinish }) => (
+    <NotificationMediumsForm
+      withContext={false}
+      form={form}
+      action={data => onFinish(data.mediums)}
       footer={
         <ButtonFooter
           submitText="Next"
