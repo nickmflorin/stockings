@@ -30,11 +30,11 @@ export type ProductsFilters = {
 };
 
 export type ProductsControls<I extends ProductIncludes = ProductIncludes> = {
-  readonly filters: ProductsFilters;
+  readonly filters?: Partial<ProductsFilters>;
   readonly ordering: Ordering<ProductOrderableField>;
-  readonly page: number;
+  readonly page?: number;
   readonly includes: I;
-  readonly limit: number;
+  readonly limit?: number;
 };
 
 export type FlattenedProductsControls<I extends ProductIncludes = ProductIncludes> =

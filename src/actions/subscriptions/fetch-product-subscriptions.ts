@@ -9,14 +9,11 @@ import type {
   ProductSubscriptionIncludes,
   ProductSubscription,
 } from "~/database/model";
-import {
-  enhance,
-  ProductSubscriptionType,
-  ProductNotificationType,
-  fieldIsIncluded,
-} from "~/database/model";
+import { enhance, ProductSubscriptionType, fieldIsIncluded } from "~/database/model";
 import { db } from "~/database/prisma";
 import { conditionalFilters, constructOrSearch } from "~/database/util";
+
+import { filtersHaveField } from "~/lib/filters";
 
 import {
   PAGE_SIZES,
@@ -27,6 +24,10 @@ import {
   type ServerSidePaginationParams,
   clampPagination,
   type SubscriptionsControls,
+  SubscriptionsFiltersOptions,
+  visibilityIsAdmin,
+  type ActionVisibility,
+  visibilityIsPublic,
 } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
@@ -39,6 +40,7 @@ const filtersClause = (filters: SubscriptionsControls["filters"]) =>
     filters.products && filters.products.length !== 0
       ? { productId: { in: filters.products } }
       : undefined,
+    filters.users && filters.users.length !== 0 ? { userId: { in: filters.users } } : undefined,
     filters.types && filters.types.length !== 0
       ? { subscriptionType: { in: filters.types } }
       : undefined,
@@ -47,11 +49,16 @@ const filtersClause = (filters: SubscriptionsControls["filters"]) =>
 const whereClause = ({
   filters,
   user,
+  visibility = "public",
 }: {
   readonly filters?: Partial<SubscriptionsControls["filters"]>;
   readonly user: User;
+  readonly visibility?: ActionVisibility;
 }) => {
   const clause = filters ? filtersClause(filters) : [];
+  if (visibilityIsAdmin(visibility)) {
+    return { AND: clause };
+  }
   if (clause.length !== 0) {
     return { AND: [...clause, { userId: user.id }] };
   }
@@ -60,30 +67,45 @@ const whereClause = ({
 
 export const fetchProductSubscriptionsCount = cache(
   async <C extends FetchActionContext>(
+    { visibility = "public" }: Pick<SubscriptionsControls, "visibility">,
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>> => {
     const { user, error } = await getAuthedUser();
     if (error) {
       return errorInFetchContext(error, context);
     }
-    const count = await db.productSubscription.count({ where: { userId: user.id } });
+    const count = await db.productSubscription.count({
+      where: visibilityIsPublic(visibility) ? { userId: user.id } : {},
+    });
     return dataInFetchContext({ count }, context);
   },
 ) as {
-  <C extends FetchActionContext>(context: C): Promise<FetchActionResponse<{ count: number }, C>>;
+  <C extends FetchActionContext>(
+    params: Pick<SubscriptionsControls, "visibility">,
+    context: C,
+  ): Promise<FetchActionResponse<{ count: number }, C>>;
 };
 
 export const fetchProductSubscriptionsPagination = cache(
   async <C extends FetchActionContext>(
-    { filters, page: _page }: Required<Pick<SubscriptionsControls, "page" | "filters">, "page">,
+    {
+      filters,
+      page: _page,
+      visibility = "public",
+    }: Required<Pick<SubscriptionsControls, "page" | "filters" | "visibility">, "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
-    const { user, error } = await getAuthedUser();
+    const { user, isAdmin, error } = await getAuthedUser();
     if (error) {
+      return errorInFetchContext(error, context);
+    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
       return errorInFetchContext(error, context);
     }
     const count = await db.productSubscription.count({
-      where: whereClause({ filters, user }),
+      where: whereClause({ filters, user, visibility }),
     });
     return dataInFetchContext(
       clampPagination({ count, page: _page, pageSize: PAGE_SIZES.productSubscription }),
@@ -92,7 +114,7 @@ export const fetchProductSubscriptionsPagination = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Required<Pick<SubscriptionsControls, "page" | "filters">, "page">,
+    params: Required<Pick<SubscriptionsControls, "page" | "filters" | "visibility">, "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
@@ -101,13 +123,22 @@ const _fetchProductSubscriptions = async <
   C extends FetchActionContext,
   I extends ProductSubscriptionIncludes,
 >(
-  { filters, page, ordering, includes }: SubscriptionsControls<I>,
+  { filters, page, ordering, includes, visibility = "public" }: SubscriptionsControls<I>,
   context: C,
 ): Promise<FetchActionResponse<ApiProductSubscription<I>[], C>> => {
   const { user, error, isAdmin } = await getAuthedUser();
   if (error) {
     return errorInFetchContext(error, context);
-  } else if (!isAdmin && fieldIsIncluded("user", includes)) {
+  } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+    const error = ApiClientGlobalError.Forbidden({
+      message: "The user does not have permission to access this data.",
+    });
+    return errorInFetchContext(error, context);
+  } else if (
+    !visibilityIsAdmin(visibility) &&
+    (fieldIsIncluded("user", includes) ||
+      filtersHaveField("users", filters, SubscriptionsFiltersOptions))
+  ) {
     const error = ApiClientGlobalError.Forbidden({
       message: "The user does not have permission to access this data.",
     });
@@ -124,7 +155,7 @@ const _fetchProductSubscriptions = async <
 
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
   const data = await enhanced.productSubscription.findMany({
-    where: whereClause({ filters, user }),
+    where: whereClause({ filters, user, visibility }),
     orderBy: ordering
       ? ordering.orderBy === "product"
         ? [{ product: { name: ordering.order } }, { id: "asc" }]
@@ -150,31 +181,20 @@ const _fetchProductSubscriptions = async <
     },
   });
 
-  let priceChangeCounts: { subscriptionId: string | null; _count: { id: number } }[] = [];
-  let statusChangeCounts: { subscriptionId: string | null; _count: { id: number } }[] = [];
+  let notificationsCounts: { subscriptionId: string | null; _count: { id: number } }[] = [];
   if (fieldIsIncluded("notificationsCount", includes)) {
-    priceChangeCounts = await enhanced.productNotification.groupBy({
+    notificationsCounts = await enhanced.productNotification.groupBy({
       by: ["subscriptionId"],
       _count: { id: true },
-      where: { notificationType: ProductNotificationType.PriceChangeNotification },
-    });
-    statusChangeCounts = await enhanced.productNotification.groupBy({
-      by: ["subscriptionId"],
-      _count: { id: true },
-      where: { notificationType: ProductNotificationType.StatusChangeNotification },
     });
   }
-
-  const getNotificationsCount = (subscriptionId: string) =>
-    (priceChangeCounts.find(ct => ct.subscriptionId === subscriptionId)?._count.id ?? 0) +
-    (statusChangeCounts.find(ct => ct.subscriptionId === subscriptionId)?._count.id ?? 0);
 
   return dataInFetchContext(
     subscriptions.map((subscription): ApiProductSubscription<I> => {
       const sub = {
         ...subscription,
         notificationsCount: fieldIsIncluded("notificationsCount", includes)
-          ? getNotificationsCount(subscription.id)
+          ? (notificationsCounts.find(n => n.subscriptionId === subscription.id)?._count.id ?? 0)
           : undefined,
       };
       if (

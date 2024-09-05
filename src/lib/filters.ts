@@ -45,6 +45,15 @@ export const pruneFilters = <F extends Partial<ParsedFilters<S>>, S extends Filt
   return pruned;
 };
 
+export const filtersHaveField = <F extends Partial<ParsedFilters<S>>, S extends FiltersSchemas>(
+  field: keyof S,
+  filters: F,
+  options: ParseFiltersOptions<S>,
+): boolean => {
+  const pruned = pruneFilters(filters, options);
+  return pruned[field] !== undefined;
+};
+
 export const parseFilters = <S extends FiltersSchemas>(
   params:
     | URLSearchParams

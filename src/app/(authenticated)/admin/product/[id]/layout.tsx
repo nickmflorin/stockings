@@ -6,9 +6,9 @@ import { logger } from "~/internal/logger";
 
 import { fetchProduct } from "~/actions/products";
 
+import { DetailBreadcrumb } from "~/components/DetailBreadcrumb";
 import { ErrorView } from "~/components/errors/ErrorView";
 import { Tabs } from "~/components/layout/Tabs";
-import { ProductBreadcrumb } from "~/features/products/components/ProductBreadcrumbs";
 
 import { ApiClientGlobalErrorCodes } from "~/api";
 
@@ -40,9 +40,9 @@ export default async function AdminProductLayout({ children, params }: AdminProd
 
   return (
     <div className="flex flex-col gap-[16px] w-full h-full max-h-full overflow-hidden">
-      <ProductBreadcrumb returnHref="/admin/products">
+      <DetailBreadcrumb returnHref="/admin/products" returnLabel="Products">
         {product.name ?? "Unnamed Product"}
-      </ProductBreadcrumb>
+      </DetailBreadcrumb>
       <Tabs
         items={[
           {

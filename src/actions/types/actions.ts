@@ -4,6 +4,12 @@ import { logger } from "~/internal/logger";
 
 import { convertToPlainObject, type ApiClientError, type ApiClientErrorJson } from "~/api";
 
+export type ActionVisibility = "admin" | "public";
+
+export const visibilityIsAdmin = (visibility?: ActionVisibility) => visibility === "admin";
+
+export const visibilityIsPublic = (visibility?: ActionVisibility) => !visibilityIsAdmin(visibility);
+
 export type ServerSidePaginationParams = {
   readonly page: number;
   readonly pageSize: number;

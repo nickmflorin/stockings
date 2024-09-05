@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 
 import { toast } from "react-toastify";
 
-import { type FullProductSubscription } from "~/database/model";
+import { type ApiProductSubscription } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { disableProductSubscriptions, enableProductSubscriptions } from "~/actions/subscriptions";
@@ -17,7 +17,7 @@ import { TableControlBar, type TableControlBarProps } from "~/components/tables/
 import { DeleteSubscriptionsConfirmationDialog } from "~/features/subscriptions/components/dialogs/DeleteSubscriptionsConfirmationDialog";
 
 export interface SubscriptionsTableFilterBarProps
-  extends Omit<TableControlBarProps<FullProductSubscription>, "children"> {}
+  extends Omit<TableControlBarProps<ApiProductSubscription<[]>>, "children"> {}
 
 export const SubscriptionsTableControlBar = ({
   selectedRows,

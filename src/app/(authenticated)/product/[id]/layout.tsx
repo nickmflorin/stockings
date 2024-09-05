@@ -6,9 +6,9 @@ import { logger } from "~/internal/logger";
 
 import { fetchProduct } from "~/actions/products";
 
+import { DetailBreadcrumb } from "~/components/DetailBreadcrumb";
 import { ErrorView } from "~/components/errors/ErrorView";
 import { Module } from "~/components/structural/Module";
-import { ProductBreadcrumb } from "~/features/products/components/ProductBreadcrumbs";
 
 import { ApiClientGlobalErrorCodes } from "~/api";
 
@@ -50,9 +50,9 @@ export default async function ProductLayout({
   }
   return (
     <div className="flex flex-col gap-[16px] overflow-y-hidden">
-      <ProductBreadcrumb returnHref="/admin/products">
+      <DetailBreadcrumb returnHref="/admin/products" returnLabel="products">
         {product.name ?? "Unnamed Product"}
-      </ProductBreadcrumb>
+      </DetailBreadcrumb>
       <div className="flex flex-row gap-[16px] grow min-h-0 overflow-y-auto">
         <div className="flex flex-col items-center max-w-[650px] gap-[16px]">
           <Module component="paper" className="w-full">

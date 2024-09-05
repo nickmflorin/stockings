@@ -7,6 +7,7 @@ export * from "./inclusion";
 export * from "./notifications";
 export * from "./product";
 export * from "./subscription";
+export * from "./user";
 
 export * from "./models";
 

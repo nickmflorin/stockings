@@ -3,12 +3,13 @@ import RouterLink from "next/link";
 import { Link } from "~/components/buttons";
 import { Title } from "~/components/typography";
 
-export interface ProductBreadcrumbProps {
+export interface DetailBreadcrumbProps {
   readonly children: string;
   readonly returnHref: `/${string}`;
+  readonly returnLabel: string;
 }
 
-export const ProductBreadcrumb = ({ children, returnHref }: ProductBreadcrumbProps) => (
+export const DetailBreadcrumb = ({ children, returnHref, returnLabel }: DetailBreadcrumbProps) => (
   <div className="flex flex-row items-center gap-2">
     <Link.Secondary
       className="text-title-sm"
@@ -17,7 +18,7 @@ export const ProductBreadcrumb = ({ children, returnHref }: ProductBreadcrumbPro
       icon="arrow-left"
       href={returnHref}
     >
-      Products
+      {returnLabel}
     </Link.Secondary>
     <Title component="h5" className="text-gray-600">
       /

@@ -2,7 +2,7 @@ import { type User as ClerkUser } from "@clerk/clerk-sdk-node";
 import clerk from "@clerk/clerk-sdk-node";
 
 import { type PrismaClient, type Product, type User } from "~/database/model";
-import { upsertUserFromClerk } from "~/database/model/user";
+import { upsertUserFromClerk } from "~/database/model/auth";
 import { db, type Transaction } from "~/database/prisma";
 import { environment } from "~/environment";
 

@@ -7,6 +7,8 @@ import type { ParseFiltersOptions } from "~/lib/filters";
 import { type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
+import { type ActionVisibility } from "./actions";
+
 export const SubscriptionOrderableFields = ["createdAt", "updatedAt", "product"] as const;
 export type SubscriptionOrderableField = (typeof SubscriptionOrderableFields)[number];
 
@@ -14,13 +16,19 @@ export interface SubscriptionsFilters {
   readonly types: ProductSubscriptionType[];
   readonly search: string;
   readonly products: string[];
+  readonly users: string[];
 }
+
+export const SubscriptionsRestrictedFilters = [
+  "users",
+] as const satisfies (keyof SubscriptionsFilters)[];
 
 export interface SubscriptionsControls<I extends ProductSubscriptionIncludes = []> {
   readonly filters: Partial<SubscriptionsFilters>;
   readonly ordering: Ordering<SubscriptionOrderableField>;
   readonly page?: number;
   readonly includes: I;
+  readonly visibility?: ActionVisibility;
 }
 
 export const SubscriptionsDefaultOrdering: Ordering<SubscriptionOrderableField> = {
@@ -45,6 +53,12 @@ export const SubscriptionsFiltersSchemas = {
     }
     return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
   }),
+  users: z.union([z.string(), z.array(z.string())]).transform(value => {
+    if (typeof value === "string") {
+      return isUuid(value) ? [value] : [];
+    }
+    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+  }),
 } satisfies {
   [key in keyof SubscriptionsFilters]: z.ZodType;
 };
@@ -53,5 +67,6 @@ export const SubscriptionsFiltersOptions: ParseFiltersOptions<typeof Subscriptio
   {
     types: { defaultValue: [], excludeWhen: v => v.length === 0 },
     products: { defaultValue: [], excludeWhen: v => v.length === 0 },
+    users: { defaultValue: [], excludeWhen: v => v.length === 0 },
     search: { defaultValue: "", excludeWhen: v => v.length === 0 },
   };

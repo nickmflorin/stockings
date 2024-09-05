@@ -4,7 +4,7 @@ import {
   type SubscriptionsAdminTableBodyProps,
 } from "~/features/subscriptions/components/tables/SubscriptionsAdminTableBody";
 
-export interface ProductSubscriptionsTableBodyProps
+export interface UserSubscriptionsTableBodyProps
   extends Omit<
     SubscriptionsAdminTableBodyProps,
     | "emptyContent"
@@ -14,15 +14,12 @@ export interface ProductSubscriptionsTableBodyProps
     | "excludeColumns"
   > {}
 
-export const ProductSubscriptionsTableBody = (
-  props: ProductSubscriptionsTableBodyProps,
-): JSX.Element => (
+export const UserSubscriptionsTableBody = (props: UserSubscriptionsTableBodyProps): JSX.Element => (
   <SubscriptionsAdminTableBody
     {...props}
     isEmpty={props.data.length === 0}
-    excludeColumns={["product"]}
-    emptyContent="There are currently no subscriptions for this product."
-    controlBarTargetId="product-subscriptions-control-bar"
+    emptyContent="The user currently is not subscribed to any products."
+    controlBarTargetId="user-subscriptions-control-bar"
     controlBarTooltipsInPortal
   />
 );

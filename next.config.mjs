@@ -87,7 +87,12 @@ let nextConfig = {
     },
     {
       source: "/admin",
-      destination: "/admin/products",
+      destination: "/admin/users",
+      permanent: false,
+    },
+    {
+      source: "/admin/user/:id",
+      destination: "/admin/user/:id/subscriptions",
       permanent: false,
     },
     {

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Script from "next/script";
 import { type ReactNode } from "react";
 
 import { environment } from "~/environment";

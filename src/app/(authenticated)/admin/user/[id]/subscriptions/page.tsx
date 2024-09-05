@@ -30,12 +30,12 @@ export default async function SubscriptionsPage({
       key={JSON.stringify(ordering) + params.id}
       fallback={
         <>
-          <SubscriptionsTableControlBarPlaceholder targetId="product-subscriptions-control-bar" />
+          <SubscriptionsTableControlBarPlaceholder targetId="user-subscriptions-control-bar" />
           <Loading isLoading component="tbody" />
         </>
       }
     >
-      <SubscriptionsTableBody productId={params.id} ordering={ordering} />
+      <SubscriptionsTableBody userId={params.id} ordering={ordering} />
     </Suspense>
   );
 }

@@ -12,10 +12,16 @@ export default async function AdminOverviewLayout({
       <Tabs
         items={[
           {
+            label: "Users",
+            path: "/admin/users",
+            activePaths: { leadingPath: "/admin/users" },
+            icon: "users",
+          },
+          {
             label: "Products",
             path: "/admin/products",
             activePaths: { leadingPath: "/admin/products" },
-            icon: { name: "toolbox" },
+            icon: "toolbox",
           },
         ]}
       />
