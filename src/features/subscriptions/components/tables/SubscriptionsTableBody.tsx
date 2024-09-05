@@ -3,16 +3,11 @@ import RouterLink from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
 
-import { uniq, uniqBy } from "lodash-es";
+import { uniqBy } from "lodash-es";
 import { toast } from "react-toastify";
 
-import {
-  type FullProductSubscription,
-  type PriceChangeCondition,
-  type StatusChangeSubscriptionCondition,
-  ProductSubscriptionTypes,
-} from "~/database/model";
-import { ProductSubscriptionType } from "~/database/model";
+import { type ApiProductSubscription } from "~/database/model";
+import { ProductSubscriptionType, ProductSubscriptionTypes } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { addQueryParamsToUrl, parseQueryParams } from "~/integrations/http";
@@ -24,7 +19,6 @@ import { Link } from "~/components/buttons";
 import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
 import { ProductLink } from "~/components/buttons/ProductLink";
 import { useDrawers } from "~/components/drawers/hooks";
-import { EnabledIcon } from "~/components/icons/EnabledIcon";
 import Icon from "~/components/icons/Icon";
 import type { Action } from "~/components/structural/Actions";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
@@ -32,24 +26,21 @@ import {
   DataTableBody,
   type DataTableBodyProps,
 } from "~/components/tables/data-tables/DataTableBody";
-import { Text } from "~/components/typography";
-import { DateTimeText } from "~/components/typography/DateTimeText";
 import { HorizontallyCentered } from "~/components/util";
 import {
   SubscriptionsTableColumns,
   type SubscriptionsTableColumnId,
 } from "~/features/subscriptions";
-import { PriceChangeConditionBadge } from "~/features/subscriptions/components/badges";
-/* eslint-disable-next-line max-len */
-import { StatusChangeConditionsDropdown } from "~/features/subscriptions/components/StatusChangeConditionsDropdown";
 
-import { SubscriptionTypeText } from "../SubscriptionTypeText";
-
+import { SubscriptionsTableColumnProperties } from "./SubscriptionsTableColumnProperties";
 import { SubscriptionsTableControlBar } from "./SubscriptionsTableControlBar";
 
 export interface SubscriptionsTableBodyProps
   extends Omit<
-    DataTableBodyProps<FullProductSubscription, SubscriptionsTableColumnId>,
+    DataTableBodyProps<
+      ApiProductSubscription<["conditions", "notificationsCount", "product"]>,
+      SubscriptionsTableColumnId
+    >,
     "rowIsSelected" | "onRowSelected" | "getRowActions" | "columns"
   > {
   readonly scope?: "subscriptions" | "product";
@@ -66,11 +57,13 @@ export const SubscriptionsTableBody = ({
   ...props
 }: SubscriptionsTableBodyProps): JSX.Element => {
   const { ids, open } = useDrawers();
-  const [selectedRows, setSelectedRows] = useState<FullProductSubscription[]>([]);
+  const [selectedRows, setSelectedRows] = useState<
+    ApiProductSubscription<["conditions", "notificationsCount", "product"]>[]
+  >([]);
 
+  const { refresh } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { refresh } = useRouter();
 
   const [enablePending, enableTransition] = useTransition();
   const [disablePending, disableTransition] = useTransition();
@@ -260,11 +253,12 @@ export const SubscriptionsTableBody = ({
           },
         ]}
         columns={convertConfigsToColumns(
-          [...SubscriptionsTableColumns] as DataTableColumnConfig<
-            FullProductSubscription,
+          [...SubscriptionsTableColumns.columns] as DataTableColumnConfig<
+            ApiProductSubscription<["conditions", "notificationsCount", "product"]>,
             SubscriptionsTableColumnId
           >[],
           {
+            ...SubscriptionsTableColumnProperties,
             product: {
               cellRenderer(datum) {
                 return (
@@ -272,47 +266,6 @@ export const SubscriptionsTableBody = ({
                     <ProductLink product={datum.product} location="internal" />
                     <ExternalProductIconLink product={datum.product} />
                   </div>
-                );
-              },
-            },
-            conditions: {
-              cellRenderer: datum =>
-                datum.subscriptionType === ProductSubscriptionType.StatusChangeSubscription &&
-                datum.conditions.length !== 0 ? (
-                  <div className="flex flex-row items-center justify-center">
-                    <StatusChangeConditionsDropdown
-                      inPortal
-                      conditions={datum.conditions as StatusChangeSubscriptionCondition[]}
-                    />
-                  </div>
-                ) : datum.subscriptionType === ProductSubscriptionType.PriceChangeSubscription &&
-                  datum.conditions.length !== 0 ? (
-                  <div className="flex flex-col items-center gap-2">
-                    {uniq(datum.conditions as PriceChangeCondition[]).map((condition, index) => (
-                      <PriceChangeConditionBadge key={index} condition={condition} />
-                    ))}
-                  </div>
-                ) : (
-                  <></>
-                ),
-            },
-            enabled: {
-              cellRenderer(datum) {
-                return (
-                  <div className="flex flex-row items-center justify-center">
-                    <EnabledIcon isEnabled={datum.enabled} size="20px" />
-                  </div>
-                );
-              },
-            },
-            type: {
-              cellRenderer(datum) {
-                return (
-                  <SubscriptionTypeText
-                    fontWeight="medium"
-                    fontSize="sm"
-                    subscriptionType={datum.subscriptionType}
-                  />
                 );
               },
             },
@@ -341,36 +294,6 @@ export const SubscriptionsTableBody = ({
                       {datum.notificationsCount}
                     </Link>
                   </HorizontallyCentered>
-                );
-              },
-            },
-            createdAt: {
-              cellRenderer(datum) {
-                return (
-                  <Text fontWeight="regular" fontSize="sm" className="text-description">
-                    Created on{" "}
-                    <DateTimeText
-                      className="text-body"
-                      fontWeight="medium"
-                      component="span"
-                      value={datum.createdAt}
-                    />
-                  </Text>
-                );
-              },
-            },
-            updatedAt: {
-              cellRenderer(datum) {
-                return (
-                  <Text fontWeight="regular" fontSize="sm" className="text-description">
-                    Last updated on{" "}
-                    <DateTimeText
-                      className="text-body"
-                      fontWeight="medium"
-                      component="span"
-                      value={datum.updatedAt}
-                    />
-                  </Text>
                 );
               },
             },

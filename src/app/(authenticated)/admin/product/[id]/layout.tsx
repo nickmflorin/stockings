@@ -1,0 +1,59 @@
+import { redirect } from "next/navigation";
+import { type ReactNode } from "react";
+
+import { type ApiProduct } from "~/database/model";
+import { logger } from "~/internal/logger";
+
+import { fetchProduct } from "~/actions/products";
+
+import { ErrorView } from "~/components/errors/ErrorView";
+import { Tabs } from "~/components/layout/Tabs";
+import { ProductBreadcrumb } from "~/features/products/components/ProductBreadcrumbs";
+
+import { ApiClientGlobalErrorCodes } from "~/api";
+
+interface AdminProductLayoutProps {
+  readonly children: ReactNode;
+  readonly params: { id: string };
+}
+
+export default async function AdminProductLayout({ children, params }: AdminProductLayoutProps) {
+  let product: ApiProduct<[]>;
+  try {
+    const { error, data } = await fetchProduct(params.id, { includes: [] }, { strict: false });
+    if (error) {
+      if (error.code === ApiClientGlobalErrorCodes.NOT_FOUND) {
+        return redirect("/404");
+      }
+      logger.error(error, "There was an error fetching the product in the admin.");
+      return (
+        <ErrorView>There was an error loading the product. Do not worry - we are on it.</ErrorView>
+      );
+    }
+    product = data;
+  } catch (e) {
+    logger.errorUnsafe(e, "There was an error fetching the product in the admin.");
+    return (
+      <ErrorView>There was an error loading the product. Do not worry - we are on it.</ErrorView>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-[16px] w-full h-full max-h-full overflow-hidden">
+      <ProductBreadcrumb returnHref="/admin/products">
+        {product.name ?? "Unnamed Product"}
+      </ProductBreadcrumb>
+      <Tabs
+        items={[
+          {
+            label: "Subscriptions",
+            path: `/admin/product/${product.id}/subscriptions`,
+            activePaths: { leadingPath: "/admin/product/:id/subscriptions" },
+            icon: "mailbox",
+          },
+        ]}
+      />
+      <div className="grow min-h-0 max-h-full h-full flex flex-col">{children}</div>
+    </div>
+  );
+}

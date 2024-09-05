@@ -34,6 +34,7 @@ export const SubscriptionsTableBody = async ({
       filters,
       ordering,
       page,
+      includes: ["conditions", "notificationsCount", "product"],
     },
     { strict: true },
   );

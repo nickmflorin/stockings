@@ -7,32 +7,32 @@ import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapp
 import { TableView } from "~/components/tables/TableView";
 import { classNames, type ComponentProps } from "~/components/types";
 import {
-  SubscriptionsTableColumns,
-  type SubscriptionsTableOrderableColumnId,
-  type SubscriptionsTableColumnId,
+  SubscriptionsAdminTableColumns,
+  type SubscriptionsAdminTableOrderableColumnId,
+  type SubscriptionsAdminTableColumnId,
 } from "~/features/subscriptions/types";
 import { useOrdering } from "~/hooks/use-ordering";
 
-export interface SubscriptionsTableViewProps extends ComponentProps {
+export interface SubscriptionsAdminTableViewProps extends ComponentProps {
   readonly children: ReactNode;
   readonly filterBar?: JSX.Element;
   readonly controlBar?: JSX.Element;
   readonly pagination?: JSX.Element;
   readonly controlBarTargetId?: string;
-  readonly excludeColumns?: SubscriptionsTableColumnId[];
+  readonly excludeColumns?: SubscriptionsAdminTableColumnId[];
 }
 
-export const SubscriptionsTableView = ({
+export const SubscriptionsAdminTableView = ({
   children,
   filterBar,
   excludeColumns,
   pagination,
   controlBarTargetId = "subscriptions-table-control-bar-target",
   ...props
-}: SubscriptionsTableViewProps) => {
-  const [ordering, setOrdering] = useOrdering<SubscriptionsTableOrderableColumnId>({
+}: SubscriptionsAdminTableViewProps) => {
+  const [ordering, setOrdering] = useOrdering<SubscriptionsAdminTableOrderableColumnId>({
     useQueryParams: true,
-    fields: SubscriptionsTableColumns.orderableColumns.map(c => c.id),
+    fields: SubscriptionsAdminTableColumns.orderableColumns.map(c => c.id),
     defaultOrdering: SubscriptionsDefaultOrdering,
   });
   return (
@@ -46,12 +46,12 @@ export const SubscriptionsTableView = ({
       <DataTableWrapper
         ordering={ordering}
         rowsAreSelectable
-        rowsHaveActions
+        rowsHaveActions={false}
         excludeColumns={excludeColumns}
-        columns={SubscriptionsTableColumns.columns}
+        columns={SubscriptionsAdminTableColumns.columns}
         onSort={(e, col) => {
           const id = col.id;
-          if (SubscriptionsTableColumns.isOrderableColumnId(id)) {
+          if (SubscriptionsAdminTableColumns.isOrderableColumnId(id)) {
             setOrdering({ field: id });
           }
         }}
@@ -62,4 +62,4 @@ export const SubscriptionsTableView = ({
   );
 };
 
-export default SubscriptionsTableView;
+export default SubscriptionsAdminTableView;

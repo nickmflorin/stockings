@@ -6,6 +6,8 @@ import {
   type ProductRecord,
   type PriceChangeNotification,
   type StatusChangeNotification,
+  type StatusChangeSubscription,
+  type PriceChangeSubscription,
 } from "./models";
 
 export type ToBrandedModel<M, T extends string> = M & {
@@ -24,6 +26,8 @@ export type Brands = {
     readonly notificationType: typeof ProductNotificationType.PriceChangeNotification;
   };
   productNotification: ProductNotification;
+  statusChangeSubscription: StatusChangeSubscription;
+  priceChangeSubscription: PriceChangeSubscription;
 };
 
 export type BrandedModels = { [key in keyof Brands]: ToBrandedModel<Brands[key], key> };
@@ -38,6 +42,8 @@ export type BrandProductRecord = BrandModel<"productRecord">;
 export type BrandPriceChangeNotification = BrandModel<"priceChangeNotification">;
 export type BrandStatusChangeNotification = BrandModel<"statusChangeNotification">;
 export type BrandProductNotification = BrandModel<"productNotification">;
+export type BrandStatusChangeSubscription = BrandModel<"statusChangeSubscription">;
+export type BrandPriceChangeSubscription = BrandModel<"priceChangeSubscription">;
 
 export type PluralBrand<T extends Brand = Brand> = `${T}s`;
 

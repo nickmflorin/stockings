@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { ProductSubscriptionType } from "~/database/model";
+import type { ProductSubscriptionIncludes, ProductSubscriptionType } from "~/database/model";
 import { ProductSubscriptionTypes } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
@@ -16,13 +16,14 @@ export interface SubscriptionsFilters {
   readonly products: string[];
 }
 
-export interface SubscriptionsControls {
-  readonly filters: SubscriptionsFilters;
+export interface SubscriptionsControls<I extends ProductSubscriptionIncludes = []> {
+  readonly filters: Partial<SubscriptionsFilters>;
   readonly ordering: Ordering<SubscriptionOrderableField>;
-  readonly page: number;
+  readonly page?: number;
+  readonly includes: I;
 }
 
-export const SubscriptionsDefaultOrdering: SubscriptionsControls["ordering"] = {
+export const SubscriptionsDefaultOrdering: Ordering<SubscriptionOrderableField> = {
   orderBy: "createdAt",
   order: "desc",
 };

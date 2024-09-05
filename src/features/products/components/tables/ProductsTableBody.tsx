@@ -86,12 +86,12 @@ export const ProductsTableBody = (props: ProductsTableBodyProps): JSX.Element =>
         },
       ]}
       columns={convertConfigsToColumns(
-        [...ProductsTableColumns] as DataTableColumnConfig<
+        [...ProductsTableColumns.columns] as DataTableColumnConfig<
           ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>,
           ProductsTableColumnId
         >[],
         {
-          ...ProductsTableColumnProperties,
+          ...ProductsTableColumnProperties("public"),
           subscription: {
             cellRenderer(datum) {
               return <SubscriptionCell product={datum} />;

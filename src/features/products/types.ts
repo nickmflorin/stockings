@@ -1,8 +1,7 @@
-import type { Product } from "~/database/model";
+import type { TableColumnId, OrderableTableColumnId } from "~/components/tables";
+import { ColumnsConfiguration } from "~/components/tables";
 
-import type { DataTableColumnConfig } from "~/components/tables";
-
-export const ProductsTableColumns = [
+const ProductsTableColumnConfigurations = ColumnsConfiguration([
   {
     id: "name",
     label: "Name",
@@ -27,7 +26,7 @@ export const ProductsTableColumns = [
     align: "center",
   },
   {
-    id: "subcategories",
+    id: "subCategories",
     label: "Sub Categories",
     align: "center",
   },
@@ -37,65 +36,31 @@ export const ProductsTableColumns = [
     minWidth: 200,
     maxWidth: 220,
   },
-  {
-    id: "actions",
-    label: "",
-  },
-] as const satisfies DataTableColumnConfig<Product, string>[];
+] as const);
 
-export type ProductsTableColumnId = (typeof ProductsTableColumns)[number]["id"];
+export const ProductsTableColumns = ProductsTableColumnConfigurations.select([
+  "name",
+  "status",
+  "price",
+  "category",
+  "subCategories",
+  "subscription",
+]);
 
-export type OrderableProductsTableColumnId = Extract<
-  (typeof ProductsTableColumns)[number],
-  { isOrderable: true }
->["id"];
+export type ProductsTableColumnId = TableColumnId<typeof ProductsTableColumns>;
 
-export const OrderableProductsTableColumnIds = [...ProductsTableColumns]
-  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
-  .map(col => col.id) as OrderableProductsTableColumnId[];
+export type ProductsTableOrderableColumnId = OrderableTableColumnId<typeof ProductsTableColumns>;
 
-export const ProductsAdminTableColumns = [
-  {
-    id: "name",
-    label: "Name",
-    isOrderable: true,
-  },
-  {
-    id: "status",
-    label: "Status",
-    minWidth: 240,
-    maxWidth: 240,
-  },
-  {
-    id: "price",
-    label: "Price",
-    isOrderable: true,
-    minWidth: 240,
-    maxWidth: 240,
-  },
-  {
-    id: "category",
-    label: "Category",
-    align: "center",
-  },
-  {
-    id: "subcategories",
-    label: "Sub Categories",
-    align: "center",
-  },
-  {
-    id: "actions",
-    label: "",
-  },
-] as const satisfies DataTableColumnConfig<Product, string>[];
+export const ProductsAdminTableColumns = ProductsTableColumnConfigurations.select([
+  "name",
+  "status",
+  "price",
+  "category",
+  "subCategories",
+]);
 
-export type ProductsAdminTableColumnId = (typeof ProductsTableColumns)[number]["id"];
+export type ProductsAdminTableColumnId = TableColumnId<typeof ProductsAdminTableColumns>;
 
-export type OrderableProductsAdminTableColumnId = Extract<
-  (typeof ProductsTableColumns)[number],
-  { isOrderable: true }
->["id"];
-
-export const OrderableProductsAdminTableColumnIds = [...ProductsTableColumns]
-  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
-  .map(col => col.id) as OrderableProductsTableColumnId[];
+export type ProductsAdminTableOrderableColumnId = OrderableTableColumnId<
+  typeof ProductsAdminTableColumns
+>;

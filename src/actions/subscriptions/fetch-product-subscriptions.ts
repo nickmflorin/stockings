@@ -1,8 +1,20 @@
 import { cache } from "react";
 
+import { type Required } from "utility-types";
+
 import { getAuthedUser } from "~/application/auth/server";
-import type { FullProductSubscription, User } from "~/database/model";
-import { enhance, ProductSubscriptionType, ProductNotificationType } from "~/database/model";
+import type {
+  ApiProductSubscription,
+  User,
+  ProductSubscriptionIncludes,
+  ProductSubscription,
+} from "~/database/model";
+import {
+  enhance,
+  ProductSubscriptionType,
+  ProductNotificationType,
+  fieldIsIncluded,
+} from "~/database/model";
 import { db } from "~/database/prisma";
 import { conditionalFilters, constructOrSearch } from "~/database/util";
 
@@ -17,7 +29,9 @@ import {
   type SubscriptionsControls,
 } from "~/actions";
 
-const filtersClause = (filters: Partial<SubscriptionsControls["filters"]>) =>
+import { ApiClientGlobalError } from "~/api";
+
+const filtersClause = (filters: SubscriptionsControls["filters"]) =>
   conditionalFilters([
     filters.search
       ? { product: constructOrSearch(filters.search, ["name", "code", "slug"]) }
@@ -61,10 +75,7 @@ export const fetchProductSubscriptionsCount = cache(
 
 export const fetchProductSubscriptionsPagination = cache(
   async <C extends FetchActionContext>(
-    {
-      filters,
-      page: _page,
-    }: { page: SubscriptionsControls["page"]; filters?: Partial<SubscriptionsControls["filters"]> },
+    { filters, page: _page }: Required<Pick<SubscriptionsControls, "page" | "filters">, "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
     const { user, error } = await getAuthedUser();
@@ -81,28 +92,25 @@ export const fetchProductSubscriptionsPagination = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: {
-      page: SubscriptionsControls["page"];
-      filters?: Partial<SubscriptionsControls["filters"]>;
-    },
+    params: Required<Pick<SubscriptionsControls, "page" | "filters">, "page">,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
 
-const _fetchProductSubscriptions = async <C extends FetchActionContext>(
-  {
-    filters,
-    page,
-    ordering,
-  }: {
-    ordering?: SubscriptionsControls["ordering"];
-    filters?: Partial<SubscriptionsControls["filters"]>;
-    page?: number;
-  },
+const _fetchProductSubscriptions = async <
+  C extends FetchActionContext,
+  I extends ProductSubscriptionIncludes,
+>(
+  { filters, page, ordering, includes }: SubscriptionsControls<I>,
   context: C,
-): Promise<FetchActionResponse<FullProductSubscription[], C>> => {
-  const { user, error } = await getAuthedUser();
+): Promise<FetchActionResponse<ApiProductSubscription<I>[], C>> => {
+  const { user, error, isAdmin } = await getAuthedUser();
   if (error) {
+    return errorInFetchContext(error, context);
+  } else if (!isAdmin && fieldIsIncluded("user", includes)) {
+    const error = ApiClientGlobalError.Forbidden({
+      message: "The user does not have permission to access this data.",
+    });
     return errorInFetchContext(error, context);
   }
 
@@ -124,45 +132,61 @@ const _fetchProductSubscriptions = async <C extends FetchActionContext>(
       : undefined,
     skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
     take: pagination ? pagination.pageSize : undefined,
-    include: { product: true },
+    include: {
+      product: fieldIsIncluded("product", includes),
+      user: isAdmin && fieldIsIncluded("user", includes),
+    },
   });
+
+  const subscriptions = data as ProductSubscription[] as ApiProductSubscription<I>[];
+
   const conditions = await enhanced.statusChangeSubscriptionCondition.findMany({
     where: {
       subscriptionId: {
-        in: data
+        in: subscriptions
           .filter(d => d.subscriptionType === ProductSubscriptionType.StatusChangeSubscription)
           .map(d => d.id),
       },
     },
   });
-  const priceChangeCounts = await enhanced.productNotification.groupBy({
-    by: ["subscriptionId"],
-    _count: { id: true },
-    where: { notificationType: ProductNotificationType.PriceChangeNotification },
-  });
-  const statusChangeCounts = await enhanced.productNotification.groupBy({
-    by: ["subscriptionId"],
-    _count: { id: true },
-    where: { notificationType: ProductNotificationType.StatusChangeNotification },
-  });
+
+  let priceChangeCounts: { subscriptionId: string | null; _count: { id: number } }[] = [];
+  let statusChangeCounts: { subscriptionId: string | null; _count: { id: number } }[] = [];
+  if (fieldIsIncluded("notificationsCount", includes)) {
+    priceChangeCounts = await enhanced.productNotification.groupBy({
+      by: ["subscriptionId"],
+      _count: { id: true },
+      where: { notificationType: ProductNotificationType.PriceChangeNotification },
+    });
+    statusChangeCounts = await enhanced.productNotification.groupBy({
+      by: ["subscriptionId"],
+      _count: { id: true },
+      where: { notificationType: ProductNotificationType.StatusChangeNotification },
+    });
+  }
 
   const getNotificationsCount = (subscriptionId: string) =>
     (priceChangeCounts.find(ct => ct.subscriptionId === subscriptionId)?._count.id ?? 0) +
     (statusChangeCounts.find(ct => ct.subscriptionId === subscriptionId)?._count.id ?? 0);
 
   return dataInFetchContext(
-    data.map((subscription): FullProductSubscription => {
-      if (subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription) {
-        return {
-          ...subscription,
-          notificationsCount: getNotificationsCount(subscription.id),
-          conditions: conditions.filter(c => c.subscriptionId === subscription.id),
-        } as FullProductSubscription;
-      }
-      return {
+    subscriptions.map((subscription): ApiProductSubscription<I> => {
+      const sub = {
         ...subscription,
-        notificationsCount: getNotificationsCount(subscription.id),
-      } as FullProductSubscription;
+        notificationsCount: fieldIsIncluded("notificationsCount", includes)
+          ? getNotificationsCount(subscription.id)
+          : undefined,
+      };
+      if (
+        subscription.subscriptionType === ProductSubscriptionType.StatusChangeSubscription &&
+        fieldIsIncluded("conditions", includes)
+      ) {
+        return {
+          ...sub,
+          conditions: conditions.filter(c => c.subscriptionId === subscription.id),
+        };
+      }
+      return sub;
     }),
     context,
   );

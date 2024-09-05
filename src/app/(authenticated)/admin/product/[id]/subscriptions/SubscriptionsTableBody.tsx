@@ -6,11 +6,9 @@ import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-product
 
 import { Loading } from "~/components/loading/Loading";
 
-import { SubscribeToOtherAction } from "./SubscribeToOtherAction";
-
-const ProductSubscriptionsTableBody = dynamic(
+const ProductSubscriptionsAdminTableBody = dynamic(
   () =>
-    import("~/features/products/components/tables/ProductSubscriptionsTableBody").then(
+    import("~/features/products/components/tables/ProductSubscriptionsAdminTableBody").then(
       mod => mod.ProductSubscriptionsTableBody,
     ),
   { loading: () => <Loading isLoading component="tbody" /> },
@@ -30,15 +28,9 @@ export const SubscriptionsTableBody = async ({
     {
       ordering,
       filters: { products: [product.id] },
-      includes: ["conditions", "notificationsCount", "product"],
+      includes: ["conditions", "product"],
     },
     { strict: true },
   );
-  return (
-    <ProductSubscriptionsTableBody
-      data={data}
-      product={product}
-      actions={[<SubscribeToOtherAction key="0" subscriptions={data} product={product} />]}
-    />
-  );
+  return <ProductSubscriptionsAdminTableBody data={data} />;
 };

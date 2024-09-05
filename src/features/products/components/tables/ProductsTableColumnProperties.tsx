@@ -13,20 +13,17 @@ import {
 } from "~/features/products/components/badges";
 import { ProductStatusText } from "~/features/products/components/ProductStatusText";
 
-export interface ProductsAdminTableBodyProps {
-  readonly excludeColumns?: ProductsAdminTableColumnId[];
-  readonly data: ApiProduct<[]>[];
-}
-
-export const ProductsTableColumnProperties: DataTableColumnProperties<
+export const ProductsTableColumnProperties = (
+  location: "admin" | "public",
+): DataTableColumnProperties<
   ApiProduct | ApiProduct<["priceChangeSubscription", "statusChangeSubscription"]>,
   ProductsAdminTableColumnId
-> = {
+> => ({
   name: {
     cellRenderer(datum) {
       return (
         <div className="flex flex-row items-center gap-2">
-          <ProductLink product={datum} location="internal" />
+          <ProductLink product={datum} location={location} />
           <ExternalProductIconLink product={datum} />
         </div>
       );
@@ -75,7 +72,7 @@ export const ProductsTableColumnProperties: DataTableColumnProperties<
       return <ProductCategoryBadge category={datum.category} />;
     },
   },
-  subcategories: {
+  subCategories: {
     cellRenderer(datum) {
       return (
         <div className="flex flex-row items-center">
@@ -86,4 +83,4 @@ export const ProductsTableColumnProperties: DataTableColumnProperties<
       );
     },
   },
-};
+});

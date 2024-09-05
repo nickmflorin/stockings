@@ -90,6 +90,11 @@ let nextConfig = {
       destination: "/admin/products",
       permanent: false,
     },
+    {
+      source: "/admin/product/:id",
+      destination: "/admin/product/:id/subscriptions",
+      permanent: false,
+    },
   ],
 };
 

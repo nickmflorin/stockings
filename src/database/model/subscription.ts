@@ -1,19 +1,20 @@
-import { enumeratedLiterals } from "enumerated-literals";
+import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 import { uniq } from "lodash-es";
 
 import { replaceInArray } from "~/lib/arrays";
 
 import { type TailwindTextColorClassName, type TailwindBgColorClassName } from "~/components/types";
 
+import { type BrandStatusChangeSubscription, type BrandPriceChangeSubscription } from "./brand";
+import { type ConditionallyInclude } from "./inclusion";
 import {
   ProductSubscriptionType,
   type ProductStatus,
   PriceChangeCondition,
   ProductNotificationType,
   type Product,
-  type StatusChangeSubscription,
   type StatusChangeSubscriptionCondition,
-  type PriceChangeSubscription,
+  type User,
 } from "./models";
 
 export const PriceChangeConditions = enumeratedLiterals(
@@ -39,11 +40,108 @@ export const PriceChangeConditions = enumeratedLiterals(
   {},
 );
 
-export type ApiStatusChangeSubscription = StatusChangeSubscription & {
-  readonly conditions: StatusChangeSubscriptionCondition[];
-};
+export const ProductSubscriptionIncludesFields = enumeratedLiterals(
+  ["product", "notificationsCount", "user"] as const,
+  {},
+);
+export type ProductSubscriptionIncludesField = EnumeratedLiteralsMember<
+  typeof ProductSubscriptionIncludesFields
+>;
 
-export type ApiProductSubscription = ApiStatusChangeSubscription | PriceChangeSubscription;
+export type ProductSubscriptionIncludes =
+  | ["product", "notificationsCount", "user", "conditions"]
+  | ["product", "notificationsCount", "conditions", "user"]
+  | ["product", "user", "notificationsCount", "conditions"]
+  | ["product", "user", "conditions", "notificationsCount"]
+  | ["product", "conditions", "notificationsCount", "user"]
+  | ["product", "conditions", "user", "notificationsCount"]
+  | ["notificationsCount", "product", "user", "conditions"]
+  | ["notificationsCount", "product", "conditions", "user"]
+  | ["notificationsCount", "user", "product", "conditions"]
+  | ["notificationsCount", "user", "conditions", "product"]
+  | ["notificationsCount", "conditions", "product", "user"]
+  | ["notificationsCount", "conditions", "user", "product"]
+  | ["user", "product", "notificationsCount", "conditions"]
+  | ["user", "product", "conditions", "notificationsCount"]
+  | ["user", "notificationsCount", "product", "conditions"]
+  | ["user", "notificationsCount", "conditions", "product"]
+  | ["user", "conditions", "product", "notificationsCount"]
+  | ["user", "conditions", "notificationsCount", "product"]
+  | ["conditions", "product", "notificationsCount", "user"]
+  | ["conditions", "product", "user", "notificationsCount"]
+  | ["conditions", "notificationsCount", "product", "user"]
+  | ["conditions", "notificationsCount", "user", "product"]
+  | ["conditions", "user", "product", "notificationsCount"]
+  | ["conditions", "user", "notificationsCount", "product"]
+  | ["product", "notificationsCount", "user"]
+  | ["product", "notificationsCount", "conditions"]
+  | ["product", "user", "notificationsCount"]
+  | ["product", "user", "conditions"]
+  | ["product", "conditions", "notificationsCount"]
+  | ["product", "conditions", "user"]
+  | ["notificationsCount", "product", "user"]
+  | ["notificationsCount", "product", "conditions"]
+  | ["notificationsCount", "user", "product"]
+  | ["notificationsCount", "user", "conditions"]
+  | ["notificationsCount", "conditions", "product"]
+  | ["notificationsCount", "conditions", "user"]
+  | ["user", "product", "notificationsCount"]
+  | ["user", "product", "conditions"]
+  | ["user", "notificationsCount", "product"]
+  | ["user", "notificationsCount", "conditions"]
+  | ["user", "conditions", "product"]
+  | ["user", "conditions", "notificationsCount"]
+  | ["conditions", "product", "notificationsCount"]
+  | ["conditions", "product", "user"]
+  | ["conditions", "notificationsCount", "product"]
+  | ["conditions", "notificationsCount", "user"]
+  | ["conditions", "user", "product"]
+  | ["conditions", "user", "notificationsCount"]
+  | ["product", "notificationsCount"]
+  | ["product", "user"]
+  | ["product", "conditions"]
+  | ["notificationsCount", "product"]
+  | ["notificationsCount", "user"]
+  | ["notificationsCount", "conditions"]
+  | ["user", "product"]
+  | ["user", "notificationsCount"]
+  | ["user", "conditions"]
+  | ["conditions", "product"]
+  | ["conditions", "notificationsCount"]
+  | ["conditions", "user"]
+  | ["product"]
+  | ["notificationsCount"]
+  | ["user"]
+  | ["conditions"]
+  | [];
+
+export type ApiStatusChangeSubscription<I extends ProductSubscriptionIncludes = []> =
+  ConditionallyInclude<
+    BrandStatusChangeSubscription & {
+      readonly product: Product;
+      readonly conditions: StatusChangeSubscriptionCondition[];
+      readonly notificationsCount: number;
+      readonly user: User;
+    },
+    ["product", "user", "conditions", "notificationsCount"],
+    I
+  >;
+
+export type ApiPriceChangeSubscription<I extends ProductSubscriptionIncludes = []> =
+  ConditionallyInclude<
+    BrandPriceChangeSubscription & {
+      readonly product: Product;
+      readonly notificationsCount: number;
+      readonly user: User;
+    },
+    ["product", "user", "conditions", "notificationsCount"],
+    I
+  >;
+
+export type ApiProductSubscription<I extends ProductSubscriptionIncludes = []> =
+  I extends ProductSubscriptionIncludes
+    ? ApiPriceChangeSubscription<I> | ApiStatusChangeSubscription<I>
+    : never;
 
 export const ProductSubscriptionTypes = enumeratedLiterals(
   [
@@ -69,18 +167,6 @@ export const ProductSubscriptionTypes = enumeratedLiterals(
   }[],
   {},
 );
-
-export type FullStatusChangeSubscription = ApiStatusChangeSubscription & {
-  readonly product: Product;
-  readonly notificationsCount: number;
-};
-
-export type FullPriceChangeSubscription = PriceChangeSubscription & {
-  readonly product: Product;
-  readonly notificationsCount: number;
-};
-
-export type FullProductSubscription = FullStatusChangeSubscription | FullPriceChangeSubscription;
 
 type FlattenedStatusChangeSubscriptionCondition = [ProductStatus, ProductStatus];
 

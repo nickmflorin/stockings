@@ -17,11 +17,11 @@ export const ProductsAdminTableBody = (props: ProductsAdminTableBodyProps): JSX.
     {...props}
     actionMenuWidth={200}
     columns={convertConfigsToColumns(
-      [...ProductsAdminTableColumns] as DataTableColumnConfig<
+      [...ProductsAdminTableColumns.columns] as DataTableColumnConfig<
         ApiProduct<[]>,
         ProductsAdminTableColumnId
       >[],
-      ProductsTableColumnProperties,
+      ProductsTableColumnProperties("admin"),
     )}
   />
 );

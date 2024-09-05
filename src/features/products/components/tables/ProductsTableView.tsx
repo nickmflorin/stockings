@@ -4,9 +4,8 @@ import { ProductsDefaultOrdering } from "~/actions";
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
 import {
-  OrderableProductsTableColumnIds,
   ProductsTableColumns,
-  type OrderableProductsTableColumnId,
+  type ProductsTableOrderableColumnId,
   type ProductsTableColumnId,
 } from "~/features/products/types";
 import { useOrdering } from "~/hooks/use-ordering";
@@ -24,9 +23,9 @@ export const ProductsTableView = ({
   pagination,
   excludeColumns,
 }: ProductsTableViewProps) => {
-  const [ordering, setOrdering] = useOrdering<OrderableProductsTableColumnId>({
+  const [ordering, setOrdering] = useOrdering<ProductsTableOrderableColumnId>({
     useQueryParams: true,
-    fields: OrderableProductsTableColumnIds,
+    fields: ProductsTableColumns.orderableColumns.map(c => c.id),
     defaultOrdering: ProductsDefaultOrdering,
   });
   return (
@@ -34,11 +33,12 @@ export const ProductsTableView = ({
       <DataTableWrapper
         rowsHaveActions
         excludeColumns={excludeColumns}
-        columns={ProductsTableColumns}
+        columns={ProductsTableColumns.columns}
         ordering={ordering}
         onSort={(e, col) => {
-          if (OrderableProductsTableColumnIds.includes(col.id as OrderableProductsTableColumnId)) {
-            setOrdering({ field: col.id as OrderableProductsTableColumnId });
+          const id = col.id;
+          if (ProductsTableColumns.isOrderableColumnId(id)) {
+            setOrdering({ field: id });
           }
         }}
       >

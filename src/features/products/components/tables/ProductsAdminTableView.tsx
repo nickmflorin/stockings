@@ -4,14 +4,13 @@ import { ProductsDefaultOrdering } from "~/actions";
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
 import {
-  OrderableProductsAdminTableColumnIds,
   ProductsAdminTableColumns,
-  type OrderableProductsAdminTableColumnId,
+  type ProductsAdminTableOrderableColumnId,
   type ProductsAdminTableColumnId,
 } from "~/features/products/types";
 import { useOrdering } from "~/hooks/use-ordering";
 
-export interface ProductsTableViewProps {
+export interface ProductsAdminTableViewProps {
   readonly children: JSX.Element;
   readonly filterBar?: JSX.Element;
   readonly pagination?: JSX.Element;
@@ -23,10 +22,10 @@ export const ProductsAdminTableView = ({
   filterBar,
   pagination,
   excludeColumns,
-}: ProductsTableViewProps) => {
-  const [ordering, setOrdering] = useOrdering<OrderableProductsAdminTableColumnId>({
+}: ProductsAdminTableViewProps) => {
+  const [ordering, setOrdering] = useOrdering<ProductsAdminTableOrderableColumnId>({
     useQueryParams: true,
-    fields: OrderableProductsAdminTableColumnIds,
+    fields: ProductsAdminTableColumns.orderableColumns.map(c => c.id),
     defaultOrdering: ProductsDefaultOrdering,
   });
   return (
@@ -34,15 +33,12 @@ export const ProductsAdminTableView = ({
       <DataTableWrapper
         rowsHaveActions={false}
         excludeColumns={excludeColumns}
-        columns={ProductsAdminTableColumns}
+        columns={ProductsAdminTableColumns.columns}
         ordering={ordering}
         onSort={(e, col) => {
-          if (
-            OrderableProductsAdminTableColumnIds.includes(
-              col.id as OrderableProductsAdminTableColumnId,
-            )
-          ) {
-            setOrdering({ field: col.id as OrderableProductsAdminTableColumnId });
+          const id = col.id;
+          if (ProductsAdminTableColumns.isOrderableColumnId(id)) {
+            setOrdering({ field: id });
           }
         }}
       >

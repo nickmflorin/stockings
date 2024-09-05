@@ -1,14 +1,14 @@
-import RouterLink from "next/link";
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
+import { type ApiProduct } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { fetchProduct } from "~/actions/products";
 
-import { Link } from "~/components/buttons";
+import { ErrorView } from "~/components/errors/ErrorView";
 import { Module } from "~/components/structural/Module";
-import { Title } from "~/components/typography";
+import { ProductBreadcrumb } from "~/features/products/components/ProductBreadcrumbs";
 
 import { ApiClientGlobalErrorCodes } from "~/api";
 
@@ -29,34 +29,30 @@ export default async function ProductLayout({
   params,
   notificationsModuleTitle,
 }: ProductLayoutProps) {
-  const { data: product, error } = await fetchProduct(
-    params.id,
-    { includes: [] },
-    { strict: false },
-  );
-  if (error) {
-    if (error.code === ApiClientGlobalErrorCodes.NOT_FOUND) {
-      return redirect("/404");
+  let product: ApiProduct<[]>;
+  try {
+    const { error, data } = await fetchProduct(params.id, { includes: [] }, { strict: false });
+    if (error) {
+      if (error.code === ApiClientGlobalErrorCodes.NOT_FOUND) {
+        return redirect("/404");
+      }
+      logger.error(error, "There was an error fetching the product.");
+      return (
+        <ErrorView>There was an error loading the product. Do not worry - we are on it.</ErrorView>
+      );
     }
-    logger.error(error, "There was an error fetching the product.");
+    product = data;
+  } catch (e) {
+    logger.errorUnsafe(e, "There was an error fetching the product.");
+    return (
+      <ErrorView>There was an error loading the product. Do not worry - we are on it.</ErrorView>
+    );
   }
   return (
     <div className="flex flex-col gap-[16px] overflow-y-hidden">
-      <div className="flex flex-row items-center gap-2">
-        <Link
-          className="text-title-md"
-          component={RouterLink}
-          element="a"
-          icon="arrow-left"
-          href="/products"
-        >
-          Products
-        </Link>
-        <Title component="h3" className="text-gray-600">
-          /
-        </Title>
-        <Title component="h3">{product?.name}</Title>
-      </div>
+      <ProductBreadcrumb returnHref="/admin/products">
+        {product.name ?? "Unnamed Product"}
+      </ProductBreadcrumb>
       <div className="flex flex-row gap-[16px] grow min-h-0 overflow-y-auto">
         <div className="flex flex-col items-center max-w-[650px] gap-[16px]">
           <Module component="paper" className="w-full">

@@ -7,17 +7,33 @@ import { logger } from "~/internal/logger";
 
 import { ApiClientGlobalError } from "~/api";
 
-type StrictUserPayload = Readonly<{ user: User; clerkUserId: string; error?: never }>;
-type NullUserPayload = Readonly<{ user?: never; clerkUserId?: never; error: ApiClientGlobalError }>;
+import * as constants from "./constants";
 
-export async function getClerkUserId(req?: Parameters<typeof getAuth>[0]): Promise<string | null> {
+type StrictUserPayload = Readonly<{
+  user: User;
+  clerkUserId: string;
+  isAdmin: boolean;
+  error?: never;
+}>;
+
+type NullUserPayload = Readonly<{
+  user?: never;
+  clerkUserId?: never;
+  isAdmin?: never;
+  error: ApiClientGlobalError;
+}>;
+
+export async function getClerkUser(
+  req?: Parameters<typeof getAuth>[0],
+): Promise<{ userId: string | null; isAdmin: boolean }> {
   let userId: string | null;
+  let orgSlug: string | null | undefined;
   if (req) {
-    ({ userId } = getAuth(req));
+    ({ userId, orgSlug } = getAuth(req));
   } else {
-    ({ userId } = auth());
+    ({ userId, orgSlug } = auth());
   }
-  return userId;
+  return { userId, isAdmin: orgSlug === constants.SITE_ADMIN_ORG_SLUG };
 }
 
 type GetAuthedUserOpts = {
@@ -32,7 +48,7 @@ type GetAuthedUserRT<O extends GetAuthedUserOpts> = O extends { strict: true }
 export const getAuthedUser = async <O extends GetAuthedUserOpts>(
   opts?: O,
 ): Promise<GetAuthedUserRT<O>> => {
-  const clerkUserId = await getClerkUserId(opts?.request);
+  const { userId: clerkUserId, isAdmin } = await getClerkUser(opts?.request);
   if (!clerkUserId) {
     if (opts?.strict !== true) {
       return { error: ApiClientGlobalError.NotAuthenticated({}) } as GetAuthedUserRT<O>;
@@ -49,5 +65,5 @@ export const getAuthedUser = async <O extends GetAuthedUserOpts>(
     }
     throw ApiClientGlobalError.NotAuthenticated({});
   }
-  return { user, clerkUserId } as GetAuthedUserRT<O>;
+  return { user, clerkUserId, isAdmin } as GetAuthedUserRT<O>;
 };

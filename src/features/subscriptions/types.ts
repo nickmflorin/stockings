@@ -1,12 +1,10 @@
-import { type FullProductSubscription } from "~/database/model";
+import type { TableColumnId, OrderableTableColumnId } from "~/components/tables";
+import { ColumnsConfiguration } from "~/components/tables";
 
-import type { DataTableColumnConfig } from "~/components/tables";
-
-export const SubscriptionsTableColumns = [
+export const SubscriptionsTableColumnConfigurations = ColumnsConfiguration([
   {
     id: "product",
     label: "Product",
-    // minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
     align: "left",
@@ -19,7 +17,6 @@ export const SubscriptionsTableColumns = [
   {
     id: "enabled",
     label: "Enabled",
-    // minWidth: 60,
     maxWidth: 60,
     align: "center",
   },
@@ -27,20 +24,17 @@ export const SubscriptionsTableColumns = [
     id: "conditions",
     label: "Conditions",
     maxWidth: 200,
-    // minWidth: 180,
     align: "center",
   },
   {
     id: "notifications",
     label: "Notifications",
-    // minWidth: 120,
     maxWidth: 140,
     align: "center",
   },
   {
     id: "createdAt",
     label: "Created",
-    // minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
     align: "left",
@@ -49,21 +43,40 @@ export const SubscriptionsTableColumns = [
   {
     id: "updatedAt",
     label: "Last Updated",
-    // minWidth: 240,
     maxWidth: 240,
     isOrderable: true,
     align: "left",
     columnCellClassName: "hidden @3xl/subscriptions-table-view:table-cell",
   },
-] as const satisfies DataTableColumnConfig<FullProductSubscription, string>[];
+] as const);
 
-export type SubscriptionsTableColumnId = (typeof SubscriptionsTableColumns)[number]["id"];
+export const SubscriptionsTableColumns = SubscriptionsTableColumnConfigurations.select([
+  "product",
+  "type",
+  "conditions",
+  "enabled",
+  "notifications",
+  "createdAt",
+  "updatedAt",
+]);
 
-export type OrderableSubscriptionsTableColumnId = Extract<
-  (typeof SubscriptionsTableColumns)[number],
-  { isOrderable: true }
->["id"];
+export type SubscriptionsTableColumnId = TableColumnId<typeof SubscriptionsTableColumns>;
 
-export const OrderableSubscriptionsTableColumnIds = [...SubscriptionsTableColumns]
-  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
-  .map(col => col.id) as OrderableSubscriptionsTableColumnId[];
+export type SubscriptionsTableOrderableColumnId = OrderableTableColumnId<
+  typeof SubscriptionsTableColumns
+>;
+
+export const SubscriptionsAdminTableColumns = SubscriptionsTableColumnConfigurations.select([
+  "product",
+  "type",
+  "conditions",
+  "enabled",
+  "createdAt",
+  "updatedAt",
+]);
+
+export type SubscriptionsAdminTableColumnId = TableColumnId<typeof SubscriptionsAdminTableColumns>;
+
+export type SubscriptionsAdminTableOrderableColumnId = OrderableTableColumnId<
+  typeof SubscriptionsAdminTableColumns
+>;
