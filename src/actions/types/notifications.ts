@@ -16,7 +16,9 @@ import type { ParseFiltersOptions } from "~/lib/filters";
 import { type Order, type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
-export const ProductNotificationOrderableFields = ["product", "state"] as const;
+import type { ActionVisibility } from "~/actions/types/actions";
+
+export const ProductNotificationOrderableFields = ["product", "state", "user"] as const;
 export type ProductNotificationOrderableField = (typeof ProductNotificationOrderableFields)[number];
 
 export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOrderableField> = {
@@ -27,6 +29,7 @@ export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOr
 export const ProductNotificationsOrderingMap = {
   state: order => [{ stateAsOf: order }] as const,
   product: order => [{ product: { name: order } }] as const,
+  user: order => [{ user: { lastName: order } }, { user: { firstName: order } }] as const,
 } as const satisfies { [key in ProductNotificationOrderableField]: (order: Order) => unknown[] };
 
 export interface ProductNotificationsFilters {
@@ -35,16 +38,18 @@ export interface ProductNotificationsFilters {
   readonly mediums: NotificationMedium[];
   readonly products: string[];
   readonly search: string;
+  readonly users: string[];
 }
 
 export interface ProductNotificationsControls<
   I extends ProductNotificationIncludes = ProductNotificationIncludes,
 > {
-  readonly filters: ProductNotificationsFilters;
+  readonly filters: Partial<ProductNotificationsFilters>;
   readonly ordering: Ordering<ProductNotificationOrderableField>;
-  readonly page: number;
+  readonly page?: number;
   readonly includes: I;
-  readonly limit: number;
+  readonly limit?: number;
+  readonly visibility?: ActionVisibility;
 }
 
 export const ProductNotificationsFiltersSchemas = {
@@ -82,6 +87,12 @@ export const ProductNotificationsFiltersSchemas = {
     }
     return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
   }),
+  users: z.union([z.string(), z.array(z.string())]).transform(value => {
+    if (typeof value === "string") {
+      return isUuid(value) ? [value] : [];
+    }
+    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+  }),
 } satisfies {
   [key in keyof ProductNotificationsFilters]: z.ZodType;
 };
@@ -93,6 +104,7 @@ export const ProductNotificationsFiltersOptions: ParseFiltersOptions<
   states: { defaultValue: [], excludeWhen: v => v.length === 0 },
   mediums: { defaultValue: [], excludeWhen: v => v.length === 0 },
   products: { defaultValue: [], excludeWhen: v => v.length === 0 },
+  users: { defaultValue: [], excludeWhen: v => v.length === 0 },
   search: { defaultValue: "", excludeWhen: v => v.length === 0 },
 };
 

@@ -2,30 +2,20 @@
 import RouterLink from "next/link";
 
 import { type ApiProductNotification } from "~/database/model";
-import { ProductNotificationType } from "~/database/model";
 
 import { InlineLink } from "~/components/buttons";
-import { ExternalProductIconLink } from "~/components/buttons/ExternalProductIconLink";
-import { ProductLink } from "~/components/buttons/ProductLink";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
 import {
   type DataTableBodyProps,
   DataTableBody,
 } from "~/components/tables/data-tables/DataTableBody";
-import { Text, Description } from "~/components/typography";
-import { DateTimeText } from "~/components/typography/DateTimeText";
-import { HorizontallyCentered } from "~/components/util";
+import { Description } from "~/components/typography";
 import {
-  ProductNotificationsTableColumns,
   type ProductNotificationsTableColumnId,
+  ProductNotificationsTableColumns,
 } from "~/features/notifications";
-import { NotificationMediumBadge } from "~/features/notifications/components/badges";
-import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
-import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
-/* eslint-disable-next-line max-len */
-import { PriceChangeConditionTransition } from "~/features/subscriptions/components/PriceChangeConditionTransition";
-/* eslint-disable-next-line max-len */
-import { StatusChangeConditionTransition } from "~/features/subscriptions/components/StatusChangeConditionTransition";
+
+import { NotificationsTableColumnProperties } from "./NotificationsTableColumnProperties";
 
 export interface NotificationsTableBodyProps
   extends Omit<
@@ -50,85 +40,11 @@ export const NotificationsTableBody = (props: NotificationsTableBodyProps): JSX.
     noResultsContent="No notifications found for search criteria."
     {...props}
     columns={convertConfigsToColumns(
-      [...ProductNotificationsTableColumns] as DataTableColumnConfig<
+      [...ProductNotificationsTableColumns.columns] as DataTableColumnConfig<
         ApiProductNotification<["product"]>,
         ProductNotificationsTableColumnId
       >[],
-      {
-        product: {
-          cellRenderer(datum) {
-            return (
-              <div className="flex flex-row items-center gap-2">
-                <ProductLink product={datum.product} location="internal" />
-                <ExternalProductIconLink product={datum.product} />
-              </div>
-            );
-          },
-        },
-        event: {
-          cellRenderer(datum) {
-            if (datum.notificationType === ProductNotificationType.StatusChangeNotification) {
-              return (
-                <HorizontallyCentered>
-                  <StatusChangeConditionTransition
-                    fromStatus={datum.previousStatus}
-                    toStatus={datum.newStatus}
-                  />
-                </HorizontallyCentered>
-              );
-            } else if (datum.notificationType === ProductNotificationType.PriceChangeNotification) {
-              return (
-                <HorizontallyCentered>
-                  <PriceChangeConditionTransition
-                    fromPrice={datum.previousPrice}
-                    toPrice={datum.newPrice}
-                  />
-                </HorizontallyCentered>
-              );
-            }
-          },
-        },
-        type: {
-          cellRenderer(datum) {
-            return (
-              <NotificationTypeText
-                fontWeight="medium"
-                fontSize="sm"
-                notificationType={datum.notificationType}
-              />
-            );
-          },
-        },
-        state: {
-          cellRenderer(datum) {
-            return (
-              <div className="flex flex-col">
-                <NotificationStateText fontWeight="medium" fontSize="sm" state={datum.state} />
-                {datum.stateAsOf && (
-                  <Text fontWeight="regular" fontSize="sm" className="text-gray-500">
-                    {" "}
-                    as of <DateTimeText component="span" value={datum.stateAsOf} />
-                  </Text>
-                )}
-              </div>
-            );
-          },
-        },
-        mediums: {
-          cellRenderer(datum) {
-            if (datum.mediums.length > 0) {
-              return (
-                <div className="flex flex-row gap-2">
-                  {datum.mediums.map(medium => (
-                    <NotificationMediumBadge key={medium} medium={medium} />
-                  ))}
-                </div>
-              );
-            }
-            return <div className="flex flex-col">Need to do</div>;
-          },
-        },
-      },
+      NotificationsTableColumnProperties("public"),
     )}
   />
 );

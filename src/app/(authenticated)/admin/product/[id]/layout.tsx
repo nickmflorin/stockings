@@ -51,6 +51,12 @@ export default async function AdminProductLayout({ children, params }: AdminProd
             activePaths: { leadingPath: "/admin/product/:id/subscriptions" },
             icon: "mailbox",
           },
+          {
+            label: "Notifications",
+            path: `/admin/product/${product.id}/notifications`,
+            activePaths: { leadingPath: "/admin/product/:id/notifications" },
+            icon: "envelope",
+          },
         ]}
       />
       <div className="grow min-h-0 max-h-full h-full flex flex-col">{children}</div>

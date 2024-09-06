@@ -29,23 +29,10 @@ const getInitialModelValue = <
 >({
   options,
   initialValue,
-  __private_controlled_value__,
   getModel,
-}: Pick<
-  UseSelectModelValueParams<M, O>,
-  "options" | "initialValue" | "__private_controlled_value__"
-> & {
+}: Pick<UseSelectModelValueParams<M, O>, "options" | "initialValue"> & {
   readonly getModel: (v: types.InferredDataSelectV<M, O>) => M | null;
 }): types.DataSelectModelValue<M, O> => {
-  // Distribute/flatten the conditional type to a union of its potential values.
-  const value = __private_controlled_value__ as
-    | types.InferredDataSelectV<M, O>
-    | null
-    | types.InferredDataSelectV<M, O>[]
-    | undefined;
-
-  /* if (value === undefined) {
-     Distribute/flatten the conditional type to a union of its potential values. */
   const initial = initialValue as
     | types.InferredDataSelectV<M, O>
     | null
@@ -58,7 +45,7 @@ const getInitialModelValue = <
       return [] as M[] as types.DataSelectModelValue<M, O>;
     }
     /* Note: This error will also likely be thrown in the 'use-select-value' hook that this
-         hook wraps. */
+       hook wraps. */
     throw new Error(
       "For a single, non-nullable select with, the 'initialValue' prop must be defined!",
     );
@@ -97,30 +84,6 @@ const getInitialModelValue = <
     }
   }
   return null as types.DataSelectModelValue<M, O>;
-  // } else if (Array.isArray(value)) {
-  //   return value.reduce((prev, v) => {
-  //     const m = getModel(v);
-  //     if (m !== null) {
-  //       return [...prev, m];
-  //     }
-  //     throw new Error("");
-  //     /* This occurs if there is no model associated with the value and the 'strictValueLookup'
-  //        option is 'false' - we have to take some form of recourse. */
-  //     // return prev;
-  //   }, [] as M[]) as types.DataSelectModelValue<M, O>;
-  // } else if (value !== null) {
-  //   const m = getModel(value);
-  //   if (m === null) {
-  //     /* This occurs if there is no model associated with the value and the 'strictValueLookup'
-  //        option is 'false' - we have to take some form of recourse. */
-  //     if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
-  //       return null as types.DataSelectModelValue<M, O>;
-  //     }
-  //     // return types.NOTSET;
-  //     throw new Error("");
-  //   }
-  // }
-  // return null as types.DataSelectModelValue<M, O>;
 };
 
 const getModel = <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
@@ -587,7 +550,12 @@ export const useSelectModelValue = <
   const set = useCallback(
     (v: types.DataSelectValue<M, O>) => {
       /* If the Select is not in a "ready" state, it means that the model in the data associated
-         with the provided value 'v' may not be present yet. */
+         with the provided value 'v' may not be present yet.  In this case, the 'set' method
+         is being called too early.  As such, we have to store the value that should be set
+         on the Select after it is initialized (once it becomes in a "ready" state) so it can
+         be applied later, once the Select is in a "ready" state.  If we do not do this, we will
+         get an error in the 'getInitializedModelValue' method - since the model in the data
+         associated with teh value 'v' may not exist yet. */
       if (!isReady) {
         setQueueValue.current = v;
         return;

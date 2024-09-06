@@ -1,8 +1,12 @@
-import { type ApiProductNotification } from "~/database/model";
+import type { TableColumnId, OrderableTableColumnId } from "~/components/tables";
+import { ColumnsConfiguration } from "~/components/tables";
 
-import type { DataTableColumnConfig } from "~/components/tables";
-
-export const ProductNotificationsTableColumns = [
+const ProductNotificationsTableColumnConfigurations = ColumnsConfiguration([
+  {
+    id: "user",
+    label: "User",
+    isOrderable: true,
+  },
   {
     id: "product",
     label: "Product",
@@ -34,16 +38,39 @@ export const ProductNotificationsTableColumns = [
     label: "Mediums",
     maxWidth: 240,
   },
-] as const satisfies DataTableColumnConfig<ApiProductNotification<["product"]>, string>[];
+] as const);
 
-export type ProductNotificationsTableColumnId =
-  (typeof ProductNotificationsTableColumns)[number]["id"];
+export const ProductNotificationsTableColumns =
+  ProductNotificationsTableColumnConfigurations.select([
+    "product",
+    "type",
+    "event",
+    "state",
+    "mediums",
+  ]);
 
-export type OrderableProductNotificationsTableColumnId = Extract<
-  (typeof ProductNotificationsTableColumns)[number],
-  { isOrderable: true }
->["id"];
+export type ProductNotificationsTableColumnId = TableColumnId<
+  typeof ProductNotificationsTableColumns
+>;
 
-export const OrderableProductNotificationsTableColumnIds = [...ProductNotificationsTableColumns]
-  .filter(col => (col as { isOrderable?: boolean }).isOrderable)
-  .map(col => col.id) as OrderableProductNotificationsTableColumnId[];
+export type ProductNotificationsTableOrderableColumnId = OrderableTableColumnId<
+  typeof ProductNotificationsTableColumns
+>;
+
+export const ProductNotificationsAdminTableColumns =
+  ProductNotificationsTableColumnConfigurations.select([
+    "user",
+    "product",
+    "type",
+    "event",
+    "state",
+    "mediums",
+  ]);
+
+export type ProductNotificationsAdminTableColumnId = TableColumnId<
+  typeof ProductNotificationsAdminTableColumns
+>;
+
+export type ProductNotificationsAdminTableOrderableColumnId = OrderableTableColumnId<
+  typeof ProductNotificationsAdminTableColumns
+>;

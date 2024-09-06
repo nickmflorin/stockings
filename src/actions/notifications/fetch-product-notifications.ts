@@ -1,20 +1,20 @@
 import { cache } from "react";
 
-import { type Optional } from "utility-types";
+import { type Required } from "utility-types";
 
 import { getAuthedUser } from "~/application/auth/server";
-import type {
-  ProductNotificationIncludes,
-  User,
-  Product,
-  ApiProductNotification,
-} from "~/database/model";
+import type { ProductNotificationIncludes, User, ApiProductNotification } from "~/database/model";
 import { enhance, fieldIsIncluded } from "~/database/model";
 import { db } from "~/database/prisma";
 import { conditionalFilters, constructOrSearch } from "~/database/util";
 
-import { ProductNotificationsOrderingMap } from "~/actions";
+import { filtersHaveField } from "~/lib/filters";
+
 import {
+  type ActionVisibility,
+  visibilityIsAdmin,
+  ProductNotificationsOrderingMap,
+  ProductNotificationsFiltersOptions,
   PAGE_SIZES,
   type FetchActionContext,
   type FetchActionResponse,
@@ -25,7 +25,9 @@ import {
   type ProductNotificationsControls,
 } from "~/actions";
 
-const filtersClause = (filters: Partial<ProductNotificationsControls["filters"]>) =>
+import { ApiClientGlobalError } from "~/api";
+
+const filtersClause = (filters: ProductNotificationsControls["filters"]) =>
   conditionalFilters([
     filters.search
       ? { product: constructOrSearch(filters.search, ["name", "code", "slug"]) }
@@ -40,43 +42,61 @@ const filtersClause = (filters: Partial<ProductNotificationsControls["filters"]>
     filters.products && filters.products.length !== 0
       ? { product: { id: { in: filters.products } } }
       : undefined,
+    filters.users && filters.users.length !== 0
+      ? { user: { id: { in: filters.users } } }
+      : undefined,
   ] as const);
 
 const whereClause = ({
   filters,
   user,
+  visibility,
 }: {
-  readonly filters?: Partial<ProductNotificationsControls["filters"]>;
+  readonly filters?: ProductNotificationsControls["filters"];
   readonly user: User;
+  readonly visibility: ActionVisibility;
 }) => {
-  const clause = filtersClause(filters ?? {});
-  if (clause.length !== 0) {
-    return {
-      AND: [...clause, { userId: user.id }],
-    };
+  const clause = filters ? filtersClause(filters) : [];
+  if (visibilityIsAdmin(visibility)) {
+    return { AND: clause };
   }
-  return {
-    userId: user.id,
-  };
+  if (clause.length !== 0) {
+    return { AND: [...clause, { userId: user.id }] };
+  }
+  return { userId: user.id };
 };
 
 export const fetchProductNotificationsCount = cache(
   async <C extends FetchActionContext>(
-    { filters }: { filters: Partial<ProductNotificationsControls["filters"]> },
+    {
+      filters,
+      visibility,
+    }: {
+      readonly filters: ProductNotificationsControls["filters"];
+      readonly visibility: ActionVisibility;
+    },
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>> => {
-    const { user, error } = await getAuthedUser();
+    const { user, error, isAdmin } = await getAuthedUser();
     if (error) {
+      return errorInFetchContext(error, context);
+    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
       return errorInFetchContext(error, context);
     }
     const count = await db.productNotification.count({
-      where: whereClause({ filters, user }),
+      where: whereClause({ filters, user, visibility }),
     });
     return dataInFetchContext({ count }, context);
   },
 ) as {
   <C extends FetchActionContext>(
-    params: { filters: Partial<ProductNotificationsControls["filters"]> },
+    params: {
+      readonly filters: ProductNotificationsControls["filters"];
+      readonly visibility: ActionVisibility;
+    },
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>>;
 };
@@ -85,29 +105,45 @@ export const fetchProductNotificationsPagination = cache(
   async <C extends FetchActionContext>(
     {
       filters,
-      page: _page,
-    }: Pick<ProductNotificationsControls, "page"> & {
-      readonly filters?: Partial<ProductNotificationsControls["filters"]>;
-    },
+      visibility,
+      page,
+    }: Required<
+      Pick<ProductNotificationsControls, "page" | "filters" | "visibility">,
+      "page" | "visibility"
+    >,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
-    const { user, error } = await getAuthedUser();
+    const { user, isAdmin, error } = await getAuthedUser({ strict: true });
     if (error) {
+      return errorInFetchContext(error, context);
+    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
+      return errorInFetchContext(error, context);
+    } else if (
+      !visibilityIsAdmin(visibility) &&
+      filtersHaveField("users", filters, ProductNotificationsFiltersOptions)
+    ) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
       return errorInFetchContext(error, context);
     }
     const count = await db.productNotification.count({
-      where: whereClause({ filters, user }),
+      where: whereClause({ filters, user, visibility }),
     });
     return dataInFetchContext(
-      clampPagination({ count, page: _page, pageSize: PAGE_SIZES.notification }),
+      clampPagination({ count, page, pageSize: PAGE_SIZES.notification }),
       context,
     );
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Pick<ProductNotificationsControls, "page"> & {
-      readonly filters?: Partial<ProductNotificationsControls["filters"]>;
-    },
+    params: Required<
+      Pick<ProductNotificationsControls, "page" | "filters" | "visibility">,
+      "page" | "visibility"
+    >,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
@@ -116,32 +152,53 @@ export const fetchProductNotifications = cache(
   async <C extends FetchActionContext, I extends ProductNotificationIncludes>(
     {
       filters,
-      ordering,
-      page: _page,
+      page,
       limit,
+      ordering,
       includes,
-    }: Omit<Optional<ProductNotificationsControls<I>, "page" | "limit">, "filters"> & {
-      readonly filters?: Partial<ProductNotificationsControls["filters"]>;
-    },
+      visibility = "public",
+    }: ProductNotificationsControls<I>,
     context: C,
   ): Promise<FetchActionResponse<ApiProductNotification<I>[], C>> => {
-    const { user, error } = await getAuthedUser({ strict: true });
+    const { user, isAdmin, error } = await getAuthedUser({ strict: true });
     if (error) {
+      return errorInFetchContext(error, context);
+    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
+      return errorInFetchContext(error, context);
+    } else if (
+      !visibilityIsAdmin(visibility) &&
+      (fieldIsIncluded("user", includes) ||
+        filtersHaveField("users", filters, ProductNotificationsFiltersOptions))
+    ) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
       return errorInFetchContext(error, context);
     }
 
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 
-    let pagination: Omit<ServerSidePaginationParams, "count"> | null = null;
-    if (_page !== undefined) {
+    let pagination: Pick<ServerSidePaginationParams, "page" | "pageSize"> | null = null;
+    if (page) {
+      /* Note: The reason that this is strict is because the checks that would otherwise throw an
+         error have already been performed in this method above, so we can be confident that they
+         will not throw (or at least, should not throw) in the 'fetchProductSubscriptionsPagination'
+         method. */
       ({ data: pagination } = await fetchProductNotificationsPagination(
-        { filters, page: _page },
+        { filters, page, visibility },
         { strict: true },
       ));
     }
 
-    const notifications = await enhanced.productNotification.findMany({
-      where: whereClause({ filters, user }),
+    const data = await enhanced.productNotification.findMany({
+      where: whereClause({ filters, user, visibility }),
+      include: {
+        user: isAdmin && fieldIsIncluded("user", includes),
+        product: fieldIsIncluded("product", includes),
+      },
       orderBy: [
         ...ProductNotificationsOrderingMap[ordering.orderBy](ordering.order),
         { stateAsOf: "desc" },
@@ -156,34 +213,12 @@ export const fetchProductNotifications = cache(
           : undefined,
     });
 
-    let products: { [key in string]: Product } | null = null;
-    if (fieldIsIncluded("product", includes)) {
-      /* The status change subscription is unique on the user and product, so this should only ever
-         yield at most 1 result per product. */
-      const productRecords = await enhanced.productRecord.findMany({
-        where: { id: { in: notifications.map(notification => notification.productRecordId) } },
-        include: { product: true },
-      });
-      products = productRecords.reduce(
-        (prev: { [key in string]: Product }, record) => ({ ...prev, [record.id]: record.product }),
-        {} as { [key in string]: Product },
-      );
-    }
-
-    if (products) {
-      const data = notifications.map((notification): ApiProductNotification<I> => {
-        const n = notification as ApiProductNotification<I>;
-        return { ...n, product: products[n.productRecordId] };
-      });
-      return dataInFetchContext(data, context);
-    }
-    return dataInFetchContext(notifications as ApiProductNotification<I>[], context);
+    const notifications = data as ApiProductNotification<[]>[] as ApiProductNotification<I>[];
+    return dataInFetchContext(notifications, context);
   },
 ) as {
   <C extends FetchActionContext, I extends ProductNotificationIncludes>(
-    params: Omit<Optional<ProductNotificationsControls<I>, "page" | "limit">, "filters"> & {
-      readonly filters?: Partial<ProductNotificationsControls["filters"]>;
-    },
+    params: ProductNotificationsControls<I>,
     context: C,
   ): Promise<FetchActionResponse<ApiProductNotification<I>[], C>>;
 };

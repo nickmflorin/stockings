@@ -6,39 +6,39 @@ import { ProductNotificationsDefaultOrdering } from "~/actions";
 import { DataTableWrapper } from "~/components/tables/data-tables/DataTableWrapper";
 import { TableView } from "~/components/tables/TableView";
 import {
-  ProductNotificationsTableColumns,
-  type ProductNotificationsTableOrderableColumnId,
-  type ProductNotificationsTableColumnId,
+  ProductNotificationsAdminTableColumns,
+  type ProductNotificationsAdminTableOrderableColumnId,
+  type ProductNotificationsAdminTableColumnId,
 } from "~/features/notifications/types";
 import { useOrdering } from "~/hooks/use-ordering";
 
-export interface NotificationsTableViewProps {
+export interface NotificationsAdminTableViewProps {
   readonly children: ReactNode;
   readonly filterBar?: JSX.Element;
   readonly pagination?: JSX.Element;
-  readonly excludeColumns?: ProductNotificationsTableColumnId[];
+  readonly excludeColumns?: ProductNotificationsAdminTableColumnId[];
 }
 
-export const NotificationsTableView = ({
+export const NotificationsAdminTableView = ({
   children,
   filterBar,
   pagination,
   excludeColumns,
-}: NotificationsTableViewProps) => {
-  const [ordering, setOrdering] = useOrdering<ProductNotificationsTableOrderableColumnId>({
+}: NotificationsAdminTableViewProps) => {
+  const [ordering, setOrdering] = useOrdering<ProductNotificationsAdminTableOrderableColumnId>({
     useQueryParams: true,
-    fields: ProductNotificationsTableColumns.orderableColumns.map(c => c.id),
+    fields: ProductNotificationsAdminTableColumns.orderableColumns.map(c => c.id),
     defaultOrdering: ProductNotificationsDefaultOrdering,
   });
   return (
     <TableView header={filterBar} footer={pagination}>
       <DataTableWrapper
-        columns={ProductNotificationsTableColumns.columns}
+        columns={ProductNotificationsAdminTableColumns.columns}
         excludeColumns={excludeColumns}
         ordering={ordering}
         onSort={(e, col) => {
           const id = col.id;
-          if (ProductNotificationsTableColumns.isOrderableColumnId(id)) {
+          if (ProductNotificationsAdminTableColumns.isOrderableColumnId(id)) {
             setOrdering({ field: id });
           }
         }}
@@ -49,4 +49,4 @@ export const NotificationsTableView = ({
   );
 };
 
-export default NotificationsTableView;
+export default NotificationsAdminTableView;

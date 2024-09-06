@@ -5,30 +5,47 @@ import type { TailwindBgColorClassName, TailwindTextColorClassName } from "~/com
 import { type BrandPriceChangeNotification, type BrandStatusChangeNotification } from "./brand";
 import { type ConditionallyInclude } from "./inclusion";
 import { NotificationState, ProductNotificationType, NotificationMedium } from "./models";
-import { type Product } from "./models";
+import { type Product, type User } from "./models";
 
-export const ProductNotificationIncludesFields = enumeratedLiterals(["product"] as const, {});
+export const ProductNotificationIncludesFields = enumeratedLiterals(
+  ["product", "user"] as const,
+  {},
+);
 export type ProductNotificationIncludesField = EnumeratedLiteralsMember<
   typeof ProductNotificationIncludesFields
 >;
 
-export type ProductNotificationIncludes = ["product"] | [];
+export type ProductNotificationIncludes =
+  | ["product", "user"]
+  | ["user", "product"]
+  | ["user"]
+  | ["product"]
+  | [];
+
+export type ApiPriceChangeNotification<I extends ProductNotificationIncludes = []> =
+  ConditionallyInclude<
+    BrandPriceChangeNotification & {
+      readonly product: Product;
+      readonly user: User;
+    },
+    ["product", "user"],
+    I
+  >;
+
+export type ApiStatusChangeNotification<I extends ProductNotificationIncludes = []> =
+  ConditionallyInclude<
+    BrandStatusChangeNotification & {
+      readonly product: Product;
+      readonly user: User;
+    },
+    ["product", "user"],
+    I
+  >;
 
 export type ApiProductNotification<I extends ProductNotificationIncludes = []> =
-  | ConditionallyInclude<
-      BrandPriceChangeNotification & {
-        readonly product: Product;
-      },
-      ["product"],
-      I
-    >
-  | ConditionallyInclude<
-      BrandStatusChangeNotification & {
-        readonly product: Product;
-      },
-      ["product"],
-      I
-    >;
+  I extends ProductNotificationIncludes
+    ? ApiStatusChangeNotification<I> | ApiPriceChangeNotification<I>
+    : never;
 
 export const NotificationMediums = enumeratedLiterals(
   [

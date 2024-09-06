@@ -49,11 +49,11 @@ const filtersClause = (filters: SubscriptionsControls["filters"]) =>
 const whereClause = ({
   filters,
   user,
-  visibility = "public",
+  visibility,
 }: {
-  readonly filters?: Partial<SubscriptionsControls["filters"]>;
+  readonly filters?: SubscriptionsControls["filters"];
   readonly user: User;
-  readonly visibility?: ActionVisibility;
+  readonly visibility: ActionVisibility;
 }) => {
   const clause = filters ? filtersClause(filters) : [];
   if (visibilityIsAdmin(visibility)) {
@@ -67,11 +67,16 @@ const whereClause = ({
 
 export const fetchProductSubscriptionsCount = cache(
   async <C extends FetchActionContext>(
-    { visibility = "public" }: Pick<SubscriptionsControls, "visibility">,
+    { visibility }: Required<Pick<SubscriptionsControls, "visibility">, "visibility">,
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>> => {
-    const { user, error } = await getAuthedUser();
+    const { user, isAdmin, error } = await getAuthedUser();
     if (error) {
+      return errorInFetchContext(error, context);
+    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
       return errorInFetchContext(error, context);
     }
     const count = await db.productSubscription.count({
@@ -81,7 +86,7 @@ export const fetchProductSubscriptionsCount = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Pick<SubscriptionsControls, "visibility">,
+    params: Required<Pick<SubscriptionsControls, "visibility">, "visibility">,
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>>;
 };
@@ -91,8 +96,11 @@ export const fetchProductSubscriptionsPagination = cache(
     {
       filters,
       page: _page,
-      visibility = "public",
-    }: Required<Pick<SubscriptionsControls, "page" | "filters" | "visibility">, "page">,
+      visibility,
+    }: Required<
+      Pick<SubscriptionsControls, "page" | "filters" | "visibility">,
+      "page" | "visibility"
+    >,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
     const { user, isAdmin, error } = await getAuthedUser();
@@ -114,7 +122,10 @@ export const fetchProductSubscriptionsPagination = cache(
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Required<Pick<SubscriptionsControls, "page" | "filters" | "visibility">, "page">,
+    params: Required<
+      Pick<SubscriptionsControls, "page" | "filters" | "visibility">,
+      "page" | "visibility"
+    >,
     context: C,
   ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
 };
@@ -147,8 +158,12 @@ const _fetchProductSubscriptions = async <
 
   let pagination: Pick<ServerSidePaginationParams, "page" | "pageSize"> | null = null;
   if (page) {
+    /* Note: The reason that this is strict is because the checks that would otherwise throw an
+       error have already been performed in this method above, so we can be confident that they
+       will not throw (or at least, should not throw) in the 'fetchProductSubscriptionsPagination'
+       method. */
     ({ data: pagination } = await fetchProductSubscriptionsPagination(
-      { filters, page },
+      { filters, page, visibility },
       { strict: true },
     ));
   }
