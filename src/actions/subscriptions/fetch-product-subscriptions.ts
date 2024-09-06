@@ -28,6 +28,7 @@ import {
   visibilityIsAdmin,
   type ActionVisibility,
   visibilityIsPublic,
+  SubscriptionsOrderingMap,
 } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
@@ -171,11 +172,11 @@ const _fetchProductSubscriptions = async <
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
   const data = await enhanced.productSubscription.findMany({
     where: whereClause({ filters, user, visibility }),
-    orderBy: ordering
-      ? ordering.orderBy === "product"
-        ? [{ product: { name: ordering.order } }, { id: "asc" }]
-        : [{ [ordering.orderBy]: ordering.order }, { id: "asc" }]
-      : undefined,
+    orderBy: [
+      ...SubscriptionsOrderingMap[ordering.orderBy](ordering.order),
+      { createdAt: "desc" },
+      { id: "asc" },
+    ],
     skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
     take: pagination ? pagination.pageSize : undefined,
     include: {

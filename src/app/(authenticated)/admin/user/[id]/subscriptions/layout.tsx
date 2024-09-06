@@ -15,9 +15,8 @@ interface UserSubscriptionsLayoutProps {
 export default function UserSubscriptionsLayout({ children }: UserSubscriptionsLayoutProps) {
   return (
     <SubscriptionsAdminTableView
-      className="overflow-y-hidden"
       controlBarTargetId="user-subscriptions-control-bar"
-      excludeColumns={["product"]}
+      excludeColumns={["user"]}
     >
       {children}
     </SubscriptionsAdminTableView>

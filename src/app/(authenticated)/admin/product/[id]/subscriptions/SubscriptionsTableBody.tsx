@@ -28,7 +28,7 @@ export const SubscriptionsTableBody = async ({
     {
       ordering,
       filters: { products: [product.id] },
-      includes: ["conditions", "product"],
+      includes: ["conditions", "product", "notificationsCount"],
       visibility: "admin",
     },
     { strict: true },

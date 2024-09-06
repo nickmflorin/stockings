@@ -1,3 +1,5 @@
+import type { ApiProductSubscription } from "~/database/model";
+
 import {
   SubscriptionsAdminTableBody,
   type SubscriptionsAdminTableBodyProps,
@@ -5,7 +7,9 @@ import {
 
 export interface UserSubscriptionsTableBodyProps
   extends Omit<
-    SubscriptionsAdminTableBodyProps,
+    SubscriptionsAdminTableBodyProps<
+      ApiProductSubscription<["conditions", "product", "notificationsCount"]>
+    >,
     | "emptyContent"
     | "isEmpty"
     | "controlBarTargetId"
@@ -17,6 +21,7 @@ export const UserSubscriptionsTableBody = (props: UserSubscriptionsTableBodyProp
   <SubscriptionsAdminTableBody
     {...props}
     isEmpty={props.data.length === 0}
+    excludeColumns={["user"]}
     emptyContent="The user currently is not subscribed to any products."
     controlBarTargetId="user-subscriptions-control-bar"
     controlBarTooltipsInPortal

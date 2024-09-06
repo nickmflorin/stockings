@@ -4,13 +4,20 @@ import type { ProductSubscriptionIncludes, ProductSubscriptionType } from "~/dat
 import { ProductSubscriptionTypes } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
-import { type Ordering } from "~/lib/ordering";
+import { type Ordering, type Order } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
 import { type ActionVisibility } from "./actions";
 
-export const SubscriptionOrderableFields = ["createdAt", "updatedAt", "product"] as const;
+export const SubscriptionOrderableFields = ["createdAt", "updatedAt", "product", "user"] as const;
 export type SubscriptionOrderableField = (typeof SubscriptionOrderableFields)[number];
+
+export const SubscriptionsOrderingMap = {
+  createdAt: order => [{ createdAt: order }] as const,
+  updatedAt: order => [{ updatedAt: order }] as const,
+  product: order => [{ product: { name: order } }] as const,
+  user: order => [{ user: { lastName: order } }, { user: { firstName: order } }] as const,
+} as const satisfies { [key in SubscriptionOrderableField]: (order: Order) => unknown[] };
 
 export interface SubscriptionsFilters {
   readonly types: ProductSubscriptionType[];
@@ -31,7 +38,7 @@ export interface SubscriptionsControls<I extends ProductSubscriptionIncludes = [
   readonly visibility?: ActionVisibility;
 }
 
-export const SubscriptionsDefaultOrdering: Ordering<SubscriptionOrderableField> = {
+export const SubscriptionsDefaultOrdering: Ordering<"createdAt"> = {
   orderBy: "createdAt",
   order: "desc",
 };

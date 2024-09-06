@@ -1,3 +1,5 @@
+import { type ApiProductSubscription } from "~/database/model";
+
 import type { TableColumnId, OrderableTableColumnId } from "~/components/tables";
 import { ColumnsConfiguration } from "~/components/tables";
 
@@ -6,6 +8,12 @@ export const SubscriptionsTableColumnConfigurations = ColumnsConfiguration([
     id: "product",
     label: "Product",
     maxWidth: 240,
+    isOrderable: true,
+    align: "left",
+  },
+  {
+    id: "user",
+    label: "User",
     isOrderable: true,
     align: "left",
   },
@@ -68,9 +76,11 @@ export type SubscriptionsTableOrderableColumnId = OrderableTableColumnId<
 
 export const SubscriptionsAdminTableColumns = SubscriptionsTableColumnConfigurations.select([
   "product",
+  "user",
   "type",
   "conditions",
   "enabled",
+  "notifications",
   "createdAt",
   "updatedAt",
 ]);
@@ -80,3 +90,18 @@ export type SubscriptionsAdminTableColumnId = TableColumnId<typeof Subscriptions
 export type SubscriptionsAdminTableOrderableColumnId = OrderableTableColumnId<
   typeof SubscriptionsAdminTableColumns
 >;
+
+export type SubscriptionsTableModel =
+  | ApiProductSubscription<["conditions", "user", "notificationsCount"]>
+  | ApiProductSubscription<["product", "conditions", "notificationsCount"]>;
+
+export const subscriptionsTableModelHasProduct = (
+  m: SubscriptionsTableModel,
+): m is ApiProductSubscription<["product", "conditions", "notificationsCount"]> =>
+  (m as ApiProductSubscription<["product", "conditions", "notificationsCount"]>).product !==
+  undefined;
+
+export const subscriptionsTableModelHasUser = (
+  m: SubscriptionsTableModel,
+): m is ApiProductSubscription<["user", "conditions", "notificationsCount"]> =>
+  (m as ApiProductSubscription<["user", "conditions", "notificationsCount"]>).user !== undefined;

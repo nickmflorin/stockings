@@ -39,14 +39,13 @@ export const SubscriptionsAdminTableView = ({
     <TableView
       {...props}
       header={filterBar}
-      footer={pagination}
       controlBarTargetId={controlBarTargetId}
       className={classNames("@container/subscriptions-table-view", props.className)}
     >
       <DataTableWrapper
         ordering={ordering}
-        rowsAreSelectable
-        rowsHaveActions={false}
+        rowsAreSelectable={true}
+        rowsHaveActions={true}
         excludeColumns={excludeColumns}
         columns={SubscriptionsAdminTableColumns.columns}
         onSort={(e, col) => {
