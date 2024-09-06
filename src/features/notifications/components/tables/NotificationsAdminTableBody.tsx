@@ -1,4 +1,3 @@
-"use client";
 import { type ApiProductNotification } from "~/database/model";
 
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
@@ -15,14 +14,20 @@ import { UserTile } from "~/features/users/components/UserTile";
 import { NotificationsTableColumnProperties } from "./NotificationsTableColumnProperties";
 
 export interface NotificationsAdminTableBodyProps<
-  M extends ApiProductNotification<["product", "user"]> | ApiProductNotification<["user"]>,
+  M extends
+    | ApiProductNotification<["product"]>
+    | ApiProductNotification<["product", "user"]>
+    | ApiProductNotification<["user"]>,
 > extends Omit<
     DataTableBodyProps<M, ProductNotificationsAdminTableColumnId>,
     "rowIsSelected" | "onRowSelected" | "getRowActions" | "columns"
   > {}
 
 export const NotificationsAdminTableBody = <
-  M extends ApiProductNotification<["product", "user"]> | ApiProductNotification<["user"]>,
+  M extends
+    | ApiProductNotification<["product"]>
+    | ApiProductNotification<["product", "user"]>
+    | ApiProductNotification<["user"]>,
 >(
   props: NotificationsAdminTableBodyProps<M>,
 ): JSX.Element => (
@@ -38,7 +43,28 @@ export const NotificationsAdminTableBody = <
       {
         ...NotificationsTableColumnProperties("admin"),
         user: {
-          cellRenderer: datum => <UserTile user={datum.user} />,
+          cellRenderer: datum => {
+            if (
+              (
+                datum as
+                  | ApiProductNotification<["product", "user"]>
+                  | ApiProductNotification<["user"]>
+              ).user !== undefined
+            ) {
+              return (
+                <UserTile
+                  user={
+                    (
+                      datum as
+                        | ApiProductNotification<["product", "user"]>
+                        | ApiProductNotification<["user"]>
+                    ).user
+                  }
+                />
+              );
+            }
+            return <></>;
+          },
         },
       },
     )}

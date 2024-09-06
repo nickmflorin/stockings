@@ -49,6 +49,12 @@ export default async function AdminUserLayout({ children, params }: AdminUserLay
             activePaths: { leadingPath: "/admin/user/:id/subscriptions" },
             icon: "mailbox",
           },
+          {
+            label: "Notifications",
+            path: `/admin/user/${user.id}/notifications`,
+            activePaths: { leadingPath: "/admin/user/:id/notifications" },
+            icon: "envelope",
+          },
         ]}
       />
       <div className="grow min-h-0 max-h-full h-full flex flex-col">{children}</div>

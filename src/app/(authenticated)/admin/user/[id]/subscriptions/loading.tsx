@@ -1,15 +1,5 @@
-import dynamic from "next/dynamic";
+import { Loading as LoadingComponent } from "~/components/loading/Loading";
 
-import { Loading } from "~/components/loading/Loading";
+const Loading = () => <LoadingComponent isLoading={true} component="tbody" />;
 
-const UserSubscriptionsTableBody = dynamic(
-  () =>
-    import("~/features/users/components/tables/UserSubscriptionsTableBody").then(
-      mod => mod.UserSubscriptionsTableBody,
-    ),
-  { loading: () => <Loading isLoading component="tbody" /> },
-);
-
-export default function SubscriptionsLoading() {
-  return <UserSubscriptionsTableBody data={[]} isLoading />;
-}
+export default Loading;
