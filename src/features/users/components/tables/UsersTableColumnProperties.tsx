@@ -4,11 +4,17 @@ import { type DataTableColumnProperties } from "~/components/tables";
 import { Text } from "~/components/typography";
 import { DateTimeText } from "~/components/typography/DateTimeText";
 import { type UsersTableColumnId } from "~/features/users";
+import { UserTile } from "~/features/users/components/UserTile";
 
 export const UsersTableColumnProperties: DataTableColumnProperties<
   ApiUser<["notificationsCount", "subscriptionsCount"]>,
   UsersTableColumnId
 > = {
+  name: {
+    cellRenderer(datum) {
+      return <UserTile user={datum} />;
+    },
+  },
   createdAt: {
     cellRenderer(datum) {
       return (

@@ -13,7 +13,7 @@ import {
 } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
-import { type Ordering } from "~/lib/ordering";
+import { type Order, type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
 export const ProductNotificationOrderableFields = ["product", "state"] as const;
@@ -23,6 +23,11 @@ export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOr
   orderBy: "state",
   order: "desc",
 };
+
+export const ProductNotificationsOrderingMap = {
+  state: order => [{ stateAsOf: order }] as const,
+  product: order => [{ product: { name: order } }] as const,
+} as const satisfies { [key in ProductNotificationOrderableField]: (order: Order) => unknown[] };
 
 export interface ProductNotificationsFilters {
   readonly states: NotificationState[];

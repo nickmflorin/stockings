@@ -1,6 +1,8 @@
 import { type User as ClerkUser } from "@clerk/clerk-sdk-node";
 import clerk from "@clerk/clerk-sdk-node";
+import { type OrganizationMembership } from "@clerk/nextjs/server";
 
+import * as constants from "~/application/auth/constants";
 import { type PrismaClient, type Product, type User } from "~/database/model";
 import { upsertUserFromClerk } from "~/database/model/auth";
 import { db, type Transaction } from "~/database/prisma";
@@ -18,6 +20,9 @@ export type ScriptContext = {
 type ScriptContextOptions = {
   readonly upsertUser?: boolean;
 };
+
+const membershipHasAdminAccess = (membership: OrganizationMembership) =>
+  membership.organization.slug === constants.SITE_ADMIN_ORG_SLUG;
 
 export async function getScriptContext(
   tx: Transaction,
@@ -104,10 +109,13 @@ export async function getScriptContext(
       "Cannot seed database without the 'SCRIPT_CONTEXT_CLERK_USER_ID' as an environment variable.",
     );
   }
-  /* TODO: We have to validate that the clerk user is in fact an admin that is allowed to make these
-     changes once we establish the notion of an admin. */
   const clerkUser = await clerk.users.getUser(personalClerkId);
-
+  const memberships = await clerk.users.getOrganizationMembershipList({
+    userId: clerkUser.id,
+  });
+  if (memberships.filter(m => membershipHasAdminAccess(m)).length === 0) {
+    throw new Error("The Clerk user must be an admin to run this script.");
+  }
   if (upsertUser) {
     return {
       clerkUser,

@@ -23,8 +23,7 @@ export default async function AdminUserLayout({ children, params }: AdminUserLay
     const { error, data } = await fetchUser(params.id, { includes: [] }, { strict: false });
     if (error) {
       if (error.code === ApiClientGlobalErrorCodes.NOT_FOUND) {
-        console.error("BLAH");
-        // return redirect("/404");
+        return redirect("/404");
       }
       logger.error(error, "There was an error fetching the user in the admin.");
       return (

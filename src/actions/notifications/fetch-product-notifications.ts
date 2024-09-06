@@ -13,8 +13,7 @@ import { enhance, fieldIsIncluded } from "~/database/model";
 import { db } from "~/database/prisma";
 import { conditionalFilters, constructOrSearch } from "~/database/util";
 
-import type { Order } from "~/lib/ordering";
-
+import { ProductNotificationsOrderingMap } from "~/actions";
 import {
   PAGE_SIZES,
   type FetchActionContext,
@@ -24,7 +23,6 @@ import {
   dataInFetchContext,
   clampPagination,
   type ProductNotificationsControls,
-  type ProductNotificationOrderableField,
 } from "~/actions";
 
 const filtersClause = (filters: Partial<ProductNotificationsControls["filters"]>) =>
@@ -142,15 +140,10 @@ export const fetchProductNotifications = cache(
       ));
     }
 
-    const orderingMap = {
-      state: order => ({ stateAsOf: order }) as const,
-      product: order => ({ product: { name: order } }) as const,
-    } as const satisfies { [key in ProductNotificationOrderableField]: (order: Order) => unknown };
-
     const notifications = await enhanced.productNotification.findMany({
       where: whereClause({ filters, user }),
       orderBy: [
-        orderingMap[ordering.orderBy](ordering.order),
+        ...ProductNotificationsOrderingMap[ordering.orderBy](ordering.order),
         { stateAsOf: "desc" },
         { createdAt: "desc" },
         { id: "desc" },

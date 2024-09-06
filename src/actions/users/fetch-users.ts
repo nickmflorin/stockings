@@ -19,6 +19,7 @@ import {
   clampPagination,
   type UsersControls,
   type UsersFilters,
+  UsersOrderingMap,
 } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
@@ -112,7 +113,11 @@ export const fetchUsers = cache(
 
     const users = await enhanced.user.findMany({
       where: whereClause({ filters }),
-      orderBy: [{ [ordering.orderBy]: ordering.order }],
+      orderBy: [
+        ...UsersOrderingMap[ordering.orderBy](ordering.order),
+        { createdAt: "desc" },
+        { id: "desc" },
+      ],
       skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
       take: pagination ? pagination.pageSize : undefined,
     });

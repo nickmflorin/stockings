@@ -92,6 +92,20 @@ export const getTransformedClerkData = (u: ClerkUser): ClerkTransformedFields =>
   };
 };
 
+export const createUserFromClerk = async (tx: Transaction, u: ClerkUser): Promise<User> =>
+  await tx.user.create({
+    data: {
+      ...getTransformedClerkData(u),
+      clerkId: u.id,
+    },
+  });
+
+export const updateUserFromClerk = async (tx: Transaction, u: ClerkUser): Promise<User> =>
+  await tx.user.update({
+    where: { clerkId: u.id },
+    data: getTransformedClerkData(u),
+  });
+
 export const upsertUserFromClerk = async (tx: Transaction, u: ClerkUser): Promise<User> =>
   await tx.user.upsert({
     where: { clerkId: u.id },

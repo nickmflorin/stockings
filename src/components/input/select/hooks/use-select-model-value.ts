@@ -44,72 +44,83 @@ const getInitialModelValue = <
     | types.InferredDataSelectV<M, O>[]
     | undefined;
 
-  if (value === undefined) {
-    // Distribute/flatten the conditional type to a union of its potential values.
-    const initial = initialValue as
-      | types.InferredDataSelectV<M, O>
-      | null
-      | types.InferredDataSelectV<M, O>[]
-      | undefined;
-    if (initial === undefined) {
-      if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
-        return null as types.DataSelectModelValue<M, O>;
-      } else if (options.behavior === types.SelectBehaviorTypes.MULTI) {
-        return [] as M[] as types.DataSelectModelValue<M, O>;
-      }
-      /* Note: This error will also likely be thrown in the 'use-select-value' hook that this
-         hook wraps. */
-      throw new Error(
-        "For a single, non-nullable select with, the 'initialValue' prop must be defined!",
-      );
-    } else if (Array.isArray(initial)) {
-      return initial.reduce((prev, v) => {
-        const m = getModel(v);
-        if (m !== null) {
-          return [...prev, m];
-        }
-        throw new Error("");
-        /* This occurs if there is no model associated with the value and the 'strictValueLookup'
-           option is 'false' - we have to take some form of recourse. */
-        // return prev;
-      }, [] as M[]) as types.DataSelectModelValue<M, O>;
-    } else if (initial !== null) {
-      const m = getModel(initial);
-      if (m === null) {
-        /* This occurs if there is no model associated with the value and the 'strictValueLookup'
-           option is 'false' - we have to take some form of recourse. */
-        if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
-          return null as types.DataSelectModelValue<M, O>;
-        }
-        throw new Error("");
-        // return types.NOTSET;
-      }
+  /* if (value === undefined) {
+     Distribute/flatten the conditional type to a union of its potential values. */
+  const initial = initialValue as
+    | types.InferredDataSelectV<M, O>
+    | null
+    | types.InferredDataSelectV<M, O>[]
+    | undefined;
+  if (initial === undefined) {
+    if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
+      return null as types.DataSelectModelValue<M, O>;
+    } else if (options.behavior === types.SelectBehaviorTypes.MULTI) {
+      return [] as M[] as types.DataSelectModelValue<M, O>;
     }
-    return null as types.DataSelectModelValue<M, O>;
-  } else if (Array.isArray(value)) {
-    return value.reduce((prev, v) => {
+    /* Note: This error will also likely be thrown in the 'use-select-value' hook that this
+         hook wraps. */
+    throw new Error(
+      "For a single, non-nullable select with, the 'initialValue' prop must be defined!",
+    );
+  } else if (Array.isArray(initial)) {
+    return initial.reduce((prev, v) => {
       const m = getModel(v);
       if (m !== null) {
         return [...prev, m];
       }
-      throw new Error("");
-      /* This occurs if there is no model associated with the value and the 'strictValueLookup'
-         option is 'false' - we have to take some form of recourse. */
-      // return prev;
+      /* This can occur if there is no model associated with the value in the Select's data -
+         which can happen if the 'isReady' flag is not initially set to 'false' for asynchronously
+         loaded data. */
+      logger.error(
+        `Could not find a model associated with select's initial value '${v}' in the data. ` +
+          "This may lead to buggy behavior.",
+      );
+      return prev;
     }, [] as M[]) as types.DataSelectModelValue<M, O>;
-  } else if (value !== null) {
-    const m = getModel(value);
+  } else if (initial !== null) {
+    const m = getModel(initial);
     if (m === null) {
-      /* This occurs if there is no model associated with the value and the 'strictValueLookup'
-         option is 'false' - we have to take some form of recourse. */
+      /* This can occur if there is no model associated with the value in the Select's data -
+         which can happen if the 'isReady' flag is not initially set to 'false' for asynchronously
+         loaded data. */
       if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
+        logger.error(
+          `Could not find a model associated with select's initial value '${initial}' ` +
+            "in the data. This may lead to buggy behavior.",
+        );
         return null as types.DataSelectModelValue<M, O>;
       }
-      // return types.NOTSET;
+      /* TODO: What to do about this case?  Where the select is non-nullable, but the initial value
+         is not associated with any model in the data? */
       throw new Error("");
+      // return types.NOTSET;
     }
   }
   return null as types.DataSelectModelValue<M, O>;
+  // } else if (Array.isArray(value)) {
+  //   return value.reduce((prev, v) => {
+  //     const m = getModel(v);
+  //     if (m !== null) {
+  //       return [...prev, m];
+  //     }
+  //     throw new Error("");
+  //     /* This occurs if there is no model associated with the value and the 'strictValueLookup'
+  //        option is 'false' - we have to take some form of recourse. */
+  //     // return prev;
+  //   }, [] as M[]) as types.DataSelectModelValue<M, O>;
+  // } else if (value !== null) {
+  //   const m = getModel(value);
+  //   if (m === null) {
+  //     /* This occurs if there is no model associated with the value and the 'strictValueLookup'
+  //        option is 'false' - we have to take some form of recourse. */
+  //     if (options.behavior === types.SelectBehaviorTypes.SINGLE_NULLABLE) {
+  //       return null as types.DataSelectModelValue<M, O>;
+  //     }
+  //     // return types.NOTSET;
+  //     throw new Error("");
+  //   }
+  // }
+  // return null as types.DataSelectModelValue<M, O>;
 };
 
 const getModel = <M extends types.DataSelectModel, O extends types.DataSelectOptions<M>>(
@@ -500,6 +511,7 @@ export const useSelectModelValue = <
   /* Keep track of whether or not the Select's model value has been initially set yet, based on
      the readiness of the Select's potentially asynchronously loaded data. */
   const wasInitialized = useRef(isReady);
+  const setQueueValue = useRef<types.DataSelectValue<M, O> | types.NotSet>(types.NOTSET);
 
   const getItemValue = useCallback(
     (m: M) => {
@@ -526,18 +538,10 @@ export const useSelectModelValue = <
     [data, strictValueLookup, options, params, getItemValue],
   );
 
-  const initializeModelValue = useCallback(() => {
-    if (!wasInitialized.current) {
-      const initial = getInitializedModelValue();
-      wasInitialized.current = true;
-      setModelValue(initial);
-    }
-  }, [getInitializedModelValue]);
-
   /* Manage the Select's model value in state in parallel to the Select's value.  See docstring
      on hook for more information. */
   const [modelValue, setModelValue] = useState<types.DataSelectModelValue<M, O> | types.NotSet>(
-    () => getInitializedModelValue(),
+    () => (isReady ? getInitializedModelValue() : types.NOTSET),
   );
 
   const {
@@ -582,6 +586,12 @@ export const useSelectModelValue = <
 
   const set = useCallback(
     (v: types.DataSelectValue<M, O>) => {
+      /* If the Select is not in a "ready" state, it means that the model in the data associated
+         with the provided value 'v' may not be present yet. */
+      if (!isReady) {
+        setQueueValue.current = v;
+        return;
+      }
       /* If the 'modelValue' has not yet been set/initialized, then we need to initialize it before
          we can apply the reducer to the value. */
       const mv: types.DataSelectModelValue<M, O> =
@@ -604,8 +614,28 @@ export const useSelectModelValue = <
         setModelValue(value);
       }
     },
-    [modelValue, data, options, strictValueLookup, _set, getItemValue, getInitializedModelValue],
+    [
+      modelValue,
+      data,
+      isReady,
+      options,
+      strictValueLookup,
+      _set,
+      getItemValue,
+      getInitializedModelValue,
+    ],
   );
+
+  const initializeModelValue = useCallback(() => {
+    if (!wasInitialized.current) {
+      const initial = getInitializedModelValue();
+      wasInitialized.current = true;
+      setModelValue(initial);
+      if (setQueueValue.current !== types.NOTSET) {
+        set(setQueueValue.current);
+      }
+    }
+  }, [getInitializedModelValue, set]);
 
   useEffect(() => {
     /* If the Select's model value has not yet been initialized, do not update it.  The effect

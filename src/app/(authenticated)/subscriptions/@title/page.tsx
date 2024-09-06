@@ -7,7 +7,7 @@ import { Title } from "~/components/typography";
 export default async function ProductsTitlePage() {
   const {
     data: { count },
-  } = await fetchProductSubscriptionsCount({ strict: true });
+  } = await fetchProductSubscriptionsCount({}, { strict: true });
   return (
     <div className="flex flex-row items-center gap-4">
       <Title component="h3">Subscriptions</Title>

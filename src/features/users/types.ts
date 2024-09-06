@@ -3,16 +3,9 @@ import { ColumnsConfiguration } from "~/components/tables";
 
 const UsersTableColumnConfigurations = ColumnsConfiguration([
   {
-    id: "firstName",
-    label: "First Name",
+    id: "name",
+    label: "Name",
     isOrderable: true,
-    accessor: "firstName",
-  },
-  {
-    id: "lastName",
-    label: "Last Name",
-    isOrderable: true,
-    accessor: "lastName",
   },
   {
     id: "subscriptionsCount",
@@ -43,8 +36,7 @@ const UsersTableColumnConfigurations = ColumnsConfiguration([
 ] as const);
 
 export const UsersTableColumns = UsersTableColumnConfigurations.select([
-  "firstName",
-  "lastName",
+  "name",
   "notificationsCount",
   "subscriptionsCount",
   "createdAt",
