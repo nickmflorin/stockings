@@ -1,12 +1,10 @@
-import dynamic from "next/dynamic";
-
 import clsx from "clsx";
 
 import { type LabeledNavItem } from "~/application/pages/types";
 
 import { type ComponentProps } from "~/components/types";
 
-const Tab = dynamic(() => import("./Tab"));
+import { Tab } from "./Tab";
 
 export interface TabsProps extends ComponentProps {
   readonly items: LabeledNavItem[];
@@ -21,7 +19,7 @@ export const Tabs = ({ items, children, ...props }: TabsProps) => (
          overflow.  On the other hand, the bottom padding of 8px is for the scrollbar, in the case
          that the tabs overflow the container in mobile views. */
       "flex flex-row items-center overflow-y-hidden w-full min-w-full max-w-full pb-[2px]",
-      "max-md:overflow-x-auto max-md:pb-[8px]",
+      "max-md:overflow-x-auto max-md:pb-[8px] h-[38px] min-h-[38px]",
       props.className,
     )}
   >

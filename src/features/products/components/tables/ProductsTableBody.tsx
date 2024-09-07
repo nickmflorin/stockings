@@ -1,28 +1,53 @@
 "use client";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 import { type ApiProduct } from "~/database/model";
 
 import { useDrawers } from "~/components/drawers/hooks";
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
-import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
+import {
+  DataTableBody,
+  type DataTableBodyProps,
+} from "~/components/tables/data-tables/DataTableBody";
 import { ProductsTableColumns, type ProductsTableColumnId } from "~/features/products";
 
-import { ProductsTableColumnProperties } from "./ProductsTableColumnProperties";
+import { useProductsTableColumnProperties } from "./hooks/use-column-properties";
 
 const SubscriptionCell = dynamic(() => import("./cells/SubscriptionCell"));
 
-export interface ProductsTableBodyProps {
-  readonly excludeColumns?: ProductsTableColumnId[];
-  readonly data: ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>[];
-}
+export interface ProductsTableBodyProps
+  extends DataTableBodyProps<
+    Omit<
+      ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>,
+      "columns" | "getRowActions" | "actionMenuWidth" | "onRowClick"
+    >,
+    ProductsTableColumnId
+  > {}
 
 export const ProductsTableBody = (props: ProductsTableBodyProps): JSX.Element => {
   const { ids, open } = useDrawers();
+  const columnProperties = useProductsTableColumnProperties();
+  const { push } = useRouter();
 
   return (
     <DataTableBody
       {...props}
+      onRowClick={id => push(`/product/${id}`)}
+      columns={convertConfigsToColumns(
+        [...ProductsTableColumns.columns] as DataTableColumnConfig<
+          ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>,
+          ProductsTableColumnId
+        >[],
+        {
+          ...columnProperties,
+          subscription: {
+            cellRenderer(datum) {
+              return <SubscriptionCell product={datum} />;
+            },
+          },
+        },
+      )}
       actionMenuWidth={200}
       getRowActions={(product, { setIsOpen }) => [
         {
@@ -85,20 +110,6 @@ export const ProductsTableBody = (props: ProductsTableBodyProps): JSX.Element =>
           },
         },
       ]}
-      columns={convertConfigsToColumns(
-        [...ProductsTableColumns.columns] as DataTableColumnConfig<
-          ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>,
-          ProductsTableColumnId
-        >[],
-        {
-          ...ProductsTableColumnProperties("public"),
-          subscription: {
-            cellRenderer(datum) {
-              return <SubscriptionCell product={datum} />;
-            },
-          },
-        },
-      )}
     />
   );
 };

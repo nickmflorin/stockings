@@ -8,8 +8,8 @@ import { type Ordering } from "~/lib/ordering";
 
 import { type FloatingContentRenderProps } from "~/components/floating";
 import { type ActionsCellProps } from "~/components/tables/cells/ActionsCell";
-import { Table } from "~/components/tables/generic/Table";
 import type { TableBodyProps } from "~/components/tables/generic/TableBody";
+import { TableBody } from "~/components/tables/generic/TableBody";
 import type * as types from "~/components/tables/types";
 import { type ClassName, type QuantitativeSize } from "~/components/types";
 
@@ -72,7 +72,7 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
   }, [data, ordering, columns]);
 
   return (
-    <Table.Body
+    <TableBody
       {...props}
       skeletonRowHeight={props.skeletonRowHeight ?? rowHeight}
       cellSkeletons={columns.map(
@@ -98,6 +98,6 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
           />
         );
       })}
-    </Table.Body>
+    </TableBody>
   );
 };

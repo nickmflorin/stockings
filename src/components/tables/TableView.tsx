@@ -42,7 +42,9 @@ const LocalTableView = ({
     </TableViewHeader>
     <div className={classNames("table-view__content", contentClassName)}>
       <Loading isLoading={isLoading}>
-        <TableContainer sx={{ maxHeight: "100%", overflowX: "auto" }}>{children}</TableContainer>
+        <TableContainer sx={{ maxHeight: "100%", overflowX: "auto", height: "100%" }}>
+          {children}
+        </TableContainer>
       </Loading>
     </div>
     <TableViewFooter {...footerProps}>{footer}</TableViewFooter>

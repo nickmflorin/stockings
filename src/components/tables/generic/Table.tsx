@@ -5,13 +5,6 @@ import { type TableSize } from "~/components/tables/types";
 import type { ComponentProps } from "~/components/types";
 import { classNames } from "~/components/types";
 
-import { TableBody } from "./TableBody";
-import { TableBodyCell } from "./TableBodyCell";
-import { TableBodyRow } from "./TableBodyRow";
-import { TableHead } from "./TableHead";
-import { TableHeaderCell } from "./TableHeaderCell";
-import { TableHeaderRow } from "./TableHeaderRow";
-
 export type TableProps = Omit<RootTableProps<"table">, keyof ComponentProps> &
   ComponentProps & {
     readonly size?: TableSize;
@@ -19,7 +12,7 @@ export type TableProps = Omit<RootTableProps<"table">, keyof ComponentProps> &
     readonly highlightRowsOnHover?: boolean;
   };
 
-const LocalTable = ({
+export const Table = ({
   children,
   highlightRowsOnHover = true,
   bordered = true,
@@ -41,14 +34,5 @@ const LocalTable = ({
     {children}
   </RootTable>
 );
-
-export const Table = Object.assign(LocalTable, {
-  Body: TableBody,
-  BodyCell: TableBodyCell,
-  HeaderCell: TableHeaderCell,
-  Head: TableHead,
-  BodyRow: TableBodyRow,
-  HeaderRow: TableHeaderRow,
-});
 
 export default Table;

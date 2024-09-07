@@ -1,29 +1,41 @@
 "use client";
+import { useRouter } from "next/navigation";
+
 import { type ApiProduct } from "~/database/model";
 
 import { convertConfigsToColumns, type DataTableColumnConfig } from "~/components/tables";
-import { DataTableBody } from "~/components/tables/data-tables/DataTableBody";
+import {
+  DataTableBody,
+  type DataTableBodyProps,
+} from "~/components/tables/data-tables/DataTableBody";
 import { ProductsAdminTableColumns, type ProductsAdminTableColumnId } from "~/features/products";
 
-import { ProductsTableColumnProperties } from "./ProductsTableColumnProperties";
+import { useProductsTableColumnProperties } from "./hooks/use-column-properties";
 
-export interface ProductsAdminTableBodyProps {
-  readonly excludeColumns?: ProductsAdminTableColumnId[];
-  readonly data: ApiProduct<[]>[];
-}
+export interface ProductsAdminTableBodyProps
+  extends DataTableBodyProps<
+    Omit<ApiProduct<[]>, "columns" | "getRowActions" | "actionMenuWidth" | "onRowClick">,
+    ProductsAdminTableColumnId
+  > {}
 
-export const ProductsAdminTableBody = (props: ProductsAdminTableBodyProps): JSX.Element => (
-  <DataTableBody
-    {...props}
-    actionMenuWidth={200}
-    columns={convertConfigsToColumns(
-      [...ProductsAdminTableColumns.columns] as DataTableColumnConfig<
-        ApiProduct<[]>,
-        ProductsAdminTableColumnId
-      >[],
-      ProductsTableColumnProperties("admin"),
-    )}
-  />
-);
+export const ProductsAdminTableBody = (props: ProductsAdminTableBodyProps): JSX.Element => {
+  const columnProperties = useProductsTableColumnProperties();
+  const { push } = useRouter();
+
+  return (
+    <DataTableBody
+      {...props}
+      actionMenuWidth={200}
+      onRowClick={id => push(`/admin/product/${id}`)}
+      columns={convertConfigsToColumns(
+        [...ProductsAdminTableColumns.columns] as DataTableColumnConfig<
+          ApiProduct<[]>,
+          ProductsAdminTableColumnId
+        >[],
+        columnProperties,
+      )}
+    />
+  );
+};
 
 export default ProductsAdminTableBody;

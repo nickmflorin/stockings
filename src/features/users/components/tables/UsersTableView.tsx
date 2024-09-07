@@ -16,7 +16,6 @@ import { useOrdering } from "~/hooks/use-ordering";
 export interface UsersTableViewProps extends ComponentProps {
   readonly children: ReactNode;
   readonly filterBar?: JSX.Element;
-  readonly controlBar?: JSX.Element;
   readonly pagination?: JSX.Element;
   readonly controlBarTargetId?: string;
   readonly excludeColumns?: UsersTableColumnId[];
@@ -27,7 +26,6 @@ export const UsersTableView = ({
   filterBar,
   excludeColumns,
   pagination,
-  controlBarTargetId = "users-table-control-bar-target",
   ...props
 }: UsersTableViewProps) => {
   const [ordering, setOrdering] = useOrdering<UsersTableOrderableColumnId>({
@@ -36,12 +34,7 @@ export const UsersTableView = ({
     defaultOrdering: UsersDefaultOrdering,
   });
   return (
-    <TableView
-      {...props}
-      header={filterBar}
-      footer={pagination}
-      controlBarTargetId={controlBarTargetId}
-    >
+    <TableView {...props} header={filterBar} footer={pagination}>
       <DataTableWrapper
         ordering={ordering}
         rowsAreSelectable={false}

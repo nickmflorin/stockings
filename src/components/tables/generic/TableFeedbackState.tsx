@@ -1,11 +1,16 @@
+import dynamic from "next/dynamic";
+
 import { enumeratedLiterals, type EnumeratedLiteralsMember } from "enumerated-literals";
 
 import { ErrorView } from "~/components/errors/ErrorView";
 import { EmptyMessage } from "~/components/feedback/EmptyMessage";
-import { Table } from "~/components/tables/generic/Table";
 import { type TableBodyProps } from "~/components/tables/generic/TableBody";
 import { type TableBodyRowProps } from "~/components/tables/generic/TableBodyRow";
 import { classNames } from "~/components/types";
+
+const TableBody = dynamic(() => import("./TableBody").then(mod => mod.TableBody));
+const TableBodyCell = dynamic(() => import("./TableBodyCell").then(mod => mod.TableBodyCell));
+const TableBodyRow = dynamic(() => import("./TableBodyRow").then(mod => mod.TableBodyRow));
 
 export const TableFeedbackStateTypes = enumeratedLiterals(
   ["error", "empty", "no-results"] as const,
@@ -70,11 +75,11 @@ const TableFeedbackStates: {
 const TableFeedbackStateInner = ({ stateType, ...props }: Omit<TableFeedbackStateProps, "as">) => {
   const Component = TableFeedbackStates[stateType];
   return (
-    <Table.BodyCell colSpan={100} height="100px">
+    <TableBodyCell colSpan={100} height="100px">
       <div className="h-full w-full flex flex-col items-center justify-center">
         <Component {...props} />
       </div>
-    </Table.BodyCell>
+    </TableBodyCell>
   );
 };
 
@@ -89,8 +94,8 @@ export const TableFeedbackState = ({
   ...props
 }: TableFeedbackStateProps) =>
   as === "tbody" ? (
-    <Table.Body {...(props as TableBodyProps)}>
-      <Table.BodyRow className="tr--feedback">
+    <TableBody {...(props as TableBodyProps)}>
+      <TableBodyRow className="tr--feedback">
         <TableFeedbackStateInner
           {...props}
           stateType={stateType}
@@ -100,10 +105,10 @@ export const TableFeedbackState = ({
           errorContent={errorContent}
           noResultsContent={noResultsContent}
         />
-      </Table.BodyRow>
-    </Table.Body>
+      </TableBodyRow>
+    </TableBody>
   ) : (
-    <Table.BodyRow
+    <TableBodyRow
       {...(props as TableBodyRowProps)}
       className={classNames("tr--feedback", props.className)}
     >
@@ -115,5 +120,5 @@ export const TableFeedbackState = ({
         errorContent={errorContent}
         noResultsContent={noResultsContent}
       />
-    </Table.BodyRow>
+    </TableBodyRow>
   );

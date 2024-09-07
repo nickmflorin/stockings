@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import { Table, type TableProps } from "~/components/tables/generic/Table";
+import { TableHead } from "~/components/tables/generic/TableHead";
 import type * as types from "~/components/tables/types";
 import { type QuantitativeSize } from "~/components/types";
 
@@ -30,7 +31,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
   ...props
 }: DataTableWrapperProps<D, I>): JSX.Element => (
   <Table {...props} stickyHeader>
-    <Table.Head>
+    <TableHead>
       <DataTableHeaderRow<D, I>
         columns={columns}
         ordering={ordering}
@@ -44,7 +45,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
           }
         }}
       />
-    </Table.Head>
+    </TableHead>
     {children}
   </Table>
 );

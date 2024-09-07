@@ -2,15 +2,20 @@
 import dynamic from "next/dynamic";
 import { type ReactNode } from "react";
 
-import RootTableBody, { type TableBodyProps as RootTableBodyProps } from "@mui/material/TableBody";
+import { type TableBodyProps as RootTableBodyProps } from "@mui/material/TableBody";
 
 import { Loading } from "~/components/loading/Loading";
 import { tableHasLoadingIndicator, type TableLoadingIndicator } from "~/components/tables/types";
 import { classNames, type QuantitativeSize, type MuiComponentProps } from "~/components/types";
 
-import { TableFeedbackState } from "./TableFeedbackState";
-
 const TableSkeleton = dynamic(() => import("./TableSkeleton").then(mod => mod.TableSkeleton));
+const TableFeedbackState = dynamic(() =>
+  import("./TableFeedbackState").then(mod => mod.TableFeedbackState),
+);
+
+const RootTableBody = dynamic(() => import("@mui/material/TableBody"), {
+  loading: () => <Loading isLoading component="tbody" />,
+});
 
 export type TableBodyProps = MuiComponentProps<RootTableBodyProps<"tbody">> & {
   readonly isLoading?: boolean;

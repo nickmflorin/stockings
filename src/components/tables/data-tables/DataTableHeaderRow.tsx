@@ -1,7 +1,7 @@
 import { type Ordering } from "~/lib/ordering";
 
-import { Table } from "~/components/tables/generic/Table";
 import type { TableHeaderRowProps } from "~/components/tables/generic/TableHeaderRow";
+import { TableHeaderRow } from "~/components/tables/generic/TableHeaderRow";
 import type * as types from "~/components/tables/types";
 
 import { TableHeaderCell } from "../generic/TableHeaderCell";
@@ -30,7 +30,7 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
   onSort,
   ...props
 }: DataTableHeaderRowProps<D, I>): JSX.Element => (
-  <Table.HeaderRow {...props}>
+  <TableHeaderRow {...props}>
     {rowsAreSelectable && <TableHeaderCell align="center" width={40} maxWidth={40} minWidth={40} />}
     {columns
       .filter(col => !excludeColumns.includes(col.id))
@@ -47,5 +47,5 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
         />
       ))}
     {rowsHaveActions && <TableHeaderCell align="center" width={60} maxWidth={60} minWidth={60} />}
-  </Table.HeaderRow>
+  </TableHeaderRow>
 );

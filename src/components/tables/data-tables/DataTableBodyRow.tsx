@@ -1,6 +1,6 @@
 import { type FloatingContentRenderProps } from "~/components/floating";
-import { Table } from "~/components/tables/generic/Table";
 import type { TableBodyRowProps } from "~/components/tables/generic/TableBodyRow";
+import { TableBodyRow } from "~/components/tables/generic/TableBodyRow";
 import type * as types from "~/components/tables/types";
 
 import { ActionsCell, type ActionsCellProps } from "../cells/ActionsCell";
@@ -33,7 +33,7 @@ export const DataTableBodyRow = <D extends types.DataTableDatum, I extends strin
   getRowActions,
   ...props
 }: DataTableBodyRowProps<D, I>): JSX.Element => (
-  <Table.BodyRow {...props}>
+  <TableBodyRow {...props}>
     {rowIsSelected && (
       <TableBodyCell align="center">
         <SelectCell
@@ -52,5 +52,5 @@ export const DataTableBodyRow = <D extends types.DataTableDatum, I extends strin
         <ActionsCell menuWidth={actionMenuWidth} actions={params => getRowActions(datum, params)} />
       </TableBodyCell>
     )}
-  </Table.BodyRow>
+  </TableBodyRow>
 );
