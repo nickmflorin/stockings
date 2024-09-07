@@ -3,14 +3,12 @@ import clerk from "@clerk/clerk-sdk-node";
 import { type OrganizationMembership } from "@clerk/nextjs/server";
 
 import * as constants from "~/application/auth/constants";
-import { type PrismaClient, type Product, type User } from "~/database/model";
+import { type PrismaClient, type User } from "~/database/model";
 import { upsertUserFromClerk } from "~/database/model/auth";
 import { db, type Transaction } from "~/database/prisma";
 import { environment } from "~/environment";
 
-import { isUuid } from "~/lib/typeguards";
-
-import { InvalidCommandLineArgumentError, MissingCommandLineArgumentError } from "~/scripts/cli";
+import * as errors from "./errors";
 
 export type ScriptContext = {
   readonly clerkUser: ClerkUser;
@@ -95,7 +93,7 @@ export async function getScriptContext(
        be run, not the 'pnpm pullenv' command.
 
        To prevent errors from happening due to this mismatch, we have to perform this check. */
-    throw new Error(
+    throw new errors.CommandLineEnvironmentError(
       "There seems to be a configuration mismatch that may incidentally cause development " +
         "Clerk data to be used to run this script.",
     );
@@ -103,10 +101,11 @@ export async function getScriptContext(
   const personalClerkId = process.env.SCRIPT_CONTEXT_CLERK_USER_ID;
   if (personalClerkId === undefined) {
     /* The only reason this value can be undefined is because is for the test environment - so as
-       long as we are not running the seed process in a test environment, this check is just to
-       satisfy TS. */
-    throw new Error(
-      "Cannot seed database without the 'SCRIPT_CONTEXT_CLERK_USER_ID' as an environment variable.",
+       long as we are not running the script in a test environment, this check is just to satisfy
+       TS. */
+    throw new errors.CommandLineEnvironmentError(
+      "Cannot access script context without the 'SCRIPT_CONTEXT_CLERK_USER_ID' as an " +
+        "environment variable.",
     );
   }
   const clerkUser = await clerk.users.getUser(personalClerkId);
@@ -114,7 +113,9 @@ export async function getScriptContext(
     userId: clerkUser.id,
   });
   if (memberships.filter(m => membershipHasAdminAccess(m)).length === 0) {
-    throw new Error("The Clerk user must be an admin to run this script.");
+    throw new errors.CommandLineEnvironmentError(
+      "The Clerk user must be an admin to run this script.",
+    );
   }
   if (upsertUser) {
     return {
@@ -126,54 +127,4 @@ export async function getScriptContext(
     clerkUser,
     user: await tx.user.findUniqueOrThrow({ where: { clerkId: clerkUser.id } }),
   };
-}
-
-export interface ProductScriptContextOptions extends ScriptContextOptions {
-  readonly productOptional?: boolean;
-}
-
-export type ProductScriptContext<O extends ProductScriptContextOptions> = O extends {
-  productOptional: true;
-}
-  ? {
-      readonly clerkUser: ClerkUser;
-      readonly user: User;
-      readonly product?: Product;
-    }
-  : {
-      readonly clerkUser: ClerkUser;
-      readonly user: User;
-      readonly product: Product;
-    };
-
-export async function getProductScriptContext<O extends ProductScriptContextOptions>(
-  options?: O,
-): Promise<ProductScriptContext<O>> {
-  const context = await getScriptContext(options);
-
-  const productIdentifier = process.argv.slice(2)[0];
-  if (!productIdentifier) {
-    if (options?.productOptional) {
-      return context as ProductScriptContext<O>;
-    }
-    throw new MissingCommandLineArgumentError("product");
-  }
-  const product = await db.product.findUnique({
-    where: isUuid(productIdentifier) ? { id: productIdentifier } : { slug: productIdentifier },
-  });
-  if (!product) {
-    if (isUuid(productIdentifier)) {
-      throw new InvalidCommandLineArgumentError(
-        "product",
-        productIdentifier,
-        `A product with the ID '${productIdentifier}' does not exist!`,
-      );
-    }
-    throw new InvalidCommandLineArgumentError(
-      "product",
-      productIdentifier,
-      `A product with the slug '${productIdentifier}' does not exist!`,
-    );
-  }
-  return { ...context, product };
 }

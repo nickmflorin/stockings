@@ -1,7 +1,9 @@
 import { DateTime } from "luxon";
 
-import { enhance, NotificationMedium } from "~/database/model";
 import {
+  enhance,
+  NotificationMedium,
+  type User,
   type PriceChangeSubscription,
   type StatusChangeSubscription,
   PriceChangeCondition,
@@ -27,9 +29,14 @@ const ConditionsPerPriceChangeEvent = MinMax(1, Object.values(PriceChangeConditi
 const PriceChangeEventFrequency = 0.5;
 const StatusChangeEventFrequency = 0.5;
 
+export interface SeedSubscriptionParmas {
+  readonly product: Product;
+  readonly user: User;
+}
+
 export const seedSubscription = async (
-  product: Product,
-  { user }: ScriptContext,
+  { user, product }: SeedSubscriptionParmas,
+  context: ScriptContext,
 ): Promise<[StatusChangeSubscription | null, PriceChangeSubscription | null]> => {
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 
@@ -46,8 +53,8 @@ export const seedSubscription = async (
         enabled: !randomBoolean({ positiveFrequency: DisabledFrequency }),
         createdAt: timestamp,
         updatedAt: timestamp,
-        createdById: user.id,
-        updatedById: user.id,
+        createdById: context.user.id,
+        updatedById: context.user.id,
         userId: user.id,
         productId: product.id,
         mediums: selectAtRandom(Object.values(NotificationMedium), {
@@ -77,8 +84,8 @@ export const seedSubscription = async (
         enabled: !randomBoolean({ positiveFrequency: DisabledFrequency }),
         createdAt: timestamp,
         updatedAt: timestamp,
-        createdById: user.id,
-        updatedById: user.id,
+        createdById: context.user.id,
+        updatedById: context.user.id,
         userId: user.id,
         productId: product.id,
         mediums: selectAtRandom(Object.values(NotificationMedium), {

@@ -36,11 +36,11 @@
     "pullenv-prod": "vercel env pull ./.env --environment=production",
     "jsonify-fixtures": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/jsonify/index.ts --live && pnpm format-json-fixtures",
     "format-json-fixtures": "npx prettier ./src/database/fixtures/json/*.json --write --ignore-path=./.prettierignore",
-    "seed-users": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/seed-users.ts",
-    "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape.ts",
-    "scrape-product": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape-product.ts",
+    "seed-users": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/seed-users/index.ts",
+    "scrape": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape/index.ts",
+    "scrape-product": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape-product/index.ts",
     "simulate-product-records": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-product-records/index.ts",
-    "simulate-dispatching-notifications": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-dispatching-notifications/index.ts",
+    "simulate-notifications": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-notifications/index.ts",
     "process-subscriptions": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/process-subscriptions/index.ts"
   },
   "dependencies": {

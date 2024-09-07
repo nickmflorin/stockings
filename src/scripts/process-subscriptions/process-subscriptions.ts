@@ -1,5 +1,3 @@
-import type { ScriptContext } from "~/scripts/context";
-
 import { enhance } from "~/database/model";
 import { db } from "~/database/prisma";
 
@@ -14,7 +12,7 @@ interface ProcessSubscriptionsParams {
 
 export const processSubscriptions = async (
   params: ProcessSubscriptionsParams,
-  ctx: ScriptContext,
+  ctx: cli.ScriptContext,
 ) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 

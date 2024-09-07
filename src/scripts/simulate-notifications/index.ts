@@ -1,11 +1,11 @@
+import { get } from "http";
+
 import { NotificationState } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { MinMax, randomBoolean } from "~/lib/random";
 
 import { cli } from "~/scripts";
-import { parseBooleanFlagCliArgument } from "~/scripts/cli";
-import { getProductScriptContext } from "~/scripts/context";
 
 const FailedRate = MinMax(0.01, 0.1);
 const SentRate = MinMax(0.6, 0.7);
@@ -15,24 +15,24 @@ type ToModify = {
   send: string[];
 };
 
-async function main() {
-  if (process.env.NODE_ENV !== "development") {
-    return cli.error("Script can only be run in development mode!");
-  }
+const script: cli.Script = async context => {
+  const product = await cli.getProductPositionalArgument({ required: true });
 
-  const { product, ...ctx } = await getProductScriptContext({ upsertUser: false });
-
-  const clean = parseBooleanFlagCliArgument("clean");
+  const clean = cli.getBooleanCliArgument("clean", { defaultValue: false });
   if (clean) {
     cli.info(`Resetting previously sent & failed notifications for product '${product.slug}'...`);
     await db.productNotification.updateMany({
       where: {
         productId: product.id,
         // TODO: Revisit whether or not we want to simulate across all users...
-        userId: ctx.user.id,
+        userId: context.user.id,
         state: { in: [NotificationState.Failed, NotificationState.Sent] },
       },
-      data: { state: NotificationState.Pending, stateAsOf: new Date(), updatedById: ctx.user.id },
+      data: {
+        state: NotificationState.Pending,
+        stateAsOf: new Date(),
+        updatedById: context.user.id,
+      },
     });
   }
 
@@ -44,8 +44,8 @@ async function main() {
       productId: product.id,
       state: NotificationState.Pending,
       // TODO: Revisit whether or not we want to simulate across all users...
-      updatedById: ctx.user.id,
-      userId: ctx.user.id,
+      updatedById: context.user.id,
+      userId: context.user.id,
     },
     select: { id: true },
   });
@@ -77,7 +77,7 @@ async function main() {
       where: { id: { in: toModify.fail } },
       data: {
         state: NotificationState.Failed,
-        updatedById: ctx.user.id,
+        updatedById: context.user.id,
         failedAt: new Date(),
         stateAsOf: new Date(),
       },
@@ -89,12 +89,12 @@ async function main() {
       where: { id: { in: toModify.send } },
       data: {
         state: NotificationState.Sent,
-        updatedById: ctx.user.id,
+        updatedById: context.user.id,
         sentAt: new Date(),
         stateAsOf: new Date(),
       },
     });
   }
-}
+};
 
-cli.runScript(main);
+cli.runScript(script, { devOnly: true, upsertUser: true });

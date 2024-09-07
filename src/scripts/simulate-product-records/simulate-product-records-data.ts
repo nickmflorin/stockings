@@ -6,8 +6,6 @@ import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 
 import { cli } from "~/scripts";
 
-import { type ScriptContext } from "../context";
-
 /* The minimum/maximum number of days to look backwards when determining the time horizon over which
    the the records will be generated.  For each product, a lookback horizon will be randomly chosen
    between these two bounds, and records will be generated for each day in the time horizon dictated
@@ -96,7 +94,7 @@ export type RecordDatum = Pick<
 
 export const simulateProductRecordsData = (
   product: Product,
-  { user }: ScriptContext,
+  { user }: cli.ScriptContext,
 ): RecordDatum[] => {
   const initialDatum: RecordDatum = {
     createdAt: DateTime.fromJSDate(product.createdAt),

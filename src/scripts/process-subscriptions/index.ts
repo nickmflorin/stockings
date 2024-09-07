@@ -1,45 +1,36 @@
 import { db } from "~/database/prisma";
 
-import { isUuid } from "~/lib/typeguards";
-
 import { cli } from "~/scripts";
-import { getScriptContext } from "~/scripts/context";
 
 import { processProductSubscriptions } from "./process-product-subscriptions";
 import { processSubscriptions } from "./process-subscriptions";
 
-async function main() {
-  const ctx = await getScriptContext({ upsertUser: false });
-  const productIdentifier = cli.getPositionalArgument(0);
+const script: cli.Script = async ctx => {
+  const _product = await cli.getProductPositionalArgument({ required: false });
 
-  const maximumLookback = cli.parseIntegerCliArgument("max-lookback");
-  if (maximumLookback !== null && process.env.NODE_ENV !== "development") {
+  const maximumLookback = cli.getIntegerCliArgument("max-lookback", {});
+  if (maximumLookback !== undefined && process.env.NODE_ENV !== "development") {
     return cli.error("Can only specify a maximum lookback in development mode!");
   }
 
-  const maximumRecords = cli.parseIntegerCliArgument("max-records");
-  if (maximumRecords !== null && process.env.NODE_ENV !== "development") {
+  const maximumRecords = cli.getIntegerCliArgument("max-records", {});
+  if (maximumRecords !== undefined && process.env.NODE_ENV !== "development") {
     return cli.error("Can only specify a maximum records in development mode!");
   }
 
-  if (!productIdentifier) {
-    return await processSubscriptions({ maximumLookback, maximumRecords }, ctx);
-  }
-  const product = await db.product.findUnique({
-    where: isUuid(productIdentifier) ? { id: productIdentifier } : { slug: productIdentifier },
-    include: { records: { orderBy: [{ timestamp: "desc" }] } },
-  });
-  if (!product) {
-    if (isUuid(productIdentifier)) {
-      return cli.error(`A product with the ID '${productIdentifier}' does not exist!`);
-    }
-    return cli.error(`A product with the slug '${productIdentifier}' does not exist!`);
-  }
-  const clean = cli.parseBooleanFlagCliArgument("clean");
+  const clean = cli.getBooleanCliArgument("clean", { defaultValue: false });
   if (clean && process.env.NODE_ENV !== "development") {
     return cli.error("Can only clean subscriptions in development mode!");
   }
-  await processProductSubscriptions({ product, clean, maximumLookback, maximumRecords }, ctx);
-}
 
-cli.runScript(main);
+  if (!_product) {
+    return await processSubscriptions({ maximumLookback, maximumRecords }, ctx);
+  }
+  const product = await db.product.findUniqueOrThrow({
+    where: { id: _product.id },
+    include: { records: { orderBy: [{ timestamp: "desc" }] } },
+  });
+  await processProductSubscriptions({ product, clean, maximumLookback, maximumRecords }, ctx);
+};
+
+cli.runScript(script);

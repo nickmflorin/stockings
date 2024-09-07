@@ -3,32 +3,25 @@ import { chunk } from "lodash-es";
 import { db } from "~/database/prisma";
 
 import { cli } from "~/scripts";
-import { parseBooleanFlagCliArgument } from "~/scripts/cli";
-import { getProductScriptContext } from "~/scripts/context";
 
 import { simulateProductRecordsData } from "./simulate-product-records-data";
 
 const RECORDS_BATCH_SIZE = 200;
 
-async function main() {
-  if (process.env.NODE_ENV !== "development") {
-    return cli.error("Script can only be run in development mode!");
-  }
+const script: cli.Script = async context => {
+  const product = await cli.getProductPositionalArgument({ required: true });
 
-  const { product, ...ctx } = await getProductScriptContext({ upsertUser: false });
-
-  const clean = parseBooleanFlagCliArgument("clean");
+  const clean = cli.getBooleanCliArgument("clean", { defaultValue: false });
   if (clean) {
     cli.info(`Deleting previously processed notifications for product '${product.slug}'...`);
     await db.productNotification.deleteMany({
       where: { productId: product.id },
     });
-
     cli.info(`Deleting product records for product '${product.slug}'...`);
     await db.productRecord.deleteMany({ where: { productId: product.id } });
   }
 
-  const recs = simulateProductRecordsData(product, ctx);
+  const recs = simulateProductRecordsData(product, context);
   const batches = chunk(recs, RECORDS_BATCH_SIZE);
   for (let b = 0; b < batches.length; b++) {
     cli.info(
@@ -39,6 +32,6 @@ async function main() {
       data: batches[b].map(r => ({ ...r, createdAt: r.createdAt.toJSDate() })),
     });
   }
-}
+};
 
-cli.runScript(main);
+cli.runScript(script, { devOnly: true, upsertUser: true });

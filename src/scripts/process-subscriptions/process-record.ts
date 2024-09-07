@@ -1,5 +1,3 @@
-import type { ScriptContext } from "~/scripts/context";
-
 import { UnreachableCaseError } from "~/application/errors";
 import {
   type ProductRecord,
@@ -19,13 +17,13 @@ import { cli } from "~/scripts";
 
 interface ProcessRecordParams {
   readonly product: Product;
-  readonly subscription: ApiProductSubscription;
+  readonly subscription: ApiProductSubscription<["conditions"]>;
   readonly record: ProductRecord;
 }
 
 export const processRecord = async (
   { product, record, subscription }: ProcessRecordParams,
-  ctx: ScriptContext,
+  ctx: cli.ScriptContext,
 ) => {
   if (!record.price && !record.status) {
     throw new Error("Cannot process a record without price or status information on the record!");
@@ -87,7 +85,7 @@ export const processRecord = async (
 
   const processStatusChange = async (
     tx: Transaction,
-    sub: ApiStatusChangeSubscription,
+    sub: ApiStatusChangeSubscription<["conditions"]>,
     statuses: { previous: ProductStatus; current: ProductStatus },
   ) => {
     if (
@@ -199,10 +197,14 @@ export const processRecord = async (
                the status on one of them) or if the records represent a change in price, not
                status. */
           } else if (prevRecordWithStatus.status !== record.status) {
-            await processStatusChange(tx, subscription as ApiStatusChangeSubscription, {
-              previous: prevRecordWithStatus.status,
-              current: record.status,
-            });
+            await processStatusChange(
+              tx,
+              subscription as ApiStatusChangeSubscription<["conditions"]>,
+              {
+                previous: prevRecordWithStatus.status,
+                current: record.status,
+              },
+            );
           }
         } else {
           cli.info(

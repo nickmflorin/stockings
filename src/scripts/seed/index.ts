@@ -1,15 +1,11 @@
 import { cli } from "~/scripts";
-
-import { getScriptContext } from "../context";
+import { seedUsers } from "~/scripts/common";
 
 import { seedProducts } from "./seed-products";
 
-async function main() {
-  if (process.env.NODE_ENV !== "development") {
-    return cli.error("Can only seed database in development mode!");
-  }
-  const ctx = await getScriptContext({ upsertUser: true });
+const script: cli.Script = async ctx => {
+  await seedUsers(ctx);
   await seedProducts(ctx);
-}
+};
 
-cli.runScript(main);
+cli.runScript(script, { upsertUser: true, devOnly: true });

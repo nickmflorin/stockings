@@ -1,7 +1,5 @@
 import { DateTime } from "luxon";
 
-import type { ScriptContext } from "~/scripts/context";
-
 import {
   ProductSubscriptionTypes,
   type ApiProductSubscription,
@@ -16,7 +14,7 @@ import { cli } from "~/scripts";
 import { processRecord } from "./process-record";
 
 interface ProcessSubscriptionParams {
-  readonly subscription: ApiProductSubscription;
+  readonly subscription: ApiProductSubscription<["conditions"]>;
   readonly product: Product;
   readonly maximumLookback?: number | null;
   readonly maximumRecords?: number | null;
@@ -24,7 +22,7 @@ interface ProcessSubscriptionParams {
 
 export const processSubscription = async (
   { product, subscription, maximumLookback, maximumRecords }: ProcessSubscriptionParams,
-  ctx: ScriptContext,
+  ctx: cli.ScriptContext,
 ) => {
   if (
     (maximumLookback !== undefined || maximumLookback !== null) &&

@@ -24,7 +24,7 @@ model User {
   firstName                   String
   lastName                    String
   profileImageUrl             String?
-  emailAddress                String
+  emailAddress                String                @unique
   createdAt                   DateTime              @default(now())
   updatedAt                   DateTime              @updatedAt
   createdProducts             Product[]             @relation("createdProducts")

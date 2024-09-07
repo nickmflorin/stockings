@@ -1,7 +1,5 @@
 import { chunk } from "lodash-es";
 
-import type { ScriptContext } from "~/scripts/context";
-
 import { enhance, type ApiProduct } from "~/database/model";
 import { db } from "~/database/prisma";
 
@@ -20,7 +18,7 @@ interface ProcessProductSubscriptionParams {
 
 export const processProductSubscriptions = async (
   { product, clean, maximumLookback, maximumRecords }: ProcessProductSubscriptionParams,
-  ctx: ScriptContext,
+  ctx: cli.ScriptContext,
 ) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 

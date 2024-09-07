@@ -38,6 +38,7 @@ export const SubscriptionsAdminTableView = ({
   return (
     <TableView
       {...props}
+      footer={pagination}
       header={filterBar}
       controlBarTargetId={controlBarTargetId}
       className={classNames("@container/subscriptions-table-view", props.className)}

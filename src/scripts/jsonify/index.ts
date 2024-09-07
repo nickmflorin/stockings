@@ -11,8 +11,8 @@ import { db } from "~/database/prisma";
 
 import { cli } from "~/scripts";
 
-async function main() {
-  const live = cli.parseBooleanFlagCliArgument("live", false);
+async function script() {
+  const live = cli.getBooleanCliArgument("live", { defaultValue: false });
 
   await db.$transaction(async tx => {
     let key: JsonifiableModel;
@@ -47,4 +47,4 @@ async function main() {
   });
 }
 
-cli.runScript(main);
+cli.runScript(script);

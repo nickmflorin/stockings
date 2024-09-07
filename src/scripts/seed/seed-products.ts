@@ -12,17 +12,14 @@ import { db } from "~/database/prisma";
 import { randomBoolean } from "~/lib/random";
 
 import { cli } from "~/scripts";
-
-import { type ScriptContext } from "../context";
-
-import { seedSubscription } from "./seed-subscriptions";
+import { seedSubscription } from "~/scripts/common/seed-subscription";
 
 const BATCH_SIZE = 50;
 const SubscriptionFrequency = 0.4;
 
 const seedProductBatch = async (
   jsonProducts: (typeof fixtures.products)[number][],
-  ctx: ScriptContext,
+  ctx: cli.ScriptContext,
 ): Promise<[Product[], ApiProductSubscription[]]> => {
   const products = await Promise.all(
     jsonProducts.map(jsonProduct =>
@@ -35,18 +32,19 @@ const seedProductBatch = async (
       }),
     ),
   );
-
+  const users = await db.user.findMany({});
   return [
     products,
     (
       await Promise.all(
         products.reduce(
-          (prev, product) => {
-            if (!randomBoolean({ positiveFrequency: SubscriptionFrequency })) {
-              return prev;
-            }
-            return [...prev, seedSubscription(product, ctx)];
-          },
+          (prev, product) =>
+            users.reduce((acc, user) => {
+              if (!randomBoolean({ positiveFrequency: SubscriptionFrequency })) {
+                return acc;
+              }
+              return [...acc, seedSubscription({ product, user }, ctx)];
+            }, prev),
           [] as Promise<[StatusChangeSubscription | null, PriceChangeSubscription | null]>[],
         ),
       )
@@ -56,7 +54,7 @@ const seedProductBatch = async (
   ];
 };
 
-export const seedProducts = async (ctx: ScriptContext) => {
+export const seedProducts = async (ctx: cli.ScriptContext) => {
   const batches = chunk(fixtures.products, BATCH_SIZE);
   for (let i = 0; i < batches.length; i++) {
     const [products, subscriptions] = await seedProductBatch(batches[i], ctx);

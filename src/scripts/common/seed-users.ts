@@ -3,14 +3,10 @@ import clerk from "@clerk/clerk-sdk-node";
 import { getTransformedClerkData, updateUserFromClerk } from "~/database/model/auth";
 import { db } from "~/database/prisma";
 
-import * as cli from "./cli";
-import { getScriptContext } from "./context";
+import { cli } from "~/scripts";
+import { type ScriptContext } from "~/scripts/context";
 
-async function main() {
-  if (process.env.NODE_ENV !== "development") {
-    return cli.error("Can only clean subscriptions in development mode!");
-  }
-  const { clerkUser } = await getScriptContext({ upsertUser: true });
+export const seedUsers = cli.inDevRestrictedEnv(async ({ clerkUser }: ScriptContext) => {
   const users = (await clerk.users.getUserList({})).filter(u => u.id !== clerkUser.id);
 
   const existingUsers = await db.user.findMany({
@@ -37,6 +33,4 @@ async function main() {
     cli.info(`Updating ${usersToUpdate.length} development users.`);
     await Promise.all(usersToUpdate.map(u => updateUserFromClerk(db, u)));
   }
-}
-
-cli.runScript(main);
+});
