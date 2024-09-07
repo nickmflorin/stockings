@@ -15,9 +15,7 @@ import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
 import { ProductCategorySelect } from "~/features/products/components/input/ProductCategorySelect";
 import { ProductStatusSelect } from "~/features/products/components/input/ProductStatusSelect";
-/* eslint-disable-next-line max-len */
 import { ProductSubCategorySelect } from "~/features/products/components/input/ProductSubCategorySelect";
-/* eslint-disable-next-line max-len */
 import { SubscriptionTypeSelect } from "~/features/subscriptions/components/input/SubscriptionTypeSelect";
 import { useFilters } from "~/hooks/use-filters";
 

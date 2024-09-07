@@ -7,29 +7,33 @@ import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
 import {
-  SubscriptionsFiltersOptions,
-  SubscriptionsFiltersSchemas,
   SubscriptionsDefaultOrdering,
-  SubscriptionOrderableFields,
+  SubscriptionsFiltersSchemas,
+  SubscriptionsFiltersOptions,
 } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
+import { SubscriptionsAdminTableColumns } from "~/features/subscriptions";
 import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
 import { SubscriptionsTableFilterBar } from "~/features/subscriptions/components/tables/SubscriptionsTableFilterBar";
 import { SubscriptionsTablePaginator } from "~/features/subscriptions/components/tables/SubscriptionsTablePaginator";
 
 import { SubscriptionsTableBody } from "./SubscriptionsTableBody";
 
-const SubscriptionsTableView = dynamic(
-  () => import("~/features/subscriptions/components/tables/SubscriptionsTableView"),
+const SubscriptionsAdminTableView = dynamic(
+  () => import("~/features/subscriptions/components/tables/SubscriptionsAdminTableView"),
   { loading: () => <Loading isLoading /> },
 );
 
-export interface SubscriptionsTablePageProps {
+export interface ProductSubscriptionsTablePageProps {
   readonly searchParams: Record<string, string>;
+  readonly params: { id: string };
 }
 
-export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTablePageProps) {
+export default async function ProductSubscriptionsTablePage({
+  searchParams,
+  params,
+}: ProductSubscriptionsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
   const filters = parseFilters(
@@ -40,20 +44,25 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: SubscriptionsDefaultOrdering,
-    fields: [...SubscriptionOrderableFields],
+    fields: SubscriptionsAdminTableColumns.orderableColumns.map(c => c.id),
   });
 
   return (
-    <SubscriptionsTableView
-      controlBarTargetId="subscriptions-control-bar"
+    <SubscriptionsAdminTableView
+      controlBarTargetId="product-subscriptions-control-bar"
+      excludeColumns={["product"]}
       filterBar={
         <Suspense>
-          <SubscriptionsTableFilterBar />
+          <SubscriptionsTableFilterBar excludeProducts />
         </Suspense>
       }
       pagination={
         <Suspense key={JSON.stringify(filters) + String(page)}>
-          <SubscriptionsTablePaginator filters={filters} page={page} visibility="public" />
+          <SubscriptionsTablePaginator
+            filters={{ ...filters, products: [params.id] }}
+            page={page}
+            visibility="public"
+          />
         </Suspense>
       }
     >
@@ -61,18 +70,18 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
         fallback={
           <>
-            <SubscriptionsTableControlBarPlaceholder targetId="subscriptions-control-bar" />
+            <SubscriptionsTableControlBarPlaceholder targetId="product-subscriptions-control-bar" />
             <Loading isLoading component="tbody" />
           </>
         }
       >
         <SubscriptionsTableBody
-          filters={filters}
-          page={page}
+          productId={params.id}
           ordering={ordering}
-          controlBarTargetId="subscriptions-control-bar"
+          page={page}
+          filters={filters}
         />
       </Suspense>
-    </SubscriptionsTableView>
+    </SubscriptionsAdminTableView>
   );
 }

@@ -6,9 +6,9 @@ import { useSWR, type SWRConfig } from "./use-swr";
 
 export const useStatusChangeSubscription = (
   id: string | null,
-  config: SWRConfig<ApiStatusChangeSubscription>,
+  config: SWRConfig<ApiStatusChangeSubscription<["conditions"]>>,
 ) =>
-  useSWR<ApiStatusChangeSubscription>(
+  useSWR<ApiStatusChangeSubscription<["conditions"]>>(
     isUuid(id) ? `/api/status-change-subscriptions/${id}` : null,
     config,
   );

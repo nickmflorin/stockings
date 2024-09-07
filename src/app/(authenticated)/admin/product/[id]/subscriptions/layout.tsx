@@ -1,24 +1,18 @@
-import dynamic from "next/dynamic";
 import { type ReactNode } from "react";
 
-import { Loading } from "~/components/loading/Loading";
-
-const SubscriptionsAdminTableView = dynamic(
-  () => import("~/features/subscriptions/components/tables/SubscriptionsAdminTableView"),
-  { loading: () => <Loading isLoading /> },
-);
-
 interface ProductSubscriptionsLayoutProps {
-  readonly children: ReactNode;
+  readonly table: ReactNode;
+  readonly title: ReactNode;
 }
 
-export default function ProductSubscriptionsLayout({ children }: ProductSubscriptionsLayoutProps) {
+export default function ProductSubscriptionsLayout({
+  table,
+  title,
+}: ProductSubscriptionsLayoutProps) {
   return (
-    <SubscriptionsAdminTableView
-      controlBarTargetId="product-subscriptions-control-bar"
-      excludeColumns={["product"]}
-    >
-      {children}
-    </SubscriptionsAdminTableView>
+    <div className="flex flex-col gap-[16px] h-full pl-1 mt-1">
+      {title}
+      <div className="flex flex-row items-center grow min-h-[0px] overflow-auto">{table}</div>
+    </div>
   );
 }

@@ -27,7 +27,6 @@ import {
   SubscriptionsFiltersOptions,
   visibilityIsAdmin,
   type ActionVisibility,
-  visibilityIsPublic,
   SubscriptionsOrderingMap,
 } from "~/actions";
 
@@ -68,7 +67,10 @@ const whereClause = ({
 
 export const fetchProductSubscriptionsCount = cache(
   async <C extends FetchActionContext>(
-    { visibility }: Required<Pick<SubscriptionsControls, "visibility">, "visibility">,
+    {
+      visibility,
+      filters,
+    }: Required<Pick<SubscriptionsControls, "visibility" | "filters">, "visibility" | "filters">,
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>> => {
     const { user, isAdmin, error } = await getAuthedUser();
@@ -81,13 +83,16 @@ export const fetchProductSubscriptionsCount = cache(
       return errorInFetchContext(error, context);
     }
     const count = await db.productSubscription.count({
-      where: visibilityIsPublic(visibility) ? { userId: user.id } : {},
+      where: whereClause({ filters, user, visibility }),
     });
     return dataInFetchContext({ count }, context);
   },
 ) as {
   <C extends FetchActionContext>(
-    params: Required<Pick<SubscriptionsControls, "visibility">, "visibility">,
+    params: Required<
+      Pick<SubscriptionsControls, "visibility" | "filters">,
+      "visibility" | "filters"
+    >,
     context: C,
   ): Promise<FetchActionResponse<{ count: number }, C>>;
 };

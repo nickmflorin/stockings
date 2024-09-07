@@ -9,15 +9,17 @@ import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
 import { ProductSelect } from "~/features/products/components/input/ProductSelect";
-/* eslint-disable-next-line max-len */
 import { SubscriptionTypeSelect } from "~/features/subscriptions/components/input/SubscriptionTypeSelect";
 import { useFilters } from "~/hooks/use-filters";
 
-export interface SubscriptionsTableFilterBarProps extends ComponentProps {}
+export interface SubscriptionsTableFilterBarProps extends ComponentProps {
+  readonly excludeProducts?: boolean;
+}
 
-export const SubscriptionsTableFilterBar = (
-  props: SubscriptionsTableFilterBarProps,
-): JSX.Element => {
+export const SubscriptionsTableFilterBar = ({
+  excludeProducts = false,
+  ...props
+}: SubscriptionsTableFilterBarProps): JSX.Element => {
   const typeSelectRef = useRef<SelectInstance<ProductSubscriptionType, "multi"> | null>(null);
   const productSelectRef = useRef<SelectInstance<string, "multi"> | null>(null);
 
@@ -39,20 +41,22 @@ export const SubscriptionsTableFilterBar = (
         updateFilters({ search: "", types: [], products: [] });
       }}
     >
-      <ProductSelect
-        ref={productSelectRef}
-        /* The product value is coming from a query parameter, so we have to account for invalid
+      {!excludeProducts && (
+        <ProductSelect
+          ref={productSelectRef}
+          /* The product value is coming from a query parameter, so we have to account for invalid
            product IDs that may sneak in. */
-        strictValueLookup={false}
-        behavior="multi"
-        filters={{ subscribed: true }}
-        dynamicHeight={false}
-        placeholder="Products"
-        inputClassName="max-w-[520px]"
-        initialValue={filters.products}
-        onChange={products => updateFilters({ products })}
-        onClear={() => updateFilters({ products: [] })}
-      />
+          strictValueLookup={false}
+          behavior="multi"
+          filters={{ subscribed: true }}
+          dynamicHeight={false}
+          placeholder="Products"
+          inputClassName="max-w-[520px]"
+          initialValue={filters.products}
+          onChange={products => updateFilters({ products })}
+          onClear={() => updateFilters({ products: [] })}
+        />
+      )}
       <SubscriptionTypeSelect
         ref={typeSelectRef}
         dynamicHeight={false}

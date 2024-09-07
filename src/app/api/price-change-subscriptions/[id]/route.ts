@@ -2,7 +2,6 @@ import { type NextRequest } from "next/server";
 
 import { db } from "~/database/prisma";
 
-/* eslint-disable-next-line max-len */
 import { fetchPriceChangeSubscription } from "~/actions/subscriptions/fetch-price-change-subscription";
 
 import { ClientResponse } from "~/api";

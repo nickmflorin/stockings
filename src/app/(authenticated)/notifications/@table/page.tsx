@@ -14,9 +14,7 @@ import {
 } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
-/* eslint-disable-next-line max-len */
 import { NotificationsTablePaginator } from "~/features/notifications/components/tables//NotificationsTablePaginator";
-/* eslint-disable-next-line max-len */
 import { NotificationsTableFilterBar } from "~/features/notifications/components/tables/NotificationsTableFilterBar";
 
 import { NotificationsTableBody } from "./NotificationsTableBody";

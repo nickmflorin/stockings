@@ -14,7 +14,7 @@ import { db } from "~/database/prisma";
 
 import { MinMax, randomBoolean, selectAtRandom } from "~/lib/random";
 
-import { type ScriptContext } from "../context";
+import { type cli } from "~/scripts";
 
 /* The minimum/maximum number of days to look backwards when determining the time horizon over which
    the the records will be generated.  For each product, a lookback horizon will be randomly chosen
@@ -36,7 +36,7 @@ export interface SeedSubscriptionParmas {
 
 export const seedSubscription = async (
   { user, product }: SeedSubscriptionParmas,
-  context: ScriptContext,
+  context: cli.ScriptContext,
 ): Promise<[StatusChangeSubscription | null, PriceChangeSubscription | null]> => {
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 

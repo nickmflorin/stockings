@@ -10,7 +10,6 @@ import { ProductsDefaultOrdering, ProductsFiltersOptions, ProductsFiltersSchemas
 
 import { Loading } from "~/components/loading/Loading";
 import { ProductsAdminTableColumns } from "~/features/products";
-/* eslint-disable-next-line max-len */
 import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
 
 import { ProductsTableBody } from "./ProductsTableBody";

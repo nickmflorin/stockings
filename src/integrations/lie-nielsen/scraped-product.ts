@@ -96,6 +96,7 @@ export type PersistedError = {
 export type ScrapedProductConfig = {
   readonly slug: string;
   readonly thumbnailData?: {
+    readonly name: string;
     readonly page: ProductsPage;
     readonly subPage: ProductsSubPage;
     readonly category: ProductCategory;

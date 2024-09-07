@@ -42,6 +42,7 @@ export const SubscriptionsTableBody = async ({
   return (
     <ClientSubscriptionsTableBody
       data={data}
+      page="subscriptions"
       controlBarTargetId={controlBarTargetId}
       isEmpty={data.length === 0 && Object.keys(pruned).length === 0}
     />

@@ -32,7 +32,6 @@ const BASE_RULES = {
           position: "after",
         },
         {
-          /* eslint-disable-next-line max-len */
           pattern:
             "{@prisma,@prisma/**,prisma,prisma/**,server,server/**,application,application/**}",
           group: "external",
@@ -76,7 +75,8 @@ const BASE_RULES = {
       ignoreUrls: true,
       ignoreTemplateLiterals: true,
       ignoreRegExpLiterals: true,
-      ignorePattern: "\\/\\*\\s+eslint-disable-next-line(.?)+\\*\\/$",
+      /* eslint-disable-next-line quotes */
+      ignorePattern: '^import\\s(.?)+(from|as)\\s"(.?)+";$',
     },
   ],
   "arrow-body-style": ["error", "as-needed"],

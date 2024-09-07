@@ -6,7 +6,6 @@ import { SubscriptionsDefaultOrdering } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
 import { SubscriptionsAdminTableColumns } from "~/features/subscriptions";
-/* eslint-disable-next-line max-len */
 import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
 
 import { SubscriptionsTableBody } from "./SubscriptionsTableBody";

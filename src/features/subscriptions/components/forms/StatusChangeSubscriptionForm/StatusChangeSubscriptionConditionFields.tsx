@@ -11,7 +11,6 @@ import { Form, type FormInstance } from "~/components/forms/Form";
 import { CircleNumber } from "~/components/icons/CircleNumber";
 import { Collapse } from "~/components/structural/Collapse";
 import { Label } from "~/components/typography";
-/* eslint-disable-next-line max-len */
 import { ProductTransitionStatusInput } from "~/features/products/components/input/ProductTransitionStatusInput";
 
 import { type StatusChangeSubscriptionFormValues } from "../hooks";

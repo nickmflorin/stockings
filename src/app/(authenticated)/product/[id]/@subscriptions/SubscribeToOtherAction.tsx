@@ -1,5 +1,5 @@
 "use client";
-import type { FullProductSubscription, Product } from "~/database/model";
+import type { ApiProductSubscription, Product } from "~/database/model";
 import { ProductSubscriptionType } from "~/database/model";
 
 import { Link } from "~/components/buttons";
@@ -9,7 +9,7 @@ import { Text } from "~/components/typography";
 
 export interface SubscribeToOtherActionProps {
   readonly product: Product;
-  readonly subscriptions: FullProductSubscription[];
+  readonly subscriptions: ApiProductSubscription[];
 }
 
 export const SubscribeToOtherAction = ({

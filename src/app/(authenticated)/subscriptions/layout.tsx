@@ -1,11 +1,11 @@
 import { type ReactNode } from "react";
 
-interface ProductsLayoutProps {
+interface SubscriptionsLayoutProps {
   readonly table: ReactNode;
   readonly title: ReactNode;
 }
 
-export default function SubscriptionsLayout({ table, title }: ProductsLayoutProps) {
+export default function SubscriptionsLayout({ table, title }: SubscriptionsLayoutProps) {
   return (
     <div className="flex flex-col gap-[16px]">
       {title}

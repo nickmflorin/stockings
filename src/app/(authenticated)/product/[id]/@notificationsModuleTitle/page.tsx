@@ -23,7 +23,7 @@ export default async function NotificationsModuleHeaderPage({
   const {
     data: { count },
   } = await fetchProductNotificationsCount(
-    { filters: { ...filters, products: [params.id] } },
+    { filters: { ...filters, products: [params.id] }, visibility: "public" },
     { strict: true },
   );
   return (

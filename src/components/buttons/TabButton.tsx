@@ -25,6 +25,7 @@ export const TabButton = ({
       "rounded-none rounded-t-md relative top-[2px]",
       "border-b-[2px] text-gray-800",
       "hover:bg-neutral-100",
+      "px-3",
       {
         "border-transparent hover:border-gray-300": !(isActive || isPending),
         "border-blue-700": isActive || isPending,

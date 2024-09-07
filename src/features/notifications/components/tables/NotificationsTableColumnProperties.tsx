@@ -11,9 +11,7 @@ import { NotificationMediumBadge } from "~/features/notifications/components/bad
 import { NotificationStateText } from "~/features/notifications/components/NotificationStateText";
 import { NotificationTypeText } from "~/features/notifications/components/NotificationTypeText";
 import { type ProductNotificationsTableColumnId } from "~/features/notifications/types";
-/* eslint-disable-next-line max-len */
 import { PriceChangeConditionTransition } from "~/features/subscriptions/components/PriceChangeConditionTransition";
-/* eslint-disable-next-line max-len */
 import { StatusChangeConditionTransition } from "~/features/subscriptions/components/StatusChangeConditionTransition";
 
 export const NotificationsTableColumnProperties = (

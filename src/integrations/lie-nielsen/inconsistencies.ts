@@ -50,21 +50,24 @@ export const checkScrapedProductInconsistencies = (product: ProcessedScrapedProd
     /* The value on the scraped product may be an error object { error: ... } if there was an
        error scraping the field.  In this case, inconsistencies should not be checked. */
     const productValue = rawProductValue.value !== undefined ? rawProductValue.value : null;
-    /* Accessing the validated data on the thumbnail should be safe because the thumbnail's
+
+    if (product.thumbnailData) {
+      /* Accessing the validated data on the thumbnail should be safe because the thumbnail's
        validity should have been checked before being used to instantiate a ScrapedProduct.  If
        the thumbnail is invalid, an error will be thrown here. */
-    const thumbnailValue = product.thumbnail.validatedData[check.field];
+      const thumbnailValue = product.thumbnailData[check.field];
 
-    if (productValue !== null && productValue !== thumbnailValue) {
-      if (inconsistencyIsAllowed(check.field, { productValue, thumbnailValue })) {
-        continue;
+      if (productValue !== null && productValue !== thumbnailValue) {
+        if (inconsistencyIsAllowed(check.field, { productValue, thumbnailValue })) {
+          continue;
+        }
+        logger.warn(
+          `Inconsistent Scraped Product: The value for the attribute '${check.field}' on ` +
+            `the scraped thumbnail is '${thumbnailValue}', but on the scraped product it ` +
+            `is '${productValue}'.`,
+          { thumbnailValue, productValue, field: check.field },
+        );
       }
-      logger.warn(
-        `Inconsistent Scraped Product: The value for the attribute '${check.field}' on ` +
-          `the scraped thumbnail is '${thumbnailValue}', but on the scraped product it ` +
-          `is '${productValue}'.`,
-        { thumbnailValue, productValue, field: check.field },
-      );
     }
   }
 };

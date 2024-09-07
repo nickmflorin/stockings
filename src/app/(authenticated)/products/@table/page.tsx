@@ -9,8 +9,7 @@ import { parseOrdering } from "~/lib/ordering";
 import { ProductsDefaultOrdering, ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
-import { OrderableProductsTableColumnIds } from "~/features/products";
-/* eslint-disable-next-line max-len */
+import { ProductsTableColumns } from "~/features/products";
 import { ProductsTableFilterBar } from "~/features/products/components/tables/ProductsTableFilterBar";
 
 import { ProductsTableBody } from "./ProductsTableBody";
@@ -32,7 +31,7 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: ProductsDefaultOrdering,
-    fields: OrderableProductsTableColumnIds,
+    fields: ProductsTableColumns.orderableColumns.map(c => c.id),
   });
 
   return (

@@ -1,7 +1,11 @@
 import { z } from "zod";
 
-import type { ProductSubscriptionIncludes, ProductSubscriptionType } from "~/database/model";
-import { ProductSubscriptionTypes } from "~/database/model";
+import type {
+  ProductSubscriptionIncludes,
+  ProductSubscriptionIncludesField,
+  ProductSubscriptionType,
+} from "~/database/model";
+import { ProductSubscriptionIncludesFields, ProductSubscriptionTypes } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
 import { type Ordering, type Order } from "~/lib/ordering";
@@ -77,3 +81,17 @@ export const SubscriptionsFiltersOptions: ParseFiltersOptions<typeof Subscriptio
     users: { defaultValue: [], excludeWhen: v => v.length === 0 },
     search: { defaultValue: "", excludeWhen: v => v.length === 0 },
   };
+
+export const SubscriptionIncludesSchema = z
+  .union([z.string(), z.array(z.string())])
+  .transform(value => {
+    if (typeof value === "string") {
+      return (
+        ProductSubscriptionIncludesFields.contains(value) ? [value] : []
+      ) as ProductSubscriptionIncludes;
+    }
+    return value.reduce(
+      (prev, curr) => (ProductSubscriptionIncludesFields.contains(curr) ? [...prev, curr] : prev),
+      [] as ProductSubscriptionIncludesField[],
+    ) as ProductSubscriptionIncludes;
+  });

@@ -17,11 +17,8 @@ import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
 import { classNames, type ComponentProps } from "~/components/types";
 import { ShowHide } from "~/components/util";
-/* eslint-disable-next-line max-len */
 import { NotificationMediumSelect } from "~/features/notifications/components/input/NotificationMediumSelect";
-/* eslint-disable-next-line max-len */
 import { NotificationStateSelect } from "~/features/notifications/components/input/NotificationStateSelect";
-/* eslint-disable-next-line max-len */
 import { NotificationTypeSelect } from "~/features/notifications/components/input/NotificationTypeSelect";
 import { ProductSelect } from "~/features/products/components/input/ProductSelect";
 import { useFilters } from "~/hooks/use-filters";

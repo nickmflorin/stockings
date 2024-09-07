@@ -21,7 +21,7 @@ import type { ActionVisibility } from "~/actions/types/actions";
 export const ProductNotificationOrderableFields = ["product", "state", "user"] as const;
 export type ProductNotificationOrderableField = (typeof ProductNotificationOrderableFields)[number];
 
-export const ProductNotificationsDefaultOrdering: Ordering<ProductNotificationOrderableField> = {
+export const ProductNotificationsDefaultOrdering: Ordering<"state"> = {
   orderBy: "state",
   order: "desc",
 };

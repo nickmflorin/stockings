@@ -4,9 +4,8 @@ import { getTransformedClerkData, updateUserFromClerk } from "~/database/model/a
 import { db } from "~/database/prisma";
 
 import { cli } from "~/scripts";
-import { type ScriptContext } from "~/scripts/context";
 
-export const seedUsers = cli.inDevRestrictedEnv(async ({ clerkUser }: ScriptContext) => {
+export const seedUsers = cli.inDevRestrictedEnv(async ({ clerkUser }: cli.ScriptContext) => {
   const users = (await clerk.users.getUserList({})).filter(u => u.id !== clerkUser.id);
 
   const existingUsers = await db.user.findMany({

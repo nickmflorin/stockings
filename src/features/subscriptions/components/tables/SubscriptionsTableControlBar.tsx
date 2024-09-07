@@ -13,7 +13,6 @@ import { DisableButton } from "~/components/buttons/DisableButton";
 import { EnableButton } from "~/components/buttons/EnableButton";
 import { Tooltip } from "~/components/floating/Tooltip";
 import { TableControlBar, type TableControlBarProps } from "~/components/tables/TableControlBar";
-/* eslint-disable-next-line max-len */
 import { DeleteSubscriptionsConfirmationDialog } from "~/features/subscriptions/components/dialogs/DeleteSubscriptionsConfirmationDialog";
 
 export interface SubscriptionsTableFilterBarProps

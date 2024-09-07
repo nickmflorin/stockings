@@ -16,20 +16,25 @@ const ProductSubscriptionsAdminTableBody = dynamic(
 
 export interface SubscriptionsTableBodyProps {
   readonly productId: string;
+  readonly filters: Omit<SubscriptionsControls["filters"], "products">;
+  readonly page: number;
   readonly ordering: SubscriptionsControls["ordering"];
 }
 
 export const SubscriptionsTableBody = async ({
   ordering,
   productId,
+  filters,
+  page,
 }: SubscriptionsTableBodyProps): Promise<JSX.Element> => {
   const { data: product } = await fetchProduct(productId, { includes: [] }, { strict: true });
   const { data } = await fetchProductSubscriptions(
     {
       ordering,
-      filters: { products: [product.id] },
-      includes: ["conditions", "product", "notificationsCount"],
+      filters: { ...filters, products: [product.id] },
+      includes: ["conditions", "user", "notificationsCount"],
       visibility: "admin",
+      page,
     },
     { strict: true },
   );

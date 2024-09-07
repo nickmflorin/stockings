@@ -3,7 +3,7 @@ import { useState, useTransition } from "react";
 
 import { toast } from "react-toastify";
 
-import type { FullProductSubscription } from "~/database/model";
+import type { ApiProductSubscription } from "~/database/model";
 import { logger } from "~/internal/logger";
 
 import { deleteProductSubscriptions } from "~/actions/subscriptions";
@@ -13,7 +13,7 @@ import { ButtonFooter } from "~/components/structural/ButtonFooter";
 
 export interface DeleteSubscriptionsConfirmationDialogProps {
   readonly isOpen: boolean;
-  readonly rows: FullProductSubscription[];
+  readonly rows: ApiProductSubscription[];
   readonly onClose: () => void;
   readonly onSuccess: () => void;
   readonly onCancel: () => void;

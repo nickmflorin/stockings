@@ -17,7 +17,7 @@ export const fetchStatusChangeSubcription = cache(
   async <C extends FetchActionContext>(
     id: string,
     context: C,
-  ): Promise<FetchActionResponse<ApiStatusChangeSubscription, C>> => {
+  ): Promise<FetchActionResponse<ApiStatusChangeSubscription<["conditions"]>, C>> => {
     const { user, error } = await getAuthedUser();
     if (error) {
       return errorInFetchContext(error, context);
@@ -25,7 +25,7 @@ export const fetchStatusChangeSubcription = cache(
 
     const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 
-    const subscription: ApiStatusChangeSubscription | null =
+    const subscription: ApiStatusChangeSubscription<["conditions"]> | null =
       await enhanced.statusChangeSubscription.findUnique({
         where: { id },
         include: {
@@ -45,4 +45,9 @@ export const fetchStatusChangeSubcription = cache(
     }
     return dataInFetchContext(subscription, context);
   },
-);
+) as {
+  <C extends FetchActionContext>(
+    id: string,
+    context: C,
+  ): Promise<FetchActionResponse<ApiStatusChangeSubscription<["conditions"]>, C>>;
+};

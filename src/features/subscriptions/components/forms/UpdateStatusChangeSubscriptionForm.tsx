@@ -43,7 +43,7 @@ export const UpdateStatusChangeSubscriptionForm = ({
     isLoading,
     error,
   } = useStatusChangeSubscription(subscriptionId, {
-    query: {},
+    query: { includes: ["conditions"] },
   });
 
   useEffect(() => {
