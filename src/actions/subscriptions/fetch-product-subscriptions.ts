@@ -58,8 +58,7 @@ const whereClause = ({
   const clause = filters ? filtersClause(filters) : [];
   if (visibilityIsAdmin(visibility)) {
     return { AND: clause };
-  }
-  if (clause.length !== 0) {
+  } else if (clause.length !== 0) {
     return { AND: [...clause, { userId: user.id }] };
   }
   return { userId: user.id };
@@ -77,6 +76,14 @@ export const fetchProductSubscriptionsCount = cache(
     if (error) {
       return errorInFetchContext(error, context);
     } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
+      return errorInFetchContext(error, context);
+    } else if (
+      !visibilityIsAdmin(visibility) &&
+      filtersHaveField("users", filters, SubscriptionsFiltersOptions)
+    ) {
       const error = ApiClientGlobalError.Forbidden({
         message: "The user does not have permission to access this data.",
       });
@@ -113,6 +120,14 @@ export const fetchProductSubscriptionsPagination = cache(
     if (error) {
       return errorInFetchContext(error, context);
     } else if (visibilityIsAdmin(visibility) && !isAdmin) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
+      return errorInFetchContext(error, context);
+    } else if (
+      !visibilityIsAdmin(visibility) &&
+      filtersHaveField("users", filters, SubscriptionsFiltersOptions)
+    ) {
       const error = ApiClientGlobalError.Forbidden({
         message: "The user does not have permission to access this data.",
       });

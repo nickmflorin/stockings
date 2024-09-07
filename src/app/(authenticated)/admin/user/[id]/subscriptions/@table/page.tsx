@@ -50,7 +50,7 @@ export default async function UserSubscriptionsTablePage({
   return (
     <SubscriptionsAdminTableView
       controlBarTargetId="user-subscriptions-control-bar"
-      excludeColumns={["product"]}
+      excludeColumns={["user"]}
       filterBar={
         <Suspense>
           <SubscriptionsTableFilterBar />
@@ -59,7 +59,7 @@ export default async function UserSubscriptionsTablePage({
       pagination={
         <Suspense key={JSON.stringify(filters) + String(page)}>
           <SubscriptionsTablePaginator
-            filters={{ ...filters, products: [params.id] }}
+            filters={{ ...filters, users: [params.id] }}
             page={page}
             visibility="public"
           />
