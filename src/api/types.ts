@@ -55,7 +55,7 @@ const ApiClientGlobalErrorJsonSchema = z.object({
     z.literal(ApiClientGlobalErrorCodes.NOT_FOUND),
   ]),
   status: z.number().int(),
-  internalMessage: z.string(),
+  internalMessage: z.string().optional(),
   message: z.string(),
   extra: z.any().optional(),
 });

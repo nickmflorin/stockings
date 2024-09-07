@@ -15,7 +15,7 @@ export const updatePriceChangeSubscription = async (
   subscriptionId: string,
   data: z.infer<typeof PriceChangeSubscriptionSchema>,
 ): Promise<MutationActionResponse<PriceChangeSubscription>> => {
-  const { user, error } = await getAuthedUser();
+  const { user, error, isAdmin } = await getAuthedUser();
   if (error) {
     return { error: error.json };
   }
@@ -27,7 +27,7 @@ export const updatePriceChangeSubscription = async (
   });
   if (!subscription) {
     return { error: ApiClientGlobalError.NotFound({}).json };
-  } else if (subscription.userId !== user.id) {
+  } else if (subscription.userId !== user.id && !isAdmin) {
     return {
       error: ApiClientGlobalError.Forbidden({
         message: "You do not have permission to access to this subscription.",

@@ -1,11 +1,13 @@
 import { isError } from "~/application/errors";
-import { type VercelEnvironmentName, type EnvironmentName } from "~/environment/constants";
+import {
+  type VercelEnvironmentName,
+  type EnvironmentName,
+  type LogLevel,
+} from "~/environment/constants";
 
 import { type HttpError, isHttpError } from "~/integrations/http";
 
-import { type ApiClientErrorJson } from "~/api";
-
-import { LogLevel } from "~/environment/constants";
+import { isApiClientErrorJson, type ApiClientErrorJson } from "~/api";
 
 export type NextLoggerTransport = "sentry" | "browser";
 
@@ -52,4 +54,4 @@ export interface SentryCaptureContext {
 export type LoggerError = Error | HttpError | ApiClientErrorJson;
 
 export const isLoggerError = (error: unknown): error is LoggerError =>
-  isError(error) || isHttpError(error);
+  isError(error) || isHttpError(error) || isApiClientErrorJson(error);

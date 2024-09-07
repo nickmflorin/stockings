@@ -11,7 +11,7 @@ import { ApiClientGlobalError } from "~/api";
 export const deleteProductSubscription = async (
   id: string,
 ): Promise<MutationActionResponse<{ message: string }>> => {
-  const { user, error } = await getAuthedUser();
+  const { user, error, isAdmin } = await getAuthedUser();
   if (error) {
     return { error: error.json };
   }
@@ -23,14 +23,13 @@ export const deleteProductSubscription = async (
   });
   if (!subscription) {
     return { error: ApiClientGlobalError.NotFound({}).json };
-  } else if (subscription.userId !== user.id) {
+  } else if (subscription.userId !== user.id && !isAdmin) {
     return {
       error: ApiClientGlobalError.Forbidden({
         message: "You do not have permission to modify this subscription.",
       }).json,
     };
   }
-
   return enhanced.$transaction(async tx => {
     if (subscription.subscriptionType === ProductSubscriptionType.PriceChangeSubscription) {
       await tx.priceChangeNotification.deleteMany({

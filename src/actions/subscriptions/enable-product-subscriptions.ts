@@ -15,7 +15,7 @@ import { ApiClientGlobalError } from "~/api";
 export const enableProductSubscriptions = async (
   _ids: string[],
 ): Promise<MutationActionResponse<{ success: true }>> => {
-  const { user, error } = await getAuthedUser();
+  const { user, error, isAdmin } = await getAuthedUser();
   if (error) {
     return { error: error.json };
   }
@@ -44,6 +44,15 @@ export const enableProductSubscriptions = async (
     logger.error(
       "The request contained subscription IDs that either do not exist or are already enabled.",
     );
+  }
+  if (!isAdmin) {
+    if (subscriptions.some(sub => sub.userId !== user.id)) {
+      return {
+        error: ApiClientGlobalError.Forbidden({
+          message: "You do not have permission to modify these subscriptions.",
+        }).json,
+      };
+    }
   }
   await enhanced.productSubscription.updateMany({
     where: { id: { in: subscriptions.map(sub => sub.id) } },

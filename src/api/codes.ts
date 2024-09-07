@@ -4,7 +4,7 @@ export const ApiClientGlobalErrorCodes = enumeratedLiterals(
   [
     {
       value: "NOT_AUTHENTICATED",
-      status: 403,
+      status: 401,
       message: "You must be authenticated to perform this action.",
     },
     {
@@ -15,7 +15,7 @@ export const ApiClientGlobalErrorCodes = enumeratedLiterals(
     { value: "BAD_REQUEST", status: 400, message: "Bad request." },
     {
       value: "FORBIDDEN",
-      status: 401,
+      status: 403,
       message: "You do not have permission to perform this action.",
     },
     {

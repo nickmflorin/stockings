@@ -96,11 +96,12 @@ export const useSubscriptionsTableRowActions = <M extends SubscriptionsTableMode
           }
           const { error } = response;
           if (error) {
-            logger.errorUnsafe(
-              e,
+            logger.error(
+              error,
               `There was an error enabling subscription with ID '${subscription.id}'!`,
             );
             toast.error("There was an error enabling the subscription. Please try again later.");
+            instance.setLoading(false);
             return;
           }
           return enableTransition(() => {
@@ -131,11 +132,12 @@ export const useSubscriptionsTableRowActions = <M extends SubscriptionsTableMode
           }
           const { error } = response;
           if (error) {
-            logger.errorUnsafe(
-              e,
+            logger.error(
+              error,
               `There was an error disabling subscription with ID '${subscription.id}'!`,
             );
             toast.error("There was an error disabling the subscription. Please try again later.");
+            instance.setLoading(false);
             return;
           }
           return disableTransition(() => {
@@ -165,11 +167,12 @@ export const useSubscriptionsTableRowActions = <M extends SubscriptionsTableMode
           }
           const { error } = response;
           if (error) {
-            logger.errorUnsafe(
-              e,
+            logger.error(
+              error,
               `There was an error deleting the subscription with ID '${subscription.id}'!`,
             );
             toast.error("There was an error deleting the subscription. Please try again later.");
+            instance.setLoading(false);
             return;
           }
           return deleteTransition(() => {

@@ -15,7 +15,7 @@ import { ApiClientGlobalError } from "~/api";
 export const deleteProductSubscriptions = async (
   _ids: string[],
 ): Promise<MutationActionResponse<{ message: string }>> => {
-  const { user, error } = await getAuthedUser();
+  const { user, error, isAdmin } = await getAuthedUser();
   if (error) {
     return { error: error.json };
   }
@@ -40,7 +40,7 @@ export const deleteProductSubscriptions = async (
       message: "Request contained subscription ID(s) that do not exist.",
     });
     return { error: err.json };
-  } else if (subscriptions.filter(sub => sub.userId !== user.id).length !== 0) {
+  } else if (subscriptions.some(sub => sub.userId !== user.id) && !isAdmin) {
     logger.error(
       "Encountered subscription ID(s) associated with subscriptions that the user does not " +
         "have access to.",
@@ -48,7 +48,7 @@ export const deleteProductSubscriptions = async (
     );
     return {
       error: ApiClientGlobalError.Forbidden({
-        message: "The request contained subscription ID(s) that the user does not have access to.",
+        message: "You do not have permission to modify these subscriptions.",
       }).json,
     };
   }

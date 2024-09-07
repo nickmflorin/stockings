@@ -1,5 +1,3 @@
-import { get } from "http";
-
 import { NotificationState } from "~/database/model";
 import { db } from "~/database/prisma";
 
