@@ -28,12 +28,12 @@ export const processSubscription = async (
     (maximumLookback !== undefined || maximumLookback !== null) &&
     process.env.NODE_ENV !== "development"
   ) {
-    return cli.error("Can only specify maximum lookback in development mode!");
+    throw new cli.CommandLineDevOnlyError("Can only specify maximum lookback in development mode!");
   } else if (
     (maximumRecords !== undefined || maximumRecords !== null) &&
     process.env.NODE_ENV !== "development"
   ) {
-    return cli.error("Can only specify maximum records in development mode!");
+    throw new cli.CommandLineDevOnlyError("Can only specify maximum records in development mode!");
   }
   const timestamp =
     maximumLookback !== null && maximumLookback !== undefined

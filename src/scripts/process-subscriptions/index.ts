@@ -7,6 +7,7 @@ import { processSubscriptions } from "./process-subscriptions";
 
 const script: cli.Script = async ctx => {
   const _product = await cli.getProductPositionalArgument({ required: false });
+  const user = await cli.getUserNamedArgument({ required: false });
 
   const maximumLookback = cli.getIntegerCliArgument("max-lookback", {});
   if (maximumLookback !== undefined && process.env.NODE_ENV !== "development") {
@@ -24,13 +25,13 @@ const script: cli.Script = async ctx => {
   }
 
   if (!_product) {
-    return await processSubscriptions({ maximumLookback, maximumRecords }, ctx);
+    return await processSubscriptions({ maximumLookback, maximumRecords, user }, ctx);
   }
   const product = await db.product.findUniqueOrThrow({
     where: { id: _product.id },
     include: { records: { orderBy: [{ timestamp: "desc" }] } },
   });
-  await processProductSubscriptions({ product, clean, maximumLookback, maximumRecords }, ctx);
+  await processProductSubscriptions({ product, clean, maximumLookback, maximumRecords, user }, ctx);
 };
 
 cli.runScript(script);

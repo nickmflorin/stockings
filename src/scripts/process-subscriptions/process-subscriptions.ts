@@ -1,4 +1,4 @@
-import { enhance } from "~/database/model";
+import { enhance, type User } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { cli } from "~/scripts";
@@ -6,6 +6,7 @@ import { cli } from "~/scripts";
 import { processSubscription } from "./process-subscription";
 
 interface ProcessSubscriptionsParams {
+  readonly user?: User | null;
   readonly maximumLookback?: number | null;
   readonly maximumRecords?: number | null;
 }
@@ -18,11 +19,11 @@ export const processSubscriptions = async (
 
   const subscriptions = [
     ...(await enhanced.statusChangeSubscription.findMany({
-      where: { enabled: true },
+      where: { enabled: true, userId: params.user?.id },
       include: { conditions: true, product: true },
     })),
     ...(await enhanced.priceChangeSubscription.findMany({
-      where: { enabled: true },
+      where: { enabled: true, userId: params.user?.id },
       include: { product: true },
     })),
   ];

@@ -1,6 +1,6 @@
 import { chunk } from "lodash-es";
 
-import { enhance, type ApiProduct } from "~/database/model";
+import { enhance, type ApiProduct, type User } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { cli } from "~/scripts";
@@ -13,23 +13,24 @@ interface ProcessProductSubscriptionParams {
   readonly maximumLookback?: number | null;
   readonly maximumRecords?: number | null;
   readonly clean?: boolean;
+  readonly user?: User | null;
   readonly product: ApiProduct<["records"]>;
 }
 
 export const processProductSubscriptions = async (
-  { product, clean, maximumLookback, maximumRecords }: ProcessProductSubscriptionParams,
+  { product, clean, user, maximumLookback, maximumRecords }: ProcessProductSubscriptionParams,
   ctx: cli.ScriptContext,
 ) => {
   const enhanced = enhance(db, { user: ctx.user }, { kinds: ["delegate"] });
 
   if (clean) {
     if (process.env.NODE_ENV !== "development") {
-      return cli.error("Can only clean subscriptions in development mode!");
+      throw new cli.CommandLineDevOnlyError("Can only clean subscriptions in development mode!");
     }
     cli.info("Deleting all product notifications so they can be regenerated.");
 
     const ids = await enhanced.productNotification.findMany({
-      where: { productId: product.id },
+      where: { productId: product.id, userId: user?.id },
       select: { id: true },
     });
     /* We have to chunk out the delete of the product notifications because we occasionally get
@@ -48,11 +49,11 @@ export const processProductSubscriptions = async (
 
   const subscriptions = [
     ...(await enhanced.statusChangeSubscription.findMany({
-      where: { enabled: true, productId: product.id },
+      where: { enabled: true, productId: product.id, userId: user?.id },
       include: { conditions: true },
     })),
     ...(await enhanced.priceChangeSubscription.findMany({
-      where: { enabled: true, productId: product.id },
+      where: { enabled: true, productId: product.id, userId: user?.id },
     })),
   ];
 

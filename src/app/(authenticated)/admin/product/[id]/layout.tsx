@@ -59,7 +59,7 @@ export default async function AdminProductLayout({ children, params }: AdminProd
           },
         ]}
       />
-      <div className="grow min-h-0 max-h-full h-full flex flex-col">{children}</div>
+      <div className="grow min-h-0 max-h-full h-full flex flex-col mt-1">{children}</div>
     </div>
   );
 }
