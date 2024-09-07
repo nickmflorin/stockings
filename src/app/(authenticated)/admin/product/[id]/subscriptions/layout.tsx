@@ -10,7 +10,7 @@ export default function ProductSubscriptionsLayout({
   title,
 }: ProductSubscriptionsLayoutProps) {
   return (
-    <div className="flex flex-col gap-[16px] h-full pl-1 mt-1">
+    <div className="flex flex-col gap-[16px] h-full pl-1">
       {title}
       <div className="flex flex-row items-center grow min-h-[0px] overflow-auto">{table}</div>
     </div>

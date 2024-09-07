@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 
 import { type SubscriptionsControls } from "~/actions";
 import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-product-subscriptions";
-import { fetchUser } from "~/actions/users/fetch-user";
 
 import { Loading } from "~/components/loading/Loading";
 
@@ -16,20 +15,24 @@ const UserSubscriptionsTableBody = dynamic(
 
 export interface SubscriptionsTableBodyProps {
   readonly userId: string;
+  readonly filters: Omit<SubscriptionsControls["filters"], "users">;
+  readonly page: number;
   readonly ordering: SubscriptionsControls["ordering"];
 }
 
 export const SubscriptionsTableBody = async ({
   ordering,
   userId,
+  filters,
+  page,
 }: SubscriptionsTableBodyProps): Promise<JSX.Element> => {
-  const { data: user } = await fetchUser(userId, { includes: [] }, { strict: true });
   const { data } = await fetchProductSubscriptions(
     {
       ordering,
-      filters: { users: [user.id] },
+      filters: { ...filters, users: [userId] },
       includes: ["conditions", "product", "notificationsCount"],
       visibility: "admin",
+      page,
     },
     { strict: true },
   );

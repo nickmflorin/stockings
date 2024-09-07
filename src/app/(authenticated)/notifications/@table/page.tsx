@@ -51,7 +51,7 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
       }
       pagination={
         <Suspense key={JSON.stringify(filters) + String(page)}>
-          <NotificationsTablePaginator filters={filters} page={page} />
+          <NotificationsTablePaginator filters={filters} page={page} visibility="public" />
         </Suspense>
       }
     >

@@ -57,6 +57,7 @@ export default async function ProductNotificationsPage({
       pagination={
         <Suspense key={JSON.stringify(filters) + String(page)}>
           <NotificationsTablePaginator
+            visibility="public"
             filters={{ ...filters, products: [params.id] }}
             page={page}
           />

@@ -17,12 +17,12 @@ import { useProductsTableColumnProperties } from "./hooks/use-column-properties"
 const SubscriptionCell = dynamic(() => import("./cells/SubscriptionCell"));
 
 export interface ProductsTableBodyProps
-  extends DataTableBodyProps<
-    Omit<
+  extends Omit<
+    DataTableBodyProps<
       ApiProduct<["statusChangeSubscription", "priceChangeSubscription"]>,
-      "columns" | "getRowActions" | "actionMenuWidth" | "onRowClick"
+      ProductsTableColumnId
     >,
-    ProductsTableColumnId
+    "columns" | "getRowActions" | "actionMenuWidth" | "onRowClick"
   > {}
 
 export const ProductsTableBody = (props: ProductsTableBodyProps): JSX.Element => {

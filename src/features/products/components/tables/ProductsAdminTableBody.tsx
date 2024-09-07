@@ -13,9 +13,9 @@ import { ProductsAdminTableColumns, type ProductsAdminTableColumnId } from "~/fe
 import { useProductsTableColumnProperties } from "./hooks/use-column-properties";
 
 export interface ProductsAdminTableBodyProps
-  extends DataTableBodyProps<
-    Omit<ApiProduct<[]>, "columns" | "getRowActions" | "actionMenuWidth" | "onRowClick">,
-    ProductsAdminTableColumnId
+  extends Omit<
+    DataTableBodyProps<ApiProduct<[]>, ProductsAdminTableColumnId>,
+    "columns" | "getRowActions" | "actionMenuWidth" | "onRowClick"
   > {}
 
 export const ProductsAdminTableBody = (props: ProductsAdminTableBodyProps): JSX.Element => {
