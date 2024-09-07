@@ -1,4 +1,5 @@
-"use client";
+import { type ApiProductSubscription } from "~/database/model";
+
 import {
   SubscriptionsAdminTableBody,
   type SubscriptionsAdminTableBodyProps,
@@ -6,7 +7,9 @@ import {
 
 export interface ProductSubscriptionsTableBodyProps
   extends Omit<
-    SubscriptionsAdminTableBodyProps,
+    SubscriptionsAdminTableBodyProps<
+      ApiProductSubscription<["conditions", "user", "notificationsCount"]>
+    >,
     | "emptyContent"
     | "isEmpty"
     | "controlBarTargetId"

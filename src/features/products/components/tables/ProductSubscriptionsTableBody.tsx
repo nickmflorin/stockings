@@ -17,7 +17,7 @@ export interface ProductSubscriptionsTableBodyProps
     | "controlBarTargetId"
     | "controlBarTooltipsInPortal"
     | "excludeColumns"
-    | "scope"
+    | "page"
   > {
   readonly product?: Product;
 }
@@ -30,7 +30,7 @@ export const ProductSubscriptionsTableBody = ({
   return (
     <SubscriptionsTableBody
       {...props}
-      scope="product"
+      page="product-detail"
       isEmpty={props.data.length === 0}
       excludeColumns={["product"]}
       emptyContent={
