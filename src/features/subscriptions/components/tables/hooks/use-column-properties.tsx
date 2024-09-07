@@ -152,32 +152,12 @@ export const useSubscriptionsTableColumnProperties = <M extends SubscriptionsTab
     },
     createdAt: {
       cellRenderer(datum) {
-        return (
-          <Text fontWeight="regular" fontSize="sm" className="text-description">
-            Created on{" "}
-            <DateTimeText
-              className="text-body"
-              fontWeight="medium"
-              component="span"
-              value={datum.createdAt}
-            />
-          </Text>
-        );
+        return <DateTimeText formatSeparately value={datum.createdAt} />;
       },
     },
     updatedAt: {
       cellRenderer(datum) {
-        return (
-          <Text fontWeight="regular" fontSize="sm" className="text-description">
-            Last updated on{" "}
-            <DateTimeText
-              className="text-body"
-              fontWeight="medium"
-              component="span"
-              value={datum.updatedAt}
-            />
-          </Text>
-        );
+        return <DateTimeText formatSeparately value={datum.updatedAt} />;
       },
     },
   };
