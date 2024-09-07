@@ -38,6 +38,7 @@ export const DataTableHeaderRow = <D extends types.DataTableDatum, I extends str
         <DataTableHeaderCell<D, I>
           key={column.id}
           column={column}
+          isOrdered={ordering?.orderBy === column.id}
           order={ordering?.orderBy === column.id ? ordering.order : null}
           onSort={e => {
             if (column.isOrderable && onSort) {

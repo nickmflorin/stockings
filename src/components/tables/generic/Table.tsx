@@ -1,16 +1,14 @@
-"use client";
-import RootTable, { type TableProps as RootTableProps } from "@mui/material/Table";
-
 import { type TableSize } from "~/components/tables/types";
-import type { ComponentProps } from "~/components/types";
+import type { ComponentProps, HTMLElementProps } from "~/components/types";
 import { classNames } from "~/components/types";
 
-export type TableProps = Omit<RootTableProps<"table">, keyof ComponentProps> &
-  ComponentProps & {
-    readonly size?: TableSize;
-    readonly bordered?: boolean;
-    readonly highlightRowsOnHover?: boolean;
-  };
+export interface TableProps
+  extends ComponentProps,
+    Omit<HTMLElementProps<"table">, keyof ComponentProps> {
+  readonly size?: TableSize;
+  readonly bordered?: boolean;
+  readonly highlightRowsOnHover?: boolean;
+}
 
 export const Table = ({
   children,
@@ -19,7 +17,7 @@ export const Table = ({
   size = "medium",
   ...props
 }: TableProps) => (
-  <RootTable
+  <table
     {...props}
     className={classNames(
       "table",
@@ -32,7 +30,7 @@ export const Table = ({
     )}
   >
     {children}
-  </RootTable>
+  </table>
 );
 
 export default Table;

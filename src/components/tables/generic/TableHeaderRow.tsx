@@ -1,4 +1,3 @@
-"use client";
 import { classNames } from "~/components/types";
 import { type ClassName } from "~/components/types";
 

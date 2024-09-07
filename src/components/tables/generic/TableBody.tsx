@@ -1,23 +1,16 @@
-"use client";
 import dynamic from "next/dynamic";
 import { type ReactNode } from "react";
 
-import { type TableBodyProps as RootTableBodyProps } from "@mui/material/TableBody";
-
 import { Loading } from "~/components/loading/Loading";
 import { tableHasLoadingIndicator, type TableLoadingIndicator } from "~/components/tables/types";
-import { classNames, type QuantitativeSize, type MuiComponentProps } from "~/components/types";
+import { classNames, type QuantitativeSize, type ComponentProps } from "~/components/types";
 
 const TableSkeleton = dynamic(() => import("./TableSkeleton").then(mod => mod.TableSkeleton));
 const TableFeedbackState = dynamic(() =>
   import("./TableFeedbackState").then(mod => mod.TableFeedbackState),
 );
 
-const RootTableBody = dynamic(() => import("@mui/material/TableBody"), {
-  loading: () => <Loading isLoading component="tbody" />,
-});
-
-export type TableBodyProps = MuiComponentProps<RootTableBodyProps<"tbody">> & {
+export interface TableBodyProps extends ComponentProps {
   readonly isLoading?: boolean;
   readonly isEmpty?: boolean;
   readonly isError?: boolean;
@@ -32,7 +25,8 @@ export type TableBodyProps = MuiComponentProps<RootTableBodyProps<"tbody">> & {
   readonly cellSkeletons?: ReactNode[];
   readonly skeletonRowHeight?: QuantitativeSize<"px">;
   readonly loadingIndicator?: TableLoadingIndicator;
-};
+  readonly children?: ReactNode;
+}
 
 export const TableBody = ({
   children,
@@ -52,7 +46,7 @@ export const TableBody = ({
   numSkeletonRows,
   ...props
 }: TableBodyProps) => (
-  <RootTableBody
+  <tbody
     {...props}
     className={classNames(
       "table__body",
@@ -95,7 +89,7 @@ export const TableBody = ({
         )}
       </Loading>
     )}
-  </RootTableBody>
+  </tbody>
 );
 
 export default TableBody;

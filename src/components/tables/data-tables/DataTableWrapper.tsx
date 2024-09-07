@@ -30,7 +30,7 @@ export const DataTableWrapper = <D extends types.DataTableDatum, I extends strin
   onSort,
   ...props
 }: DataTableWrapperProps<D, I>): JSX.Element => (
-  <Table {...props} stickyHeader>
+  <Table {...props}>
     <TableHead>
       <DataTableHeaderRow<D, I>
         columns={columns}

@@ -1,4 +1,6 @@
 @use "partials";
+
+@use "../typography" as typography;
 @use "./constants" as constants;
 
 @mixin table-head() {
@@ -102,6 +104,9 @@
 
 .table {
   height: 100%;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 
   @include table-size(constants.$table-default-size);
   @each $size in constants.$table-sizes {
@@ -112,15 +117,35 @@
 
   @include table-head {
     color: constants.$table-color;
+    display: table-header-group;
 
     @include table-header-row($direct: true) {
       color: inherit;
+      display: table-row;
+      vertical-align: middle;
+      outline: 0;
 
       @include table-header-cell($direct: true) {
+        @include typography.font("body", $size: "xs", $weight: "medium");
+        display: table-cell;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        text-align: left;
         border-bottom: none;
-        color: inherit;
-        font-size: 13px;
         background-color: constants.$table-header-bg-color;
+
+        &:not(.table__header-cell--ordered) {
+          .table__header-cell__sort-icon {
+            opacity: 0;
+          }
+
+          @include partials.hovered {
+            .table__header-cell__sort-icon {
+              opacity: 1;
+            }
+          }
+        }
       }
     }
   }
@@ -132,11 +157,17 @@
 
     @include table-body-row($direct: true) {
       color: inherit;
+      display: table-row;
+      vertical-align: middle;
+      outline: 0;
 
       @include table-body-cell($direct: true) {
+        @include typography.font("body", $size: "xs", $weight: "regular");
         color: inherit;
         font-size: 14px;
         border-bottom: none;
+        display: table-cell;
+        text-align: left;
       }
 
       &--highlighted {

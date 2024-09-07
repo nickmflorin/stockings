@@ -22,7 +22,11 @@ export const TableControlBarPlaceholder = ({
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setContainer(document.getElementById(targetId));
+    if (targetId) {
+      setContainer(document.getElementById(targetId));
+    } else {
+      setContainer(null);
+    }
   }, [targetId]);
 
   return (

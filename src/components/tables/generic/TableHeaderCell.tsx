@@ -1,56 +1,84 @@
-"use client";
-import RootTableCell, { type TableCellProps as RootTableCellProps } from "@mui/material/TableCell";
-import TableSortLabel from "@mui/material/TableSortLabel";
+import type { ReactNode } from "react";
+import React from "react";
+
+import { type Order } from "~/lib/ordering";
 
 import { type IconProp, type IconName } from "~/components/icons";
-import type * as types from "~/components/tables/types";
-import { type QuantitativeSize, classNames, type MuiComponentProps } from "~/components/types";
+import { SortIcon } from "~/components/icons/SortIcon";
+import {
+  type QuantitativeSize,
+  classNames,
+  sizeToString,
+  type ComponentProps,
+  TextAlignClassNames,
+  type TextAlign,
+} from "~/components/types";
 
-export interface TableHeaderCellProps
-  extends Omit<MuiComponentProps<RootTableCellProps>, "sortDirection"> {
+export interface TableHeaderCellProps extends ComponentProps {
   readonly icon?: IconProp | IconName;
   readonly isOrderable?: boolean;
-  readonly order?: types.TableOrder | null;
+  readonly order?: Order | null;
+  readonly align?: Extract<TextAlign, "left" | "center" | "right">;
   readonly width?: QuantitativeSize<"px">;
   readonly minWidth?: QuantitativeSize<"px">;
   readonly maxWidth?: QuantitativeSize<"px">;
-  readonly onSort?: (event: React.MouseEvent<unknown>) => void;
+  readonly children?: ReactNode;
+  readonly isOrdered?: boolean;
+  readonly onClick?: (e: React.MouseEvent<HTMLTableHeaderCellElement>) => void;
+  readonly onSort?: (event: React.MouseEvent<HTMLTableHeaderCellElement>) => void;
 }
 
 export const TableHeaderCell = ({
   icon,
   isOrderable = false,
+  align,
   order,
   children,
   width,
   minWidth,
   maxWidth,
+  isOrdered,
   onSort,
+  onClick,
   ...props
 }: TableHeaderCellProps) => (
-  <RootTableCell
+  <th
     {...props}
-    className={classNames("table__cell table__header-cell", props.className)}
-    sortDirection={isOrderable && order ? order : false}
-    sx={[...(Array.isArray(props?.sx) ? props.sx : [props?.sx]), { width, minWidth, maxWidth }]}
+    className={classNames(
+      "table__cell table__header-cell",
+      {
+        "table__header-cell--ordered": isOrdered,
+        "pointer-events-auto cursor-pointer":
+          onClick !== undefined || (isOrderable && order !== undefined),
+      },
+      align ? TextAlignClassNames[align] : "",
+      props.className,
+    )}
+    onClick={e => {
+      onClick?.(e);
+      onSort?.(e);
+    }}
+    style={{
+      ...props.style,
+      minWidth: minWidth ? sizeToString(minWidth, "px") : props.style?.minWidth,
+      maxWidth: maxWidth ? sizeToString(maxWidth, "px") : props.style?.maxWidth,
+      width: width ? sizeToString(width, "px") : props.style?.width,
+    }}
   >
     {isOrderable && order !== undefined ? (
-      <TableSortLabel
-        active={order !== null}
-        direction={order !== null ? order : undefined}
-        onClick={e => onSort?.(e)}
-      >
+      <div className="flex flex-row items-center gap-3">
         {children}
-        {order !== null && (
-          <span className="hidden">
-            {order === "desc" ? "sorted descending" : "sorted ascending"}
-          </span>
-        )}
-      </TableSortLabel>
+        <SortIcon
+          order={order ?? "asc"}
+          icon={icon}
+          className="table__header-cell__sort-icon"
+          size="14px"
+        />
+      </div>
     ) : (
       children
     )}
-  </RootTableCell>
+  </th>
 );
 
 export default TableHeaderCell;

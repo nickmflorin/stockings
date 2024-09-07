@@ -8,7 +8,6 @@ const DrawersProvider = dynamic(() => import("~/components/drawers/DrawersProvid
   ssr: false,
 });
 const MantineProvider = dynamic(() => import("./MantineProvider"), { ssr: false });
-const StylesProvider = dynamic(() => import("./StylesProvider"), { ssr: false });
 const GlobalNavigatableProvider = dynamic(() => import("./GlobalNavigatableProvider"), {
   ssr: false,
 });
@@ -20,11 +19,9 @@ export interface ClientConfigProps {
 export const ClientConfig = (props: ClientConfigProps) => (
   <SWRConfig>
     <MantineProvider>
-      <StylesProvider>
-        <GlobalNavigatableProvider>
-          <DrawersProvider>{props.children}</DrawersProvider>
-        </GlobalNavigatableProvider>
-      </StylesProvider>
+      <GlobalNavigatableProvider>
+        <DrawersProvider>{props.children}</DrawersProvider>
+      </GlobalNavigatableProvider>
     </MantineProvider>
   </SWRConfig>
 );

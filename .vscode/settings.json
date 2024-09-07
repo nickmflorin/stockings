@@ -62,7 +62,7 @@
   "typescript.preferences.quoteStyle": "double",
   "typescript.preferences.autoImportFileExcludePatterns": [
     "@mantine/*",
-    "@mui/*",
+    "@mui/base/*",
     "~/database/model/generated"
   ],
 

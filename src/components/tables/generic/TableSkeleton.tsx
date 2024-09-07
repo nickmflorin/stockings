@@ -1,10 +1,11 @@
 import React, { type ReactNode } from "react";
 
-import Skeleton from "@mui/material/Skeleton";
-
-import { Table } from "~/components/tables/generic/Table";
 import { type TableBodyProps } from "~/components/tables/generic/TableBody";
 import type { QuantitativeSize } from "~/components/types";
+
+import { TableBody } from "./TableBody";
+import { TableBodyCell } from "./TableBodyCell";
+import { TableBodyRow } from "./TableBodyRow";
 
 interface BaseTableSkeletonProps {
   readonly numRows?: number;
@@ -13,6 +14,11 @@ interface BaseTableSkeletonProps {
   readonly rowHeight?: QuantitativeSize<"px">;
 }
 
+/* Note: We are not currently using this component, so we have a dummy
+   '<div className="skeleton" />' as the skeleton for each cell - although the 'skeleton' class
+   name and associated component is not yet built.  This was done so we can preemptively remove
+   @mui from the application in its entirety - and since we are currently not using skeletons
+   *anywhere*, this was a lazy stop-gap for now. */
 const TableSkeletonInner = ({
   numRows = 25,
   cellSkeletons,
@@ -21,13 +27,13 @@ const TableSkeletonInner = ({
 }: BaseTableSkeletonProps) => (
   <>
     {new Array(numRows).fill("").map((e, i) => (
-      <Table.BodyRow tabIndex={-1} key={i} height={rowHeight}>
-        {(cellSkeletons ?? new Array(numColumns).fill(<Skeleton variant="text" />)).map(
+      <TableBodyRow tabIndex={-1} key={i} height={rowHeight}>
+        {(cellSkeletons ?? new Array(numColumns).fill(<div className="skeleton" />)).map(
           (skeleton, i) => (
-            <Table.BodyCell key={i}>{skeleton}</Table.BodyCell>
+            <TableBodyCell key={i}>{skeleton}</TableBodyCell>
           ),
         )}
-      </Table.BodyRow>
+      </TableBodyRow>
     ))}
   </>
 );
@@ -53,14 +59,14 @@ export const TableSkeleton = ({
   ...props
 }: TableSkeletonProps) =>
   component === "tbody" ? (
-    <Table.Body {...props}>
+    <TableBody {...props}>
       <TableSkeletonInner
         cellSkeletons={cellSkeletons}
         numColumns={numColumns}
         numRows={numRows}
         rowHeight={rowHeight}
       />
-    </Table.Body>
+    </TableBody>
   ) : (
     <TableSkeletonInner
       cellSkeletons={cellSkeletons}

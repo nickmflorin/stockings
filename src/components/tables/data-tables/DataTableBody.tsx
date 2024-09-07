@@ -1,7 +1,5 @@
 import { useMemo } from "react";
 
-import Skeleton from "@mui/material/Skeleton";
-
 import { logger } from "~/internal/logger";
 
 import { type Ordering } from "~/lib/ordering";
@@ -75,8 +73,13 @@ export const DataTableBody = <D extends types.DataTableDatum, I extends string>(
     <TableBody
       {...props}
       skeletonRowHeight={props.skeletonRowHeight ?? rowHeight}
+      /* Note: We are not currently using this component, so we have a dummy
+         '<div className="skeleton" />' as the skeleton for each cell - although the 'skeleton'
+         class name and associated component is not yet built.  This was done so we can preemptively
+         remove @mui from the application in its entirety - and since we are currently not using
+         skeletons *anywhere*, this was a lazy stop-gap for now. */
       cellSkeletons={columns.map(
-        ({ config: { skeleton } }, i) => skeleton ?? <Skeleton key={i} variant="text" />,
+        ({ config: { skeleton } }, i) => skeleton ?? <div key={i} className="skeleton" />,
       )}
     >
       {processedData.map((datum, index) => {

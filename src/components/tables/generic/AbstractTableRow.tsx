@@ -1,20 +1,25 @@
-"use client";
-import RootTableRow, { type TableRowProps as RootTableRowProps } from "@mui/material/TableRow";
+import {
+  classNames,
+  type ComponentProps,
+  sizeToString,
+  type QuantitativeSize,
+  type HTMLElementProps,
+} from "~/components/types";
 
-import { classNames } from "~/components/types";
-import { sizeToString, type QuantitativeSize } from "~/components/types";
-
-export type AbstractTableRowProps = RootTableRowProps<"tr"> & {
+export interface AbstractTableRowProps
+  extends ComponentProps,
+    Omit<HTMLElementProps<"tr">, keyof ComponentProps> {
   readonly height?: QuantitativeSize<"px">;
-};
+}
 
 export const AbstractTableRow = ({ height, ...props }: AbstractTableRowProps) => (
-  <RootTableRow
+  <tr
     {...props}
     className={classNames("table__row", props.className)}
-    sx={{
-      height: height ? sizeToString(height, "px") : undefined,
-      maxHeight: height ? sizeToString(height, "px") : undefined,
+    style={{
+      ...props.style,
+      height: height ? sizeToString(height, "px") : props.style?.height,
+      maxHeight: height ? sizeToString(height, "px") : props.style?.maxHeight,
     }}
   />
 );
