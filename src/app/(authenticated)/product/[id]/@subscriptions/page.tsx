@@ -5,7 +5,7 @@ import { parseOrdering } from "~/lib/ordering";
 import { SubscriptionsDefaultOrdering } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
-import { OrderableSubscriptionsTableColumnIds } from "~/features/subscriptions";
+import { SubscriptionsTableColumns } from "~/features/subscriptions";
 /* eslint-disable-next-line max-len */
 import { SubscriptionsTableControlBarPlaceholder } from "~/features/subscriptions/components/tables/SubscriptionsTableControlBarPlaceholder";
 
@@ -22,7 +22,7 @@ export default async function SubscriptionsPage({
 }: SubscriptionsTablePageProps) {
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: SubscriptionsDefaultOrdering,
-    fields: OrderableSubscriptionsTableColumnIds,
+    fields: SubscriptionsTableColumns.orderableColumns.map(c => c.id),
   });
 
   return (
