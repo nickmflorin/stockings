@@ -1,3 +1,5 @@
+import { type ApiProductNotification } from "~/database/model";
+
 import type { TableColumnId, OrderableTableColumnId } from "~/components/tables";
 import { ColumnsConfiguration } from "~/components/tables";
 
@@ -74,3 +76,14 @@ export type ProductNotificationsAdminTableColumnId = TableColumnId<
 export type ProductNotificationsAdminTableOrderableColumnId = OrderableTableColumnId<
   typeof ProductNotificationsAdminTableColumns
 >;
+
+export type ProductNotificationsAdminTableModel =
+  | ApiProductNotification<["product"]>
+  | ApiProductNotification<["product", "user"]>
+  | ApiProductNotification<["user"]>;
+
+export const productNotificationsTableModelHasUser = (
+  m: ProductNotificationsAdminTableModel,
+): m is ApiProductNotification<["product", "user"]> | ApiProductNotification<["user"]> =>
+  (m as ApiProductNotification<["product", "user"]> | ApiProductNotification<["user"]>).user !==
+  undefined;

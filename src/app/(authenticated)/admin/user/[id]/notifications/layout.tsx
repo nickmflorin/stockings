@@ -1,19 +1,21 @@
-import dynamic from "next/dynamic";
 import { type ReactNode } from "react";
 
-import { Loading } from "~/components/loading/Loading";
-
-const NotificationsAdminTableView = dynamic(
-  () => import("~/features/notifications/components/tables/NotificationsAdminTableView"),
-  { loading: () => <Loading isLoading /> },
-);
+import { Badge } from "~/components/badges/Badge";
+import { Title } from "~/components/typography";
 
 interface UserNotificationsLayoutProps {
-  readonly children: ReactNode;
+  readonly table: ReactNode;
+  readonly title: ReactNode;
 }
 
-export default function UserNotificationsLayout({ children }: UserNotificationsLayoutProps) {
+export default function UserNotificationsLayout({ table, title }: UserNotificationsLayoutProps) {
   return (
-    <NotificationsAdminTableView excludeColumns={["user"]}>{children}</NotificationsAdminTableView>
+    <div className="flex flex-col gap-[16px] h-full pl-1">
+      <div className="flex flex-row items-center gap-4">
+        <Title component="h3">Notifications</Title>
+        <Badge>{title}</Badge>
+      </div>
+      <div className="flex flex-row items-center grow min-h-[0px] overflow-auto">{table}</div>
+    </div>
   );
 }

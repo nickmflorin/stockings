@@ -21,6 +21,8 @@ export const UserNotificationsTableBody = (props: UserNotificationsTableBodyProp
     {...props}
     excludeColumns={["user"]}
     isEmpty={props.data.length === 0}
+    controlBarTargetId="user-notifications-control-bar"
+    controlBarTooltipsInPortal
     emptyContent="The user has not yet received any notifications."
   />
 );

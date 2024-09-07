@@ -1,4 +1,3 @@
-"use client";
 import { DisableButton } from "~/components/buttons/DisableButton";
 import { EnableButton } from "~/components/buttons/EnableButton";
 import { TableControlBarPlaceholder } from "~/components/tables/TableControlBarPlaceholder";

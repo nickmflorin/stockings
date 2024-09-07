@@ -61,7 +61,7 @@ export default async function UserSubscriptionsTablePage({
           <SubscriptionsTablePaginator
             filters={{ ...filters, users: [params.id] }}
             page={page}
-            visibility="public"
+            visibility="admin"
           />
         </Suspense>
       }

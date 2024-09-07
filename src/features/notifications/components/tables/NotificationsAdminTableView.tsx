@@ -17,6 +17,7 @@ export interface NotificationsAdminTableViewProps {
   readonly filterBar?: JSX.Element;
   readonly pagination?: JSX.Element;
   readonly excludeColumns?: ProductNotificationsAdminTableColumnId[];
+  readonly controlBarTargetId?: string;
 }
 
 export const NotificationsAdminTableView = ({
@@ -24,6 +25,7 @@ export const NotificationsAdminTableView = ({
   filterBar,
   pagination,
   excludeColumns,
+  controlBarTargetId,
 }: NotificationsAdminTableViewProps) => {
   const [ordering, setOrdering] = useOrdering<ProductNotificationsAdminTableOrderableColumnId>({
     useQueryParams: true,
@@ -31,9 +33,10 @@ export const NotificationsAdminTableView = ({
     defaultOrdering: ProductNotificationsDefaultOrdering,
   });
   return (
-    <TableView header={filterBar} footer={pagination}>
+    <TableView header={filterBar} footer={pagination} controlBarTargetId={controlBarTargetId}>
       <DataTableWrapper
         columns={ProductNotificationsAdminTableColumns.columns}
+        rowsAreSelectable
         excludeColumns={excludeColumns}
         ordering={ordering}
         onSort={(e, col) => {
