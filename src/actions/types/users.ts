@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { UserIncludes } from "~/database/model";
+import { UserIncludesFields, type UserIncludes, type UserIncludesField } from "~/database/model";
 
 import type { ParseFiltersOptions } from "~/lib/filters";
 import { type Ordering, type Order } from "~/lib/ordering";
@@ -28,7 +28,16 @@ export interface UsersControls<I extends UserIncludes = []> {
   readonly ordering: Ordering<UserOrderableField>;
   readonly page?: number;
   readonly includes: I;
+  readonly limit?: number;
 }
+
+// Used for API Routes
+export type FlattenedUserControls<I extends UserIncludes = UserIncludes> = UsersFilters &
+  Ordering<UserOrderableField> & {
+    readonly page: number;
+    readonly includes: I;
+    readonly limit: number;
+  };
 
 export const UsersFiltersSchemas = {
   search: z.string(),
@@ -39,3 +48,14 @@ export const UsersFiltersSchemas = {
 export const UsersFiltersOptions: ParseFiltersOptions<typeof UsersFiltersSchemas> = {
   search: { defaultValue: "", excludeWhen: v => v.length === 0 },
 };
+
+// Used for API Routes
+export const UserIncludesSchema = z.union([z.string(), z.array(z.string())]).transform(value => {
+  if (typeof value === "string") {
+    return (UserIncludesFields.contains(value) ? [value] : []) as UserIncludes;
+  }
+  return value.reduce(
+    (prev, curr) => (UserIncludesFields.contains(curr) ? [...prev, curr] : prev),
+    [] as UserIncludesField[],
+  ) as UserIncludes;
+});

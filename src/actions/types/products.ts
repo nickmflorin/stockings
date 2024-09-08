@@ -117,6 +117,7 @@ export const ProductsFiltersOptions: ParseFiltersOptions<typeof ProductsFiltersS
   subscriptionTypes: { defaultValue: [], excludeWhen: v => v.length === 0 },
 };
 
+// Used for API Routes
 export const ProductIncludesSchema = z.union([z.string(), z.array(z.string())]).transform(value => {
   if (typeof value === "string") {
     return (ProductIncludesFields.contains(value) ? [value] : []) as ProductIncludes;

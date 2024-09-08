@@ -108,6 +108,7 @@ export const ProductNotificationsFiltersOptions: ParseFiltersOptions<
   search: { defaultValue: "", excludeWhen: v => v.length === 0 },
 };
 
+// Used for API Routes
 export const ProductNotificationIncludesSchema = z
   .union([z.string(), z.array(z.string())])
   .transform(value => {

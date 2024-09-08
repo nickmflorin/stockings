@@ -88,7 +88,7 @@ export const fetchUsersPagination = cache(
 
 export const fetchUsers = cache(
   async <C extends FetchActionContext, I extends UserIncludes>(
-    { filters, ordering, page: _page, includes }: UsersControls<I>,
+    { filters, ordering, page: _page, limit, includes }: UsersControls<I>,
     context: C,
   ): Promise<FetchActionResponse<ApiUser<I>[], C>> => {
     const { user, isAdmin, error } = await getAuthedUser();
@@ -119,7 +119,7 @@ export const fetchUsers = cache(
         { id: "desc" },
       ],
       skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
-      take: pagination ? pagination.pageSize : undefined,
+      take: pagination ? pagination.pageSize : limit,
     });
 
     let notificationsCounts: { userId: string | null; _count: { id: number } }[] = [];
