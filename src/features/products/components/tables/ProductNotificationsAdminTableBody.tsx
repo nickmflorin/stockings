@@ -23,6 +23,7 @@ export const ProductNotificationsAdminTableBody = (
     {...props}
     isEmpty={props.data.length === 0}
     excludeColumns={["product"]}
+    controlBarTargetId="product-notifications-control-bar"
     errorMessage="There was an error loading the notifications for this product."
     emptyContent="There are no notifications for this product."
   />

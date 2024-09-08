@@ -53,7 +53,7 @@ export default async function ProductNotificationsTablePage({
       excludeColumns={["product"]}
       filterBar={
         <Suspense key={JSON.stringify(filters)}>
-          <NotificationsTableFilterBar filters={filters} />
+          <NotificationsTableFilterBar filters={filters} excludeProducts />
         </Suspense>
       }
       pagination={
