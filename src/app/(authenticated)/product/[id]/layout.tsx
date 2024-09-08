@@ -50,7 +50,7 @@ export default async function ProductLayout({
   }
   return (
     <div className="flex flex-col gap-[16px] overflow-y-hidden">
-      <DetailBreadcrumb returnHref="/admin/products" returnLabel="products">
+      <DetailBreadcrumb returnHref="/products" returnLabel="Products">
         {product.name ?? "Unnamed Product"}
       </DetailBreadcrumb>
       <div className="flex flex-row gap-[16px] grow min-h-0 overflow-y-auto">

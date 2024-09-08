@@ -29,6 +29,7 @@ export interface UsersControls<I extends UserIncludes = []> {
   readonly page?: number;
   readonly includes: I;
   readonly limit?: number;
+  readonly visibility: "admin";
 }
 
 // Used for API Routes

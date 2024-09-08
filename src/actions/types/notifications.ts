@@ -16,7 +16,7 @@ import { Filters } from "~/lib/filters";
 import { type Order, type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
-import type { ActionVisibility } from "~/actions/types/actions";
+import type { ActionVisibility } from "~/actions/visibility";
 
 export const ProductNotificationOrderableFields = ["product", "state", "user"] as const;
 export type ProductNotificationOrderableField = (typeof ProductNotificationOrderableFields)[number];

@@ -44,9 +44,9 @@ export const GET = async (request: NextRequest) => {
     defaultOrdering: UsersDefaultOrdering,
     fields: [...UserOrderableFields],
   });
-
-  const { error, data } = await fetchUsers(
-    { filters, ordering, includes, limit },
+  const fetcher = fetchUsers(includes);
+  const { error, data } = await fetcher(
+    { filters, ordering, limit, visibility: "admin" },
     { scope: "api" },
   );
   if (error) {

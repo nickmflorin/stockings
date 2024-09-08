@@ -21,12 +21,13 @@ export const UsersTableBody = async ({
   page,
   ordering,
 }: UsersTableBodyProps): Promise<JSX.Element> => {
-  const { data: users } = await fetchUsers(
+  const fetcher = fetchUsers(["notificationsCount", "subscriptionsCount"]);
+  const { data: users } = await fetcher(
     {
       filters,
       ordering,
       page,
-      includes: ["notificationsCount", "subscriptionsCount"],
+      visibility: "admin",
     },
     { strict: true },
   );

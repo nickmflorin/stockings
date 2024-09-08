@@ -19,7 +19,7 @@ import {
 import { Filters } from "~/lib/filters";
 import { type Ordering } from "~/lib/ordering";
 
-import { type ActionVisibility } from "./actions";
+import { type ActionVisibility } from "~/actions/visibility";
 
 export type ProductsFilters = {
   readonly search: string;

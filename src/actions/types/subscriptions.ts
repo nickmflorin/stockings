@@ -11,7 +11,7 @@ import { Filters } from "~/lib/filters";
 import { type Ordering, type Order } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
-import { type ActionVisibility } from "./actions";
+import { type ActionVisibility } from "~/actions/visibility";
 
 export const SubscriptionOrderableFields = ["createdAt", "updatedAt", "product", "user"] as const;
 export type SubscriptionOrderableField = (typeof SubscriptionOrderableFields)[number];

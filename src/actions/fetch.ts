@@ -1,7 +1,5 @@
 import { cache } from "react";
 
-import { clamp } from "lodash-es";
-
 import { getAuthedUser } from "~/application/auth/server";
 import { type User } from "~/database/model";
 import { logger } from "~/internal/logger";
@@ -9,24 +7,7 @@ import { logger } from "~/internal/logger";
 import { convertToPlainObject, type ApiClientError, type ApiClientErrorJson } from "~/api";
 import { isApiClientError, ApiClientGlobalError } from "~/api";
 
-export type ActionVisibility = "admin" | "public";
-
-export const visibilityIsAdmin = (visibility?: ActionVisibility) => visibility === "admin";
-
-export const visibilityIsPublic = (visibility?: ActionVisibility) => !visibilityIsAdmin(visibility);
-
-export type ServerSidePaginationParams = {
-  readonly page: number;
-  readonly pageSize: number;
-  readonly count: number;
-};
-
-export const clampPagination = (params: ServerSidePaginationParams) => {
-  const count = clamp(params.count, 0, Infinity);
-  const pageSize = clamp(params.pageSize, 1, Infinity);
-  const page = clamp(params.page, 1, clamp(Math.ceil(params.count / pageSize), 1, Infinity));
-  return { page, pageSize, count };
-};
+import { type ActionVisibility, visibilityIsAdmin } from "./visibility";
 
 export type FetchActionScope = "api" | "action";
 
@@ -96,9 +77,18 @@ export type FetchActionFn<P extends { visibility: ActionVisibility }, R> = (
   user: User,
 ) => StandardFetchActionReturn<R>;
 
+interface StandardFetchActionOptions {
+  readonly adminOnly?: boolean;
+}
+
+type StandardFetchAction<P extends { visibility: ActionVisibility }, R> = {
+  <C extends FetchActionContext>(params: P, context: C): Promise<FetchActionResponse<R, C>>;
+};
+
 export const standardFetchAction = <P extends { visibility: ActionVisibility }, R>(
   fn: FetchActionFn<P, R>,
-) => {
+  opts?: StandardFetchActionOptions,
+): StandardFetchAction<P, R> => {
   const wrapped = async <C extends FetchActionContext>(
     params: P,
     context: C,
@@ -106,7 +96,10 @@ export const standardFetchAction = <P extends { visibility: ActionVisibility }, 
     const { error, user, isAdmin } = await getAuthedUser();
     if (error) {
       return errorInFetchContext(error, context);
-    } else if (visibilityIsAdmin(params.visibility) && !isAdmin) {
+    } else if (
+      (opts?.adminOnly && !isAdmin) ||
+      (visibilityIsAdmin(params.visibility) && !isAdmin)
+    ) {
       const error = ApiClientGlobalError.Forbidden({
         message: "The user does not have permission to access this data.",
       });
