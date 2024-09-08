@@ -45,11 +45,7 @@ export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTa
           <SubscriptionsTableFilterBar />
         </Suspense>
       }
-      pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <SubscriptionsTablePaginator filters={filters} page={page} visibility="public" />
-        </Suspense>
-      }
+      pagination={<SubscriptionsTablePaginator filters={filters} page={page} visibility="public" />}
     >
       <Suspense
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}

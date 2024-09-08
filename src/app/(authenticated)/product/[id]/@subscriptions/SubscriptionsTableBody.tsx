@@ -29,6 +29,7 @@ export const SubscriptionsTableBody = async ({
   const { data } = await fetchProductSubscriptions(
     {
       ordering,
+      visibility: "public",
       filters: { products: [product.id] },
       includes: ["conditions", "notificationsCount", "product"],
     },

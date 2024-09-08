@@ -8,7 +8,7 @@ import {
   type ProductSubscriptionType,
 } from "~/database/model";
 
-import { ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
+import { ProductsFiltersObj } from "~/actions";
 
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
@@ -35,8 +35,7 @@ export const ProductsTableFilterBar = ({
   );
 
   const [filters, updateFilters] = useFilters({
-    schemas: ProductsFiltersSchemas,
-    options: ProductsFiltersOptions,
+    filters: ProductsFiltersObj,
   });
 
   return (

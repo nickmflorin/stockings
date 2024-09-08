@@ -1,8 +1,5 @@
-import { cache } from "react";
-
 import { type Required } from "utility-types";
 
-import { getAuthedUser } from "~/application/auth/server";
 import type {
   ApiProduct,
   BrandProduct,
@@ -18,18 +15,13 @@ import { conditionalFilters } from "~/database/util";
 import {
   constructTableSearchClause,
   PAGE_SIZES,
-  type FetchActionContext,
-  dataInFetchContext,
-  errorInFetchContext,
-  type FetchActionResponse,
   type ServerSidePaginationParams,
   clampPagination,
   type ProductsControls,
-  type ActionVisibility,
   visibilityIsAdmin,
+  standardFetchAction,
+  type StandardFetchActionReturn,
 } from "~/actions";
-
-import { isApiClientError, type ApiClientError, ApiClientGlobalError } from "~/api";
 
 const filtersClause = ({
   filters,
@@ -77,160 +69,88 @@ const whereClause = ({
   return undefined;
 };
 
-export const fetchProductsCount = cache(
-  async <C extends FetchActionContext>(
+export const fetchProductsCount = standardFetchAction(
+  async (
     {
       filters,
       visibility,
     }: Required<Pick<ProductsControls, "filters" | "visibility">, "visibility">,
-    context: C,
-  ): Promise<FetchActionResponse<{ count: number }, C>> => {
-    const { error, isAdmin, user } = await getAuthedUser();
-    if (error) {
-      return errorInFetchContext(error, context);
-    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
-      const error = ApiClientGlobalError.Forbidden({
-        message: "The user does not have permission to access this data.",
-      });
-      return errorInFetchContext(error, context);
-    }
+    user,
+  ): StandardFetchActionReturn<{ count: number }> => {
     const count = await db.product.count({ where: whereClause({ filters, user, visibility }) });
-    return dataInFetchContext({ count }, context);
+    return { count };
   },
-) as {
-  <C extends FetchActionContext>(
-    params: Required<Pick<ProductsControls, "filters" | "visibility">, "visibility">,
-    context: C,
-  ): Promise<FetchActionResponse<{ count: number }, C>>;
-};
+);
 
-export const fetchProductsPagination = cache(
-  async <C extends FetchActionContext>(
+export const fetchProductsPagination = standardFetchAction(
+  async (
     {
       filters,
       page,
       visibility,
     }: Required<Pick<ProductsControls, "filters" | "visibility" | "page">, "page" | "visibility">,
-    context: C,
-  ): Promise<FetchActionResponse<ServerSidePaginationParams, C>> => {
-    const { user, error, isAdmin } = await getAuthedUser();
-    if (error) {
-      return errorInFetchContext(error, context);
-    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
-      const error = ApiClientGlobalError.Forbidden({
-        message: "The user does not have permission to access this data.",
-      });
-      return errorInFetchContext(error, context);
-    }
+    user,
+  ): StandardFetchActionReturn<ServerSidePaginationParams> => {
     const count = await db.product.count({
       where: whereClause({ filters, user, visibility }),
     });
-    return dataInFetchContext(
-      clampPagination({ count, page, pageSize: PAGE_SIZES.product }),
-      context,
-    );
+    return clampPagination({ count, page, pageSize: PAGE_SIZES.product });
   },
-) as {
-  <C extends FetchActionContext>(
-    params: Required<
-      Pick<ProductsControls, "filters" | "visibility" | "page">,
-      "page" | "visibility"
-    >,
-    context: C,
-  ): Promise<FetchActionResponse<ServerSidePaginationParams, C>>;
-};
+);
 
-type ActionFn<P extends { visibility: ActionVisibility }, R> = (
-  params: P,
-  user: User,
-) => R | ApiClientError;
+export const fetchProducts = <I extends ProductIncludes>(includes: I) =>
+  standardFetchAction(
+    async (
+      { filters, ordering, page, limit, visibility }: Omit<ProductsControls<I>, "includes">,
+      user,
+    ): StandardFetchActionReturn<ApiProduct<I>[]> => {
+      const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
 
-const standardFetchAction = <P extends { visibility: ActionVisibility }, R>(fn: ActionFn<P, R>) => {
-  const wrapped = async <C extends FetchActionContext>(
-    params: P,
-    context: C,
-  ): Promise<FetchActionResponse<R, C>> => {
-    const { error, user, isAdmin } = await getAuthedUser();
-    if (error) {
-      return errorInFetchContext(error, context);
-    } else if (visibilityIsAdmin(params.visibility) && !isAdmin) {
-      const error = ApiClientGlobalError.Forbidden({
-        message: "The user does not have permission to access this data.",
-      });
-      return errorInFetchContext(error, context);
-    }
-    const result = fn(params, user);
-    if (isApiClientError(result)) {
-      return errorInFetchContext(result, context);
-    }
-    return dataInFetchContext(result, context);
-  };
-  return cache(wrapped) as typeof wrapped;
-};
+      let pagination: Omit<ServerSidePaginationParams, "count"> | null = null;
+      if (page !== undefined) {
+        ({ data: pagination } = await fetchProductsPagination(
+          { filters, page, visibility },
+          { strict: true },
+        ));
+      }
 
-export const fetchProducts = (
-  async <C extends FetchActionContext, I extends ProductIncludes>(
-    { filters, ordering, page, limit, includes, visibility }: ProductsControls<I>,
-    context: C,
-  ): Promise<FetchActionResponse<ApiProduct<I>[], C>> => {
-    const { user, error, isAdmin } = await getAuthedUser();
-    if (error) {
-      return errorInFetchContext(error, context);
-    } else if (visibilityIsAdmin(visibility) && !isAdmin) {
-      const error = ApiClientGlobalError.Forbidden({
-        message: "The user does not have permission to access this data.",
-      });
-      return errorInFetchContext(error, context);
-    }
-
-    const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
-
-    let pagination: Omit<ServerSidePaginationParams, "count"> | null = null;
-    if (page !== undefined) {
-      ({ data: pagination } = await fetchProductsPagination(
-        { filters, page, visibility },
-        { strict: true },
-      ));
-    }
-
-    const products = await enhanced.product.findMany({
-      where: whereClause({ filters, user }),
-      orderBy: [{ [ordering.orderBy]: ordering.order }],
-      skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
-      take: pagination
-        ? pagination.pageSize
-        : limit !== undefined && limit !== 0
-          ? limit
-          : undefined,
-      include: {
-        records: fieldIsIncluded("records", includes),
-        subscriptions: {
-          where: { userId: user.id },
+      const products = await enhanced.product.findMany({
+        where: whereClause({ filters, user, visibility }),
+        orderBy: [{ [ordering.orderBy]: ordering.order }],
+        skip: pagination ? pagination.pageSize * (pagination.page - 1) : undefined,
+        take: pagination
+          ? pagination.pageSize
+          : limit !== undefined && limit !== 0
+            ? limit
+            : undefined,
+        include: {
+          records: fieldIsIncluded("records", includes),
+          subscriptions: {
+            where: { userId: user.id },
+          },
         },
-      },
-    });
-
-    let statusChangeSubscriptions: StatusChangeSubscription[] | null = null;
-    if (fieldIsIncluded("statusChangeSubscription", includes)) {
-      /* The status change subscription is unique on the user and product, so this should only ever
-         yield at most 1 result per product. */
-      statusChangeSubscriptions = await enhanced.statusChangeSubscription.findMany({
-        where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
-        include: { conditions: true },
       });
-    }
 
-    let priceChangeSubscriptions: PriceChangeSubscription[] | null = null;
-    if (fieldIsIncluded("priceChangeSubscription", includes)) {
-      /* The status change subscription is unique on the user and product, so this should only ever
-         yield at most 1 result per product. */
-      priceChangeSubscriptions = await enhanced.priceChangeSubscription.findMany({
-        where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
-      });
-    }
+      let statusChangeSubscriptions: StatusChangeSubscription[] | null = null;
+      if (fieldIsIncluded("statusChangeSubscription", includes)) {
+        /* The status change subscription is unique on the user and product, so this should only
+           ever yield at most 1 result per product. */
+        statusChangeSubscriptions = await enhanced.statusChangeSubscription.findMany({
+          where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
+          include: { conditions: true },
+        });
+      }
 
-    return dataInFetchContext(
-      products.map((datum: BrandProduct): ApiProduct<I> => {
+      let priceChangeSubscriptions: PriceChangeSubscription[] | null = null;
+      if (fieldIsIncluded("priceChangeSubscription", includes)) {
+        /* The status change subscription is unique on the user and product, so this should only
+           ever yield at most 1 result per product. */
+        priceChangeSubscriptions = await enhanced.priceChangeSubscription.findMany({
+          where: { userId: user.id, productId: { in: products.map(prod => prod.id) } },
+        });
+      }
+
+      return products.map((datum: BrandProduct): ApiProduct<I> => {
         const d = datum as ApiProduct<I>;
         return {
           ...d,
@@ -243,13 +163,6 @@ export const fetchProducts = (
               ? (statusChangeSubscriptions.find(sub => sub.productId === datum.id) ?? null)
               : undefined,
         };
-      }),
-      context,
-    );
-  },
-) as {
-  <C extends FetchActionContext, I extends ProductIncludes>(
-    params: ProductsControls<I>,
-    context: C,
-  ): Promise<FetchActionResponse<ApiProduct<I>[], C>>;
-};
+      });
+    },
+  );

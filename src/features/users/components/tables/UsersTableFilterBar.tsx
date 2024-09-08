@@ -1,5 +1,5 @@
 "use client";
-import { UsersFiltersOptions, UsersFiltersSchemas } from "~/actions";
+import { UsersFiltersObj } from "~/actions";
 
 import { TableView } from "~/components/tables/TableView";
 import type { ComponentProps } from "~/components/types";
@@ -9,8 +9,7 @@ export interface UsersTableFilterBarProps extends ComponentProps {}
 
 export const UsersTableFilterBar = (props: UsersTableFilterBarProps): JSX.Element => {
   const [filters, updateFilters] = useFilters({
-    schemas: UsersFiltersSchemas,
-    options: UsersFiltersOptions,
+    filters: UsersFiltersObj,
   });
 
   return (

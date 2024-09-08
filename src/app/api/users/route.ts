@@ -6,12 +6,10 @@ import type { UserIncludes } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { parseQueryParams } from "~/integrations/http";
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
 import {
-  UsersFiltersSchemas,
-  UsersFiltersOptions,
+  UsersFiltersObj,
   UsersDefaultOrdering,
   UserOrderableFields,
   UserIncludesSchema,
@@ -40,7 +38,7 @@ export const GET = async (request: NextRequest) => {
     includes = parsed.data;
   }
 
-  const filters = parseFilters(query, UsersFiltersSchemas, UsersFiltersOptions);
+  const filters = UsersFiltersObj.parse(query);
 
   const ordering = parseOrdering(query, {
     defaultOrdering: UsersDefaultOrdering,

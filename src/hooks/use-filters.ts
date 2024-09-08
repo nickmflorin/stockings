@@ -1,73 +1,45 @@
-import {
-  usePathname,
-  useSearchParams,
-  useRouter,
-  type ReadonlyURLSearchParams,
-} from "next/navigation";
-import { useCallback, useMemo } from "react";
-
-import { type z } from "zod";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 import { parseQueryParams, stringifyQueryParams } from "~/integrations/http";
 import {
-  type FiltersSchemas,
-  type ParseFiltersOptions,
+  type BaseFiltersConfiguration,
+  type FiltersClass,
   type ParsedFilters,
-  parseFilters as _parseFilters,
-  addFilter as _addFilter,
-  pruneFilters as _pruneFilters,
 } from "~/lib/filters";
 
 import { useReferentialCallback } from "~/hooks";
 
-export interface UseFiltersOptions<S extends FiltersSchemas> {
-  readonly schemas: S;
-  readonly options: ParseFiltersOptions<S>;
+export interface UseFiltersOptions<C extends BaseFiltersConfiguration> {
+  readonly filters: FiltersClass<C>;
   readonly maintainExisting?: boolean;
 }
 
-export type FiltersUpdate<S extends FiltersSchemas> = Partial<{
-  [key in keyof S]: z.infer<S[key]>;
-}>;
+export type FiltersUpdate<C extends BaseFiltersConfiguration> = Partial<ParsedFilters<C>>;
 
-export const useFilters = <S extends FiltersSchemas>({
-  schemas,
-  options,
+export const useFilters = <C extends BaseFiltersConfiguration>({
+  filters,
   maintainExisting = true,
-}: UseFiltersOptions<S>) => {
+}: UseFiltersOptions<C>) => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  const addFilter = useCallback(
-    <K extends keyof S>(f: ParsedFilters<S>, field: K, value: z.infer<S[K]>) =>
-      _addFilter(f, field, value, options),
-    [options],
-  );
+  const initialFilters = useMemo(() => filters.parse(searchParams), [filters, searchParams]);
 
-  const parseFilters = useCallback(
-    (params: ReadonlyURLSearchParams) => _parseFilters(params, schemas, options),
-    [options, schemas],
-  );
-
-  const pruneFilters = useCallback(
-    (filters: ParsedFilters<S>) => _pruneFilters(filters, options),
-    [options],
-  );
-
-  const initialFilters = useMemo(() => parseFilters(searchParams), [parseFilters, searchParams]);
-
-  const setFilters = useReferentialCallback((update: FiltersUpdate<S>) => {
-    let currentFilters = parseFilters(searchParams);
+  const setFilters = useReferentialCallback((update: FiltersUpdate<C>) => {
+    let currentFilters = filters.parse(searchParams);
     for (const [field, value] of Object.entries(update)) {
-      currentFilters = addFilter(currentFilters, field, value);
+      const f = field as keyof C;
+      const v = value as ParsedFilters<C>[typeof f];
+      currentFilters = filters.add(currentFilters, f, v);
     }
-    let pruned = pruneFilters(currentFilters);
+    let pruned = filters.prune(currentFilters);
 
     if (maintainExisting) {
       const all = parseQueryParams(searchParams.toString());
       for (const [field, value] of Object.entries(all)) {
-        if (!Object.keys(schemas).includes(field)) {
+        if (!filters.contains(field)) {
           pruned = { ...pruned, [field]: value };
         }
       }

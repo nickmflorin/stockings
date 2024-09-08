@@ -3,7 +3,7 @@ import { useRef } from "react";
 
 import { type ProductSubscriptionType } from "~/database/model";
 
-import { SubscriptionsFiltersOptions, SubscriptionsFiltersSchemas } from "~/actions";
+import { SubscriptionsFiltersObj } from "~/actions";
 
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
@@ -24,8 +24,7 @@ export const SubscriptionsTableFilterBar = ({
   const productSelectRef = useRef<SelectInstance<string, "multi"> | null>(null);
 
   const [filters, updateFilters] = useFilters({
-    schemas: SubscriptionsFiltersSchemas,
-    options: SubscriptionsFiltersOptions,
+    filters: SubscriptionsFiltersObj,
   });
 
   return (

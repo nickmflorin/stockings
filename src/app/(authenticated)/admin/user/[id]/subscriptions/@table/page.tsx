@@ -48,13 +48,11 @@ export default async function UserSubscriptionsTablePage({
         </Suspense>
       }
       pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <SubscriptionsTablePaginator
-            filters={{ ...filters, users: [params.id] }}
-            page={page}
-            visibility="admin"
-          />
-        </Suspense>
+        <SubscriptionsTablePaginator
+          filters={{ ...filters, users: [params.id] }}
+          page={page}
+          visibility="admin"
+        />
       }
     >
       <Suspense

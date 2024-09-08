@@ -3,14 +3,12 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
 import {
   ProductNotificationOrderableFields,
   ProductNotificationsDefaultOrdering,
-  ProductNotificationsFiltersOptions,
-  ProductNotificationsFiltersSchemas,
+  ProductNotificationsFiltersObj,
 } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
@@ -31,11 +29,7 @@ export interface NotificationsTablePageProps {
 export default function NotificationsTablePage({ searchParams }: NotificationsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    ProductNotificationsFiltersSchemas,
-    ProductNotificationsFiltersOptions,
-  );
+  const filters = ProductNotificationsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: ProductNotificationsDefaultOrdering,
@@ -49,11 +43,7 @@ export default function NotificationsTablePage({ searchParams }: NotificationsTa
           <NotificationsTableFilterBar filters={filters} />
         </Suspense>
       }
-      pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <NotificationsTablePaginator filters={filters} page={page} visibility="public" />
-        </Suspense>
-      }
+      pagination={<NotificationsTablePaginator filters={filters} page={page} visibility="public" />}
     >
       <Suspense
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}

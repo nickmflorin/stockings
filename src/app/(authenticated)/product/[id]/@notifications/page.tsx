@@ -3,14 +3,12 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
 import {
   ProductNotificationOrderableFields,
   ProductNotificationsDefaultOrdering,
-  ProductNotificationsFiltersSchemas,
-  ProductNotificationsFiltersOptions,
+  ProductNotificationsFiltersObj,
 } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
@@ -35,11 +33,7 @@ export default async function ProductNotificationsPage({
 }: ProductNotificationsPageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    ProductNotificationsFiltersSchemas,
-    ProductNotificationsFiltersOptions,
-  );
+  const filters = ProductNotificationsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: ProductNotificationsDefaultOrdering,
@@ -59,13 +53,11 @@ export default async function ProductNotificationsPage({
         </Suspense>
       }
       pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <NotificationsTablePaginator
-            visibility="public"
-            filters={{ ...filters, products: [params.id] }}
-            page={page}
-          />
-        </Suspense>
+        <NotificationsTablePaginator
+          visibility="public"
+          filters={{ ...filters, products: [params.id] }}
+          page={page}
+        />
       }
     >
       <Suspense

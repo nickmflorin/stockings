@@ -1,9 +1,7 @@
 import dynamic from "next/dynamic";
 
-import { pruneFilters } from "~/lib/filters";
-
 import { type ProductNotificationsControls, type ProductNotificationsFilters } from "~/actions";
-import { ProductNotificationsFiltersOptions } from "~/actions";
+import { ProductNotificationsFiltersObj } from "~/actions";
 import { fetchProductNotifications } from "~/actions/notifications";
 
 import { Loading } from "~/components/loading/Loading";
@@ -30,14 +28,14 @@ export const NotificationsTableBody = async ({
       ordering,
       page,
       includes: ["product"],
+      visibility: "public",
     },
     { strict: true },
   );
-  const pruned = pruneFilters(filters, ProductNotificationsFiltersOptions);
   return (
     <ClientNotificationsTableBody
       data={notifications}
-      isEmpty={notifications.length === 0 && Object.keys(pruned).length === 0}
+      isEmpty={notifications.length === 0 && ProductNotificationsFiltersObj.areEmpty(filters)}
     />
   );
 };

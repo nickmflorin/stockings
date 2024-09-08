@@ -13,8 +13,6 @@ import { enhance, ProductSubscriptionType, fieldIsIncluded } from "~/database/mo
 import { db } from "~/database/prisma";
 import { conditionalFilters, constructOrSearch } from "~/database/util";
 
-import { filtersHaveField } from "~/lib/filters";
-
 import {
   PAGE_SIZES,
   type FetchActionContext,
@@ -24,10 +22,10 @@ import {
   type ServerSidePaginationParams,
   clampPagination,
   type SubscriptionsControls,
-  SubscriptionsFiltersOptions,
   visibilityIsAdmin,
   type ActionVisibility,
   SubscriptionsOrderingMap,
+  SubscriptionsFiltersObj,
 } from "~/actions";
 
 import { ApiClientGlobalError } from "~/api";
@@ -82,7 +80,7 @@ export const fetchProductSubscriptionsCount = cache(
       return errorInFetchContext(error, context);
     } else if (
       !visibilityIsAdmin(visibility) &&
-      filtersHaveField("users", filters, SubscriptionsFiltersOptions)
+      SubscriptionsFiltersObj.hasFilter(filters, "users")
     ) {
       const error = ApiClientGlobalError.Forbidden({
         message: "The user does not have permission to access this data.",
@@ -126,7 +124,7 @@ export const fetchProductSubscriptionsPagination = cache(
       return errorInFetchContext(error, context);
     } else if (
       !visibilityIsAdmin(visibility) &&
-      filtersHaveField("users", filters, SubscriptionsFiltersOptions)
+      SubscriptionsFiltersObj.hasFilter(filters, "users")
     ) {
       const error = ApiClientGlobalError.Forbidden({
         message: "The user does not have permission to access this data.",
@@ -168,8 +166,7 @@ const _fetchProductSubscriptions = async <
     return errorInFetchContext(error, context);
   } else if (
     !visibilityIsAdmin(visibility) &&
-    (fieldIsIncluded("user", includes) ||
-      filtersHaveField("users", filters, SubscriptionsFiltersOptions))
+    (fieldIsIncluded("user", includes) || SubscriptionsFiltersObj.hasFilter(filters, "users"))
   ) {
     const error = ApiClientGlobalError.Forbidden({
       message: "The user does not have permission to access this data.",

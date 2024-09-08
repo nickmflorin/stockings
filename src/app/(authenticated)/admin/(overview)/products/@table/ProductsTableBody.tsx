@@ -21,12 +21,13 @@ export const ProductsTableBody = async ({
   page,
   ordering,
 }: ProductsTableBodyProps): Promise<JSX.Element> => {
-  const { data: products } = await fetchProducts(
+  const fetcher = fetchProducts([]);
+  const { data: products } = await fetcher(
     {
       filters,
       ordering,
       page,
-      includes: [],
+      visibility: "admin",
     },
     { strict: true },
   );

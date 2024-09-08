@@ -9,6 +9,6 @@ export default async function ProductsTitlePage({ searchParams }: ProductsTitleP
   const filters = ProductsFiltersObj.parse(searchParams);
   const {
     data: { count },
-  } = await fetchProductsCount({ filters }, { strict: true });
+  } = await fetchProductsCount({ filters, visibility: "admin" }, { strict: true });
   return <>{count}</>;
 }

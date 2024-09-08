@@ -2,10 +2,8 @@ import dynamic from "next/dynamic";
 
 import { ProductSubscriptionType } from "~/database/model";
 
-import { pruneFilters } from "~/lib/filters";
-
 import { type ProductNotificationsControls, type ProductNotificationsFilters } from "~/actions";
-import { ProductNotificationsFiltersOptions } from "~/actions";
+import { ProductNotificationsFiltersObj } from "~/actions";
 import { fetchProductNotifications } from "~/actions/notifications";
 import { fetchProduct } from "~/actions/products";
 
@@ -43,16 +41,15 @@ export const NotificationsTableBody = async ({
       filters: { ...filters, products: [product.id] },
       includes: ["product"],
       page,
+      visibility: "public",
     },
     { strict: true },
   );
-  const pruned = pruneFilters(filters, ProductNotificationsFiltersOptions);
-
   return (
     <ClientProductNotificationsTableBody
       data={data}
       product={product}
-      isNoResults={Object.keys(pruned).length !== 0 && data.length === 0}
+      isNoResults={data.length === 0 && ProductNotificationsFiltersObj.areEmpty(filters)}
       activeSubscriptions={[
         product.priceChangeSubscription
           ? ProductSubscriptionType.PriceChangeSubscription

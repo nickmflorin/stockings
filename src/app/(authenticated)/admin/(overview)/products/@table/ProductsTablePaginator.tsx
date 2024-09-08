@@ -16,7 +16,10 @@ export const ProductsTablePaginator = async ({
 }: ProductsTablePaginatorProps): Promise<JSX.Element> => {
   const {
     data: { count, page, pageSize },
-  } = await fetchProductsPagination({ filters, page: _page }, { strict: true });
+  } = await fetchProductsPagination(
+    { filters, page: _page, visibility: "admin" },
+    { strict: true },
+  );
   return (
     <Suspense>
       <Paginator count={count} pageSize={pageSize} page={page} />

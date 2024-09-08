@@ -3,10 +3,9 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
-import { UsersDefaultOrdering, UsersFiltersOptions, UsersFiltersSchemas } from "~/actions";
+import { UsersDefaultOrdering, UsersFiltersObj } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
 import { UsersTableColumns } from "~/features/users";
@@ -26,7 +25,7 @@ export interface UsersTablePageProps {
 export default function UsersTablePage({ searchParams }: UsersTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(searchParams, UsersFiltersSchemas, UsersFiltersOptions);
+  const filters = UsersFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: UsersDefaultOrdering,
@@ -40,11 +39,7 @@ export default function UsersTablePage({ searchParams }: UsersTablePageProps) {
           <UsersTableFilterBar />
         </Suspense>
       }
-      pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <UsersTablePaginator filters={filters} page={page} />
-        </Suspense>
-      }
+      pagination={<UsersTablePaginator filters={filters} page={page} />}
     >
       <Suspense
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}

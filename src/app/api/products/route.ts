@@ -6,12 +6,10 @@ import type { ProductIncludes } from "~/database/model";
 import { db } from "~/database/prisma";
 
 import { parseQueryParams } from "~/integrations/http";
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
 import {
-  ProductsFiltersSchemas,
-  ProductsFiltersOptions,
+  ProductsFiltersObj,
   ProductsDefaultOrdering,
   ProductOrderableFields,
   ProductIncludesSchema,
@@ -40,15 +38,16 @@ export const GET = async (request: NextRequest) => {
     includes = parsed.data;
   }
 
-  const filters = parseFilters(query, ProductsFiltersSchemas, ProductsFiltersOptions);
+  const filters = ProductsFiltersObj.parse(query);
 
   const ordering = parseOrdering(query, {
     defaultOrdering: ProductsDefaultOrdering,
     fields: [...ProductOrderableFields],
   });
 
-  const { error, data } = await fetchProducts(
-    { filters, ordering, includes, limit },
+  const fetcher = fetchProducts(includes);
+  const { error, data } = await fetcher(
+    { filters, ordering, limit, visibility: "public" },
     { scope: "api" },
   );
   if (error) {

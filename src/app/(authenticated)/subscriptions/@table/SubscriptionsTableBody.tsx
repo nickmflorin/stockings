@@ -1,11 +1,9 @@
 import dynamic from "next/dynamic";
 
-import { pruneFilters } from "~/lib/filters";
-
 import {
   type SubscriptionsFilters,
   type SubscriptionsControls,
-  SubscriptionsFiltersOptions,
+  SubscriptionsFiltersObj,
 } from "~/actions";
 import { fetchProductSubscriptions } from "~/actions/subscriptions/fetch-product-subscriptions";
 
@@ -34,17 +32,17 @@ export const SubscriptionsTableBody = async ({
       filters,
       ordering,
       page,
+      visibility: "public",
       includes: ["conditions", "notificationsCount", "product"],
     },
     { strict: true },
   );
-  const pruned = pruneFilters(filters, SubscriptionsFiltersOptions);
   return (
     <ClientSubscriptionsTableBody
       data={data}
       page="subscriptions"
       controlBarTargetId={controlBarTargetId}
-      isEmpty={data.length === 0 && Object.keys(pruned).length === 0}
+      isEmpty={data.length === 0 && SubscriptionsFiltersObj.areEmpty(filters)}
     />
   );
 };

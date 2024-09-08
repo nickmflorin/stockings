@@ -7,11 +7,7 @@ import {
   type NotificationMedium,
 } from "~/database/model";
 
-import {
-  ProductNotificationsFiltersOptions,
-  ProductNotificationsFiltersSchemas,
-  type ProductNotificationsFilters,
-} from "~/actions";
+import { ProductNotificationsFiltersObj, type ProductNotificationsFilters } from "~/actions";
 
 import type { SelectInstance } from "~/components/input/select";
 import { TableView } from "~/components/tables/TableView";
@@ -91,8 +87,7 @@ export const NotificationsTableFilterBar = ({
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const [, updateFilters] = useFilters({
-    schemas: ProductNotificationsFiltersSchemas,
-    options: ProductNotificationsFiltersOptions,
+    filters: ProductNotificationsFiltersObj,
   });
 
   useEffect(() => {

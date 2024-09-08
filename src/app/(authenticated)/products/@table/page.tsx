@@ -3,10 +3,9 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
-import { ProductsDefaultOrdering, ProductsFiltersOptions, ProductsFiltersSchemas } from "~/actions";
+import { ProductsDefaultOrdering, ProductsFiltersObj } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
 import { ProductsTableColumns } from "~/features/products";
@@ -27,7 +26,7 @@ export interface ProductsTablePageProps {
 export default function ProductsTablePage({ searchParams }: ProductsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(searchParams, ProductsFiltersSchemas, ProductsFiltersOptions);
+  const filters = ProductsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: ProductsDefaultOrdering,
@@ -41,11 +40,7 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
           <ProductsTableFilterBar />
         </Suspense>
       }
-      pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <ProductsTablePaginator filters={filters} page={page} />
-        </Suspense>
-      }
+      pagination={<ProductsTablePaginator filters={filters} page={page} />}
     >
       <Suspense
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}

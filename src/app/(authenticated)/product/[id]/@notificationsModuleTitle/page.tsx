@@ -1,6 +1,4 @@
-import { parseFilters } from "~/lib/filters";
-
-import { ProductNotificationsFiltersSchemas, ProductNotificationsFiltersOptions } from "~/actions";
+import { ProductNotificationsFiltersObj } from "~/actions";
 import { fetchProductNotificationsCount } from "~/actions/notifications";
 
 import { Badge } from "~/components/badges/Badge";
@@ -15,11 +13,7 @@ export default async function NotificationsModuleHeaderPage({
   params,
   searchParams,
 }: NotificationsModuleHeaderPageProps) {
-  const filters = parseFilters(
-    searchParams,
-    ProductNotificationsFiltersSchemas,
-    ProductNotificationsFiltersOptions,
-  );
+  const filters = ProductNotificationsFiltersObj.parse(searchParams);
   const {
     data: { count },
   } = await fetchProductNotificationsCount(

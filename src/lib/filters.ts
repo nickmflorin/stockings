@@ -12,7 +12,7 @@ type FilterConfig<S extends z.ZodType = z.ZodTypeAny> = S extends z.ZodType
     }
   : never;
 
-type BaseFiltersConfiguration = {
+export type BaseFiltersConfiguration = {
   [key in string]: FilterConfig;
 };
 
@@ -20,11 +20,11 @@ type FiltersDefaultValues<C extends BaseFiltersConfiguration> = {
   [key in keyof C]: C[key] extends { defaultValue: infer V } ? V : never;
 };
 
-type FiltersSchemas<C extends BaseFiltersConfiguration> = {
+export type FiltersSchemas<C extends BaseFiltersConfiguration> = {
   [key in keyof C]: C[key] extends { schema: infer V } ? V : never;
 };
 
-type ParsedFilters<C extends BaseFiltersConfiguration> = {
+export type ParsedFilters<C extends BaseFiltersConfiguration> = {
   [key in keyof C]: C[key] extends FilterConfig<infer S extends z.ZodType> ? z.infer<S> : never;
 };
 
@@ -53,7 +53,12 @@ export class FiltersClass<C extends BaseFiltersConfiguration> {
     return typeof f === "string" && Object.keys(this.config).includes(f);
   }
 
-  private addFilter<K extends keyof C>(f: ParsedFilters<C>, field: K, value: FiltersSchemas<C>[K]) {
+  public hasFilter(filters: Partial<ParsedFilters<C>>, f: keyof C) {
+    const pruned = this.prune(filters);
+    return pruned[f] !== undefined;
+  }
+
+  public add<K extends keyof C>(f: ParsedFilters<C>, field: K, value: ParsedFilters<C>[K]) {
     const config = this.config[field];
     if (config.excludeWhen?.(value)) {
       f = { ...f, [field]: config.defaultValue };
@@ -75,7 +80,7 @@ export class FiltersClass<C extends BaseFiltersConfiguration> {
     return pruned;
   }
 
-  public areEmpty(filters: ParsedFilters<C>) {
+  public areEmpty(filters: Partial<ParsedFilters<C>>) {
     const pruned = this.prune(filters);
     return Object.keys(pruned).length === 0;
   }
@@ -102,7 +107,7 @@ export class FiltersClass<C extends BaseFiltersConfiguration> {
       if (parsed[field] !== undefined) {
         const parsedField = schema.safeParse(parsed[field]);
         if (parsedField.success) {
-          f = this.addFilter(f, field, parsedField.data);
+          f = this.add(f, field, parsedField.data);
         } else {
           f = { ...f, [field]: config.defaultValue };
         }

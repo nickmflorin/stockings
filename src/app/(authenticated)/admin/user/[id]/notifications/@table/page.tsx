@@ -3,14 +3,9 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
-import {
-  ProductNotificationsDefaultOrdering,
-  ProductNotificationsFiltersSchemas,
-  ProductNotificationsFiltersOptions,
-} from "~/actions";
+import { ProductNotificationsDefaultOrdering, ProductNotificationsFiltersObj } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
 import { ProductNotificationsAdminTableColumns } from "~/features/notifications";
@@ -36,11 +31,7 @@ export default async function UserNotificationsTablePage({
 }: UserNotificationsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    ProductNotificationsFiltersSchemas,
-    ProductNotificationsFiltersOptions,
-  );
+  const filters = ProductNotificationsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: ProductNotificationsDefaultOrdering,
@@ -57,13 +48,11 @@ export default async function UserNotificationsTablePage({
         </Suspense>
       }
       pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <NotificationsTablePaginator
-            filters={{ ...filters, users: [params.id] }}
-            page={page}
-            visibility="admin"
-          />
-        </Suspense>
+        <NotificationsTablePaginator
+          filters={{ ...filters, users: [params.id] }}
+          page={page}
+          visibility="admin"
+        />
       }
     >
       <Suspense

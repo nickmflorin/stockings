@@ -40,11 +40,7 @@ export default function ProductsTablePage({ searchParams }: ProductsTablePagePro
           <ProductsTableFilterBar excludeSubscriptions />
         </Suspense>
       }
-      pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <ProductsTablePaginator filters={filters} page={page} />
-        </Suspense>
-      }
+      pagination={<ProductsTablePaginator filters={filters} page={page} />}
     >
       <Suspense
         key={JSON.stringify(filters) + JSON.stringify(ordering) + String(page)}
