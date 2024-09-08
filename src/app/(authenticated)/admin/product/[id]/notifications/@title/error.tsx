@@ -1,5 +1,4 @@
 "use client";
-
 export default function Error() {
-  return <>{0}</>;
+  return <>0</>;
 }

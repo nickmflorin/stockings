@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 
 import { type ProductNotificationsControls } from "~/actions";
 import { fetchProductNotifications } from "~/actions/notifications/fetch-product-notifications";
-import { fetchProduct } from "~/actions/products";
 
 import { Loading } from "~/components/loading/Loading";
 
@@ -16,20 +15,24 @@ const ProductNotificationsAdminTableBody = dynamic(
 
 export interface NotificationsTableBodyProps {
   readonly productId: string;
+  readonly filters: Omit<ProductNotificationsControls["filters"], "products">;
+  readonly page: number;
   readonly ordering: ProductNotificationsControls["ordering"];
 }
 
 export const NotificationsTableBody = async ({
   ordering,
   productId,
+  filters,
+  page,
 }: NotificationsTableBodyProps): Promise<JSX.Element> => {
-  const { data: product } = await fetchProduct(productId, { includes: [] }, { strict: true });
   const { data } = await fetchProductNotifications(
     {
       ordering,
-      filters: { products: [product.id] },
+      filters: { ...filters, products: [productId] },
       includes: ["user"],
       visibility: "admin",
+      page,
     },
     { strict: true },
   );

@@ -1,21 +1,20 @@
-import dynamic from "next/dynamic";
 import { type ReactNode } from "react";
 
-import { Loading } from "~/components/loading/Loading";
-
-const NotificationsAdminTableView = dynamic(
-  () => import("~/features/notifications/components/tables/NotificationsAdminTableView"),
-  { loading: () => <Loading isLoading /> },
-);
+import { TableTitle } from "~/features/common/TableTitle";
 
 interface ProductNotificationsLayoutProps {
-  readonly children: ReactNode;
+  readonly table: ReactNode;
+  readonly title: ReactNode;
 }
 
-export default function ProductNotificationsLayout({ children }: ProductNotificationsLayoutProps) {
+export default function ProductNotificationsLayout({
+  table,
+  title,
+}: ProductNotificationsLayoutProps) {
   return (
-    <NotificationsAdminTableView excludeColumns={["product"]}>
-      {children}
-    </NotificationsAdminTableView>
+    <div className="flex flex-col gap-[16px] h-full pl-1">
+      <TableTitle count={title}>Notifications</TableTitle>
+      <div className="flex flex-row items-center grow min-h-[0px] overflow-auto">{table}</div>
+    </div>
   );
 }
