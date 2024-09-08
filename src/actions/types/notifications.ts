@@ -12,7 +12,7 @@ import {
   type ProductNotificationIncludesField,
 } from "~/database/model";
 
-import type { ParseFiltersOptions } from "~/lib/filters";
+import { Filters } from "~/lib/filters";
 import { type Order, type Ordering } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
@@ -49,64 +49,71 @@ export interface ProductNotificationsControls<
   readonly page?: number;
   readonly includes: I;
   readonly limit?: number;
-  readonly visibility?: ActionVisibility;
+  readonly visibility: ActionVisibility;
 }
 
-export const ProductNotificationsFiltersSchemas = {
-  search: z.string(),
-  states: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return NotificationStates.contains(value) ? [value] : [];
-    }
-    return value.reduce(
-      (prev, curr) => (NotificationStates.contains(curr) ? [...prev, curr] : prev),
-      [] as NotificationState[],
-    );
-  }),
-  types: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return ProductNotificationTypes.contains(value) ? [value] : [];
-    }
-    return value.reduce(
-      (prev, curr) => (ProductNotificationTypes.contains(curr) ? [...prev, curr] : prev),
-      [] as ProductNotificationType[],
-    );
-  }),
-  mediums: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return NotificationMediums.contains(value) ? [value] : [];
-    }
-    return value.reduce(
-      (prev, curr) => (NotificationMediums.contains(curr) ? [...prev, curr] : prev),
-      [] as NotificationMedium[],
-    );
-  }),
-  products: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return isUuid(value) ? [value] : [];
-    }
-    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
-  }),
-  users: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return isUuid(value) ? [value] : [];
-    }
-    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
-  }),
-} satisfies {
-  [key in keyof ProductNotificationsFilters]: z.ZodType;
-};
-
-export const ProductNotificationsFiltersOptions: ParseFiltersOptions<
-  typeof ProductNotificationsFiltersSchemas
-> = {
-  types: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  states: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  mediums: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  products: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  users: { defaultValue: [], excludeWhen: v => v.length === 0 },
-  search: { defaultValue: "", excludeWhen: v => v.length === 0 },
-};
+export const ProductNotificationsFiltersObj = Filters({
+  search: { schema: z.string(), defaultValue: "", excludeWhen: (v: string) => v.length === 0 },
+  states: {
+    defaultValue: [] as NotificationState[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return NotificationStates.contains(value) ? [value] : [];
+      }
+      return value.reduce(
+        (prev, curr) => (NotificationStates.contains(curr) ? [...prev, curr] : prev),
+        [] as NotificationState[],
+      );
+    }),
+  },
+  types: {
+    defaultValue: [] as ProductNotificationType[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return ProductNotificationTypes.contains(value) ? [value] : [];
+      }
+      return value.reduce(
+        (prev, curr) => (ProductNotificationTypes.contains(curr) ? [...prev, curr] : prev),
+        [] as ProductNotificationType[],
+      );
+    }),
+  },
+  mediums: {
+    defaultValue: [] as NotificationMedium[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return NotificationMediums.contains(value) ? [value] : [];
+      }
+      return value.reduce(
+        (prev, curr) => (NotificationMediums.contains(curr) ? [...prev, curr] : prev),
+        [] as NotificationMedium[],
+      );
+    }),
+  },
+  products: {
+    defaultValue: [] as string[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return isUuid(value) ? [value] : [];
+      }
+      return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+    }),
+  },
+  users: {
+    defaultValue: [] as string[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return isUuid(value) ? [value] : [];
+      }
+      return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+    }),
+  },
+});
 
 // Used for API Routes
 export const ProductNotificationIncludesSchema = z

@@ -3,12 +3,10 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
 import {
-  SubscriptionsFiltersOptions,
-  SubscriptionsFiltersSchemas,
+  SubscriptionsFiltersObj,
   SubscriptionsDefaultOrdering,
   SubscriptionOrderableFields,
 } from "~/actions";
@@ -32,11 +30,7 @@ export interface SubscriptionsTablePageProps {
 export default function SubscriptionsTablePage({ searchParams }: SubscriptionsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    SubscriptionsFiltersSchemas,
-    SubscriptionsFiltersOptions,
-  );
+  const filters = SubscriptionsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: SubscriptionsDefaultOrdering,

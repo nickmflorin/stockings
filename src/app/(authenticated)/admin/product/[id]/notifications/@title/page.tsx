@@ -1,6 +1,4 @@
-import { parseFilters } from "~/lib/filters";
-
-import { ProductNotificationsFiltersSchemas, ProductNotificationsFiltersOptions } from "~/actions";
+import { ProductNotificationsFiltersObj } from "~/actions";
 import { fetchProductNotificationsCount } from "~/actions/notifications/fetch-product-notifications";
 
 export interface SubscriptionsTitlePageProps {
@@ -12,11 +10,7 @@ export default async function SubscriptionsTitlePage({
   searchParams,
   params,
 }: SubscriptionsTitlePageProps) {
-  const filters = parseFilters(
-    searchParams,
-    ProductNotificationsFiltersSchemas,
-    ProductNotificationsFiltersOptions,
-  );
+  const filters = ProductNotificationsFiltersObj.parse(searchParams);
   const {
     data: { count },
   } = await fetchProductNotificationsCount(

@@ -3,17 +3,11 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
-import {
-  ProductNotificationsDefaultOrdering,
-  ProductNotificationsFiltersSchemas,
-  ProductNotificationsFiltersOptions,
-} from "~/actions";
+import { ProductNotificationsDefaultOrdering, ProductNotificationsFiltersObj } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
-import { Paginator } from "~/components/pagination/Paginator";
 import { ProductNotificationsAdminTableColumns } from "~/features/notifications";
 import { NotificationsAdminTableControlBarPlaceholder } from "~/features/notifications/components/tables/NotificationsAdminTableControlBarPlaceholder";
 import { NotificationsTableFilterBar } from "~/features/notifications/components/tables/NotificationsTableFilterBar";
@@ -37,11 +31,7 @@ export default async function ProductNotificationsTablePage({
 }: ProductNotificationsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    ProductNotificationsFiltersSchemas,
-    ProductNotificationsFiltersOptions,
-  );
+  const filters = ProductNotificationsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: ProductNotificationsDefaultOrdering,

@@ -4,85 +4,115 @@ import { type z } from "zod";
 
 import { parseQueryParams } from "~/integrations/http";
 
-export type FiltersSchemas = {
-  [key in string]: z.ZodType;
-};
-
-export type ParsedFilters<S extends FiltersSchemas> = { [key in keyof S]: z.infer<S[key]> };
-
-export type ParseFiltersOptions<S extends FiltersSchemas> = {
-  [key in keyof S]: {
-    readonly defaultValue: z.infer<S[key]>;
-    readonly excludeWhen?: (v: z.infer<S[key]>) => boolean;
-  };
-};
-
-export const addFilter = <S extends FiltersSchemas, K extends keyof S>(
-  f: ParsedFilters<S>,
-  field: K,
-  value: z.infer<S[K]>,
-  options: ParseFiltersOptions<S>,
-) => {
-  if (options[field]?.excludeWhen?.(value)) {
-    f = { ...f, [field]: options[field].defaultValue };
-  } else {
-    f = { ...f, [field]: value };
-  }
-  return f;
-};
-
-export const pruneFilters = <F extends Partial<ParsedFilters<S>>, S extends FiltersSchemas>(
-  filters: F,
-  options: ParseFiltersOptions<S>,
-): Partial<F> => {
-  let pruned: Partial<F> = {};
-  for (const [field, value] of Object.entries(filters)) {
-    const excl = options[field].excludeWhen;
-    if (!excl || excl(value) === false) {
-      pruned = { ...pruned, [field]: value };
+type FilterConfig<S extends z.ZodType = z.ZodTypeAny> = S extends z.ZodType
+  ? {
+      readonly schema: S;
+      readonly defaultValue: z.infer<S>;
+      readonly excludeWhen?: (v: z.infer<S>) => boolean;
     }
+  : never;
+
+type BaseFiltersConfiguration = {
+  [key in string]: FilterConfig;
+};
+
+type FiltersDefaultValues<C extends BaseFiltersConfiguration> = {
+  [key in keyof C]: C[key] extends { defaultValue: infer V } ? V : never;
+};
+
+type FiltersSchemas<C extends BaseFiltersConfiguration> = {
+  [key in keyof C]: C[key] extends { schema: infer V } ? V : never;
+};
+
+type ParsedFilters<C extends BaseFiltersConfiguration> = {
+  [key in keyof C]: C[key] extends FilterConfig<infer S extends z.ZodType> ? z.infer<S> : never;
+};
+
+export class FiltersClass<C extends BaseFiltersConfiguration> {
+  constructor(private readonly config: C) {
+    this.config = config;
   }
-  return pruned;
-};
 
-export const filtersHaveField = <F extends Partial<ParsedFilters<S>>, S extends FiltersSchemas>(
-  field: keyof S,
-  filters: F,
-  options: ParseFiltersOptions<S>,
-): boolean => {
-  const pruned = pruneFilters(filters, options);
-  return pruned[field] !== undefined;
-};
+  public get defaultValues(): FiltersDefaultValues<C> {
+    let defaults = {} as FiltersDefaultValues<C>;
+    for (const [field, { defaultValue }] of Object.entries(this.config)) {
+      defaults = { ...defaults, [field]: defaultValue };
+    }
+    return defaults;
+  }
 
-export const parseFilters = <S extends FiltersSchemas>(
-  params:
-    | URLSearchParams
-    | ReadonlyURLSearchParams
-    | Record<string, string | string[] | undefined>
-    | string
-    | null
-    | undefined,
-  schemas: S,
-  options: ParseFiltersOptions<S>,
-) => {
-  let f: ParsedFilters<S> = {} as ParsedFilters<S>;
-  const parsed =
-    params instanceof ReadonlyURLSearchParams || params instanceof URLSearchParams
-      ? parseQueryParams(params.toString())
-      : typeof params === "string"
-        ? parseQueryParams(params)
-        : (params ?? {});
-  for (const [field, schema] of Object.entries(schemas)) {
-    if (parsed[field] !== undefined) {
-      const parsedField = schema.safeParse(parsed[field]);
-      if (parsedField.success) {
-        f = addFilter(f, field, parsedField.data, options);
-      } else {
-        f = { ...f, [field]: options[field].defaultValue };
-      }
+  public get schemas(): FiltersSchemas<C> {
+    let schemas = {} as FiltersSchemas<C>;
+    for (const [field, { schema }] of Object.entries(this.config)) {
+      schemas = { ...schemas, [field]: schema };
+    }
+    return schemas;
+  }
+
+  public contains(f: unknown): f is keyof C {
+    return typeof f === "string" && Object.keys(this.config).includes(f);
+  }
+
+  private addFilter<K extends keyof C>(f: ParsedFilters<C>, field: K, value: FiltersSchemas<C>[K]) {
+    const config = this.config[field];
+    if (config.excludeWhen?.(value)) {
+      f = { ...f, [field]: config.defaultValue };
     } else {
-      f = { ...f, [field]: options[field].defaultValue };
+      f = { ...f, [field]: value };
     }
+    return f;
   }
-  return f;
-};
+
+  public prune<F extends Partial<ParsedFilters<C>>>(filters: F) {
+    let pruned: Partial<F> = {};
+    for (const [field, value] of Object.entries(filters)) {
+      const config = this.config[field];
+      const excl = config.excludeWhen;
+      if (!excl || excl(value) === false) {
+        pruned = { ...pruned, [field]: value };
+      }
+    }
+    return pruned;
+  }
+
+  public areEmpty(filters: ParsedFilters<C>) {
+    const pruned = this.prune(filters);
+    return Object.keys(pruned).length === 0;
+  }
+
+  public parse(
+    params:
+      | URLSearchParams
+      | ReadonlyURLSearchParams
+      | Record<string, string | string[] | undefined>
+      | string
+      | null
+      | undefined,
+  ) {
+    let f: ParsedFilters<C> = {} as ParsedFilters<C>;
+    const parsed =
+      params instanceof ReadonlyURLSearchParams || params instanceof URLSearchParams
+        ? parseQueryParams(params.toString())
+        : typeof params === "string"
+          ? parseQueryParams(params)
+          : (params ?? {});
+    for (const [field, schema] of Object.entries(this.schemas)) {
+      const config = this.config[field];
+
+      if (parsed[field] !== undefined) {
+        const parsedField = schema.safeParse(parsed[field]);
+        if (parsedField.success) {
+          f = this.addFilter(f, field, parsedField.data);
+        } else {
+          f = { ...f, [field]: config.defaultValue };
+        }
+      } else {
+        f = { ...f, [field]: config.defaultValue };
+      }
+    }
+    return f;
+  }
+}
+
+export const Filters = <C extends BaseFiltersConfiguration>(config: C) =>
+  new FiltersClass<C>(config);

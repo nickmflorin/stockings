@@ -3,14 +3,9 @@ import { Suspense } from "react";
 
 import { z } from "zod";
 
-import { parseFilters } from "~/lib/filters";
 import { parseOrdering } from "~/lib/ordering";
 
-import {
-  SubscriptionsDefaultOrdering,
-  SubscriptionsFiltersSchemas,
-  SubscriptionsFiltersOptions,
-} from "~/actions";
+import { SubscriptionsDefaultOrdering, SubscriptionsFiltersObj } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
 import { SubscriptionsAdminTableColumns } from "~/features/subscriptions";
@@ -36,11 +31,7 @@ export default async function UserSubscriptionsTablePage({
 }: UserSubscriptionsTablePageProps) {
   const page = z.coerce.number().int().positive().min(1).safeParse(searchParams?.page).data ?? 1;
 
-  const filters = parseFilters(
-    searchParams,
-    SubscriptionsFiltersSchemas,
-    SubscriptionsFiltersOptions,
-  );
+  const filters = SubscriptionsFiltersObj.parse(searchParams);
 
   const ordering = parseOrdering(searchParams, {
     defaultOrdering: SubscriptionsDefaultOrdering,

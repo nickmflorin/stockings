@@ -7,7 +7,7 @@ import type {
 } from "~/database/model";
 import { ProductSubscriptionIncludesFields, ProductSubscriptionTypes } from "~/database/model";
 
-import type { ParseFiltersOptions } from "~/lib/filters";
+import { Filters } from "~/lib/filters";
 import { type Ordering, type Order } from "~/lib/ordering";
 import { isUuid } from "~/lib/typeguards";
 
@@ -23,12 +23,12 @@ export const SubscriptionsOrderingMap = {
   user: order => [{ user: { lastName: order } }, { user: { firstName: order } }] as const,
 } as const satisfies { [key in SubscriptionOrderableField]: (order: Order) => unknown[] };
 
-export interface SubscriptionsFilters {
+export type SubscriptionsFilters = {
   readonly types: ProductSubscriptionType[];
   readonly search: string;
   readonly products: string[];
   readonly users: string[];
-}
+};
 
 export const SubscriptionsRestrictedFilters = [
   "users",
@@ -39,7 +39,7 @@ export interface SubscriptionsControls<I extends ProductSubscriptionIncludes = [
   readonly ordering: Ordering<SubscriptionOrderableField>;
   readonly page?: number;
   readonly includes: I;
-  readonly visibility?: ActionVisibility;
+  readonly visibility: ActionVisibility;
 }
 
 export const SubscriptionsDefaultOrdering: Ordering<"createdAt"> = {
@@ -47,40 +47,42 @@ export const SubscriptionsDefaultOrdering: Ordering<"createdAt"> = {
   order: "desc",
 };
 
-export const SubscriptionsFiltersSchemas = {
-  search: z.string(),
-  types: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return ProductSubscriptionTypes.contains(value) ? [value] : [];
-    }
-    return value.reduce(
-      (prev, curr) => (ProductSubscriptionTypes.contains(curr) ? [...prev, curr] : prev),
-      [] as ProductSubscriptionType[],
-    );
-  }),
-  products: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return isUuid(value) ? [value] : [];
-    }
-    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
-  }),
-  users: z.union([z.string(), z.array(z.string())]).transform(value => {
-    if (typeof value === "string") {
-      return isUuid(value) ? [value] : [];
-    }
-    return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
-  }),
-} satisfies {
-  [key in keyof SubscriptionsFilters]: z.ZodType;
-};
-
-export const SubscriptionsFiltersOptions: ParseFiltersOptions<typeof SubscriptionsFiltersSchemas> =
-  {
-    types: { defaultValue: [], excludeWhen: v => v.length === 0 },
-    products: { defaultValue: [], excludeWhen: v => v.length === 0 },
-    users: { defaultValue: [], excludeWhen: v => v.length === 0 },
-    search: { defaultValue: "", excludeWhen: v => v.length === 0 },
-  };
+export const SubscriptionsFiltersObj = Filters({
+  search: { schema: z.string(), defaultValue: "", excludeWhen: (v: string) => v.length === 0 },
+  types: {
+    defaultValue: [] as ProductSubscriptionType[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return ProductSubscriptionTypes.contains(value) ? [value] : [];
+      }
+      return value.reduce(
+        (prev, curr) => (ProductSubscriptionTypes.contains(curr) ? [...prev, curr] : prev),
+        [] as ProductSubscriptionType[],
+      );
+    }),
+  },
+  products: {
+    defaultValue: [] as string[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return isUuid(value) ? [value] : [];
+      }
+      return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+    }),
+  },
+  users: {
+    defaultValue: [] as string[],
+    excludeWhen: v => v.length === 0,
+    schema: z.union([z.string(), z.array(z.string())]).transform(value => {
+      if (typeof value === "string") {
+        return isUuid(value) ? [value] : [];
+      }
+      return value.reduce((prev, curr) => (isUuid(curr) ? [...prev, curr] : prev), [] as string[]);
+    }),
+  },
+});
 
 // Used for API Routes
 export const SubscriptionIncludesSchema = z

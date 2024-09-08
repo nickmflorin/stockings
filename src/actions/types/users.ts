@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { UserIncludesFields, type UserIncludes, type UserIncludesField } from "~/database/model";
 
-import type { ParseFiltersOptions } from "~/lib/filters";
+import { Filters } from "~/lib/filters";
 import { type Ordering, type Order } from "~/lib/ordering";
 
 export const UserOrderableFields = ["createdAt", "updatedAt", "name"] as const;
@@ -39,15 +39,9 @@ export type FlattenedUserControls<I extends UserIncludes = UserIncludes> = Users
     readonly limit: number;
   };
 
-export const UsersFiltersSchemas = {
-  search: z.string(),
-} satisfies {
-  [key in keyof UsersFilters]: z.ZodType;
-};
-
-export const UsersFiltersOptions: ParseFiltersOptions<typeof UsersFiltersSchemas> = {
-  search: { defaultValue: "", excludeWhen: v => v.length === 0 },
-};
+export const UsersFiltersObj = Filters({
+  search: { schema: z.string(), defaultValue: "", excludeWhen: (v: string) => v.length === 0 },
+});
 
 // Used for API Routes
 export const UserIncludesSchema = z.union([z.string(), z.array(z.string())]).transform(value => {
