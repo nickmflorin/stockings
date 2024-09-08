@@ -9,6 +9,7 @@ import { UsersDefaultOrdering, type UsersControls } from "~/actions";
 
 import type { SelectBehaviorType, DataSelectInstance } from "~/components/input/select";
 import { DataSelect, type DataSelectProps } from "~/components/input/select/DataSelect";
+import { UserTile } from "~/features/users/components/UserTile";
 import { useUsers } from "~/hooks/api";
 
 import { type ApiClientError } from "~/api";
@@ -64,9 +65,7 @@ export const UserSelect = forwardRef(
         getItemValueLabel={m =>
           m.firstName.length !== 0 ? `${m.firstName[0]}. ${m.lastName}` : m.lastName
         }
-        itemRenderer={m =>
-          m.firstName.length !== 0 ? `${m.firstName[0]}. ${m.lastName}` : m.lastName
-        }
+        itemRenderer={m => <UserTile user={m} size="sm" />}
       />
     );
   },

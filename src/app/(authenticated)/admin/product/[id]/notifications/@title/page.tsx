@@ -1,7 +1,7 @@
 import { parseFilters } from "~/lib/filters";
 
-import { SubscriptionsFiltersSchemas, SubscriptionsFiltersOptions } from "~/actions";
-import { fetchProductSubscriptionsCount } from "~/actions/subscriptions/fetch-product-subscriptions";
+import { ProductNotificationsFiltersSchemas, ProductNotificationsFiltersOptions } from "~/actions";
+import { fetchProductNotificationsCount } from "~/actions/notifications/fetch-product-notifications";
 
 export interface SubscriptionsTitlePageProps {
   readonly searchParams: Record<string, string>;
@@ -14,12 +14,12 @@ export default async function SubscriptionsTitlePage({
 }: SubscriptionsTitlePageProps) {
   const filters = parseFilters(
     searchParams,
-    SubscriptionsFiltersSchemas,
-    SubscriptionsFiltersOptions,
+    ProductNotificationsFiltersSchemas,
+    ProductNotificationsFiltersOptions,
   );
   const {
     data: { count },
-  } = await fetchProductSubscriptionsCount(
+  } = await fetchProductNotificationsCount(
     { visibility: "admin", filters: { ...filters, products: [params.id] } },
     { strict: true },
   );

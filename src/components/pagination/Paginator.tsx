@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useTransition } from "react";
 
 import { clamp } from "lodash-es";
 import { z } from "zod";
@@ -22,6 +22,7 @@ export const Paginator = ({ count, page, pageSize = 10, ...props }: PaginatorPro
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
+  const [_, startTransition] = useTransition();
 
   useEffect(() => {
     const pg = searchParams?.get("page");
@@ -44,7 +45,13 @@ export const Paginator = ({ count, page, pageSize = 10, ...props }: PaginatorPro
       _setPage(page);
       const params = new URLSearchParams(searchParams?.toString());
       params.set("page", page.toString());
-      replace(`${pathname}?${params.toString()}`);
+      /* We wrap the pagination change in a transition to allow the server side pagination
+         components that are relying on this data to show stale content before the new page data
+         is fetched.  If we did not do this, the server side suspense boundaries would render the
+         fallback - which we do not want (we want to show the stale content). */
+      startTransition(() => {
+        replace(`${pathname}?${params.toString()}`);
+      });
     },
     [pathname, searchParams, replace],
   );

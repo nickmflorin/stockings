@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { type ActionVisibility, type ProductNotificationsFilters } from "~/actions";
 import { fetchProductNotificationsPagination } from "~/actions/notifications";
 
@@ -22,9 +20,5 @@ export const NotificationsTablePaginator = async ({
     { filters, page: _page, visibility },
     { strict: true },
   );
-  return (
-    <Suspense>
-      <Paginator count={count} pageSize={pageSize} page={page} />
-    </Suspense>
-  );
+  return <Paginator count={count} pageSize={pageSize} page={page} />;
 };

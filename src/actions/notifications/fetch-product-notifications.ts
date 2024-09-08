@@ -85,6 +85,14 @@ export const fetchProductNotificationsCount = cache(
         message: "The user does not have permission to access this data.",
       });
       return errorInFetchContext(error, context);
+    } else if (
+      !visibilityIsAdmin(visibility) &&
+      filtersHaveField("users", filters, ProductNotificationsFiltersOptions)
+    ) {
+      const error = ApiClientGlobalError.Forbidden({
+        message: "The user does not have permission to access this data.",
+      });
+      return errorInFetchContext(error, context);
     }
     const count = await db.productNotification.count({
       where: whereClause({ filters, user, visibility }),

@@ -53,7 +53,7 @@ export default async function UserNotificationsTablePage({
       excludeColumns={["user"]}
       filterBar={
         <Suspense key={JSON.stringify(filters)}>
-          <NotificationsTableFilterBar filters={filters} />
+          <NotificationsTableFilterBar filters={filters} excludeFilters={["users"]} />
         </Suspense>
       }
       pagination={

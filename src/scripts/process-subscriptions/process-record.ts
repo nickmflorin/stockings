@@ -37,29 +37,16 @@ export const processRecord = async (
     sub: PriceChangeSubscription,
     prices: { previous: number; current: number },
   ) => {
-    if (!sub.enabled) {
-      return cli.info(
-        `Not processing price change for subscription '${sub.id}' because it is disabled.`,
-      );
-    } else if (
-      prices.previous > prices.current &&
-      !sub.conditions.includes(PriceChangeCondition.PriceDecrease)
+    if (
+      !sub.enabled ||
+      (prices.previous > prices.current &&
+        !sub.conditions.includes(PriceChangeCondition.PriceDecrease)) ||
+      (prices.previous < prices.current &&
+        !sub.conditions.includes(PriceChangeCondition.PriceIncrease))
     ) {
-      return cli.info(
-        `Not processing price change for subscription '${sub.id}' because the the price ` +
-          "decrease condition is not included in the subscription.",
-      );
-    } else if (
-      prices.previous < prices.current &&
-      !sub.conditions.includes(PriceChangeCondition.PriceIncrease)
-    ) {
-      return cli.info(
-        `Not processing price change for subscription '${sub.id}' because the the price ` +
-          "increase condition is not included in the subscription.",
-      );
-    }
-    // This is a sanity check.
-    if (prices.previous === prices.current) {
+      return;
+    } else if (prices.previous === prices.current) {
+      // This is a sanity check.
       throw new Error("Unexpected Condition: Prices should not be equal!");
     }
     return await tx.priceChangeNotification.create({

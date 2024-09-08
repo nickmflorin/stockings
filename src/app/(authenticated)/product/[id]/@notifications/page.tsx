@@ -51,7 +51,11 @@ export default async function ProductNotificationsPage({
       excludeColumns={["product"]}
       filterBar={
         <Suspense>
-          <NotificationsTableFilterBar excludeProducts isSearchable={false} filters={filters} />
+          <NotificationsTableFilterBar
+            excludeFilters={["products"]}
+            isSearchable={false}
+            filters={filters}
+          />
         </Suspense>
       }
       pagination={

@@ -32,10 +32,11 @@ const StatusChangeEventFrequency = 0.5;
 export interface SeedSubscriptionParmas {
   readonly product: Product;
   readonly user: User;
+  readonly atLeastOne?: boolean;
 }
 
 export const seedSubscription = async (
-  { user, product }: SeedSubscriptionParmas,
+  { user, product, atLeastOne = false }: SeedSubscriptionParmas,
   context: cli.ScriptContext,
 ): Promise<[StatusChangeSubscription | null, PriceChangeSubscription | null]> => {
   const enhanced = enhance(db, { user }, { kinds: ["delegate"] });
@@ -78,7 +79,10 @@ export const seedSubscription = async (
       },
     });
   }
-  if (randomBoolean({ positiveFrequency: PriceChangeEventFrequency })) {
+  if (
+    randomBoolean({ positiveFrequency: PriceChangeEventFrequency }) ||
+    (atLeastOne && !statusChange)
+  ) {
     priceChange = await enhanced.priceChangeSubscription.create({
       data: {
         enabled: !randomBoolean({ positiveFrequency: DisabledFrequency }),
@@ -89,7 +93,7 @@ export const seedSubscription = async (
         userId: user.id,
         productId: product.id,
         mediums: selectAtRandom(Object.values(NotificationMedium), {
-          length: MinMax(1, 3),
+          length: MinMax(1, Object.values(NotificationMedium).length),
           unique: true,
         }),
         conditions: selectAtRandom(Object.values(PriceChangeCondition), {

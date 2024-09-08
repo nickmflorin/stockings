@@ -2,12 +2,18 @@
 import { isError } from "~/application/errors";
 import { terminal } from "~/support";
 
+import { CommandLineError } from "~/scripts/cli/errors";
+
 export const error = (message: string | Error) => {
-  console.error(
-    terminal.applyStyles(isError(message) ? message.message : message, {
-      foreground: "red",
-    }),
-  );
+  if (message instanceof CommandLineError || typeof message === "string") {
+    console.error(
+      terminal.applyStyles(isError(message) ? message.message : message, {
+        foreground: "red",
+      }),
+    );
+  } else {
+    console.error(message);
+  }
 };
 
 export const info = (message: string) => {

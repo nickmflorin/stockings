@@ -13,6 +13,7 @@ import {
 } from "~/actions";
 
 import { Loading } from "~/components/loading/Loading";
+import { Paginator } from "~/components/pagination/Paginator";
 import { ProductNotificationsAdminTableColumns } from "~/features/notifications";
 import { NotificationsAdminTableControlBarPlaceholder } from "~/features/notifications/components/tables/NotificationsAdminTableControlBarPlaceholder";
 import { NotificationsTableFilterBar } from "~/features/notifications/components/tables/NotificationsTableFilterBar";
@@ -53,17 +54,15 @@ export default async function ProductNotificationsTablePage({
       excludeColumns={["product"]}
       filterBar={
         <Suspense key={JSON.stringify(filters)}>
-          <NotificationsTableFilterBar filters={filters} excludeProducts />
+          <NotificationsTableFilterBar filters={filters} excludeFilters={["products"]} />
         </Suspense>
       }
       pagination={
-        <Suspense key={JSON.stringify(filters) + String(page)}>
-          <NotificationsTablePaginator
-            filters={{ ...filters, users: [params.id] }}
-            page={page}
-            visibility="admin"
-          />
-        </Suspense>
+        <NotificationsTablePaginator
+          filters={{ ...filters, products: [params.id] }}
+          page={page}
+          visibility="admin"
+        />
       }
     >
       <Suspense

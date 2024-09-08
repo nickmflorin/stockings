@@ -16,9 +16,9 @@ export const randomlyNull =
   (): T | null =>
     evaluateFrequency(nullChance) ? null : func();
 
-type MinMaxObj = {
-  min: number;
-  max: number;
+type MinMaxObj<T extends number = number> = {
+  min: T;
+  max: T;
 };
 
 export type RandomInterval = MinMaxObj | [number, number];
@@ -50,16 +50,35 @@ export function randomInt(min: number | RandomInterval, max?: number) {
   } else if (Array.isArray(min)) {
     return randomInt({ min: min[0], max: min[1] });
   }
+  if (min.max <= min.min) {
+    throw new Error(
+      `The minimum value '${min.min}' must be less than the maximum value '${min.max}'.`,
+    );
+  }
   return Math.floor(
     Math.random() * (Math.floor(min.max) - Math.ceil(min.min) + 1) + Math.ceil(min.min),
   );
 }
 
-export const MinMax = <T extends number>(min: T, max: T) => ({
-  min,
-  max,
-  random: () => randomInt(min, max),
-});
+interface IMinMax<L extends number = number, U extends number = number> {
+  readonly min: L;
+  readonly max: U;
+  readonly random: () => number;
+}
+
+export const MinMax = <L extends number = number, U extends number = number>(
+  min: L,
+  max: U,
+): IMinMax<L, U> => {
+  if (max <= min) {
+    throw new Error(`The minimum value '${min}' must be less than the maximum value '${max}'.`);
+  }
+  return {
+    min,
+    max,
+    random: () => randomInt(min, max),
+  };
+};
 
 type PositiveRandomBoolOptions = {
   readonly positiveFrequency: number;
@@ -228,7 +247,7 @@ export function selectAtRandom<T>(
  */
 export function selectAtRandom<T>(data: T[] | FrequencyDatum<T>[], options?: SelectAtRandomOpts) {
   if (data.length === 0) {
-    throw new Error("");
+    throw new Error("At least one value must be provided to select from!");
   }
 
   if (options?.withFrequencies) {
@@ -295,7 +314,7 @@ export function selectAtRandom<T>(data: T[] | FrequencyDatum<T>[], options?: Sel
     }
     return result;
   }
-  const ind = randomInt(0, (data as T[]).length - 1);
+  const ind = (data as T[]).length === 1 ? 0 : randomInt(0, (data as T[]).length - 1);
   const datum = (data as T[])[ind];
   if (datum === undefined) {
     throw new Error(`Data unexpectedly returned undefined value at index ${ind}!`);

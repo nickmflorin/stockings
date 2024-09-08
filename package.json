@@ -41,6 +41,7 @@
     "scrape-product": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/scrape-product/index.ts",
     "simulate-product-records": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-product-records/index.ts",
     "simulate-notifications": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-notifications/index.ts",
+    "simulate-user-subscription": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/simulate-user-subscription/index.ts",
     "process-subscriptions": "pnpm validate-node-version && pnpm manual-dev-env-setup -- npx tsx --tsconfig ./tsconfig.json src/scripts/process-subscriptions/index.ts"
   },
   "dependencies": {
